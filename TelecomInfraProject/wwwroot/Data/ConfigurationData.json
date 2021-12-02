@@ -1,0 +1,130 @@
+{
+  "project": {
+    "network_platform_layout": [
+      "ANSI",
+      "ETSI"
+    ]
+  },
+  "node": {
+    "site_length": 20,
+    "dir": "../Assets/img/",
+    "roadm_type": [
+      "Default"
+    ],
+
+    "Roadm": {
+      "is_degree_validation": false,
+      "default": {
+        "label": "site ",
+        "node_degree": 100,
+        "node_type": "Roadm",
+        "roadm_type": "",
+        "pre_amp_type": "",
+        "booster_type": "",
+        "component_type": "node"
+      }
+    },
+    "Amplifier": {
+      "is_degree_validation": true,
+      "default": {
+        "label": "site ",
+        "node_degree": 2,
+        "node_type": "Amplifier",
+        "pre_amp_type": "",
+        "booster_type": "",
+        "component_type": "node"
+      }
+    },
+    "Fused": {
+      "is_degree_validation": true,
+      "default": {
+        "label": "site ",
+        "node_degree": 2,
+        "node_type": "Fused",
+        "pre_amp_type": "none",
+        "booster_type": "none",
+        "component_type": "node"
+      }
+    },
+    "Transceiver": {
+      "is_degree_validation": false,
+      "default": {
+        "label": "site ",
+        "node_degree": 100,
+        "node_type": "Transceiver",
+        "transceiver_type": "",
+        "transceiver_mode": "",
+        "component_type": "node"
+      }
+    }
+  },
+  "Fiber": {
+    "component_type": "Fiber",
+    "fiber_type": [
+      "SSMF",
+      "LOF",
+      "NZDF"
+    ],
+    "SSMF": {
+      "CD_coefficient": 16.7
+    },
+    "LOF": {
+      "CD_coefficient": 22.0
+    },
+    "NZDF": {
+      "CD_coefficient": 5.0
+    },
+    "default": {
+      "fiber_type": "SSMF",
+      "CD_coefficient": 16.7,
+      "PMD_coefficient": 0.0400028124,
+      "Span_length": 1.0,
+      "Loss_Co_eficient": 0.25,
+      "connector_in": 0.5,
+      "Conenctor_Out": 0.5,
+      "Ageing_Loss": 0.0,
+      "Length_based_loss": false,
+      "Span_Loss": 1.0
+    }
+  },
+
+  "Service": {
+    "component_type": "Service",
+    "service_type": [
+      "OpenROADM MSA ver. 4.0"
+    ],
+    "data_rate": [
+      "100G DP-QPSK",
+      "200G DP-QPSK",
+      "300G DP-8QAM",
+      "400G DP-16QAM"
+    ],
+    "100G DP-QPSK": [
+      "27.95",
+      "31.57"
+    ],
+    "200G DP-QPSK": [
+      "63.1"
+    ],
+    "300G DP-8QAM": [
+      "63.1"
+    ],
+    "400G DP-16QAM": [
+      "63.1"
+    ],
+    "Central_frequency": [
+      "Auto"
+    ],
+    "Grid_spacing_min": "Baud-rate",
+    "Grid_spacing_max": "150GHz",
+    "default": {
+      "service_type": "OpenROADM MSA ver. 4.0",
+      "Frequency_min": 0.0400028124,
+      "Frequency_max": 1.0,
+      "Data_rate": "100G DP-QPSK",
+      "Baud_rate": 27.95,
+      "Grid_spacing": "50GHz",
+      "Central_frequency": "Auto"
+    }
+  }
+}
