@@ -1,5 +1,5 @@
 let Attenuator = document.querySelector('#Attenuator');
-let single = document.querySelector('#single');
+let roadm = document.querySelector('#roadm');
 let amplifier = document.querySelector('#amplifier');
 let duelfiber = document.querySelector('#duelfiber');
 let service = document.querySelector('#service');
@@ -13,7 +13,7 @@ let drawerclose = document.getElementById('drawer-close')
 function openDrawer(node) {
     switch (node) {
         case 'Attenuator':
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -25,7 +25,7 @@ function openDrawer(node) {
 
             //  drawerclose.classList.add("drawerleft")
             break;
-        case 'single':
+        case 'roadm':
             Attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
@@ -35,7 +35,7 @@ function openDrawer(node) {
             singlefiber.classList.remove('d-visible');
 
 
-            single.classList.add('d-visible');
+            roadm.classList.add('d-visible');
             // drawerclose.classList.add("drawerleft")
             break;
         case 'amplifier':
@@ -44,7 +44,7 @@ function openDrawer(node) {
             duelfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
             create.classList.remove('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -56,7 +56,7 @@ function openDrawer(node) {
             duelfiber.classList.add('d-visible');
             service.classList.remove('d-visible');
             create.classList.remove('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -67,7 +67,7 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             create.classList.add('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -79,7 +79,7 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             create.classList.remove('d-visible');
             transceiver.classList.add('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -91,7 +91,7 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             create.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.add('d-visible');
@@ -103,7 +103,7 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             duelfiber.classList.remove('d-visible');
             service.classList.add('d-visible');
-            single.classList.remove('d-visible');
+            roadm.classList.remove('d-visible');
             create.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -119,8 +119,8 @@ function closeDrawer(node) {
             Attenuator.classList.remove('d-visible');
             // drawerclose.classList.remove("drawerleft")
             break;
-        case 'single':
-            single.classList.remove('d-visible');
+        case 'roadm':
+            roadm.classList.remove('d-visible');
             // drawerclose.classList.remove("drawerleft")
             break;
         case 'amplifier':

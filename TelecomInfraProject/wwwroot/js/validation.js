@@ -4,20 +4,21 @@
         flag = true;
     return flag;
 }
-function addSingleNodeVal() {
+function addSingleNodeVal(element) {
     var flag = true;
+    var elementID="#"+element
     var maxLength = Number(configData.node.site_length);
     //var maxDegree = Number(configData.node[$("#ddlNodeType").val()].max_degree);
     //var regex = /^[1-9-+()]*$/;
     //isDegreeValid = regex.test(document.getElementById("txtNodeDegree").value);
     var msg = "";
 
-    if ($("#txtNodeName").val().trim() == '') {
-        msg = "Please enter the site name";
+    if ($(elementID).val().trim() == '') {
+        msg = "Please enter the name";
         flag = false;
     }
-    else if (Number($("#txtNodeName").val().trim().length) > maxLength) {
-        msg = "site name length should be below than 20";
+    else if (Number($(elementID).val().trim().length) > maxLength) {
+        msg = "name length should be below than 20";
         flag = false;
     }
     //else if ($("#txtNodeDegree").val().trim() == '') {

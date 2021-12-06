@@ -3,7 +3,8 @@
     "network_platform_layout": [
       "ANSI",
       "ETSI"
-    ]
+    ],
+    "eqpt_config_file_path": "http://localhost:60711/Data/eqpt_config.json"
   },
   "node": {
     "site_length": 20,
@@ -49,7 +50,7 @@
     "Transceiver": {
       "is_degree_validation": false,
       "default": {
-        "label": "site ",
+        "label": "TCVR ",
         "node_degree": 100,
         "node_type": "Transceiver",
         "transceiver_type": "",

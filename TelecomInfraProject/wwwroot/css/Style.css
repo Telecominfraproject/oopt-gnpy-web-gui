@@ -1189,6 +1189,7 @@ select {
 /*stepper design*/
 
 .stepper-tab .tab-content {
+    z-index:9999;
     position: absolute;
     left: 0px;
     top: 50%;
@@ -1525,4 +1526,18 @@ select {
     padding: 5px 10px;
     font-size: 15px;
     margin-top: -1px;
+}
+.close-btnn1 {
+    cursor: pointer;
+    color: #1eabbc;
+    width: 35px;
+    height: 35px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    margin-top: -26px !important;
+    margin-right: -15px !important;
+    background: #efefef !important;
+    border-radius: 50px !important;
 }

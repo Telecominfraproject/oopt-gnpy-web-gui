@@ -46,7 +46,7 @@
   "Amplifier": {
     "shape": "circularImage",
     "size": 10,
-    "image": "ampRL.svg",
+    "image": "amp3.svg",
     "node_type": "Amplifier",
     "component_type": "node",
     "icon": {},
@@ -68,7 +68,7 @@
   "Fused": {
     "shape": "circularImage",
     "size": 10,
-    "image": "FusedNode.svg",
+    "image": "rednode.svg",
     "node_type": "Fused",
     "component_type": "node",
     "icon": {},

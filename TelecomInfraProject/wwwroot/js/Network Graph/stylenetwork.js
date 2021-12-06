@@ -50,6 +50,8 @@ var DIR = "";
 var eleroadmtype = "ddlroadmType";
 var elepreamptype = "ddlPreAmpType";
 var eleboostertype = "ddlBoosterType";
+
+var eqpt_file = "";
 $(document).ready(function () {
 
     $.getJSON("/Data/StyleData.json", function (data) {
@@ -69,6 +71,7 @@ $(document).ready(function () {
 
         configData = data;
         DIR = configData.node.dir;
+        eqpt_file = configData.project.eqpt_config_file_path;
         tempLayoutName = configData.project.network_platform_layout[0];
         $.each(configData.project.network_platform_layout, function (index, item) {
             $('#ddlPlatformLayout').append('<option value="' + item + '">' + item + '</option>');
@@ -125,7 +128,7 @@ $(document).ready(function () {
         networkPage();
     });
 
-    $("#btnSaveNetwork").click(function () {
+    $("#btnSaveNetwork, #btnSaveNetworkTop").click(function () {
         if (networkValidation())
             SaveNetwork();
     });
@@ -166,11 +169,28 @@ $(document).ready(function () {
         else
             alert('please enter the all values');
     });
-    $("#btnNewNetwork").click(function () {
-        $("#staticBackdrop").modal({ show: true });
-        $("#txtProjectName").val(tempProjectName);
-        $("#ddlPlatformLayout").val(tempLayoutName);
+    //$("#btnNewNetwork").click(function () {
+    //    $("#staticBackdrop").modal({ show: true });
+    //    $("#txtProjectName").val(tempProjectName);
+    //    $("#ddlPlatformLayout").val(tempLayoutName);
 
+    //});
+    $("#btnPrevious").click(function () {
+        $("#staticBackdrop4").modal('hide');
+        $("#stepCreateProject").click();
+        
+    }); 
+    $("#btnSaveGP").click(function () {
+        $("#staticBackdrop4").modal('hide'); 
+        $("#stepCreateTopology").click();
+    });
+    $("#btnDownloadJson").click(function () {
+        const a = document.createElement("a");
+        a.href = eqpt_file;
+        a.download = "eqpt_config.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     });
 
 });
@@ -502,15 +522,15 @@ function draw(isImport) {
                 //    data,
                 //    callback
                 //);
-                //document.getElementById("closeSingle").onclick = clearSingleNode.bind();
+                //document.getElementById("closeSingle").onclick = clearRoadm.bind();
                 //openDrawer('single');
             },
         },
     };
-    $("#localworkarea").show();
+    $("#mynetwork").show();
     network = new vis.Network(container, data, options);
     if (!isLocalStorage)
-        $("#localworkarea").hide();
+        $("#mynetwork").hide();
 
     network.on("click", function (params) {
         params.event = "[original event]";
@@ -642,24 +662,38 @@ function draw(isImport) {
 
         }
         else {
-            if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused
+            if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
             {
 
                 if (nodeData != undefined) {
-                    ////$("#nodeMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
-                    //document.getElementById("nodeMenu").style.display = "block";
-                    showContextMenu(data.event.pageX, data.event.pageY, "nodeMenu");
-                    document.getElementById("rightClickNodeEdit").onclick = rightClickNodeEdit.bind(
-                        this,
-                        nodeData,
-                        callback
+                    if (type == roadmJSON.node_type) {
+                        showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
+                        document.getElementById("rcRoadmEdit").onclick = roadmEdit.bind(
+                            this,
+                            nodeData,
+                            callback
 
-                    );
-                    document.getElementById("rightClickNodeDelete").onclick = deleteNode.bind(
-                        this,
-                        nodeData,
-                        callback
-                    );
+                        );
+                        document.getElementById("rcRoadmDelete").onclick = deleteNode.bind(
+                            this,
+                            nodeData,
+                            callback
+                        );
+                    }
+                    if (type == fusedJSON.node_type) {
+                        showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
+                        document.getElementById("rcAttenuatorEdit").onclick = attenuatorEdit.bind(
+                            this,
+                            nodeData,
+                            callback
+
+                        );
+                        document.getElementById("rcAttenuatorDelete").onclick = deleteNode.bind(
+                            this,
+                            nodeData,
+                            callback
+                        );
+                    }
                 }
             }
             else if (type == fiberJSON.component_type) {
@@ -1808,12 +1842,12 @@ function importNetwork() {
                 //    data,
                 //    callback
                 //);
-                //document.getElementById("closeSingle").onclick = clearSingleNode.bind();
+                //document.getElementById("closeSingle").onclick = clearRoadm.bind();
                 //openDrawer('single');
             },
         },
     };
-    $("#localworkarea").show();
+    $("#mynetwork").show();
     network = new vis.Network(container, data, options);
 
 
@@ -1953,10 +1987,10 @@ function importNetwork() {
                 }
 
                 if (nodeData != undefined) {
-                    ////$("#nodeMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
-                    //document.getElementById("nodeMenu").style.display = "block";
-                    showContextMenu(data.event.pageX, data.event.pageY, "nodeMenu");
-                    document.getElementById("rightClickNodeEdit").onclick = rightClickNodeEdit.bind(
+                    ////$("#roadmMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
+                    //document.getElementById("roadmMenu").style.display = "block";
+                    showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
+                    document.getElementById("roadmEdit").onclick = roadmEdit.bind(
                         this,
                         nodeData,
                         callback
@@ -2957,30 +2991,34 @@ function addNodes(data, callback) {
 
 }
 
-function clearSingleNode() {
-    $("#txtNodeName").val('');
+function clearRoadm() {
+    $("#txtRoadmName").val('');
     //$("#ddlNodeType").val();
     //$("#txtNodeDegree").val('');
-    $("#ddlPreAmpType").val(0);
-    $("#ddlBoosterType").val(0);
-
-    closeDrawer('single');
+    //$("#ddlPreAmpType").val(0);
+    //$("#ddlBoosterType").val(0);
+    $("#divRoadmPro").empty();
+    closeDrawer('roadm');
     network.unselectAll();
-    $("#closeNodeEditConfirm").click();
+    //$("#closeNodeEditConfirm").click();
     _roadmListDB().remove();
 }
+function clearAttenuator() {
+    $("#txtAttenuatorName").val('');
+    closeDrawer('Attenuator');
+}
 
-function rightClickNodeEdit(nodeID, callback) {
+function roadmEdit(nodeID, callback) {
     //alert();
     _roadmListDB().remove();
     disableFiberService();
-    document.getElementById("nodeMenu").style.display = "none";
-    openDrawer('single');
+    document.getElementById("roadmMenu").style.display = "none";
+    openDrawer('roadm');
     var nodeDetails = nodes.get(nodeID);
-    $("#txtNodeName").val(nodeDetails.label);
+    $("#txtRoadmName").val(nodeDetails.label);
 
 
-    $("#divTransceiverNode, #divPreBoosterType, #divRoadmPro").hide();
+    $("#divRoadmPro").hide();
     $("#divRoadmPro").empty();
     if (nodeDetails.node_type == roadmJSON.node_type) {
         arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
@@ -3008,13 +3046,29 @@ function rightClickNodeEdit(nodeID, callback) {
 
 
 
-    document.getElementById("saveRoadmNode").onclick = updateNode.bind(
+    document.getElementById("btnUpdateRoadm").onclick = updateRoadm.bind(
         this,
         nodeID,
         callback
     );
 
-    document.getElementById("closeSingle").onclick = clearSingleNode.bind(
+    document.getElementById("btnCloseRoadm").onclick = clearRoadm.bind(
+    );
+}
+function attenuatorEdit(nodeID, callback) {
+    disableFiberService();
+    document.getElementById("attenuatorMenu").style.display = "none";
+    openDrawer('Attenuator');
+    var nodeDetails = nodes.get(nodeID);
+    $("#txtAttenuatorName").val(nodeDetails.label);
+
+    document.getElementById("btnUpdateAttenuator").onclick = updateAttenuator.bind(
+        this,
+        nodeID,
+        callback
+    );
+
+    document.getElementById("btnCloseAttenuator").onclick = clearAttenuator.bind(
     );
 }
 function deleteNode(nodeID) {
@@ -3023,7 +3077,7 @@ function deleteNode(nodeID) {
     if (!isDelete)
         return;
     disableFiberService();
-    document.getElementById("nodeMenu").style.display = "none";
+    document.getElementById("roadmMenu").style.display = "none";
     if (network.getConnectedEdges(nodeID).length > 0) {
         alert("Unpair node then delete");
 
@@ -3032,21 +3086,13 @@ function deleteNode(nodeID) {
     }
     network.unselectAll();
 }
-function updateNode(nodeID) {
+function updateRoadm(nodeID) {
 
     var id = nodeID;
-    var label = $("#txtNodeName").val().trim();
+    var label = $("#txtRoadmName").val().trim();
     var node_type = nodes.get(nodeID).node_type
 
-
-    //var preNodeType = nodes.get(id).node_type;
-
-    //if (preNodeType == roadmJSON.node_type && node_type == ampJSON.node_type) {
-    //    alert("should not be able to change a site type from ROADM to Amplifier");
-    //    return;
-    //}
-
-    if (addSingleNodeVal()) {
+    if (addSingleNodeVal("txtRoadmName")) {
 
         var roadmtypeprodata = _roadmListDB().get();
         if (node_type == roadmJSON.node_type) {
@@ -3056,7 +3102,7 @@ function updateNode(nodeID) {
                 var lddlpreamptype = "#" + elepreamptype + item.roadm_fiber_id;
                 var lddlboostertype = "#" + eleboostertype + item.roadm_fiber_id;
                 var edgeDetails = edges.get(item.roadm_fiber_id);
-                var llabelname = node_type + "- [" + $("#txtNodeName").val() + ' - ' + nodes.get(edgeDetails.to).label + ' ]'
+                var llabelname = node_type + "- [" + label + ' - ' + nodes.get(edgeDetails.to).label + ' ]'
                 _roadmListDB({ "roadm_fiber_id": item.roadm_fiber_id, }).update({
                     "roadm_label": llabelname, "roadm_type": $(lddlroadmtype).val(),
                     "pre_amp_type": $(lddlpreamptype).val(), "booster_type": $(lddlboostertype).val(),
@@ -3067,24 +3113,43 @@ function updateNode(nodeID) {
                 id: id, label: label, roadm_type_pro: roadmtypeprodata
             });
         }
-        else if (node_type == ampJSON.node_type) {
+        //else if (node_type == ampJSON.node_type) {
 
-            network.body.data.nodes.update({
-                id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
-            });
-        }
-        else if (node_type == fusedJSON.node_type) {
+        //    network.body.data.nodes.update({
+        //        id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
+        //    });
+        //}
+        //else if (node_type == fusedJSON.node_type) {
+        //    network.body.data.nodes.update({
+        //        id: id, label: label
+        //    });
+        //}
+        //else if (node_type == transceiverJSON.node_type) {
+        //    network.body.data.nodes.update({
+        //        id: id, label: label, transceiver_type: $("#ddlTransceiverType").val(), transceiver_mode: $("#ddlModeRate").val(),
+        //    });
+        //}
+
+        clearRoadm();
+    }
+
+}
+function updateAttenuator(nodeID) {
+
+    var id = nodeID;
+    var label = $("#txtAttenuatorName").val().trim();
+    var node_type = nodes.get(nodeID).node_type
+
+    if (addSingleNodeVal("txtAttenuatorName")) {
+
+        if (node_type == fusedJSON.node_type) {
             network.body.data.nodes.update({
                 id: id, label: label
             });
-        }
-        else if (node_type == transceiverJSON.node_type) {
-            network.body.data.nodes.update({
-                id: id, label: label, transceiver_type: $("#ddlTransceiverType").val(), transceiver_mode: $("#ddlModeRate").val(),
-            });
+            clearAttenuator();
         }
 
-        clearSingleNode();
+        
     }
 
 }
@@ -3268,8 +3333,8 @@ function appendPreAmpandBoosterType(nodeType, ddlID) {
 //show context menu on righ click of component
 function showContextMenu(x, y, menu) {
 
-    document.getElementById("nodeMenu").style.display = "none";
-    document.getElementById("fiberMenu").style.display = "none";
+    document.getElementById("roadmMenu").style.display = "none";
+    document.getElementById("attenuatorMenu").style.display = "none";
     document.getElementById("serviceMenu").style.display = "none";
 
     var windowHeight = $(window).height() / 2;
@@ -3305,12 +3370,13 @@ function showContextMenu(x, y, menu) {
 function createNewProject(projectName, layoutName) {
     tempProjectName = projectName;
     tempLayoutName = layoutName;
-    $("#dropdownMenuButton").text(projectName);
+    $("#displayPN").text(projectName);
     //$("#cardNetworkArea, #divNodeFiber").removeClass('disableDiv');
-    $("#divNodeFiber").removeClass('disableDiv');
-    $("#localworkarea").show();
-    $("#divWelcome").hide();
-    $("#NetworkCreationClose").click();
+    //$("#divNodeFiber").removeClass('disableDiv');
+    $("#mynetwork").show();
+    //$("#divWelcome").hide();
+    $("#staticBackdrop").modal('hide');
+    $("#stepGP").click();
 }
 function networkValidation() {
     var flag = false;
