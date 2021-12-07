@@ -110,9 +110,10 @@
 
   },
 
-  "Fiber": {
+  "DualFiber": {
     "dashes": false,
     "component_type": "Fiber",
+    "fiber_category": "Dual",
     "options": {
       "color": {
         "color": "#blue",
@@ -148,7 +149,45 @@
       }
     }
   },
+  "SingleFiber": {
+    "dashes": true,
+    "component_type": "Fiber",
+    "fiber_category": "Single",
+    "options": {
+      "color": {
+        "color": "#blue",
+        "highlight": "#blue",
+        "hover": "#blue",
+        "inherit": false,
+        "opacity": 1
+      },
+      "background": {
+        "color": "blue",
+        "dashes": false,
+        "enabled": false,
+        "size": 10
+      },
+      "arrows": {
+        "from": {
+          "enabled": false,
+          "type": "arrow"
+        },
+        "to": {
+          "enabled": false,
+          "type": "arrow"
+        }
+      },
+      "font": {
+        "align": "top"
+      },
+      "smooth": {
+        "enabled": false,
+        "roundness": 0.5,
+        "type": "continuous"
 
+      }
+    }
+  },
 
   "Service": {
     "dashes": true,

@@ -403,7 +403,7 @@
                                     </div>
                                 </div>
                                 <div class="group-node mt-2">
-                                    <div class="create-back" id="btnmanualaddEdge">
+                                    <div class="create-back" id="btnAddDualFiber">
                                         <div class="card icon-group hover-show">
                                             <img src="./Assets/img/dualfiber.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
@@ -411,7 +411,7 @@
                                         </div><span class="sidebar-text1">Dual fiber</span>
                                     </div>
 
-                                    <div class="create-back" onclick="openDrawer('singlefiber')">
+                                    <div class="create-back" id="btnAddSingleFiber">
                                         <div class="card icon-group hover-show">
                                             <img src="./Assets/img/singlefiber.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
@@ -425,7 +425,7 @@
                                 </span>
                             </div>
                             <div class="tab-pane fade d-non" id="add-service" role="tabpanel" aria-labelledby="pills-contact-tab">
-                                <div class="create-back" onclick="openDrawer('service')">
+                                <div class="create-back" id="btnServiceActive">
                                     <div class="card icon-group hover-show">
                                         <img src="./Assets/img/service.svg"
                                              class="mx-auto  icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
@@ -491,7 +491,7 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Attenuator name</label><span class="f-s-12"> (Max length 20)</span>
+                            <label class="f-s-17">Attenuator name</label><span class="f-s-12" id="siteLength"></span>
                             <input id="txtAttenuatorName" type="text" placeholder="Enter Attenuator name" class="form-control" />
                         </div>
                     </div>
@@ -509,7 +509,7 @@
 
                 <div class="mutinode-drawer-container" id="roadm">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">Node properties</label>
+                        <label class="f-s-20 dark-heading mb-0">ROADM properties</label>
                         <div>
                             <span class="close close-btnn" data-tab="single" onclick="closeDrawer('roadm')">
                                 <span aria-hidden="true">&times;</span>
@@ -521,7 +521,7 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">ROADM name</label><span class="f-s-12"> (Max length 20)</span>
+                            <label class="f-s-17">ROADM name</label><span class="f-s-12" id="siteLength"></span>
                             <input type="text" id="txtRoadmName" placeholder="Enter ROADM name" class="form-control" />
                         </div>
                         <div id="divRoadmPro">
@@ -543,11 +543,11 @@
                     </div>
                 </div>
 
-                <div class="mutinode-drawer-container" id="duelfiber">
+                <div class="mutinode-drawer-container" id="dualfiber">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">Duel fiber properties</label>
+                        <label class="f-s-20 dark-heading mb-0">Dual fiber properties</label>
                         <div>
-                            <span class="close close-btnn" id="single" data-tab="fibre" onclick="closeDrawer('duelfiber')">
+                            <span class="close close-btnn" id="single" data-tab="fibre" onclick="closeDrawer('dualfiber')">
                                 <span aria-hidden="true">&times;</span>
                             </span>
                         </div>
@@ -556,69 +556,72 @@
 
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Fiber Label / Name</label>
+                            <input type="text" id="txtFiberName"
+                                   placeholder="Enter Fiber Name"
+                                   class="form-control" />
+                        </div>
                         <div class="accordion-fiber">
-                            <p class="title m-0 f-s-17">Fiber A</p>
+                            <p class="title m-0 f-s-17" id="pFiberA">Fiber A</p>
                             <span class="show-fiber">+</span>
                         </div>
                         <div class="info-fiber">
                             <div class="panel">
-                                <div class="form-group mt-2">
-                                    <label class="f-s-17">Fiber name</label>
-                                    <input type="text" placeholder="Enter Fiber name" class="form-control" />
-                                </div>
+
                                 <div class="form-group">
                                     <label class="f-s-17">Fiber type</label>
-                                    <select id="inputState" class="form-control">
-                                        <option selected>Select fiber type</option>
-                                        <option>...</option>
-                                    </select>
+                                    <select id="ddlFiberAType" class="form-control"></select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Source</label>
-                                    <input type="text" placeholder="Enter Source" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">Destination</label>
-                                    <input type="text" placeholder="Enter Destination" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">CD Coefficient</label>
-                                    <input type="text" placeholder="Enter CD Coefficient" class="form-control" />
+                                    <label class="f-s-17">CD Coefficient(ps/nm/km)</label>
+                                    <input type="text"
+                                           placeholder="Enter CD Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">PMD Coefficient</label>
-                                    <input type="text" placeholder="Enter PMD Coefficient" class="form-control" />
+                                    <input type="text"
+                                           placeholder="Enter PMD Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Span length</label>
-                                    <input type="text" placeholder="Enter Span length" class="form-control" />
+                                    <label class="f-s-17">Span length(in km)</label>
+                                    <input type="text"
+                                           placeholder="Enter Span length"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Loss Coefficient</label>
-                                    <input type="text" placeholder="Enter Loss Coefficient" class="form-control" />
+                                    <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                                    <input type="text"
+                                           placeholder="Enter Loss Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Connector IN</label>
-                                    <input type="text" placeholder="Enter Connector IN" class="form-control" />
+                                    <label class="f-s-17">Connector IN(dB)</label>
+                                    <input type="text"
+                                           placeholder="Enter Connector IN"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Connector OUT</label>
-                                    <input type="text" placeholder="Connector OUT" class="form-control" />
+                                    <label class="f-s-17">Connector OUT(dB)</label>
+                                    <input type="text"
+                                           placeholder="Connector OUT"
+                                           class="form-control" />
                                 </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">Ageing Loss</label>
-                                    <input type="text" placeholder="Enter Ageing Loss" class="form-control" />
-                                </div>
+
                                 <div>
                                     <label class="container-check f-s-17">
-                                        Length Border Loss
+                                        Length Based Loss
                                         <input type="checkbox" checked="checked">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span loss</label>
-                                    <input type="text" placeholder="Enter Span loss" class="form-control" />
+                                    <input type="text"
+                                           placeholder="Enter Span loss"
+                                           class="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -630,80 +633,74 @@
                             </label>
                         </div>
                         <div class="accordion-fiber mt-1">
-                            <p class="title m-0 f-s-17">Fiber B</p>
+                            <p class="title m-0 f-s-17" id="pFiberB">Fiber B</p>
                             <span class="show-fiber">+</span>
                         </div>
                         <div class="info-fiber">
                             <div class="panel">
-                                <div class="form-group mt-2">
-                                    <label class="f-s-17">Fiber name</label>
-                                    <input type="text" placeholder="Enter Fiber name" class="form-control" />
-                                </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Fiber type</label>
-                                    <select id="inputState" class="form-control">
-                                        <option selected>Select fiber type</option>
-                                        <option>...</option>
-                                    </select>
+                                    <select id="ddlFiberBType" class="form-control"></select>
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Source</label>
-                                    <input type="text" placeholder="Enter Source" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">Destination</label>
-                                    <input type="text" placeholder="Enter Destination" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">CD Coefficient</label>
-                                    <input type="text" placeholder="Enter CD Coefficient" class="form-control" />
+                                    <label class="f-s-17">CD Coefficient(ps/nm/km)</label>
+                                    <input type="text"
+                                           placeholder="Enter CD Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">PMD Coefficient</label>
-                                    <input type="text" placeholder="Enter PMD Coefficient" class="form-control" />
+                                    <input type="text"
+                                           placeholder="Enter PMD Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Span length</label>
-                                    <input type="text" placeholder="Enter Span length" class="form-control" />
+                                    <label class="f-s-17">Span length(in km)</label>
+                                    <input type="text"
+                                           placeholder="Enter Span length"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Loss Coefficient</label>
-                                    <input type="text" placeholder="Enter Loss Coefficient" class="form-control" />
+                                    <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                                    <input type="text"
+                                           placeholder="Enter Loss Coefficient"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Connector IN</label>
-                                    <input type="text" placeholder="Enter Connector IN" class="form-control" />
+                                    <label class="f-s-17">Connector IN(dB)</label>
+                                    <input type="text"
+                                           placeholder="Enter Connector IN"
+                                           class="form-control" />
                                 </div>
                                 <div class="form-group">
-                                    <label class="f-s-17">Connector OUT</label>
-                                    <input type="text" placeholder="Connector OUT" class="form-control" />
-                                </div>
-                                <div class="form-group">
-                                    <label class="f-s-17">Ageing Loss</label>
-                                    <input type="text" placeholder="Enter Ageing Loss" class="form-control" />
+                                    <label class="f-s-17">Connector OUT(dB)</label>
+                                    <input type="text"
+                                           placeholder="Connector OUT"
+                                           class="form-control" />
                                 </div>
                                 <div>
                                     <label class="container-check f-s-17">
-                                        Length Border Loss
+                                        Length Based Loss
                                         <input type="checkbox" checked="checked">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span loss</label>
-                                    <input type="text" placeholder="Enter Span loss" class="form-control" />
+                                    <input type="text"
+                                           placeholder="Enter Span loss"
+                                           class="form-control" />
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnDualFiberUpdate" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseDualFiber" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
 
@@ -726,63 +723,82 @@
 
                         <div class="form-group mt-2">
                             <label class="f-s-17">Fiber name</label>
-                            <input type="text" placeholder="Enter Fiber name" class="form-control" />
+                            <input type="text" id="txtSinlgeFiberName" placeholder="Enter Fiber name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Source(Tx)</label>
+                            <input type="text" id="txtSource"
+                                   placeholder="Enter Source"
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Destination(Rx)</label>
+                            <input type="text" id="txtDestination"
+                                   placeholder="Enter Destination"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Fiber type</label>
-                            <select id="inputState" class="form-control">
-                                <option selected>Select fiber type</option>
-                                <option>...</option>
-                            </select>
+                            <select id="ddlSingleFiberType" class="form-control"></select>
                         </div>
                         <div class="form-group">
-                            <label class="f-s-17">CD Coefficient</label>
-                            <input type="text" placeholder="Enter CD Coefficient" class="form-control" />
+                            <label class="f-s-17">CD Coefficient(ps/nm/km)</label>
+                            <input type="text"
+                                   placeholder="Enter CD Coefficient"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">PMD Coefficient</label>
-                            <input type="text" placeholder="Enter PMD Coefficient" class="form-control" />
+                            <input type="text"
+                                   placeholder="Enter PMD Coefficient"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label class="f-s-17">Span length</label>
-                            <input type="text" placeholder="Enter Span length" class="form-control" />
+                            <label class="f-s-17">Span length(in km)</label>
+                            <input type="text"
+                                   placeholder="Enter Span length"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label class="f-s-17">Loss Coefficient</label>
-                            <input type="text" placeholder="Enter Loss Coefficient" class="form-control" />
+                            <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                            <input type="text"
+                                   placeholder="Enter Loss Coefficient"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label class="f-s-17">Connector IN</label>
-                            <input type="text" placeholder="Enter Connector IN" class="form-control" />
+                            <label class="f-s-17">Connector IN(dB)</label>
+                            <input type="text"
+                                   placeholder="Enter Connector IN"
+                                   class="form-control" />
                         </div>
                         <div class="form-group">
-                            <label class="f-s-17">Connector OUT</label>
-                            <input type="text" placeholder="Connector OUT" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label class="f-s-17">Ageing Loss</label>
-                            <input type="text" placeholder="Enter Ageing Loss" class="form-control" />
+                            <label class="f-s-17">Connector OUT(dB)</label>
+                            <input type="text"
+                                   placeholder="Connector OUT"
+                                   class="form-control" />
                         </div>
                         <div>
                             <label class="container-check f-s-17">
-                                Length Border Loss
+                                Length Based Loss
                                 <input type="checkbox" checked="checked">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Span loss</label>
-                            <input type="text" placeholder="Enter Span loss" class="form-control" />
+                            <input type="text"
+                                   placeholder="Enter Span loss"
+                                   class="form-control" />
                         </div>
 
                     </div>
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnSingleFiberUpdate" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseSingleFiber" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
 
@@ -803,8 +819,8 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Amplifier name</label><span class="f-s-12"> (Max length 20)</span>
-                            <input type="text" placeholder="Enter Amplifier name" class="form-control" />
+                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtAmplifierName" placeholder="Enter Amplifier name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Pre-Amp Type</label>
@@ -818,10 +834,10 @@
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnAmplifierUpdate" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseAmplifier" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -841,51 +857,25 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Transceiver name</label><span class="f-s-12"> (Max length 20)</span>
-                            <input type="text" placeholder="Enter Transceiver name" class="form-control" />
+                            <label class="f-s-17">Transceiver name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtTransceiverName" placeholder="Enter Transceiver name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Transceiver Type</label>
-                            <select id="inputState" class="form-control">
-                                <option selected="">Select Transceiver Type</option>
-                                <option>...</option>
-                            </select>
+                            <select id="ddlTransceiverType" class="form-control"></select>
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Mode / Data Rate</label>
-                            <select id="inputState" class="form-control">
-                                <option selected="">Select Mode / Data Rate</option>
-                                <option>...</option>
-                            </select>
+                            <select id="ddlDataRate" class="form-control"></select>
                         </div>
-
-                        <!-- <div class="form-group">
-                          <label class="f-s-17">Node Type</label>
-                          <select id="inputState" class="form-control">
-                            <option selected>Type 2 ROADM</option>
-                            <option>...</option>
-                          </select>
-                        </div>
-
-                        <div class="form-group">
-                          <label class="f-s-17">Node Degree</label><span class="f-s-12"> (Max length 16)</span>
-                          <input type="text" placeholder="Enter node Degree" class="form-control" />
-                        </div> -->
-                        <!-- <div class="form-group-single">
-
-                           <button class="single-save">Save</button>
-                        </div> -->
-
-
-
                     </div>
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnTransceiverUpdate" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseTransceiver" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -936,7 +926,7 @@
                 <!--add service-->
                 <div class="mutinode-drawer-container" id="service">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">service properties</label>
+                        <label class="f-s-20 dark-heading mb-0">Service properties</label>
                         <div>
                             <span class="close close-btnn" id="single" data-tab="service" onclick="closeDrawer('service')">
                                 <span aria-hidden="true">&times;</span>
@@ -948,25 +938,61 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Band rate</label><span class="f-s-12"></span>
-                            <input type="number" class="form-control" />
+                            <label class="f-s-17">Service name/Label</label>
+                            <input type="text"
+                                   placeholder="Service 1"
+                                   class="form-control" />
                         </div>
 
+                        <div class="row">
+                            <div class="col-12 col-lg-4 col-xl-4 col-sm-4">
+                                <label class="f-s-14">Source</label>
+                            </div>
+                            <div class="col-12 col-lg-3 col-xl-3 col-sm-3">
+                                <input type="text"
+                                       placeholder="A"
+                                       class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-1">
+                            <div class="col-12 col-lg-4 col-xl-4 col-sm-4">
+                                <label class="f-s-14">Destination</label>
+                            </div>
+                            <div class="col-12 col-lg-3 col-xl-3 col-sm-3">
+                                <input type="text"
+                                       placeholder="B"
+                                       class="form-control" />
+                            </div>
+                        </div>
+
+
+
                         <div class="form-group">
-                            <label class="f-s-17">Central frequency</label>
+                            <label class="f-s-17">Bandwidth (in Gbps)</label>
+                            <input type="number"
+                                   value="100"
+                                   class="form-control" />
+                        </div>
+
+
+
+                        <div class="form-group">
+                            <label class="f-s-17">Central frequency(in GHz)</label>
                             <select id="inputState" class="form-control">
                                 <option selected>Auto</option>
                                 <option>...</option>
                             </select>
                         </div>
+
                     </div>
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnUpdateService" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseService" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
 
@@ -1129,14 +1155,37 @@
         <a class="dropdown-item" id="rcAttenuatorEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Attenuator</span></a>
         <a class="dropdown-item" id="rcAttenuatorDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Attenuator</span></a>
     </div>
-    <div class="dropdown-menu" id="fiberMenu" aria-labelledby="dropdownMenuButton">
-        <span class="close close-btnn1" onclick="closeMenu('fiberMenu')">
+    <div class="dropdown-menu" id="amplifierMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('amplifierMenu')">
             <span aria-hidden="true">×</span>
         </span>
-        <a class="dropdown-item" id="rightClickEdgeEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Fiber</span></a>
-        <a class="dropdown-item" id="rightClickEdgeDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Fiber</span></a>
-        <a class="dropdown-item" id="InsertNode" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Insert node</span></a>
-        <a class="dropdown-item" id="Copy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Amplifier</span></a>
+        <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Amplifier</span></a>
+    </div>
+    <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="rcTransceiverEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Transceiver</span></a>
+        <a class="dropdown-item" id="rcTransceiverDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Transceiver</span></a>
+    </div>
+    <div class="dropdown-menu" id="dualFiberMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('dualFiberMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="rcDualFiberEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Dual Fiber</span></a>
+        <a class="dropdown-item" id="rcDualFiberDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Dual Fiber</span></a>
+        <a class="dropdown-item" id="rcDualInsertNode" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Insert node</span></a>
+        <a class="dropdown-item" id="rcDualCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
+    </div>
+    <div class="dropdown-menu" id="singleFiberMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('singleFiberMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="rcSingleFiberEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Single Fiber</span></a>
+        <a class="dropdown-item" id="rcSingleFiberDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Single Fiber</span></a>
+        <a class="dropdown-item" id="rcSingleInsertNode" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Insert node</span></a>
+        <a class="dropdown-item" id="rcSingleCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
     <div class="dropdown-menu" id="serviceMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('serviceMenu')" data-tab="single">
