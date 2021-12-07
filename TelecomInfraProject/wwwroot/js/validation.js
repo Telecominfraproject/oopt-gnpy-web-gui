@@ -1,9 +1,4 @@
-﻿function newProjectValidation() {
-    var flag = false;
-    if ($("#txtProjectName").val().trim() != '' && $("#ddlPlatformLayout").val().trim() != '')
-        flag = true;
-    return flag;
-}
+﻿
 function addSingleNodeVal(element) {
     var flag = true;
     var elementID="#"+element

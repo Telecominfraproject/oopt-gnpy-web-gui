@@ -1237,22 +1237,17 @@ select {
 
     .stepper-tab ul li:nth-child(2) {
         z-index: 9;
-        margin-left: 151px;
+        margin-left: 212px;
     }
 
     .stepper-tab ul li:nth-child(3) {
         z-index: 8;
-        margin-left: 336px;
+        margin-left: 410px;
     }
 
     .stepper-tab ul li:nth-child(4) {
         z-index: 7;
-        margin-left: 534px;
-    }
-
-    .stepper-tab ul li:nth-child(5) {
-        z-index: 6;
-        margin-left: 703px;
+        margin-left: 580px;
     }
 
 .stepper-tab .nav-link {

@@ -57,102 +57,10 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-                  Create
-                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-                </button> -->
+      Create
+      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+    </button> -->
                 <!-- Create new Modal start -->
-
-                <div class="modal modal1 fade" id="staticBackdrop" data-backdrop="false" data-keyboard="false" tabindex="-1"
-                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content modal-content-borderless mt-5">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">
-                                    Network Creation
-                                </h5>
-                                <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                   <span aria-hidden="true">&times;</span>
-                                 </button> -->
-                            </div>
-                            <div class="modal-body">
-                                <div>
-                                    <h6 class="model-title">
-                                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                                        User Requester you to add Network Level Options
-                                    </h6>
-                                </div>
-                                <form>
-                                    <div class="form-group">
-                                        <label for="">Project Name</label>
-                                        <input type="text"
-                                               class="form-control"
-                                               id="txtProjectName"
-                                               placeholder="Enter your project name" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="">Network Platform Layout</label>
-                                        <select class="form-control" id="ddlPlatformLayout"></select>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" id="btnCreateProject" class="btn modal-btn mx-auto">Go to next</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal modal1 fade" id="staticBackdrop5" data-backdrop="false" data-keyboard="false" tabindex="-1"
-                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content modal-content-borderless mt-5">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">
-                                    Import Network
-                                </h5>
-                                <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                   <span aria-hidden="true">&times;</span>
-                                 </button> -->
-                            </div>
-                            <div class="modal-body">
-
-                                <form>
-                                    <div class="container justify-content-center align-items-center">
-                                        <div class="row">
-
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" readonly>
-                                                    <div class="input-group-btn">
-                                                        <span class="fileUpload btn">
-                                                            <span class="upl" id="upload">Browse File</span>
-                                                            <input type="file" class="upload up" />
-                                                        </span><!-- btn-orange -->
-                                                    </div><!-- btn -->
-                                                </div><!-- group -->
-                                            </div><!-- form-group -->
-
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="container">
-                                    <div class="row mx-auto">
-                                        <div class="col-md-6 col-12 col-lg-6 col-xl-6">
-                                            <button type="button" class="btn modal-btn" data-dismiss="modal" style="min-width: 150px;border-radius: 10px;">Import</button>
-                                        </div>
-                                        <div class="col-md-6 col-12 col-lg-6 col-xl-6">
-                                            <button type="button" class="btn modal-btn1" data-dismiss="modal" style="min-width: 150px;border-radius: 10px;">Cancel</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
                      aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -160,19 +68,19 @@
                         <div class="modal-content modal-content-borderless mt-5">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="staticBackdropLabel">
-                                    Global Parameters
+                                    Simulation Parameters
                                 </h5>
                                 <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                   <span aria-hidden="true">&times;</span>
-                                 </button> -->
+                      <span aria-hidden="true">&times;</span>
+                    </button> -->
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                                  <h6 class="model-title">
-                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                                    User Requester you to add Network Level Options
-                                  </h6>
-                                </div> -->
+                      <h6 class="model-title">
+                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                        User Requester you to add Network Level Options
+                      </h6>
+                    </div> -->
 
                                 <div class="container">
 
@@ -212,46 +120,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">Equipment File</label><button type="button" id="btnDownloadJson" class="btn download-btn float-right">Download JSON</button>
-                                            <div class="input-group">
-                                                <button type="button" onclick="document.getElementById('import_Eqpt_button').click()" class="btn upload-btn">
-                                                    Load equipment file
-                                                    <img src="./Assets/img/import.svg" class="mx-2" />
-                                                </button>
-                                                <input style="display:none" type="file" id="import_Eqpt_button" onclick="loadEqpt()" value="Upload File" />
 
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn modal-btn-pre" id="btnPrevious">Previous</button>
-                                <button type="button" class="btn modal-btn" id="btnSaveGP">Go to next</button>
+                                <button type="button" class="btn modal-btn" id="btnSaveGP">Apply</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Create new Modal End -->
-                <!-- <button type="button" class="btn btn-white">
-                  Import
-                  Network<img src="./Assets/img/Import.svg" class="mx-2" />
-                </button> -->
-                <!-- <button type="button" class="btn btn-white mx-2">
-                 Save <img src="./Assets/img/Save.svg" class="mx-2" />
+               
+                <button type="button" onclick="document.getElementById('import_Eqpt_button').click()" class="btn upload-btn">
+                    Import data
+                    <img src="./Assets/img/import.svg" class="mx-2" />
                 </button>
-                <button type="button" class="btn btn-green ">
-                  <img src="./Assets/img/Export File icon.svg" class="mx-2" />Export
-                  File
-                </button> -->
-                <!-- <a href="help.html" class=" mx-2" data-toggle="tooltip" data-placement="top" title="Help">
-                  <img src="./Assets/img/Help icon.svg" class="mx-2" />
-                </a> -->
-
+                <input style="display:none" type="file" id="import_Eqpt_button" onclick="loadEqpt()" value="Upload File" />
                 <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
                     <img src="./Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
                          title="About" />
@@ -294,25 +178,16 @@
 
                     <div class="row stepper-tab">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1">
-                                <a class="nav-link active d-inline-flex" id="stepCreateProject" data-toggle="pill" href="#create-network"
-                                   role="tab" aria-controls="pills-home" aria-selected="true">
-                                    <span class="material-icons pr-2">
-                                        add_circle
-                                    </span>
-                                    Create project
-                                </a>
-                            </li>
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(2)" id="step2" data-toggle="modal" data-target="#staticBackdrop4">
+                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1" data-toggle="modal" data-target="#staticBackdrop4">
                                 <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#global"
                                    role="tab" aria-controls="pills-profile" aria-selected="false">
                                     <span class="material-icons pr-2">
                                         speed
                                     </span>
-                                    Global parameters
+                                    Simulation parameters
                                 </a>
                             </li>
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(3)" id="step3">
+                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(2)" id="step2">
                                 <a class="nav-link d-inline-flex" id="stepCreateTopology" data-toggle="pill" href="#edit-topology"
                                    role="tab" aria-controls="pills-profile" aria-selected="false">
                                     <span class="material-icons pr-2">
@@ -321,7 +196,7 @@
                                     Create/Edit topology
                                 </a>
                             </li>
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(4)" id="step4" data-toggle="modal" data-target="#staticBackdrop6">
+                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(3)" id="step3" data-toggle="modal" data-target="#staticBackdrop6">
                                 <a class="nav-link d-inline-flex" id="stepAddService" data-toggle="pill" href="#add-service"
                                    role="tab" aria-controls="pills-contact" aria-selected="false">
                                     <span class="material-icons">
@@ -330,7 +205,7 @@
                                     Add/edit services
                                 </a>
                             </li>
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(5)" id="step5">
+                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(4)" id="step4">
                                 <a class="nav-link d-inline-flex" id="stepSaveNetwork" data-toggle="pill" href="#save-network"
                                    role="tab" aria-controls="pills-contact" aria-selected="false">
                                     <span class="material-icons pr-2">
@@ -341,36 +216,6 @@
                             </li>
                         </ul>
                         <div class="tab-content stp-tab" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="create-network" role="tabpanel"
-                                 aria-labelledby="pills-home-tab">
-
-                                <div class="create-back" data-toggle="modal" data-target="#staticBackdrop">
-                                    <img src="./Assets/img/create.svg" class=""
-                                         width="15px" height="20px" data-target="#staticBackdrop" data-toggle="tooltip" data-placement="top"
-                                         title="Create network" />&nbsp; <span class="sidebar-text">Create network</span>
-                                </div>
-
-                                <div class="create-back" data-toggle="modal" data-target="#staticBackdrop5">
-                                    <img src="./Assets/img/import.svg" width="15px" height="20px" data-toggle="tooltip" data-placement="top"
-                                         title="Import network" />&nbsp; <span class="sidebar-text">Import network</span>
-                                </div>
-
-                                <span class="material-icons toggle-arrow" id="toggle-arrow-1">
-                                    chevron_left
-                                </span>
-                            </div>
-                            <div class="tab-pane fade" id="global" role="tabpanel" aria-labelledby="pills-contact-tab">
-
-                                <!--    <div class="create-back"  >
-                                  <img src="./Assets/img/save1.png"  width="20px" height="20px"
-                                  />&nbsp;<span>Save</span>
-                                </div>
-
-                                 <span class="material-icons toggle-arrow" id="toggle-arrow-5">
-                                   chevron_left
-                                 </span> -->
-
-                            </div>
                             <div class="tab-pane fade" id="edit-topology" role="tabpanel" aria-labelledby="pills-profile-tab">
                                 <div class="group-node">
                                     <div class="create-back" id="btnAddRoadm">
@@ -461,10 +306,6 @@
                         </div>
                     </div>
                     <div class="float-right d-flex right-btn">
-                        <button type="button" class="btn btn-white">
-                            Project: <span id="displayPN">Untitlted-1</span>  &nbsp;<i class="fa fa-edit pt-2" style="color: white;" data-toggle="modal" data-target="#staticBackdrop"></i>
-                        </button>
-
                         <a href="#" id="btncaptureimagenetwork" class=" mx-2 icon-top-right" data-toggle="tooltip" data-placement="top" title="Camera">
                             <img src="./Assets/img/camera.png" />
                         </a>
@@ -863,10 +704,6 @@
                         <div class="form-group">
                             <label class="f-s-17">Transceiver Type</label>
                             <select id="ddlTransceiverType" class="form-control"></select>
-                        </div>
-                        <div class="form-group">
-                            <label class="f-s-17">Mode / Data Rate</label>
-                            <select id="ddlDataRate" class="form-control"></select>
                         </div>
                     </div>
                     <div class="multinode-footer pl-3 pr-3">

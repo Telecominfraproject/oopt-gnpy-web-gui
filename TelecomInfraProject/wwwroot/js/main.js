@@ -172,12 +172,6 @@ var sidebartext3 = document.querySelectorAll(".sidebar-text3");
 
 
 
-arrowbtn1.addEventListener("click", function () {
-    tabcontent.classList.toggle('left-59')
-    for (var i = 0; i < sidebartext.length; i++) {
-        sidebartext[i].classList.toggle("d-none")
-    }
-})
 
 arrowbtn2.addEventListener("click", function () {
     tabcontent.classList.toggle('left-59')
@@ -234,14 +228,6 @@ function stepColor(index) {
             let prev2 = document.querySelector("#step4").previousElementSibling;
             if (prev2.id === "step3") {
                 let step1 = document.getElementById("step3").childNodes;
-                step1[1].classList.add("tab-nav-completed");
-                step1[1].classList.add("text-tab-completed")
-            }
-            break;
-        case 5:
-            let prev3 = document.querySelector("#step5").previousElementSibling;
-            if (prev3.id === "step4") {
-                let step1 = document.getElementById("step4").childNodes;
                 step1[1].classList.add("tab-nav-completed");
                 step1[1].classList.add("text-tab-completed")
             }

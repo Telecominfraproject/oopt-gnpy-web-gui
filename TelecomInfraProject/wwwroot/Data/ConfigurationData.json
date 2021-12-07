@@ -4,7 +4,7 @@
       "ANSI",
       "ETSI"
     ],
-    "eqpt_config_file_path": "http://localhost:60711/Data/eqpt_config.json"
+    "eqpt_config_file_path": "https://uatassess.hiremee.co.in/Data/eqpt_config.json"
   },
   "node": {
     "site_length": 20,
