@@ -1,4 +1,4 @@
-let Attenuator = document.querySelector('#Attenuator');
+let attenuator = document.querySelector('#attenuator');
 let roadm = document.querySelector('#roadm');
 let amplifier = document.querySelector('#amplifier');
 let dualfiber = document.querySelector('#dualfiber');
@@ -12,13 +12,13 @@ let drawerclose = document.getElementById('drawer-close')
 
 function openDrawer(node) {
     switch (node) {
-        case 'Attenuator':
+        case 'attenuator':
             roadm.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
             create.classList.remove('d-visible');
-            Attenuator.classList.add('d-visible');
+            attenuator.classList.add('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -26,7 +26,7 @@ function openDrawer(node) {
             //  drawerclose.classList.add("drawerleft")
             break;
         case 'roadm':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -39,7 +39,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'amplifier':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.add('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -51,7 +51,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'dualfiber':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.add('d-visible');
             service.classList.remove('d-visible');
@@ -63,7 +63,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'create':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -75,7 +75,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'transceiver':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -87,7 +87,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'singlefiber':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
@@ -99,7 +99,7 @@ function openDrawer(node) {
             // drawerclose.classList.add("drawerleft")
             break;
         case 'service':
-            Attenuator.classList.remove('d-visible');
+            attenuator.classList.remove('d-visible');
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.add('d-visible');
@@ -115,8 +115,8 @@ function openDrawer(node) {
 
 function closeDrawer(node) {
     switch (node) {
-        case 'Attenuator':
-            Attenuator.classList.remove('d-visible');
+        case 'attenuator':
+            attenuator.classList.remove('d-visible');
             // drawerclose.classList.remove("drawerleft")
             break;
         case 'roadm':
@@ -205,10 +205,15 @@ arrowbtn4.addEventListener("click", function () {
 
 
 function stepColor(index) {
+    showMenu = 0;
+    modeHighLight();
+    
     switch (index) {
         case 1:
             break;
         case 2:
+            currentStepper = "stepCreateTopology";
+            showMenu = 1;
             let prev = document.querySelector("#step2").previousElementSibling;
             if (prev.id === "step1") {
                 let step1 = document.getElementById("step1").childNodes;
@@ -217,6 +222,8 @@ function stepColor(index) {
             }
             break;
         case 3:
+            currentStepper = "stepAddService";
+            showMenu = 2;
             let prev1 = document.querySelector("#step3").previousElementSibling;
             if (prev1.id === "step2") {
                 let step1 = document.getElementById("step2").childNodes;
@@ -225,6 +232,7 @@ function stepColor(index) {
             }
             break;
         case 4:
+            currentStepper = "stepSaveNetwork";
             let prev2 = document.querySelector("#step4").previousElementSibling;
             if (prev2.id === "step3") {
                 let step1 = document.getElementById("step3").childNodes;
@@ -234,8 +242,97 @@ function stepColor(index) {
             break;
     }
 }
+var btnAddRoadm = "#btnAddRoadm";
+var btnAddFused = "#btnAddFused";
+var btnAddAmp = "#btnAddAmp";
+var btnAddTransceiver = "#btnAddTransceiver";
+var btnAddDualFiber = "#btnAddDualFiber";
+var btnAddSingleFiber = "#btnAddSingleFiber"; 
+var btnServiceActive = "#btnServiceActive";
+function modeHighLight(node) {
+    disableFiberService();
+    showHideDrawerandMenu();
+    switch (node) {
+        case 'Roadm':
+            $(btnAddRoadm).addClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            break;
+        case 'amplifier':
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).addClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            break;
+        case 'fused':
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).addClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            break;
+        case 'transceiver':
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).addClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            break;
+        case 'dualfiber':
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).addClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            break;
+        case 'singlefiber':
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).addClass('highlight');
+            break;
+        case 'service':
+            $(btnServiceActive).addClass('highlight');
+            break;
+        default:
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddAmp).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight');
+            $(btnAddDualFiber).removeClass('highlight');
+            $(btnAddSingleFiber).removeClass('highlight');
+            $(btnServiceActive).removeClass('highlight');
+           
+    }
+}
 
-
+function showHideDrawerandMenu() {
+    document.getElementById("roadmMenu").style.display = "none";
+    document.getElementById("attenuatorMenu").style.display = "none";
+    document.getElementById("amplifierMenu").style.display = "none";
+    document.getElementById("transceiverMenu").style.display = "none";
+    document.getElementById("serviceMenu").style.display = "none";
+    document.getElementById("singleFiberMenu").style.display = "none";
+    document.getElementById("dualFiberMenu").style.display = "none";
+    
+    closeDrawer('roadm');
+    closeDrawer('attenuator');
+    closeDrawer('amplifier');
+    closeDrawer('transceiver');
+    closeDrawer('service');
+    closeDrawer('dualfiber');
+    closeDrawer('singlefiber');
+}
 
 
 

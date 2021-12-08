@@ -1433,7 +1433,8 @@ select {
 
 
 .text-tab-completed {
-    color: #000000 !important;
+    color: #fff !important;
+    /*color: #000000 !important;*/
 }
 
 .modal-content-borderless {
@@ -1535,4 +1536,7 @@ select {
     margin-right: -15px !important;
     background: #efefef !important;
     border-radius: 50px !important;
+}
+.highlight {
+    background: #143436 !important;
 }

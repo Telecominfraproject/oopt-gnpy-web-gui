@@ -49,6 +49,8 @@ var eleroadmtype = "ddlroadmType";
 var elepreamptype = "ddlPreAmpType";
 var eleboostertype = "ddlBoosterType";
 
+var currentStepper = "";
+
 $(document).ready(function () {
 
     $.getJSON("/Data/StyleData.json", function (data) {
@@ -84,23 +86,23 @@ $(document).ready(function () {
         console.log("An error has occurred3.");
     });
 
-   
+
     $("#btnAddDualFiber").click(function () {
-        nodeMode = "";
+        modeHighLight('dualfiber');
         dualFiberMode();
     });
     $("#btnAddSingleFiber").click(function () {
-        nodeMode = "";
+        modeHighLight('singlefiber');
         singleFiberMode();
     });
     $("#btnServiceActive").click(function () {
-        nodeMode = "";
         if (networkValidation()) {
+            modeHighLight('service');
             manualAddServiceMode();
         }
     });
 
- 
+
     $("#btncaptureimagenetwork").click(function () {
         if (networkValidation())
             networkPage();
@@ -125,21 +127,36 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
+        modeHighLight('Roadm');
         AddNodeMode(1);
     });
     $("#btnAddAmp").click(function () {
+        modeHighLight('amplifier');
         AddNodeMode(2);
     });
     $("#btnAddFused").click(function () {
+        modeHighLight('fused');
         AddNodeMode(3);
     });
     $("#btnAddTransceiver").click(function () {
+        modeHighLight('transceiver');
         AddNodeMode(4);
     });
-    
+
     $("#btnSaveGP").click(function () {
         $("#staticBackdrop4").modal('hide');
-        $("#stepCreateTopology").click();
+        if (currentStepper) {
+            var stepperID = "#" + currentStepper;
+            $(stepperID).addClass('active');
+            $('#stepGP').removeClass('active');
+            if (currentStepper == "stepCreateTopology")
+                showMenu = 1;
+            else if (currentStepper == "stepAddService")
+                showMenu = 2;
+
+        }
+        else
+            $("#stepCreateTopology").click();
     });
 
 });
@@ -350,7 +367,6 @@ function getDbSchema() {
 }
 
 function drag(ev) {
-    disableFiberService();
     ev.dataTransfer.setData("text", ev.target.id);
 }
 
@@ -462,9 +478,11 @@ function draw(isImport) {
         manipulation: {
             enabled: false,
             addNode: function (data, callback) {
-                counter = counter + 1;
-                localStorage.setItem("nodelength", counter);
-                addNodes(data, callback);
+                if (nodeMode > 0 && nodeMode < 5) {
+                    counter = counter + 1;
+                    localStorage.setItem("nodelength", counter);
+                    addNodes(data, callback);
+                }
             },
         },
     };
@@ -485,7 +503,7 @@ function draw(isImport) {
         //}
     });
     network.on("selectEdge", function (data) {
-        nodeMode = "";
+        //nodeMode = "";
         if (data.edges.length > 1 || data.edges.length == 0) {
             copyData.edges = [];
             copyData.nodes = [];
@@ -496,14 +514,14 @@ function draw(isImport) {
         setCopyData(clickedEdge.options.id, '');
     });
     network.on("selectNode", function (params) {
-        nodeMode = "";
+        //nodeMode = "";
         var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
         var deletenode = network.getConnectedEdges(clickedNode.id);
         localStorage.setItem("deletenodeconectededge", deletenode.length);
         //_nodesDB().remove();
         //_nodesDB.insert({ "id": clickedNode.id, "type": nodes.get(clickedNode.id).node_type });
         setCopyData('', clickedNode.options.id);
-        if (isDualFiberMode == 1 || isSingleFiberMode==1) {
+        if (isDualFiberMode == 1 || isSingleFiberMode == 1) {
             isAddService = 0;
             addServicData = {
                 from: '',
@@ -556,7 +574,7 @@ function draw(isImport) {
         _nodesDB().remove();
     });
     network.on("oncontext", function (data, callback) {
-        nodeMode = "";
+        //nodeMode = "";
         //data.preventDefault();
 
         var nodeDatas = this.body.nodes[this.getNodeAt(data.pointer.DOM)];
@@ -584,124 +602,128 @@ function draw(isImport) {
         }
 
         //var type = _nodesDB().first();
-
+        console.log(showMenu);
         if (type == serviceJSON.component_type) {
+            if (showMenu == 2)//enable service menu
+            {
+                if (edgeData != undefined) {
 
-            if (edgeData != undefined) {
-                showContextMenu(data.event.pageX, data.event.pageY, "serviceMenu");
-                document.getElementById("rightClickServiceEdit").onclick = rightClickServiceEdit.bind();
-                document.getElementById("rightClickServiceDelete").onclick = deleteFiber.bind();
+                    showContextMenu(data.event.pageX, data.event.pageY, "serviceMenu");
+                    document.getElementById("rightClickServiceEdit").onclick = rightClickServiceEdit.bind();
+                    document.getElementById("rightClickServiceDelete").onclick = deleteFiber.bind();
+                }
             }
 
         }
         else {
-            if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
+            if (showMenu == 1)//2 enable node and fiber menus
             {
+                if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
+                {
 
-                if (nodeData != undefined) {
-                    if (type == roadmJSON.node_type) {
-                        showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
-                        document.getElementById("rcRoadmEdit").onclick = roadmEdit.bind(
-                            this,
-                            nodeData,
-                            callback
+                    if (nodeData != undefined) {
+                        if (type == roadmJSON.node_type) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
+                            document.getElementById("rcRoadmEdit").onclick = roadmEdit.bind(
+                                this,
+                                nodeData,
+                                callback
 
-                        );
-                        document.getElementById("rcRoadmDelete").onclick = deleteNode.bind(
-                            this,
-                            nodeData,
-                            callback
-                        );
-                    }
-                    else if (type == fusedJSON.node_type) {
-                        showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
-                        document.getElementById("rcAttenuatorEdit").onclick = attenuatorEdit.bind(
-                            this,
-                            nodeData,
-                            callback
+                            );
+                            document.getElementById("rcRoadmDelete").onclick = deleteNode.bind(
+                                this,
+                                nodeData,
+                                callback
+                            );
+                        }
+                        else if (type == fusedJSON.node_type) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
+                            document.getElementById("rcAttenuatorEdit").onclick = attenuatorEdit.bind(
+                                this,
+                                nodeData,
+                                callback
 
-                        );
-                        document.getElementById("rcAttenuatorDelete").onclick = deleteNode.bind(
-                            this,
-                            nodeData,
-                            callback
-                        );
-                    }
-                    else if (type == ampJSON.node_type) {
-                        showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
-                        document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
-                            this,
-                            nodeData,
-                            callback
+                            );
+                            document.getElementById("rcAttenuatorDelete").onclick = deleteNode.bind(
+                                this,
+                                nodeData,
+                                callback
+                            );
+                        }
+                        else if (type == ampJSON.node_type) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
+                            document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
+                                this,
+                                nodeData,
+                                callback
 
-                        );
-                        document.getElementById("rcAmplifierDelete").onclick = deleteNode.bind(
-                            this,
-                            nodeData,
-                            callback
-                        );
-                    }
-                    else {
-                        showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
-                        document.getElementById("rcTransceiverEdit").onclick = transceiverEdit.bind(
-                            this,
-                            nodeData,
-                            callback
+                            );
+                            document.getElementById("rcAmplifierDelete").onclick = deleteNode.bind(
+                                this,
+                                nodeData,
+                                callback
+                            );
+                        }
+                        else {
+                            showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
+                            document.getElementById("rcTransceiverEdit").onclick = transceiverEdit.bind(
+                                this,
+                                nodeData,
+                                callback
 
-                        );
-                        document.getElementById("rcTransceiverDelete").onclick = deleteNode.bind(
-                            this,
-                            nodeData,
-                            callback
-                        );
-                    }
-                }
-            }
-            else if (type == dualFiberJSON.component_type) {
-
-                if (edgeData != undefined) {
-                    if (fiber_category == dualFiberJSON.fiber_category) {
-                        showContextMenu(data.event.pageX, data.event.pageY, "dualFiberMenu");
-                        document.getElementById("rcDualInsertNode").addEventListener('click', function () {
-                            AddData(this, 0);
-                        });
-                        document.getElementById("rcDualCopy").onclick = copy.bind();
-                        //document.getElementById("rcPaste").onclick = paste.bind();
-                        document.getElementById("rcDualFiberEdit").onclick = dualFiberEdit.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
-                        document.getElementById("rcDualFiberDelete").onclick = deleteFiber.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
-                    }
-                    if (fiber_category == singleFiberJSON.fiber_category) {
-                        showContextMenu(data.event.pageX, data.event.pageY, "singleFiberMenu");
-                        document.getElementById("rcSingleInsertNode").addEventListener('click', function () {
-                            AddData(this, 0);
-                        });
-                        document.getElementById("rcSingleCopy").onclick = copy.bind();
-                        //document.getElementById("rcPaste").onclick = paste.bind();
-                        document.getElementById("rcSingleFiberEdit").onclick = singleFiberEdit.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
-                        document.getElementById("rcSingleFiberDelete").onclick = deleteFiber.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
+                            );
+                            document.getElementById("rcTransceiverDelete").onclick = deleteNode.bind(
+                                this,
+                                nodeData,
+                                callback
+                            );
+                        }
                     }
                 }
+                else if (type == dualFiberJSON.component_type) {
 
+                    if (edgeData != undefined) {
+                        if (fiber_category == dualFiberJSON.fiber_category) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "dualFiberMenu");
+                            document.getElementById("rcDualInsertNode").addEventListener('click', function () {
+                                AddData(this, 0);
+                            });
+                            document.getElementById("rcDualCopy").onclick = copy.bind();
+                            //document.getElementById("rcPaste").onclick = paste.bind();
+                            document.getElementById("rcDualFiberEdit").onclick = dualFiberEdit.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                            document.getElementById("rcDualFiberDelete").onclick = deleteFiber.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                        }
+                        if (fiber_category == singleFiberJSON.fiber_category) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "singleFiberMenu");
+                            document.getElementById("rcSingleInsertNode").addEventListener('click', function () {
+                                AddData(this, 0);
+                            });
+                            document.getElementById("rcSingleCopy").onclick = copy.bind();
+                            //document.getElementById("rcPaste").onclick = paste.bind();
+                            document.getElementById("rcSingleFiberEdit").onclick = singleFiberEdit.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                            document.getElementById("rcSingleFiberDelete").onclick = deleteFiber.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                        }
+                    }
+
+                }
             }
         }
-
-
         if (copy == "Yes") {
             document.getElementById("contextMenu").style.display = "none";
             $("#pastecontextMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
@@ -713,7 +735,7 @@ function draw(isImport) {
         _nodesDB().remove();
     });
 
-    
+
     network.on("hoverNode", function (params) {
         try {
             var clickedNode = nodes.get(params.node);
@@ -743,33 +765,16 @@ function draw(isImport) {
     });
 }
 
-function AddService() {
-    disableFiberService();
-    isService = 1;
-    data.componentType = 'service';
-    network.addEdgeMode();
-}
-
-function AddEdgeMode() {
-    disableFiberService();
-    isService = 0;
-    network.addEdgeMode();
-}
-function EditEdgeMode() {
-    disableFiberService();
-    network.editEdgeMode();
-}
-//1-roadm, 2-amp, 3-fused
+//1-roadm, 2-amp, 3-fused, 4-transceiver
 function AddNodeMode(nodemode) {
 
     nodeMode = nodemode;
-    disableFiberService();
-    network.addNodeMode();
+    if (nodeMode) {
+        if (nodeMode > 0 && nodeMode < 5) 
+            network.addNodeMode();
+    }
 }
-function EditNodeMode() {
-    disableFiberService();
-    network.editNode();
-}
+
 function htmlTitle(html, backcolor) {
     const container = document.createElement("pre");
     container.innerHTML = html;
@@ -976,7 +981,6 @@ function testing() {
 }
 
 function exportNetwork(isSaveNetwork) {
-    disableFiberService();
     testing();
 
     //var nodesModel = [];
@@ -1096,7 +1100,7 @@ function exportNetwork(isSaveNetwork) {
 
 
 
-  
+
 
     //start test
     var final = [];
@@ -1278,7 +1282,6 @@ function handleFileLoad(event) {
     importNetwork();
 }
 function importNetwork() {
-    disableFiberService();
     init(true);
     nodes = [];
     edges = [];
@@ -1837,7 +1840,6 @@ var storageData = {
     edges: []
 }
 function SaveNetwork() {
-    disableFiberService();
     exportNetwork(true);
     //storageData.nodes = nodes.get();
     //storageData.edges = edges.get();
@@ -1858,60 +1860,14 @@ var addEdgeData = {
     to: ''
 };
 function addFiber() {
-    var fromcounter = 0;
-    var tocounter = 0;
-
-    var fromnodedegree = nodes.get(addEdgeData.from).node_degree;
-    var tonodedegree = nodes.get(addEdgeData.to).node_degree;
-    var fromnodeconnectededge = network.getConnectedEdges(addEdgeData.from);
-    var tonodeconnectededge = network.getConnectedEdges(addEdgeData.to);
-    fromnodeconnectededge.forEach(function (item, index) {
-        var formnodeconnecteddataset = edges.get();
-        for (i = 0; i < formnodeconnecteddataset.length; i++) {
-            if (item == formnodeconnecteddataset[i].id) {
-                if (formnodeconnecteddataset[i].component_type == dualFiberJSON.component_type) {
-                    fromcounter = fromcounter + 1;
-                }
-            }
-        }
-    });
-    tonodeconnectededge.forEach(function (item, index) {
-        var tonodeconnecteddataset = edges.get();
-        for (i = 0; i < tonodeconnecteddataset.length; i++) {
-            if (item == tonodeconnecteddataset[i].id) {
-                if (tonodeconnecteddataset[i].component_type == dualFiberJSON.component_type) {
-                    tocounter = tocounter + 1;
-                    //console.log("hi");
-                }
-            }
-        }
-    });
-    if (fromcounter < Number(fromnodedegree) && tocounter < Number(tonodedegree)) {
-        var labelvalue = dualFiberJSON.component_type + " " + nodes.get(addEdgeData.from).number + ' - ' + nodes.get(addEdgeData.to).number;
-        var textvalue = roadmJSON.node_type + "- [ " + nodes.get(addEdgeData.from).label + ' - ' + nodes.get(addEdgeData.to).label + " ]";
-        addFiberComponent(1, addEdgeData.from, addEdgeData.to, labelvalue, textvalue);
-        addEdgeData = {
-            from: '',
-            to: ''
-        };
-        UnSelectAll();
-    }
-    else {
-
-        var nodeName = "";
-        if (fromcounter >= Number(fromnodedegree)) {
-            nodeName = nodes.get(addEdgeData.from).label + ' ';
-        }
-        if (tocounter >= Number(tonodedegree)) {
-            nodeName += nodes.get(addEdgeData.to).label;
-        }
-        alert(nodeName + " : node degree limit exist");
-        UnSelectAll();
-        addEdgeData = {
-            from: '',
-            to: ''
-        };
-    }
+    var labelvalue = dualFiberJSON.component_type + " " + nodes.get(addEdgeData.from).number + ' - ' + nodes.get(addEdgeData.to).number;
+    var textvalue = roadmJSON.node_type + "- [ " + nodes.get(addEdgeData.from).label + ' - ' + nodes.get(addEdgeData.to).label + " ]";
+    addFiberComponent(1, addEdgeData.from, addEdgeData.to, labelvalue, textvalue);
+    addEdgeData = {
+        from: '',
+        to: ''
+    };
+    UnSelectAll();
 }
 function dualFiberMode() {
     UnSelectAll();
@@ -1972,7 +1928,6 @@ function manualAddServiceMode() {
 }
 
 function copy() {
-    disableFiberService();
     document.getElementById("edgecontextMenu").style.display = "none";
     copyData.dataCopied = true;
     copy = "Yes";
@@ -1989,7 +1944,6 @@ function UnSelectAll() {
 }
 
 function wholePage() {
-    disableFiberService();
     html2canvas(document.body, {
         onrendered: function (canvas) {
             var img = canvas.toDataURL();
@@ -2004,7 +1958,6 @@ function wholePage() {
 }
 
 function networkPage() {
-    disableFiberService();
     html2canvas(document.querySelector("#mynetwork"), {
         onrendered: function (canvas) {
             var img = canvas.toDataURL();
@@ -2019,6 +1972,7 @@ function networkPage() {
 }
 
 function disableFiberService() {
+    nodeMode = "";
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
     isAddService = 0;
@@ -2323,7 +2277,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
         }
         if (isDualFiberMode == 1) {
             network.body.data.edges.add({
-                id: fiberID, from: cfrom, to: cto, label: clabel, dashes: dualFiberJSON.dashes,fiber_category:dualFiberJSON.fiber_category,
+                id: fiberID, from: cfrom, to: cto, label: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
                 component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color,
                 background: dualFiberJSON.options.background, arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: dualFiberJSON.options.smooth
 
@@ -2420,7 +2374,7 @@ function clearRoadm() {
 }
 function clearAttenuator() {
     $("#txtAttenuatorName").val('');
-    closeDrawer('Attenuator');
+    closeDrawer('attenuator');
     network.unselectAll();
 }
 function clearAmplifier() {
@@ -2440,7 +2394,6 @@ function clearTransceiver() {
 
 function roadmEdit(nodeID, callback) {
     _roadmListDB().remove();
-    disableFiberService();
     document.getElementById("roadmMenu").style.display = "none";
     openDrawer('roadm');
     var nodeDetails = nodes.get(nodeID);
@@ -2468,9 +2421,8 @@ function roadmEdit(nodeID, callback) {
     );
 }
 function attenuatorEdit(nodeID, callback) {
-    disableFiberService();
     document.getElementById("attenuatorMenu").style.display = "none";
-    openDrawer('Attenuator');
+    openDrawer('attenuator');
     var nodeDetails = nodes.get(nodeID);
     $("#txtAttenuatorName").val(nodeDetails.label);
 
@@ -2484,7 +2436,6 @@ function attenuatorEdit(nodeID, callback) {
     );
 }
 function amplifierEdit(nodeID, callback) {
-    disableFiberService();
     document.getElementById("amplifierMenu").style.display = "none";
     openDrawer('amplifier');
     var nodeDetails = nodes.get(nodeID);
@@ -2502,7 +2453,6 @@ function amplifierEdit(nodeID, callback) {
     );
 }
 function transceiverEdit(nodeID, callback) {
-    disableFiberService();
     document.getElementById("transceiverMenu").style.display = "none";
     openDrawer('transceiver');
     var nodeDetails = nodes.get(nodeID);
@@ -2523,7 +2473,6 @@ function deleteNode(nodeID) {
     var isDelete = confirm('do you want to delete site : ' + nodes.get(nodeID).label + ' ?');
     if (!isDelete)
         return;
-    disableFiberService();
     document.getElementById("roadmMenu").style.display = "none";
     if (network.getConnectedEdges(nodeID).length > 0) {
         alert("Unpair node then delete");
@@ -2641,7 +2590,6 @@ function deleteFiber(fiberID) {
     var isDelete = confirm('do you want to delete fiber : ' + edges.get(fiberID).label + ' ?');
     if (!isDelete)
         return;
-    disableFiberService();
     document.getElementById("dualFiberMenu").style.display = "none";
 
     var nodeDetails = nodes.get(edges.get(fiberID).from);
@@ -2663,7 +2611,6 @@ function deleteFiber(fiberID) {
 
 }
 function dualFiberEdit(fiberID, callback) {
-    disableFiberService();
     document.getElementById("dualFiberMenu").style.display = "none";
 
     openDrawer('dualfiber');
@@ -2680,7 +2627,6 @@ function dualFiberEdit(fiberID, callback) {
     );
 }
 function singleFiberEdit(fiberID, callback) {
-    disableFiberService();
     document.getElementById("singleFiberMenu").style.display = "none";
 
     openDrawer('singlefiber');
@@ -2697,12 +2643,11 @@ function singleFiberEdit(fiberID, callback) {
     );
 }
 function rightClickServiceEdit() {
-    disableFiberService();
     document.getElementById("serviceMenu").style.display = "none";
     openDrawer('service');
-    document.getElementById("btnUpdateService").onclick = popupsaveedgeData.bind(
+    document.getElementById("btnUpdateService").onclick = updateSingleFiber.bind(
     );
-    document.getElementById("btnCloseService").onclick = edgecancelNodeEdit.bind(
+    document.getElementById("btnCloseService").onclick = updateSingleFiber.bind(
     );
 }
 
@@ -2776,9 +2721,7 @@ function appendPreAmpandBoosterType(nodeType, ddlID) {
 //show context menu on righ click of component
 function showContextMenu(x, y, menu) {
 
-    document.getElementById("roadmMenu").style.display = "none";
-    document.getElementById("attenuatorMenu").style.display = "none";
-    document.getElementById("serviceMenu").style.display = "none";
+    showHideDrawerandMenu();
 
     var windowHeight = $(window).height() / 2;
     var windowWidth = $(window).width() / 2;
@@ -2808,9 +2751,10 @@ function showContextMenu(x, y, menu) {
         $(element).css("left", "auto");
         $(element).css("bottom", "auto");
     }
+
     document.getElementById(menu).style.display = "block";
 }
-
+var showMenu = 0;
 function networkValidation() {
     var flag = false;
     if (nodes.get().length > 0 || edges.get().length > 0)
