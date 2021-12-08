@@ -3,7 +3,6 @@ let roadm = document.querySelector('#roadm');
 let amplifier = document.querySelector('#amplifier');
 let dualfiber = document.querySelector('#dualfiber');
 let service = document.querySelector('#service');
-let create = document.querySelector('#create');
 let transceiver = document.querySelector('#transceiver');
 let singlefiber = document.querySelector('#singlefiber');
 
@@ -17,7 +16,6 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             attenuator.classList.add('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -30,7 +28,6 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -43,7 +40,6 @@ function openDrawer(node) {
             amplifier.classList.add('d-visible');
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             roadm.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -55,7 +51,6 @@ function openDrawer(node) {
             amplifier.classList.remove('d-visible');
             dualfiber.classList.add('d-visible');
             service.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             roadm.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
@@ -68,7 +63,6 @@ function openDrawer(node) {
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
             roadm.classList.remove('d-visible');
-            create.classList.add('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -80,7 +74,6 @@ function openDrawer(node) {
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
             roadm.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             transceiver.classList.add('d-visible');
             singlefiber.classList.remove('d-visible');
 
@@ -92,7 +85,6 @@ function openDrawer(node) {
             dualfiber.classList.remove('d-visible');
             service.classList.remove('d-visible');
             roadm.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.add('d-visible');
 
@@ -104,7 +96,6 @@ function openDrawer(node) {
             dualfiber.classList.remove('d-visible');
             service.classList.add('d-visible');
             roadm.classList.remove('d-visible');
-            create.classList.remove('d-visible');
             transceiver.classList.remove('d-visible');
             singlefiber.classList.remove('d-visible');
 

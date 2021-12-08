@@ -98,7 +98,7 @@ $(document).ready(function () {
     $("#btnServiceActive").click(function () {
         if (networkValidation()) {
             modeHighLight('service');
-            manualAddServiceMode();
+            addServiceMode();
         }
     });
 
@@ -157,6 +157,14 @@ $(document).ready(function () {
         }
         else
             $("#stepCreateTopology").click();
+    });
+    $('#cbxLength_Based_Loss').change(function () {
+        if (this.checked) {
+            var span_length = Number($("#txtSpan_Length").val());
+            var loss_coefficient = Number($("#txtLoss_Coefficient").val());
+            var span_loss = span_length * loss_coefficient;
+            $("#txtSpan_Loss").val(span_loss);
+        }
     });
 
 });
@@ -559,7 +567,7 @@ function draw(isImport) {
             }
 
             if (addServiceData.from != '' && addServiceData.to != '')
-                manualAddService();
+                addService();
 
         }
     });
@@ -597,20 +605,24 @@ function draw(isImport) {
             fiber_category = edges.get(edgeData).fiber_category;
         }
         else {
-            //alert('unable find. please try again !');
             return;
         }
-
-        //var type = _nodesDB().first();
-        console.log(showMenu);
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
             {
                 if (edgeData != undefined) {
 
                     showContextMenu(data.event.pageX, data.event.pageY, "serviceMenu");
-                    document.getElementById("rightClickServiceEdit").onclick = rightClickServiceEdit.bind();
-                    document.getElementById("rightClickServiceDelete").onclick = deleteFiber.bind();
+                    document.getElementById("rcServiceEdit").onclick = serviceEdit.bind(
+                        this,
+                        edgeData,
+                        callback
+                    );
+                    document.getElementById("rcServiceDelete").onclick = deleteService.bind(
+                        this,
+                        edgeData,
+                        callback
+                    );
                 }
             }
 
@@ -770,7 +782,7 @@ function AddNodeMode(nodemode) {
 
     nodeMode = nodemode;
     if (nodeMode) {
-        if (nodeMode > 0 && nodeMode < 5) 
+        if (nodeMode > 0 && nodeMode < 5)
             network.addNodeMode();
     }
 }
@@ -1268,7 +1280,6 @@ function load_EqptConfig() {
     appendSinglePreAmpandBoosterType();
 }
 
-
 function handleFileSelect(event) {
     const reader = new FileReader()
     reader.onload = handleFileLoad;
@@ -1402,7 +1413,7 @@ function importNetwork() {
             }
 
             if (addServiceData.from != '' && addServiceData.to != '')
-                manualAddService();
+                addService();
 
         }
     });
@@ -1447,7 +1458,7 @@ function importNetwork() {
 
             if (edgeData != undefined) {
                 showContextMenu(data.event.pageX, data.event.pageY, "serviceMenu");
-                document.getElementById("rightClickServiceEdit").onclick = rightClickServiceEdit.bind();
+                document.getElementById("btnServiceUpdate").onclick = serviceEdit.bind();
                 document.getElementById("rightClickServiceDelete").onclick = deleteFiber.bind();
             }
 
@@ -1611,7 +1622,6 @@ function getNodeData(data) {
 
     return new vis.DataSet(importNodes);
 }
-
 
 function getNodeById(data, id) {
     for (var n = 0; n < data.length; n++) {
@@ -1859,6 +1869,7 @@ var addEdgeData = {
     from: '',
     to: ''
 };
+
 function addFiber() {
     var labelvalue = dualFiberJSON.component_type + " " + nodes.get(addEdgeData.from).number + ' - ' + nodes.get(addEdgeData.to).number;
     var textvalue = roadmJSON.node_type + "- [ " + nodes.get(addEdgeData.from).label + ' - ' + nodes.get(addEdgeData.to).label + " ]";
@@ -1889,12 +1900,14 @@ function singleFiberMode() {
         to: ''
     };
 }
+
 var isAddService = 0;
 var addServiceData = {
     from: '',
     to: ''
 };
-function manualAddService() {
+
+function addService() {
 
     var fromDetails = nodes.get(addServiceData.from);
     var toDetails = nodes.get(addServiceData.to);
@@ -1916,7 +1929,7 @@ function manualAddService() {
     }
 
 }
-function manualAddServiceMode() {
+function addServiceMode() {
     UnSelectAll();
     isAddService = 1;
     isDualFiberMode = 0;
@@ -2508,25 +2521,9 @@ function updateRoadm(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, roadm_type_pro: roadmtypeprodata
             });
+            clearRoadm();
         }
-        //else if (node_type == ampJSON.node_type) {
 
-        //    network.body.data.nodes.update({
-        //        id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
-        //    });
-        //}
-        //else if (node_type == fusedJSON.node_type) {
-        //    network.body.data.nodes.update({
-        //        id: id, label: label
-        //    });
-        //}
-        //else if (node_type == transceiverJSON.node_type) {
-        //    network.body.data.nodes.update({
-        //        id: id, label: label, transceiver_type: $("#ddlTransceiverType").val(), transceiver_mode: $("#ddlDataRate").val(),
-        //    });
-        //}
-
-        clearRoadm();
     }
 
 }
@@ -2586,11 +2583,118 @@ function updateTransceiver(nodeID) {
     }
 
 }
+
+function dualFiberEdit(fiberID, callback) {
+    document.getElementById("dualFiberMenu").style.display = "none";
+
+    openDrawer('dualfiber');
+    var edgeDetails = edges.get(fiberID);
+    $("#txtFiberName").val(edgeDetails.label);
+    var connectedNode = network.getConnectedNodes(fiberID);
+
+    $("#pFiberA").text("Fiber A [" + nodes.get(connectedNode[0]).label + ' - ' + nodes.get(connectedNode[1]).label + "]");
+    $("#pFiberB").text("Fiber B [" + nodes.get(connectedNode[1]).label + ' - ' + nodes.get(connectedNode[0]).label + "]");
+
+    document.getElementById("btnDualFiberUpdate").onclick = updateDualFiber.bind(
+        this,
+        fiberID,
+        callback
+    );
+    document.getElementById("btnCloseDualFiber").onclick = clearDualFiber.bind(
+    );
+}
+function updateDualFiber() {
+    closeDrawer('dualfiber');
+}
+function clearDualFiber() {
+    closeDrawer('dualfiber');
+    network.unselectAll();
+}
+
+
+function singleFiberEdit(fiberID, callback) {
+    document.getElementById("singleFiberMenu").style.display = "none";
+    var edgeDetails = edges.get(fiberID);
+    var connectedNode = network.getConnectedNodes(fiberID);
+    $("#txtSinlgeFiberName").val(edgeDetails.label);
+    $("#txtSource").val(nodes.get(connectedNode[0]).label);
+    $("#txtDestination").val(nodes.get(connectedNode[1]).label);
+    $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
+    $("#txtCD_Coefficient").val(edgeDetails.cd_coefficient);
+    $("#txtPMD_Coefficient").val(edgeDetails.pmd_coefficient);
+    $("#txtSpan_Length").val(edgeDetails.span_length);
+    $("#txtLoss_Coefficient").val(edgeDetails.loss_coefficient);
+    $("#txtConnector_IN").val(edgeDetails.connector_in);
+    $("#txtConnector_OUT").val(edgeDetails.connector_out);
+    $("#txtSpan_Loss").val(edgeDetails.span_loss);
+    openDrawer('singlefiber');
+    document.getElementById("btnSingleFiberUpdate").onclick = updateSingleFiber.bind(
+        this,
+        fiberID,
+        callback
+    );
+    document.getElementById("btnCloseSingleFiber").onclick = clearSingleFiber.bind(
+    );
+}
+function updateSingleFiber(fiberID) {
+
+    
+    var id = fiberID;
+    var label = $("#txtSinlgeFiberName").val().trim();
+    var fiber_type = $("#ddlSingleFiberType").val();
+    var cd_coefficient = $("#txtCD_Coefficient").val();
+    var pmd_coefficient = $("#txtPMD_Coefficient").val();
+    var span_length = $("#txtSpan_Length").val();
+    var loss_coefficient = $("#txtLoss_Coefficient").val();
+    var connector_in = $("#txtConnector_IN").val();
+    var connector_out = $("#txtConnector_OUT").val();
+    var span_loss = $("#txtSpan_Loss").val();
+
+    var spanlen = Number(span_length);
+    if (spanlen <= 0)
+    {
+        alert('pleae enter valid span length.');
+        return;
+    }
+
+    var component_type = edges.get(fiberID).component_type
+
+    if (addSingleNodeVal("txtSinlgeFiberName")) {
+
+        if (component_type == singleFiberJSON.component_type) {
+            network.body.data.edges.update({
+                id: id, label: label, fiber_type: fiber_type, cd_coefficient: cd_coefficient, pmd_coefficient: pmd_coefficient, span_length: span_length,
+                loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
+            });
+            clearSingleFiber();
+        }
+
+    }
+}
+function clearSingleFiber() {
+
+    $("#txtSinlgeFiberName").val('');
+    $("#txtSource").val('');
+    $("#txtDestination").val('');
+    $("#ddlSingleFiberType").val('');
+    $("#txtCD_Coefficient").val('');
+    $("#txtPMD_Coefficient").val('');
+    $("#txtSpan_Length").val('');
+    $("#txtLoss_Coefficient").val('');
+    $("#txtConnector_IN").val('');
+    $("#txtConnector_OUT").val('');
+    $("#txtSpan_Loss").val('');
+    $('#cbxLength_Based_Loss').prop('checked', false);
+    closeDrawer('singlefiber');
+    network.unselectAll();
+}
+
 function deleteFiber(fiberID) {
     var isDelete = confirm('do you want to delete fiber : ' + edges.get(fiberID).label + ' ?');
     if (!isDelete)
         return;
     document.getElementById("dualFiberMenu").style.display = "none";
+    document.getElementById("singleFiberMenu").style.display = "none";
 
     var nodeDetails = nodes.get(edges.get(fiberID).from);
     arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
@@ -2610,66 +2714,73 @@ function deleteFiber(fiberID) {
 
 
 }
-function dualFiberEdit(fiberID, callback) {
-    document.getElementById("dualFiberMenu").style.display = "none";
 
-    openDrawer('dualfiber');
-    var edgeDetails = edges.get(fiberID);
-    $("#txtFiberName").val(edgeDetails.label);
-    var connectedNode = network.getConnectedNodes(fiberID);
-
-    $("#pFiberA").text("Fiber A [" + nodes.get(connectedNode[0]).label + ' - ' + nodes.get(connectedNode[1]).label + "]");
-    $("#pFiberB").text("Fiber B [" + nodes.get(connectedNode[1]).label + ' - ' + nodes.get(connectedNode[0]).label + "]");
-
-    document.getElementById("btnDualFiberUpdate").onclick = updateDualFiber.bind(
-    );
-    document.getElementById("btnCloseDualFiber").onclick = clearDualFiber.bind(
-    );
-}
-function singleFiberEdit(fiberID, callback) {
-    document.getElementById("singleFiberMenu").style.display = "none";
-
-    openDrawer('singlefiber');
-    var edgeDetails = edges.get(fiberID);
-    $("#txtSinlgeFiberName").val(edgeDetails.label);
-    var connectedNode = network.getConnectedNodes(fiberID);
-
-    $("#txtSource").val(nodes.get(connectedNode[0]).label);
-    $("#txtDestination").val(nodes.get(connectedNode[1]).label);
-
-    document.getElementById("btnSingleFiberUpdate").onclick = updateSingleFiber.bind(
-    );
-    document.getElementById("btnCloseSingleFiber").onclick = clearSingleFiber.bind(
-    );
-}
-function rightClickServiceEdit() {
+function serviceEdit(serviceID, callback) {
     document.getElementById("serviceMenu").style.display = "none";
+    var edgeDetails = edges.get(serviceID);
+    $("#txtServiceName").val(edgeDetails.label);
+    var connectedNode = network.getConnectedNodes(serviceID);
+    $("#txtServiceSrc").val(nodes.get(connectedNode[0]).label);
+    $("#txtServiceDest").val(nodes.get(connectedNode[1]).label);
+    $("#txtBandwidth").val(edgeDetails.bandwidth);
+    $("#ddlCentralFrq").val(edgeDetails.centralFrq);
     openDrawer('service');
-    document.getElementById("btnUpdateService").onclick = updateSingleFiber.bind(
+    document.getElementById("btnUpdateService").onclick = updateService.bind(
+        this,
+        serviceID,
+        callback
     );
-    document.getElementById("btnCloseService").onclick = updateSingleFiber.bind(
+    document.getElementById("btnCloseService").onclick = clearService.bind(
     );
+}
+function updateService(serviceID) {
+
+    var id = serviceID;
+    var label = $("#txtServiceName").val().trim();
+    var bandwidth = $("#txtBandwidth").val();
+    var centralFrq = $("#ddlCentralFrq").val();
+    var component_type = edges.get(serviceID).component_type
+
+    if (addSingleNodeVal("txtServiceName")) {
+
+        if (component_type == serviceJSON.component_type) {
+            network.body.data.edges.update({
+                id: id, label: label, bandwidth: bandwidth, centralFrq: centralFrq
+            });
+            clearService();
+        }
+
+    }
+
+}
+function deleteService(serviceID) {
+    var isDelete = confirm('do you want to delete service : ' + edges.get(serviceID).label + ' ?');
+    if (!isDelete)
+        return;
+    document.getElementById("serviceMenu").style.display = "none";
+    edges.remove(serviceID);
+    network.unselectAll();
+}
+function clearService() {
+
+    $("#txtServiceName").val('');
+    $("#txtServiceSrc").val('');
+    $("#txtServiceDest").val('');
+    $("#txtBandwidth").val('');
+    $("#ddlCentralFrq").val('');
+    closeDrawer('service');
+    network.unselectAll();
 }
 
-function clearSingleFiber() {
-    closeDrawer('singlefiber');
-    network.unselectAll();
-}
-function clearDualFiber() {
-    closeDrawer('dualfiber');
-    network.unselectAll();
-}
-function updateSingleFiber() {
-    closeDrawer('singlefiber');
-}
-function updateDualFiber() {
-    closeDrawer('dualfiber');
-}
+
+
+
 
 function closeMenu(menuID) {
     document.getElementById(menuID).style.display = "none";
     network.unselectAll();
 }
+
 //append node,preamp, booster type
 function appendSinglePreAmpandBoosterType() {
     $('#ddlPreAmpType').empty();
@@ -2760,7 +2871,7 @@ function networkValidation() {
     if (nodes.get().length > 0 || edges.get().length > 0)
         flag = true;
     else {
-        alert('Please create node and fiber.');
+        alert('Please create node/fiber/service.');
     }
 
     return flag;
