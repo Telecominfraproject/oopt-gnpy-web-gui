@@ -1,5 +1,5 @@
 ﻿
-function addSingleNodeVal(element) {
+function nameLengthValidation(element) {
     var flag = true;
     var elementID="#"+element
     var maxLength = Number(configData.node.site_length);

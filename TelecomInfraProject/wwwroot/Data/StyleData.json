@@ -48,6 +48,51 @@
     "size": 10,
     "image": "amp3.svg",
     "node_type": "Amplifier",
+    "amp_category": "Amplifier",
+    "component_type": "node",
+    "icon": {},
+    "color": {
+      "border": "#2B7CE9",
+      "background": "#97C2FC",
+      "highlight": {
+        "border": "green",
+        "background": "green"
+      },
+      "hover": {
+        "border": "yellow",
+        "background": "yellow"
+      }
+
+    }
+  },
+  "PreAmplifier": {
+    "shape": "circularImage",
+    "size": 10,
+    "image": "amp1.svg",
+    "node_type": "Amplifier",
+    "amp_category": "PreAmplifier",
+    "component_type": "node",
+    "icon": {},
+    "color": {
+      "border": "#2B7CE9",
+      "background": "#97C2FC",
+      "highlight": {
+        "border": "green",
+        "background": "green"
+      },
+      "hover": {
+        "border": "yellow",
+        "background": "yellow"
+      }
+
+    }
+  },
+  "BoosterAmplifier": {
+    "shape": "circularImage",
+    "size": 10,
+    "image": "leftamp.svg",
+    "node_type": "Amplifier",
+    "amp_category": "BoosterAmplifier",
     "component_type": "node",
     "icon": {},
     "color": {
@@ -113,7 +158,7 @@
   "DualFiber": {
     "dashes": false,
     "component_type": "Fiber",
-    "fiber_category": "Dual",
+    "fiber_category": "Dual Fiber",
     "options": {
       "color": {
         "color": "#blue",
@@ -152,7 +197,7 @@
   "SingleFiber": {
     "dashes": true,
     "component_type": "Fiber",
-    "fiber_category": "Single",
+    "fiber_category": "Single Fiber",
     "options": {
       "color": {
         "color": "#blue",
