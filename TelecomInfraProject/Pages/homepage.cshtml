@@ -433,37 +433,37 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">CD Coefficient(ps/nm/km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberACD"
                                            placeholder="Enter CD Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">PMD Coefficient</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberAPMD"
                                            placeholder="Enter PMD Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span length(in km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberASL"
                                            placeholder="Enter Span length"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Loss Coefficient(dB/km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberALC"
                                            placeholder="Enter Loss Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Connector IN(dB)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberACIN"
                                            placeholder="Enter Connector IN"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Connector OUT(dB)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberACOUT"
                                            placeholder="Connector OUT"
                                            class="form-control" />
                                 </div>
@@ -471,13 +471,13 @@
                                 <div>
                                     <label class="container-check f-s-17">
                                         Length Based Loss
-                                        <input type="checkbox" checked="checked">
+                                        <input type="checkbox" id="cbx_FiberALBL">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span loss</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberASpanLoss"
                                            placeholder="Enter Span loss"
                                            class="form-control" />
                                 </div>
@@ -486,66 +486,68 @@
                         <div class="mt-3 d-flex justify-content-end">
                             <label class="container-check f-s-17">
                                 Clone
-                                <input type="checkbox" checked="checked">
+                                <input type="checkbox" id="cbx_clone">
                                 <span class="checkmark"></span>
                             </label>
                         </div>
-                        <div class="accordion-fiber mt-1">
+                        <div class="accordion-fiber">
                             <p class="title m-0 f-s-17" id="pFiberB">Fiber B</p>
                             <span class="show-fiber">+</span>
                         </div>
                         <div class="info-fiber">
                             <div class="panel">
+
                                 <div class="form-group">
                                     <label class="f-s-17">Fiber type</label>
                                     <select id="ddlFiberBType" class="form-control"></select>
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">CD Coefficient(ps/nm/km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBCD"
                                            placeholder="Enter CD Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">PMD Coefficient</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBPMD"
                                            placeholder="Enter PMD Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span length(in km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBSL"
                                            placeholder="Enter Span length"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Loss Coefficient(dB/km)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBLC"
                                            placeholder="Enter Loss Coefficient"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Connector IN(dB)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBCIN"
                                            placeholder="Enter Connector IN"
                                            class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Connector OUT(dB)</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBCOUT"
                                            placeholder="Connector OUT"
                                            class="form-control" />
                                 </div>
+
                                 <div>
                                     <label class="container-check f-s-17">
                                         Length Based Loss
-                                        <input type="checkbox" checked="checked">
+                                        <input type="checkbox" id="cbx_FiberBLBL">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="form-group">
                                     <label class="f-s-17">Span loss</label>
-                                    <input type="text"
+                                    <input type="text" id="txtFiberBSpanLoss"
                                            placeholder="Enter Span loss"
                                            class="form-control" />
                                 </div>
@@ -834,8 +836,7 @@
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Bandwidth (in Gbps)</label>
-                            <input type="number" id="txtBandwidth"
-                                   value="100"
+                            <input type="number" id="txtBandwidth" step="50"
                                    class="form-control" />
                         </div>
                         <div class="form-group">

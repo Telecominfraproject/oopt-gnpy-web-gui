@@ -179,7 +179,8 @@
       "Data_rate": "100G DP-QPSK",
       "Baud_rate": 27.95,
       "Grid_spacing": "50GHz",
-      "Central_frequency": "Auto"
+      "band_width": 100,
+      "central_frequency": "Auto"
     }
   }
 }
