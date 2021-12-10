@@ -83,12 +83,13 @@ $(document).ready(function () {
         console.log("An error has occurred2.");
     });
 
-    $.getJSON("/Data/eqpt_config.json", function (data) {
+    $.getJSON("/Data/yang.json", function (data) {
         eqpt_config = data;
         load_EqptConfig();
     }).fail(function () {
         console.log("An error has occurred3.");
     });
+
 
     $("#btncaptureimagenetwork").click(function () {
         if (networkValidation())
@@ -163,7 +164,6 @@ $(document).ready(function () {
             }
         }
     });
-
 
 
     $("#btnSaveGP").click(function () {
@@ -1364,16 +1364,36 @@ function loadEqpt() {
 }
 
 function load_EqptConfig() {
-    $.each(eqpt_config.Transceiver, function (index, item) {
-        $('#ddlTransceiverType').append('<option value="' + item.type_variety + '">' + item.type_variety + '</option>');
-    });
-    $.each(eqpt_config.Fiber, function (index, item) {
-        $('#ddlFiberAType').append('<option value="' + item.type_variety + '">' + item.type_variety + '</option>');
-        $('#ddlFiberBType').append('<option value="' + item.type_variety + '">' + item.type_variety + '</option>');
-        $('#ddlSingleFiberType').append('<option value="' + item.type_variety + '">' + item.type_variety + '</option>');
+    try {
+        $("#txtFrgMin").val('');
+        $("#txtFrqMax").val('');
+        $("#txtGridSpac").val('');
+        $("#txtNoOfChannel").val('');
+        $("#txtAgeingMargin").val('');
 
-    });
-    appendSinglePreAmpandBoosterType();
+        var simulationsData = eqpt_config['tip-photonic-simulation:simulation'];
+        var simulations = simulationsData["grid"];
+        $("#txtFrgMin").val(simulations["frequency-min"]);
+        $("#txtFrqMax").val(simulations["frequency-max"]);
+        $("#txtGridSpac").val(simulations.spacing);
+        //$("#txtNoOfChannel").val();
+        $("#txtAgeingMargin").val(simulationsData["system-margin"]);
+
+        $.each(eqpt_config['tip-photonic-equipment:transceiver'], function (index, item) {
+            $('#ddlTransceiverType').append('<option value="' + item.type + '">' + item.type + '</option>');
+        });
+        $.each(eqpt_config['tip-photonic-equipment:fiber'], function (index, item) {
+            $('#ddlFiberAType').append('<option value="' + item.type + '">' + item.type + '</option>');
+            $('#ddlFiberBType').append('<option value="' + item.type + '">' + item.type + '</option>');
+            $('#ddlSingleFiberType').append('<option value="' + item.type + '">' + item.type + '</option>');
+
+        });
+        appendSinglePreAmpandBoosterType();
+    }
+    catch {
+        console.log("keyError:'elements', try again");
+        //alert("keyError:'elements', try again");
+    }
 }
 
 function handleFileSelect(event) {
@@ -2782,7 +2802,7 @@ function updateBoosterAmp(nodeID) {
 
         if (amp_category == boosterAmpJSON.amp_category) {
             network.body.data.nodes.update({
-                id: id, label: label, pre_booster_type: $("#ddlBoosterAmpCategoryType").val(),
+                id: id, label: label, booster_amp_type: $("#ddlBoosterAmpCategoryType").val(),
             });
             clearBoosterAmp();
         }
@@ -3154,18 +3174,11 @@ function appendSinglePreAmpandBoosterType() {
     $('#ddlBoosterType').empty();
     $('#ddlPreAmpCategoryType').empty();
     $('#ddlBoosterAmpCategoryType').empty();
-    $.each(eqpt_config.Roadm, function (index, item) {
-        var preAmpType = item.restrictions.preamp_variety_list;
-        var boosterType = item.restrictions.booster_variety_list;
-
-        $.each(preAmpType, function (i, value) {
-            $('#ddlPreAmpType').append('<option value="' + value + '">' + value + '</option>');
-            $('#ddlPreAmpCategoryType').append('<option value="' + value + '">' + value + '</option>');
-        });
-        $.each(boosterType, function (i, value) {
-            $('#ddlBoosterType').append('<option value="' + value + '">' + value + '</option>');
-            $('#ddlBoosterAmpCategoryType').append('<option value="' + value + '">' + value + '</option>');
-        });
+    $.each(eqpt_config['tip-photonic-equipment:amplifier'], function (index, item) {
+        $('#ddlPreAmpType').append('<option value="' + item.type + '">' + item.type + '</option>');
+        $('#ddlPreAmpCategoryType').append('<option value="' + item.type + '">' + item.type + '</option>');
+        $('#ddlBoosterType').append('<option value="' + item.type + '">' + item.type + '</option>');
+        $('#ddlBoosterAmpCategoryType').append('<option value="' + item.type + '">' + item.type + '</option>');
     });
 
 
@@ -3177,30 +3190,26 @@ function appendPreAmpandBoosterType(nodeType, ddlID) {
     var preAmpType = [];
     var boosterType = [];
 
-    $.each(eqpt_config.Roadm, function (index, item) {
-        preAmpType = item.restrictions.preamp_variety_list;
-        boosterType = item.restrictions.booster_variety_list;
-    });
-
     var ddlroadmtype = "#" + eleroadmtype + ddlID;
     var ddlpreamptype = "#" + elepreamptype + ddlID;
     var ddlboostertype = "#" + eleboostertype + ddlID;
+    if (eqpt_config["tip-photonic-equipment:roadm"]) {
+        $.each(eqpt_config["tip-photonic-equipment:roadm"], function (index, item) {
 
-    $.each(configData.node.roadm_type, function (index, item) {
-        $(ddlroadmtype).append('<option value="' + item + '">' + item + '</option>');
-    });
-
-    $.each(preAmpType, function (index, item) {
-        $(ddlpreamptype).append('<option value="' + item + '">' + item + '</option>');
-    });
-    $.each(boosterType, function (index, item) {
-        $(ddlboostertype).append('<option value="' + item + '">' + item + '</option>');
-    });
-
-
+            preAmpType = item["compatible-preamp"];
+            boosterType = item["compatible-booster"];
+            $.each(preAmpType, function (i, preAmp) {
+                $(ddlpreamptype).append('<option value="' + preAmp + '">' + preAmp + '</option>');
+            });
+            $.each(boosterType, function (j, boosterAmp) {
+                $(ddlboostertype).append('<option value="' + boosterAmp + '">' + boosterAmp + '</option>');
+            });
+            $(ddlroadmtype).append('<option value="' + item.type + '">' + item.type + '</option>');
+        });
+    }
 }
 
-//show context menu on righ click of component
+//show context menu on righ click of the component
 function showContextMenu(x, y, menu) {
 
     showHideDrawerandMenu();
