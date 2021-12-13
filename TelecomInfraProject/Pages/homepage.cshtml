@@ -57,9 +57,9 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-                  Create
-                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-                </button> -->
+      Create
+      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+    </button> -->
                 <!-- Create new Modal start -->
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
@@ -71,16 +71,16 @@
                                     Simulation Parameters
                                 </h5>
                                 <!--  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button> -->
+                      <span aria-hidden="true">&times;</span>
+                    </button> -->
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                                  <h6 class="model-title">
-                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                                    User Requester you to add Network Level Options
-                                  </h6>
-                                </div> -->
+                      <h6 class="model-title">
+                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                        User Requester you to add Network Level Options
+                      </h6>
+                    </div> -->
 
                                 <div class="container">
 
@@ -99,7 +99,7 @@
                                     <div class="col-md-6 col-lg-6 col-xl-6">
                                         <div class="form-group">
                                             <label for="">Grid spacing</label>
-                                            <input type="text" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
+                                            <input type="number" step="12.5" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
                                         </div>
                                     </div>
                                     <div class="col-md-6 col-lg-6 col-xl-6">
@@ -122,17 +122,18 @@
 
                             </div>
                             <div class="modal-footer">
+                                <button type="button" class="btn modal-btn btn-gray-n" id="btnCloseGP">Cancel</button>
                                 <button type="button" class="btn modal-btn" id="btnSaveGP">Apply</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <button type="button" onclick="document.getElementById('import_Eqpt_button').click()" class="btn upload-btn">
+                <button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
                     <img src="./Assets/img/import.svg" class="mx-2" />
                 </button>
-                <input style="display:none" type="file" id="import_Eqpt_button" onclick="loadEqpt()" value="Upload File" />
+                <input style="display:none" type="file" id="importEqpt" value="Upload File" />
                 <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
                     <img src="./Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
                          title="About" />
@@ -243,8 +244,8 @@
                                         <div class="card icon-group hover-show">
                                             <img src="./Assets/img/amp3.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
-                                                 title="Amplifier" />
-                                        </div><span class="sidebar-text1">Amplifier</span>
+                                                 title="ILA" />
+                                        </div><span class="sidebar-text1">ILA</span>
                                     </div>
                                     <div class="create-back" id="btnPreAmplifier">
                                         <div class="card icon-group hover-show">
@@ -257,8 +258,8 @@
                                         <div class="card icon-group hover-show">
                                             <img src="~/Assets/img/leftamp.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
-                                                 title="Booster Amplifier" style="padding: 1px;" />
-                                        </div><span class="sidebar-text1">Booster Amplifier</span>
+                                                 title="Booster" style="padding: 1px;" />
+                                        </div><span class="sidebar-text1">Booster</span>
                                     </div>
                                 </div>
                                 <div class="group-node mt-2">
@@ -664,7 +665,7 @@
 
                 <div class="mutinode-drawer-container" id="amplifier">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">Amplifier Properties</label>
+                        <label class="f-s-20 dark-heading mb-0">ILA Properties</label>
                         <div>
                             <span class="close close-btnn" id="single" data-tab="amplifier" onclick="closeDrawer('amplifier')">
                                 <span aria-hidden="true">&times;</span>
@@ -676,8 +677,8 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
-                            <input type="text" id="txtAmplifierName" placeholder="Enter Amplifier name" class="form-control" />
+                            <label class="f-s-17">ILA name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtAmplifierName" placeholder="Enter ILA name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Pre-Amp Type</label>
@@ -714,8 +715,8 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
-                            <input type="text" id="txtPreAmpName" placeholder="Enter Amplifier name" class="form-control" />
+                            <label class="f-s-17">Pre-Amplifier name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtPreAmpName" placeholder="Enter Pre-Amplifier name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Amplifier Type</label>
@@ -735,7 +736,7 @@
                 </div>
                 <div class="mutinode-drawer-container" id="boosteramplifier">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">Booster-Amplifier Properties</label>
+                        <label class="f-s-20 dark-heading mb-0">Booster Properties</label>
                         <div>
                             <span class="close close-btnn" id="single" data-tab="boosteramplifier" onclick="closeDrawer('boosteramplifier')">
                                 <span aria-hidden="true">&times;</span>
@@ -747,8 +748,8 @@
                     <!--mutinode field body-->
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
-                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
-                            <input type="text" id="txtBoosterAmpName" placeholder="Enter Amplifier name" class="form-control" />
+                            <label class="f-s-17">Booster name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtBoosterAmpName" placeholder="Enter Booster name" class="form-control" />
                         </div>
                         <div class="form-group">
                             <label class="f-s-17">Amplifier Type</label>
@@ -911,7 +912,7 @@
                     </button> -->
                 </div>
                 <div class="modal-body">
-                    <p class="confirm-export">Are you sure want to proceed service?</p>
+                    <p class="confirm-export">Are you sure you want to proceed for creating service?</p>
                 </div>
                 <div class="modal-footer">
 
@@ -1017,8 +1018,8 @@
         <span class="close close-btnn1" onclick="closeMenu('amplifierMenu')">
             <span aria-hidden="true">×</span>
         </span>
-        <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Amplifier</span></a>
-        <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Amplifier</span></a>
+        <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit ILA</span></a>
+        <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete ILA</span></a>
     </div>
     <div class="dropdown-menu" id="preAmpMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('preAmpMenu')">
@@ -1031,8 +1032,8 @@
         <span class="close close-btnn1" onclick="closeMenu('boosterAmpMenu')">
             <span aria-hidden="true">×</span>
         </span>
-        <a class="dropdown-item" id="rcBoosterAmpEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Booster-Amplifier</span></a>
-        <a class="dropdown-item" id="rcBoosterAmpDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Booster-Amplifier</span></a>
+        <a class="dropdown-item" id="rcBoosterAmpEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Booster</span></a>
+        <a class="dropdown-item" id="rcBoosterAmpDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Booster</span></a>
     </div>
     <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
