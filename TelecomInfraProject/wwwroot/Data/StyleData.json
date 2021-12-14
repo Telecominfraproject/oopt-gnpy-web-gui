@@ -161,9 +161,9 @@
     "fiber_category": "Dual Fiber",
     "options": {
       "color": {
-        "color": "#blue",
-        "highlight": "#blue",
-        "hover": "#blue",
+        "color": "blue",
+        "highlight": "blue",
+        "hover": "blue",
         "inherit": false,
         "opacity": 1
       },
@@ -200,9 +200,9 @@
     "fiber_category": "Single Fiber",
     "options": {
       "color": {
-        "color": "#blue",
-        "highlight": "#blue",
-        "hover": "#blue",
+        "color": "blue",
+        "highlight": "blue",
+        "hover": "blue",
         "inherit": false,
         "opacity": 1
       },
@@ -246,7 +246,7 @@
         "opacity": 1
       },
       "background": {
-        "color": "rgba(111,111,111,1)",
+        "color": "red",
         "dashes": false,
         "enabled": false,
         "size": 10

@@ -55,41 +55,7 @@ var currentStepper = "";
 
 $(document).ready(function () {
 
-    $("#importEqptLink").click(function () {
-        var conMsg = confirm('Do you want to override existing data and replace with new data?');
-        if (conMsg)
-            $("#importEqpt").click();
-
-    });
-    function readTextFile(file, callback) {
-        var rawFile = new XMLHttpRequest();
-        rawFile.overrideMimeType("application/json");
-        rawFile.open("GET", file, true);
-        rawFile.onreadystatechange = function () {
-            if (rawFile.readyState === 4 && rawFile.status == "200") {
-                callback(rawFile.responseText);
-            }
-        }
-        rawFile.send(null);
-    }
-    $("#importEqpt").on('change', function (e) {
-        var file = e.target.files[0];
-        if (file) {
-            var path = (window.URL || window.webkitURL).createObjectURL(file);
-            readTextFile(path, function (text) {
-
-                var eqptData = "";
-                if (text) {
-                    eqptData = JSON.parse(text);
-                    isEqptFile = true;
-                    eqpt_config = eqptData;
-                    load_EqptConfig();
-                }
-            });
-        }
-    });
-
-
+ 
     $.getJSON("/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
@@ -245,7 +211,41 @@ $(document).ready(function () {
         }
     });
 
+    $("#importEqptLink").click(function () {
+        
+        var conMsg = confirm('Do you want to override existing data and replace with new data?');
+        if (conMsg)
+            $("#importEqpt").click();
 
+
+    });
+    function readTextFile(file, callback) {
+        var rawFile = new XMLHttpRequest();
+        rawFile.overrideMimeType("application/json");
+        rawFile.open("GET", file, true);
+        rawFile.onreadystatechange = function () {
+            if (rawFile.readyState === 4 && rawFile.status == "200") {
+                callback(rawFile.responseText);
+            }
+        }
+        rawFile.send(null);
+    }
+    $("#importEqpt").on('change', function (e) {
+        var file = e.target.files[0];
+        if (file) {
+            var path = (window.URL || window.webkitURL).createObjectURL(file);
+            readTextFile(path, function (text) {
+
+                var eqptData = "";
+                if (text) {
+                    eqptData = JSON.parse(text);
+                    isEqptFile = true;
+                    eqpt_config = eqptData;
+                    load_EqptConfig();
+                }
+            });
+        }
+    });
 
 });
 function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
@@ -2503,6 +2503,8 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
                 id: cfrom, roadm_type_pro: arrRoadmTypePro
             });
         }
+
+       
         if (isDualFiberMode == 1) {
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
