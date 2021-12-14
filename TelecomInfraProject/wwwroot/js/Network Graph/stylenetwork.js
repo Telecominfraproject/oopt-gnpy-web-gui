@@ -2510,6 +2510,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
                 id: fiberID, from: cfrom, to: cto, label: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
                 component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
                 arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: dualFiberJSON.options.smooth,
+                width: dualFiberJSON.width,
                 RxToTxFiber: {
                     from: cto, to: cfrom, label: clabel,fiber_category: dualFiberJSON.fiber_category,
                     component_type: dualFiberJSON.component_type
@@ -2520,7 +2521,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
         if (isSingleFiberMode == 1) {
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
-                component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color,
+                component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: singleFiberJSON.options.smooth
 
             });
@@ -2536,7 +2537,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
 
     if (cmode == 1) {
         network.body.data.edges.add({
-            id: token(), from: cfrom, to: cto, label: clabel, dashes: serviceJSON.dashes,
+            id: token(), from: cfrom, to: cto, label: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
             component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background, arrows: serviceJSON.options.arrows, font: serviceJSON.options.font, smooth: serviceJSON.options.smooth,
             band_width: configData[serviceJSON.component_type].default.band_width, central_frequency: configData[serviceJSON.component_type].default.central_frequency
         });

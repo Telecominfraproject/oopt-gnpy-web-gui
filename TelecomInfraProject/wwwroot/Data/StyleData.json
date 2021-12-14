@@ -159,6 +159,7 @@
     "dashes": false,
     "component_type": "Fiber",
     "fiber_category": "Dual Fiber",
+    "width": 2,
     "options": {
       "color": {
         "color": "blue",
@@ -198,6 +199,7 @@
     "dashes": true,
     "component_type": "Fiber",
     "fiber_category": "Single Fiber",
+    "width": 2,
     "options": {
       "color": {
         "color": "blue",
@@ -237,6 +239,7 @@
   "Service": {
     "dashes": true,
     "component_type": "Service",
+    "width": 2,
     "options": {
       "color": {
         "color": "red",
