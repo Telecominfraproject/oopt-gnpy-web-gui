@@ -2508,8 +2508,12 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
         if (isDualFiberMode == 1) {
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
-                component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color,
-                background: dualFiberJSON.options.background, arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: dualFiberJSON.options.smooth
+                component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
+                arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: dualFiberJSON.options.smooth,
+                RxToTxFiber: {
+                    from: cto, to: cfrom, label: clabel,fiber_category: dualFiberJSON.fiber_category,
+                    component_type: dualFiberJSON.component_type
+                }
 
             });
         }
@@ -2919,7 +2923,8 @@ function deleteNode(nodeID) {
 
 function dualFiberEdit(fiberID, callback) {
     document.getElementById("dualFiberMenu").style.display = "none";
-
+    
+    clearCbxandAccordian();
     openDrawer('dualfiber');
     var edgeDetails = edges.get(fiberID);
     var connectedNode = network.getConnectedNodes(fiberID);
@@ -2936,14 +2941,16 @@ function dualFiberEdit(fiberID, callback) {
     $("#txtFiberACOUT").val(edgeDetails.connector_out);
     $("#txtFiberASpanLoss").val(edgeDetails.span_loss);
     //fiber B details
-    $("#ddlFiberBType").val(edgeDetails.fiber_type);
-    $("#txtFiberBCD").val(edgeDetails.cd_coefficient);
-    $("#txtFiberBPMD").val(edgeDetails.pmd_coefficient);
-    $("#txtFiberBSL").val(edgeDetails.span_length);
-    $("#txtFiberBLC").val(edgeDetails.loss_coefficient);
-    $("#txtFiberBCIN").val(edgeDetails.connector_in);
-    $("#txtFiberBCOUT").val(edgeDetails.connector_out);
-    $("#txtFiberBSpanLoss").val(edgeDetails.span_loss);
+    if (edgeDetails.RxToTxFiber) {
+        $("#ddlFiberBType").val(edgeDetails.RxToTxFiber.fiber_type);
+        $("#txtFiberBCD").val(edgeDetails.RxToTxFiber.cd_coefficient);
+        $("#txtFiberBPMD").val(edgeDetails.RxToTxFiber.pmd_coefficient);
+        $("#txtFiberBSL").val(edgeDetails.RxToTxFiber.span_length);
+        $("#txtFiberBLC").val(edgeDetails.RxToTxFiber.loss_coefficient);
+        $("#txtFiberBCIN").val(edgeDetails.RxToTxFiber.connector_in);
+        $("#txtFiberBCOUT").val(edgeDetails.RxToTxFiber.connector_out);
+        $("#txtFiberBSpanLoss").val(edgeDetails.RxToTxFiber.span_loss);
+    }
 
 
     $("#pFiberA").text("Fiber A [" + nodes.get(connectedNode[0]).label + ' - ' + nodes.get(connectedNode[1]).label + "]");
@@ -2969,14 +2976,14 @@ function updateDualFiber(fiberID) {
     var connector_out = $("#txtFiberACOUT").val();
     var span_loss = $("#txtFiberASpanLoss").val();
 
-    //var fiber_type = $("#ddlFiberBType").val();
-    //var cd_coefficient = $("#txtFiberBCD").val();
-    //var pmd_coefficient = $("#txtFiberBPMD").val();
-    //var span_length = $("#txtFiberBSL").val();
-    //var loss_coefficient = $("#txtFiberBLC").val();
-    //var connector_in = $("#txtFiberBCIN").val();
-    //var connector_out = $("#txtFiberBCOUT").val();
-    //var span_loss = $("#txtFiberBSpanLoss").val();
+    var fiber_typeB = $("#ddlFiberBType").val();
+    var cd_coefficientB = $("#txtFiberBCD").val();
+    var pmd_coefficientB = $("#txtFiberBPMD").val();
+    var span_lengthB = $("#txtFiberBSL").val();
+    var loss_coefficientB = $("#txtFiberBLC").val();
+    var connector_inB = $("#txtFiberBCIN").val();
+    var connector_outB = $("#txtFiberBCOUT").val();
+    var span_lossB = $("#txtFiberBSpanLoss").val();
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
@@ -2995,11 +3002,15 @@ function updateDualFiber(fiberID) {
     var fiberDetails = edges.get(fiberID);
 
     if (nameLengthValidation("txtFiberName")) {
-
-        if (fiberDetails.component_type == dualFiberJSON.component_type && fiberDetails.amp_category == dualFiberJSON.amp_category) {
+        if (fiberDetails.component_type == dualFiberJSON.component_type && fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             network.body.data.edges.update({
                 id: id, label: label, fiber_type: fiber_type, cd_coefficient: cd_coefficient, pmd_coefficient: pmd_coefficient, span_length: span_length,
-                loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
+                loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss,
+                RxToTxFiber: {
+                    from: fiberDetails.to, to: fiberDetails.from, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
+                    label: label, fiber_type: fiber_typeB, cd_coefficient: cd_coefficientB, pmd_coefficient: pmd_coefficientB, span_length: span_lengthB,
+                    loss_coefficient: loss_coefficientB, connector_in: connector_inB, connector_out: connector_outB, span_loss: span_lossB,
+                }
             });
             clearDualFiber();
         }
@@ -3016,9 +3027,6 @@ function clearDualFiber() {
     $("#txtFiberALC").val('');
     $("#txtFiberACIN").val('');
     $("#txtFiberACOUT").val('');
-    $('#cbx_FiberALBL').prop('checked', false);
-
-    $('#cbx_clone').prop('checked', false);
 
     $("#ddlFiberBType").val('');
     $("#txtFiberBCD").val('');
@@ -3027,11 +3035,20 @@ function clearDualFiber() {
     $("#txtFiberBLC").val('');
     $("#txtFiberBCIN").val('');
     $("#txtFiberBCOUT").val('');
-    $('#cbx_FiberBLBL').prop('checked', false);
+    clearCbxandAccordian();
+
     closeDrawer('dualfiber');
     network.unselectAll();
 }
-
+function clearCbxandAccordian() {
+    if ($("#aFiberA").text() == "-")
+        $("#aFiberA").click();
+    if ($("#aFiberB").text() == "-")
+        $("#aFiberB").click();
+    $('#cbx_FiberALBL').prop('checked', false);
+    $('#cbx_FiberBLBL').prop('checked', false);
+    $('#cbx_clone').prop('checked', false);
+}
 
 function singleFiberEdit(fiberID, callback) {
     document.getElementById("singleFiberMenu").style.display = "none";
@@ -3080,7 +3097,7 @@ function updateSingleFiber(fiberID) {
 
     if (nameLengthValidation("txtSinlgeFiberName")) {
 
-        if (fiberDetails.component_type == singleFiberJSON.component_type && fiberDetails.amp_category == singleFiberJSON.amp_category) {
+        if (fiberDetails.component_type == singleFiberJSON.component_type && fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
             network.body.data.edges.update({
                 id: id, label: label, fiber_type: fiber_type, cd_coefficient: cd_coefficient, pmd_coefficient: pmd_coefficient, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
