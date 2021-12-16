@@ -201,8 +201,6 @@ $(document).ready(function () {
     $('#cbx_clone').change(function () {
         if (this.checked) {
             $("#ddlFiberBType").val($("#ddlFiberAType").val());
-            $("#txtFiberBCD").val($("#txtFiberACD").val());
-            $("#txtFiberBPMD").val($("#txtFiberAPMD").val());
             $("#txtFiberBSL").val($("#txtFiberASL").val());
             $("#txtFiberBLC").val($("#txtFiberALC").val());
             $("#txtFiberBCIN").val($("#txtFiberACIN").val());
@@ -241,7 +239,7 @@ $(document).ready(function () {
                     eqptData = JSON.parse(text);
                     isEqptFile = true;
                     eqpt_config = eqptData;
-                    load_EqptConfig();
+                    load_EqptConfig(true);
                 }
             });
         }
@@ -1369,14 +1367,17 @@ var _eqpt_json;
 var isEqptFile = false;
 
 
-function load_EqptConfig() {
+function load_EqptConfig(isFileUpload) {
     try {
 
 
-        if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier'])
-        {
+        if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
             alert("keyError:'elements', try again");
             return;
+        }
+        else {
+            if (isFileUpload)
+                alert("json file loaded successfully ");
         }
         $("#txtFrgMin").val('');
         $("#txtFrqMax").val('');
@@ -2934,8 +2935,6 @@ function dualFiberEdit(fiberID, callback) {
     $("#txtFiberName").val(edgeDetails.label);
     //fiber A details
     $("#ddlFiberAType").val(edgeDetails.fiber_type);
-    $("#txtFiberACD").val(edgeDetails.cd_coefficient);
-    $("#txtFiberAPMD").val(edgeDetails.pmd_coefficient);
     $("#txtFiberASL").val(edgeDetails.span_length);
     $("#txtFiberALC").val(edgeDetails.loss_coefficient);
     $("#txtFiberACIN").val(edgeDetails.connector_in);
@@ -2944,8 +2943,6 @@ function dualFiberEdit(fiberID, callback) {
     //fiber B details
     if (edgeDetails.RxToTxFiber) {
         $("#ddlFiberBType").val(edgeDetails.RxToTxFiber.fiber_type);
-        $("#txtFiberBCD").val(edgeDetails.RxToTxFiber.cd_coefficient);
-        $("#txtFiberBPMD").val(edgeDetails.RxToTxFiber.pmd_coefficient);
         $("#txtFiberBSL").val(edgeDetails.RxToTxFiber.span_length);
         $("#txtFiberBLC").val(edgeDetails.RxToTxFiber.loss_coefficient);
         $("#txtFiberBCIN").val(edgeDetails.RxToTxFiber.connector_in);
@@ -2969,8 +2966,6 @@ function updateDualFiber(fiberID) {
     var id = fiberID;
     var label = $("#txtFiberName").val().trim();
     var fiber_type = $("#ddlFiberAType").val();
-    var cd_coefficient = $("#txtFiberACD").val();
-    var pmd_coefficient = $("#txtFiberAPMD").val();
     var span_length = $("#txtFiberASL").val();
     var loss_coefficient = $("#txtFiberALC").val();
     var connector_in = $("#txtFiberACIN").val();
@@ -2978,8 +2973,6 @@ function updateDualFiber(fiberID) {
     var span_loss = $("#txtFiberASpanLoss").val();
 
     var fiber_typeB = $("#ddlFiberBType").val();
-    var cd_coefficientB = $("#txtFiberBCD").val();
-    var pmd_coefficientB = $("#txtFiberBPMD").val();
     var span_lengthB = $("#txtFiberBSL").val();
     var loss_coefficientB = $("#txtFiberBLC").val();
     var connector_inB = $("#txtFiberBCIN").val();
@@ -3005,11 +2998,11 @@ function updateDualFiber(fiberID) {
     if (nameLengthValidation("txtFiberName")) {
         if (fiberDetails.component_type == dualFiberJSON.component_type && fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             network.body.data.edges.update({
-                id: id, label: label, fiber_type: fiber_type, cd_coefficient: cd_coefficient, pmd_coefficient: pmd_coefficient, span_length: span_length,
+                id: id, label: label, fiber_type: fiber_type, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss,
                 RxToTxFiber: {
                     from: fiberDetails.to, to: fiberDetails.from, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
-                    label: label, fiber_type: fiber_typeB, cd_coefficient: cd_coefficientB, pmd_coefficient: pmd_coefficientB, span_length: span_lengthB,
+                    label: label, fiber_type: fiber_typeB, span_length: span_lengthB,
                     loss_coefficient: loss_coefficientB, connector_in: connector_inB, connector_out: connector_outB, span_loss: span_lossB,
                 }
             });
@@ -3022,16 +3015,12 @@ function clearDualFiber() {
     $("#txtfiberName").val('');
 
     $("#ddlFiberAType").val('');
-    $("#txtFiberACD").val('');
-    $("#txtFiberAPMD").val('');
     $("#txtFiberASL").val('');
     $("#txtFiberALC").val('');
     $("#txtFiberACIN").val('');
     $("#txtFiberACOUT").val('');
 
     $("#ddlFiberBType").val('');
-    $("#txtFiberBCD").val('');
-    $("#txtFiberBPMD").val('');
     $("#txtFiberBSL").val('');
     $("#txtFiberBLC").val('');
     $("#txtFiberBCIN").val('');
@@ -3059,8 +3048,6 @@ function singleFiberEdit(fiberID, callback) {
     $("#txtSource").val(nodes.get(connectedNode[0]).label);
     $("#txtDestination").val(nodes.get(connectedNode[1]).label);
     $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
-    $("#txtCD_Coefficient").val(edgeDetails.cd_coefficient);
-    $("#txtPMD_Coefficient").val(edgeDetails.pmd_coefficient);
     $("#txtSpan_Length").val(edgeDetails.span_length);
     $("#txtLoss_Coefficient").val(edgeDetails.loss_coefficient);
     $("#txtConnector_IN").val(edgeDetails.connector_in);
@@ -3080,8 +3067,6 @@ function updateSingleFiber(fiberID) {
     var id = fiberID;
     var label = $("#txtSinlgeFiberName").val().trim();
     var fiber_type = $("#ddlSingleFiberType").val();
-    var cd_coefficient = $("#txtCD_Coefficient").val();
-    var pmd_coefficient = $("#txtPMD_Coefficient").val();
     var span_length = $("#txtSpan_Length").val();
     var loss_coefficient = $("#txtLoss_Coefficient").val();
     var connector_in = $("#txtConnector_IN").val();
@@ -3100,7 +3085,7 @@ function updateSingleFiber(fiberID) {
 
         if (fiberDetails.component_type == singleFiberJSON.component_type && fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
             network.body.data.edges.update({
-                id: id, label: label, fiber_type: fiber_type, cd_coefficient: cd_coefficient, pmd_coefficient: pmd_coefficient, span_length: span_length,
+                id: id, label: label, fiber_type: fiber_type, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
             clearSingleFiber();
@@ -3114,8 +3099,6 @@ function clearSingleFiber() {
     $("#txtSource").val('');
     $("#txtDestination").val('');
     $("#ddlSingleFiberType").val('');
-    $("#txtCD_Coefficient").val('');
-    $("#txtPMD_Coefficient").val('');
     $("#txtSpan_Length").val('');
     $("#txtLoss_Coefficient").val('');
     $("#txtConnector_IN").val('');
