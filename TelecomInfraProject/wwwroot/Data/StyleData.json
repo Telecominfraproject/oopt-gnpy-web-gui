@@ -43,10 +43,32 @@
   },
 
 
-  "Amplifier": {
+  "ILA": {
     "shape": "circularImage",
     "size": 10,
     "image": "amp3.svg",
+    "node_type": "Amplifier",
+    "amp_category": "ILA",
+    "component_type": "node",
+    "icon": {},
+    "color": {
+      "border": "#2B7CE9",
+      "background": "#97C2FC",
+      "highlight": {
+        "border": "green",
+        "background": "green"
+      },
+      "hover": {
+        "border": "yellow",
+        "background": "yellow"
+      }
+
+    }
+  },
+  "Amplifier": {
+    "shape": "circularImage",
+    "size": 10,
+    "image": "amptriangle.svg",
     "node_type": "Amplifier",
     "amp_category": "Amplifier",
     "component_type": "node",
@@ -65,51 +87,7 @@
 
     }
   },
-  "PreAmplifier": {
-    "shape": "circularImage",
-    "size": 10,
-    "image": "amp1.svg",
-    "node_type": "Amplifier",
-    "amp_category": "PreAmplifier",
-    "component_type": "node",
-    "icon": {},
-    "color": {
-      "border": "#2B7CE9",
-      "background": "#97C2FC",
-      "highlight": {
-        "border": "green",
-        "background": "green"
-      },
-      "hover": {
-        "border": "yellow",
-        "background": "yellow"
-      }
-
-    }
-  },
-  "BoosterAmplifier": {
-    "shape": "circularImage",
-    "size": 10,
-    "image": "leftamp.svg",
-    "node_type": "Amplifier",
-    "amp_category": "BoosterAmplifier",
-    "component_type": "node",
-    "icon": {},
-    "color": {
-      "border": "#2B7CE9",
-      "background": "#97C2FC",
-      "highlight": {
-        "border": "green",
-        "background": "green"
-      },
-      "hover": {
-        "border": "yellow",
-        "background": "yellow"
-      }
-
-    }
-  },
-
+  
   "Fused": {
     "shape": "circularImage",
     "size": 10,

@@ -25,6 +25,18 @@
         "component_type": "node"
       }
     },
+    "ILA": {
+      "is_degree_validation": true,
+      "default": {
+        "label": "site ",
+        "node_degree": 2,
+        "node_type": "Amplifier",
+        "amp_category": "ILA",
+        "pre_amp_type": "",
+        "booster_type": "",
+        "component_type": "node"
+      }
+    },
     "Amplifier": {
       "is_degree_validation": true,
       "default": {
@@ -33,29 +45,6 @@
         "node_type": "Amplifier",
         "amp_category": "Amplifier",
         "pre_amp_type": "",
-        "booster_type": "",
-        "component_type": "node"
-      }
-    },
-    "PreAmplifier": {
-      "is_degree_validation": true,
-      "default": {
-        "label": "site ",
-        "node_degree": 2,
-        "node_type": "Amplifier",
-        "amp_category": "PreAmplifier",
-        "pre_amp_type": "",
-        "component_type": "node"
-      }
-    },
-    "BoosterAmplifier": {
-      "is_degree_validation": true,
-      "default": {
-        "label": "site ",
-        "node_degree": 2,
-        "node_type": "Amplifier",
-        "amp_category": "BoosterAmplifier",
-        "booster_type": "",
         "component_type": "node"
       }
     },

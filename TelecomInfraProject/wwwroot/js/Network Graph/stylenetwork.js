@@ -28,9 +28,8 @@ var _import_json;
 
 var optionsJSON = "";
 var roadmJSON = "";
-var ampJSON = "";
-var preAmpJSON = "";
-var boosterAmpJSON = "";
+var ILAJSON = "";
+var amplifierJSON = "";
 var fusedJSON = "";
 var transceiverJSON = "";
 var dualFiberJSON = "";
@@ -59,9 +58,8 @@ $(document).ready(function () {
     $.getJSON("/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
-        ampJSON = data.Amplifier;
-        preAmpJSON = data.PreAmplifier;
-        boosterAmpJSON = data.BoosterAmplifier;
+        ILAJSON = data.ILA;
+        amplifierJSON = data.Amplifier;
         fusedJSON = data.Fused;
         transceiverJSON = data.Transceiver;
         dualFiberJSON = data.DualFiber;
@@ -118,14 +116,11 @@ $(document).ready(function () {
     $("#btnAddRoadm").click(function () {
         enableDisableNode(1, "Roadm");
     });
-    $("#btnAddAmp").click(function () {
-        enableDisableNode(2, "amplifier");
+    $("#btnAddILA").click(function () {
+        enableDisableNode(2, "ILA");
     });
-    $("#btnPreAmplifier").click(function () {
-        enableDisableNode(5, "preamplifier");
-    });
-    $("#btnBoosterAmplifier").click(function () {
-        enableDisableNode(6, "boosteramplifier");
+    $("#btnAddAmplifier").click(function () {
+        enableDisableNode(5, "amplifier");
     });
     $("#btnAddFused").click(function () {
         enableDisableNode(3, "fused");
@@ -583,7 +578,7 @@ function draw(isImport) {
         manipulation: {
             enabled: false,
             addNode: function (data, callback) {
-                if (nodeMode > 0 && nodeMode < 7) {
+                if (nodeMode > 0 && nodeMode < 6) {
                     counter = counter + 1;
                     localStorage.setItem("nodelength", counter);
                     addNodes(data, callback);
@@ -620,6 +615,7 @@ function draw(isImport) {
     });
     network.on("selectNode", function (params) {
         //nodeMode = "";
+        console.log(params);
         var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
         var deletenode = network.getConnectedEdges(clickedNode.id);
         localStorage.setItem("deletenodeconectededge", deletenode.length);
@@ -729,7 +725,7 @@ function draw(isImport) {
         else {
             if (showMenu == 1)//2 enable node and fiber menus
             {
-                if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
+                if (type == roadmJSON.node_type || type == ILAJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
                 {
 
                     if (nodeData != undefined) {
@@ -761,8 +757,22 @@ function draw(isImport) {
                                 callback
                             );
                         }
-                        else if (type == ampJSON.node_type) {
-                            if (amp_category == ampJSON.amp_category) {
+                        else if (type == ILAJSON.node_type) {
+                            if (amp_category == ILAJSON.amp_category) {
+                                showContextMenu(data.event.pageX, data.event.pageY, "ILAMenu");
+                                document.getElementById("rcILAEdit").onclick = ILAEdit.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
+                                document.getElementById("rcILADelete").onclick = deleteNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+                                );
+                            }
+                            else if (amp_category == amplifierJSON.amp_category) {
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
                                 document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
                                     this,
@@ -771,34 +781,6 @@ function draw(isImport) {
 
                                 );
                                 document.getElementById("rcAmplifierDelete").onclick = deleteNode.bind(
-                                    this,
-                                    nodeData,
-                                    callback
-                                );
-                            }
-                            else if (amp_category == preAmpJSON.amp_category) {
-                                showContextMenu(data.event.pageX, data.event.pageY, "preAmpMenu");
-                                document.getElementById("rcPreAmpEdit").onclick = preAmpEdit.bind(
-                                    this,
-                                    nodeData,
-                                    callback
-
-                                );
-                                document.getElementById("rcPreAmpDelete").onclick = deleteNode.bind(
-                                    this,
-                                    nodeData,
-                                    callback
-                                );
-                            }
-                            else if (amp_category == boosterAmpJSON.amp_category) {
-                                showContextMenu(data.event.pageX, data.event.pageY, "boosterAmpMenu");
-                                document.getElementById("rcBoosterAmpEdit").onclick = boosterAmpEdit.bind(
-                                    this,
-                                    nodeData,
-                                    callback
-
-                                );
-                                document.getElementById("rcBoosterAmpDelete").onclick = deleteNode.bind(
                                     this,
                                     nodeData,
                                     callback
@@ -911,7 +893,7 @@ function AddNodeMode(nodemode) {
 
     nodeMode = nodemode;
     if (nodeMode) {
-        if (nodeMode > 0 && nodeMode < 7)
+        if (nodeMode > 0 && nodeMode < 6)
             network.addNodeMode();
     }
 }
@@ -1306,7 +1288,7 @@ function exportNetwork(isSaveNetwork) {
             }
             final.push(node);
         }
-        else if (item.node_type == ampJSON.node_type) {
+        else if (item.node_type == ILAJSON.node_type) {
             var node = {
                 uid: item.id,
                 type: "Edfa",
@@ -1393,8 +1375,7 @@ function load_EqptConfig(isFileUpload) {
 
         $('#ddlPreAmpType').empty();
         $('#ddlBoosterType').empty();
-        $('#ddlPreAmpCategoryType').empty();
-        $('#ddlBoosterAmpCategoryType').empty();
+        $('#ddlAmplifierType').empty();
         
 
         if (eqpt_config['tip-photonic-simulation:simulation']) {
@@ -1482,254 +1463,6 @@ function importNetwork() {
         },
     };
     network = new vis.Network(container, data, options);
-
-
-    network.on("click", function (params) {
-        params.event = "[original event]";
-        if (this.getNodeAt(params.pointer.DOM)) {
-
-        }
-        else if (this.getEdgeAt(params.pointer.DOM)) {
-            $("#txtNodeX").val(params.pointer.canvas.x);
-            $("#txtNodeY").val(params.pointer.canvas.y);
-        }
-        else {
-            $("#txtNodeX").val(params.pointer.canvas.x);
-            $("#txtNodeY").val(params.pointer.canvas.y);
-        }
-    });
-    network.on("selectEdge", function (data) {
-        //console.log('edge');
-        //_insertnodeDB().remove();
-
-        if (data.edges.length > 1 || data.edges.length == 0) {
-            copyData.edges = [];
-            copyData.nodes = [];
-            copyData.dataCopied = false;
-            return;
-        }
-        //var getnodedata = edges.get();
-        var clickedEdge = this.body.edges[data.edges[0]];
-        //data.label = network.body.edges[data.edges[0]].options.label;
-        //_insertnodeDB.insert({ "id": data.edges[0], "type": "NodeInsert", "label": data.label });
-        //_nodesDB().remove();
-        //_nodesDB.insert({ "id": clickedEdge.id, "type": edges.get(clickedEdge.id).component_type });
-        setCopyData(clickedEdge.options.id, '');
-    });
-    network.on("selectNode", function (params) {
-        var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
-        var deletenode = network.getConnectedEdges(clickedNode.id);
-        localStorage.setItem("deletenodeconectededge", deletenode.length);
-        //_nodesDB().remove();
-        //_nodesDB.insert({ "id": clickedNode.id, "type": nodes.get(clickedNode.id).node_type });
-        setCopyData('', clickedNode.options.id);
-        if (isDualFiberMode == 1) {
-            isAddService = 0;
-            addServicData = {
-                from: '',
-                to: ''
-            };
-            if (addEdgeData.from == '')
-                addEdgeData.from = clickedNode.options.id
-            else if (addEdgeData.to == '') {
-                if (addEdgeData.from == clickedNode.options.id) {
-                    alert('pls click destination source');
-                    return;
-                }
-                addEdgeData.to = clickedNode.options.id
-            }
-
-            if (addEdgeData.from != '' && addEdgeData.to != '')
-                addFiber();
-        }
-        if (isAddService == 1) {
-            isDualFiberMode = 0;
-            isSingleFiberMode = 0;
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-
-            if (addServiceData.from == '')
-                addServiceData.from = clickedNode.options.id
-            else if (addServiceData.to == '') {
-                if (addServiceData.from == clickedNode.options.id) {
-                    alert('pls click destination source');
-                    return;
-                }
-                addServiceData.to = clickedNode.options.id
-            }
-
-            if (addServiceData.from != '' && addServiceData.to != '')
-                addService();
-
-        }
-    });
-    network.on("doubleClick", function (data) {
-        var type = _nodesDB().first();
-        if (type.type == "node") {
-            network.editNodeMode();
-        }
-        else {
-            network.editEdgeMode();
-        }
-        _nodesDB().remove();
-    });
-    network.on("oncontext", function (data, callback) {
-        //data.preventDefault();
-
-        var nodeDatas = this.body.nodes[this.getNodeAt(data.pointer.DOM)];
-        var edgeDatas = this.body.edges[this.getEdgeAt(data.pointer.DOM)];
-        var nodeData = "";
-        var edgeData = "";
-
-        if (nodeDatas != undefined)
-            nodeData = nodeDatas.id;
-        if (edgeDatas != undefined)
-            edgeData = edgeDatas.id;
-
-        var type = "";
-        if ((nodeData != '' && edgeData != '') || nodeData != '') {
-            type = nodes.get(nodeData).node_type;
-        }
-        else if (edgeData != '') {
-            type = edges.get(edgeData).component_type;
-        }
-        else {
-            //alert('unable find. please try again !');
-            return;
-        }
-
-        //var type = _nodesDB().first();
-
-        if (type == serviceJSON.component_type) {
-
-            if (edgeData != undefined) {
-                showContextMenu(data.event.pageX, data.event.pageY, "serviceMenu");
-                document.getElementById("btnServiceUpdate").onclick = serviceEdit.bind();
-                document.getElementById("rightClickServiceDelete").onclick = deleteFiber.bind();
-            }
-
-        }
-
-        else {
-            if (type == roadmJSON.node_type || type == ampJSON.node_type || type == fusedJSON.node_type)//node || amp ||fused
-            {
-
-                if (type == ampJSON.node_type || type == fusedJSON.node_type) {
-                    $("#roadmtype, #divRoadmTypePro").hide();
-                }
-
-                if (nodeData != undefined) {
-                    ////$("#roadmMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
-                    //document.getElementById("roadmMenu").style.display = "block";
-                    showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
-                    document.getElementById("roadmEdit").onclick = roadmEdit.bind(
-                        this,
-                        nodeData,
-                        callback
-
-                    );
-                    document.getElementById("rightClickNodeDelete").onclick = deleteNode.bind(
-                        this,
-                        nodeData,
-                        callback
-                    );
-                }
-            }
-            else if (type == dualFiberJSON.component_type) {
-
-                //var getrightclickedge = this.body.edges[this.getEdgeAt(data.pointer.DOM)];
-                if (edgeData != undefined) {
-                    showContextMenu(data.event.pageX, data.event.pageY, "dualFiberMenu");
-                    document.getElementById("InsertNode").addEventListener('click', function () {
-                        AddData(this, 0);
-                    });
-                    document.getElementById("Copy").onclick = copy.bind();
-                    //document.getElementById("Paste").onclick = paste.bind();
-                    document.getElementById("fiberEdit").onclick = dualFiberEdit.bind();
-                    document.getElementById("rightClickEdgeDelete").onclick = deleteFiber.bind();
-                }
-
-            }
-        }
-
-
-        if (copy == "Yes") {
-            document.getElementById("contextMenu").style.display = "none";
-            $("#pastecontextMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
-            document.getElementById("pastecontextMenu").style.display = "block";
-
-
-            document.getElementById("Paste").onclick = paste.bind();
-        }
-        _nodesDB().remove();
-    });
-
-    container.addEventListener("dragover", (function (e) {
-        e.preventDefault();
-        //console.log("gj")
-    }));
-    container.addEventListener("dragenter", (function (e) {
-        e.target.className += " dragenter";
-        //console.log("gj")
-    }));
-    container.addEventListener("dragleave", (function (e) {
-        //alert()
-        e.target.className = "whiteBox";
-    }));
-
-    container.addEventListener("drop", (function (e) {
-
-        //counter = counter + 1;
-        //localStorage.setItem("nodelength", counter);
-        //if (e.dataTransfer.getData("text") == "btnAddRoadm") {
-        //    var x = e.layerX - ($("#mynetwork").width() / 2);
-        //    var y = e.layerY - ($("#mynetwork").height() / 2);
-        //    addNodeComponent(1, 1, x, y);
-        //}
-        //if (e.dataTransfer.getData("text") == "btnAddAmp") {
-        //    var x = e.layerX - ($("#mynetwork").width() / 2);
-        //    var y = e.layerY - ($("#mynetwork").height() / 2);
-        //    addNodeComponent(1, 2, x, y);
-        //}
-
-        //e.preventDefault();
-    }));
-
-    network.on("dragStart", function (params) {
-    });
-
-    network.on("dragEnd", function (params) {
-        params.event = "[original event]";
-    });
-    network.on("hoverNode", function (params) {
-        try {
-            var clickedNode = nodes.get(params.node);
-            var fromlabel = clickedNode.label;
-            $("#click").css({ left: (params.event.pageX + 20) + "px", top: (params.event.pageY - 40) + "px" });
-            $('#click').html(htmlTitle("label : " + fromlabel + "\n" + "type : " + clickedNode.componentType, clickedNode.color));
-            $('#click').show();
-        }
-        catch (e) { }
-    });
-    network.on("blurNode", function (params) {
-        $('#click').hide();
-    });
-    network.on("hoverEdge", function (params) {
-        try {
-            var clickedNode = edges.get(params.edge);
-            var fromlabel = "(" + nodes.get(clickedNode.from).label + " -> " + nodes.get(clickedNode.to).label + ")";
-            $("#click").css({ left: (params.event.pageX + 20) + "px", top: (params.event.pageY - 40) + "px" });
-            $('#click').html(htmlTitle("dir : " + fromlabel + "\n" + "type : " + clickedNode.componentType, clickedNode.color));
-            $('#click').show();
-        }
-        catch (e) { }
-    });
-    network.on("blurEdge", function (params) {
-        console.log("blurEdge Event:", params);
-        $('#click').hide();
-    });
     testing();
 }
 
@@ -2026,14 +1759,17 @@ function addFiber() {
     //to restrict pre amp and boost amp on dualfiber connection
     if (isDualFiberMode == 1) {
         var msg = "";
-        if (srcNode.amp_category == preAmpJSON.amp_category || srcNode.amp_category == boosterAmpJSON.amp_category) {
+        if (srcNode.amp_category == amplifierJSON.amp_category) {
             msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
         }
         else {
             isSrcOk = true;
-            msg = srcNode.node_type + " type : " + srcNode.label + " to ";
+            if (srcNode.amp_category)
+                msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
+            else
+                msg = srcNode.node_type + " type : " + srcNode.label + " to ";
         }
-        if (DestNode.amp_category == boosterAmpJSON.amp_category || DestNode.amp_category == preAmpJSON.amp_category) {
+        if (DestNode.amp_category == amplifierJSON.amp_category) {
             msg += DestNode.amp_category + " type : " + DestNode.label;
         }
         else {
@@ -2055,7 +1791,7 @@ function addFiber() {
     //to restrict amplifier on singelfiber connection
     if (isSingleFiberMode == 1) {
         var msg = "";
-        if (srcNode.amp_category == ampJSON.node_type) {
+        if (srcNode.amp_category == ILAJSON.amp_category) {
             msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
         }
         else {
@@ -2065,7 +1801,7 @@ function addFiber() {
             else
                 msg = srcNode.node_type + " type : " + srcNode.label + " to ";
         }
-        if (DestNode.amp_category == ampJSON.amp_category) {
+        if (DestNode.amp_category == ILAJSON.amp_category) {
             msg += DestNode.amp_category + " type : " + DestNode.label;
         }
         else {
@@ -2395,86 +2131,6 @@ function getAllNode() {
 
 }
 
-//drag and drop, add multiple RODAM/Amp//Fusedcmode 1-add,ctype 1-node, 2-amp, 3-fused
-function addNodeComponent(cmode, ctype, cx, cy) {
-    var nodelength = localStorage.getItem("nodelength");
-    var nodeLable = "";
-
-    if (cmode == 1 && ctype == 1) {
-        var nodeDetails = configData.node[roadmJSON.node_type];
-        nodeLable = nodeDetails.default.label;
-        if (nodelength != "") {
-            nodeLable += '' + Number(nodelength) + '';
-
-        } else {
-            nodeLable += 1;
-        }
-        network.body.data.nodes.add({
-            id: token(),
-            label: nodeLable,
-            node_degree: nodeDetails.default.node_degree,
-            node_type: nodeDetails.default.node_type,
-            roadm_type: nodeDetails.default.roadm_type,
-            pre_amp_type: nodeDetails.default.pre_amp_type,
-            booster_type: nodeDetails.default.booster_type,
-            component_type: roadmJSON.component_type,
-            x: cx,
-            y: cy,
-
-        })
-    }
-    else if (cmode == 1 && ctype == 2) {
-        var nodeDetails = configData.node[ampJSON.node_type];
-        nodeLable = nodeDetails.default.label;
-        if (nodelength != "") {
-            nodeLable += '' + Number(nodelength) + '';
-
-        } else {
-            nodeLable += 1;
-        }
-        network.body.data.nodes.add({
-            id: token(),
-            label: nodeLable,
-            shape: ampJSON.shape,
-            node_degree: nodeDetails.default.node_degree,
-            node_type: nodeDetails.default.node_type,
-            //roadm_type: nodeDetails.default.roadm_type,
-            pre_amp_type: nodeDetails.default.pre_amp_type,
-            booster_type: nodeDetails.default.booster_type,
-            component_type: roadmJSON.component_type,
-            color: ampJSON.color,
-            x: cx,
-            y: cy,
-        })
-    }
-    else if (cmode == 1 && ctype == 3) {
-        var nodeDetails = configData.node[fusedJSON.node_type];
-        nodeLable = nodeDetails.default.label;
-        if (nodelength != "") {
-            nodeLable += '' + Number(nodelength) + '';
-
-        } else {
-            nodeLable += 1;
-        }
-        network.body.data.nodes.add({
-            id: token(),
-            label: nodeLable,
-            shape: fusedJSON.shape,
-            node_degree: nodeDetails.default.node_degree,
-            node_type: nodeDetails.default.node_type,
-            //roadm_type: nodeDetails.default.roadm_type,
-            pre_amp_type: nodeDetails.default.pre_amp_type,
-            booster_type: nodeDetails.default.booster_type,
-            component_type: roadmJSON.component_type,
-            color: fusedJSON.color,
-            x: cx,
-            y: cy,
-        })
-    }
-
-
-}
-
 //Add fiber//cmode 1-add
 function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
     if (cmode == 1) {
@@ -2544,7 +2200,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
         });
     }
 }
-//Add node nodeMode - 1-roadm, 2-amp, 3=fused, 4-transceiver,5-preamp, 6-boosteramp
+//Add node nodeMode - 1-roadm, 2-ILA, 3=fused/attenuator, 4-transceiver,5-amplifier
 function addNodes(data, callback) {
 
     var nodeDetails = "";
@@ -2554,12 +2210,12 @@ function addNodes(data, callback) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
     }
-    else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5 || nodeMode == 6) {
+    else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
         if (nodeMode == 2) {
-            nodeDetails = configData.node[ampJSON.node_type];
-            nodeShape = ampJSON.shape;
-            nodeColor = ampJSON.color;
-            data.image = DIR + ampJSON.image;
+            nodeDetails = configData.node[ILAJSON.amp_category];
+            nodeShape = ILAJSON.shape;
+            nodeColor = ILAJSON.color;
+            data.image = DIR + ILAJSON.image;
             data.pre_amp_type = nodeDetails.default.pre_amp_type;
             data.booster_type = nodeDetails.default.booster_type;
             data.amp_category = nodeDetails.default.amp_category;
@@ -2578,21 +2234,14 @@ function addNodes(data, callback) {
             data.transceiver_type = nodeDetails.default.transceiver_type;
         }
         else if (nodeMode == 5) {
-            nodeDetails = configData.node[preAmpJSON.amp_category];
-            nodeShape = preAmpJSON.shape;
-            nodeColor = preAmpJSON.color;
-            data.image = DIR + preAmpJSON.image;
-            data.pre_amp_type = nodeDetails.default.pre_amp_type;
+            nodeDetails = configData.node[amplifierJSON.amp_category];
+            nodeShape = amplifierJSON.shape;
+            nodeColor = amplifierJSON.color;
+            data.image = DIR + amplifierJSON.image;
+            data.amp_type = nodeDetails.default.amp_type;
             data.amp_category = nodeDetails.default.amp_category;
         }
-        else if (nodeMode == 6) {
-            nodeDetails = configData.node[boosterAmpJSON.amp_category];
-            nodeShape = boosterAmpJSON.shape;
-            nodeColor = boosterAmpJSON.color;
-            data.image = DIR + boosterAmpJSON.image;
-            data.booster_type = nodeDetails.default.booster_type;
-            data.amp_category = nodeDetails.default.amp_category;
-        }
+        
         data.shape = nodeShape;
         data.color = nodeColor;
 
@@ -2611,7 +2260,7 @@ function addNodes(data, callback) {
     data.component_type = roadmJSON.component_type;
     callback(data);
 
-    if (nodeMode == 1 || nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5 || nodeMode == 6)
+    if (nodeMode == 1 || nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5)
         network.addNodeMode();
 
 
@@ -2729,13 +2378,56 @@ function clearAttenuator() {
     network.unselectAll();
 }
 
+function ILAEdit(nodeID, callback) {
+    document.getElementById("ILAMenu").style.display = "none";
+    openDrawer('ILA');
+    var nodeDetails = nodes.get(nodeID);
+    $("#txtILAName").val(nodeDetails.label);
+    $("#ddlPreAmpType").val(nodeDetails.pre_amp_type);
+    $("#ddlBoosterType").val(nodeDetails.booster_type);
+
+    document.getElementById("btnILAUpdate").onclick = updateILA.bind(
+        this,
+        nodeID,
+        callback
+    );
+
+    document.getElementById("btnCloseILA").onclick = clearILA.bind(
+    );
+}
+function updateILA(nodeID) {
+
+    var id = nodeID;
+    var label = $("#txtILAName").val().trim();
+    var node_type = nodes.get(nodeID).node_type
+
+    if (nameLengthValidation("txtILAName")) {
+
+        if (node_type == ILAJSON.node_type) {
+            network.body.data.nodes.update({
+                id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
+            });
+            clearILA();
+        }
+
+
+    }
+
+}
+function clearILA() {
+    $("#txtILAName").val('');
+    $("#ddlPreAmpType").val('');
+    $("#ddlBoosterType").val('');
+    closeDrawer('ILA');
+    network.unselectAll();
+}
+
 function amplifierEdit(nodeID, callback) {
     document.getElementById("amplifierMenu").style.display = "none";
     openDrawer('amplifier');
     var nodeDetails = nodes.get(nodeID);
     $("#txtAmplifierName").val(nodeDetails.label);
-    $("#ddlPreAmpType").val(nodeDetails.pre_amp_type);
-    $("#ddlBoosterType").val(nodeDetails.booster_type);
+    $("#ddlAmplifierType").val(nodeDetails.amp_type);
 
     document.getElementById("btnAmplifierUpdate").onclick = updateAmplifier.bind(
         this,
@@ -2750,13 +2442,13 @@ function updateAmplifier(nodeID) {
 
     var id = nodeID;
     var label = $("#txtAmplifierName").val().trim();
-    var node_type = nodes.get(nodeID).node_type
+    var amp_category = nodes.get(nodeID).amp_category
 
     if (nameLengthValidation("txtAmplifierName")) {
 
-        if (node_type == ampJSON.node_type) {
+        if (amp_category == amplifierJSON.amp_category) {
             network.body.data.nodes.update({
-                id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
+                id: id, label: label, amp_type: $("#ddlAmplifierType").val(),
             });
             clearAmplifier();
         }
@@ -2767,93 +2459,8 @@ function updateAmplifier(nodeID) {
 }
 function clearAmplifier() {
     $("#txtAmplifierName").val('');
-    $("#ddlPreAmpType").val('');
-    $("#ddlBoosterType").val('');
+    $("#ddlAmplifierType").val('');
     closeDrawer('amplifier');
-    network.unselectAll();
-}
-
-function preAmpEdit(nodeID, callback) {
-    document.getElementById("preAmpMenu").style.display = "none";
-    openDrawer('preamplifier');
-    var nodeDetails = nodes.get(nodeID);
-    $("#txtPreAmpName").val(nodeDetails.label);
-    $("#ddlPreAmpCategoryType").val(nodeDetails.pre_amp_type);
-
-    document.getElementById("btnPreAmpUpdate").onclick = updatePreAmp.bind(
-        this,
-        nodeID,
-        callback
-    );
-
-    document.getElementById("btnClosePreAmp").onclick = clearPreAmp.bind(
-    );
-}
-function updatePreAmp(nodeID) {
-
-    var id = nodeID;
-    var label = $("#txtPreAmpName").val().trim();
-    var amp_category = nodes.get(nodeID).amp_category
-
-    if (nameLengthValidation("txtPreAmpName")) {
-
-        if (amp_category == preAmpJSON.amp_category) {
-            network.body.data.nodes.update({
-                id: id, label: label, pre_amp_type: $("#ddlPreAmpCategoryType").val(),
-            });
-            clearPreAmp();
-        }
-
-
-    }
-
-}
-function clearPreAmp() {
-    $("#txtPreAmpName").val('');
-    $("#ddlPreAmpCategoryType").val('');
-    closeDrawer('preamplifier');
-    network.unselectAll();
-}
-
-function boosterAmpEdit(nodeID, callback) {
-    document.getElementById("boosterAmpMenu").style.display = "none";
-    openDrawer('boosteramplifier');
-    var nodeDetails = nodes.get(nodeID);
-    $("#txtBoosterAmpName").val(nodeDetails.label);
-    $("#ddlBoosterAmpCategoryType").val(nodeDetails.booster_amp_type);
-
-    document.getElementById("btnBoosterAmpUpdate").onclick = updateBoosterAmp.bind(
-        this,
-        nodeID,
-        callback
-    );
-
-    document.getElementById("btnCloseBoosterAmp").onclick = clearBoosterAmp.bind(
-    );
-}
-function updateBoosterAmp(nodeID) {
-
-    var id = nodeID;
-    var label = $("#txtBoosterAmpName").val().trim();
-    var amp_category = nodes.get(nodeID).amp_category
-
-    if (nameLengthValidation("txtBoosterAmpName")) {
-
-        if (amp_category == boosterAmpJSON.amp_category) {
-            network.body.data.nodes.update({
-                id: id, label: label, booster_amp_type: $("#ddlBoosterAmpCategoryType").val(),
-            });
-            clearBoosterAmp();
-        }
-
-
-    }
-
-}
-function clearBoosterAmp() {
-    $("#txtBoosterAmpName").val('');
-    $("#ddlBoosterAmpCategoryType").val('');
-    closeDrawer('boosteramplifier');
     network.unselectAll();
 }
 
@@ -2902,16 +2509,15 @@ function clearTransceiver() {
 function deleteNode(nodeID) {
     var nodeDetails = nodes.get(nodeID);
     var node_type = nodeDetails.node_type;
-    if (nodeDetails.node_type == ampJSON.node_type)
+    if (nodeDetails.node_type == ILAJSON.node_type)
         node_type = nodeDetails.amp_category;
     var isDelete = confirm('do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?');
     if (!isDelete)
         return;
     document.getElementById("roadmMenu").style.display = "none";
     document.getElementById("attenuatorMenu").style.display = "none";
+    document.getElementById("ILAMenu").style.display = "none";
     document.getElementById("amplifierMenu").style.display = "none";
-    document.getElementById("preAmpMenu").style.display = "none";
-    document.getElementById("boosterAmpMenu").style.display = "none";
     document.getElementById("transceiverMenu").style.display = "none";
 
     if (network.getConnectedEdges(nodeID).length > 0) {
@@ -3208,9 +2814,8 @@ function appendSinglePreAmpandBoosterType() {
     if (eqpt_config['tip-photonic-equipment:amplifier']) {
         $.each(eqpt_config['tip-photonic-equipment:amplifier'], function (index, item) {
             $('#ddlPreAmpType').append('<option value="' + item.type + '">' + item.type + '</option>');
-            $('#ddlPreAmpCategoryType').append('<option value="' + item.type + '">' + item.type + '</option>');
             $('#ddlBoosterType').append('<option value="' + item.type + '">' + item.type + '</option>');
-            $('#ddlBoosterAmpCategoryType').append('<option value="' + item.type + '">' + item.type + '</option>');
+            $('#ddlAmplifierType').append('<option value="' + item.type + '">' + item.type + '</option>');
         });
     }
 
