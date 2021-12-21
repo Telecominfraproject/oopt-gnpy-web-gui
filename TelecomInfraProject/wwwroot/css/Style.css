@@ -362,7 +362,7 @@ ul {
 
 .modal-footer {
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
 }
 
 .modal-btn {
@@ -1209,15 +1209,15 @@ select {
 .stepper-tab .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
     background: linear-gradient(45deg, #255a5c, #365b7e);
-    border-top-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+    /*border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;*/
 }
 
 .stepper-tab .nav-pills .nav-link {
     background: #f3fbfe;
-    border-top-right-radius: 20px;
+    /*border-top-right-radius: 20px;*/
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border-bottom-right-radius: 20px;
+    /*border-bottom-right-radius: 20px;*/
 }
 
 .stepper-tab .tap-pane {
@@ -1237,17 +1237,17 @@ select {
 
     .stepper-tab ul li:nth-child(2) {
         z-index: 9;
-        margin-left: 212px;
+        margin-left: 230px;
     }
 
     .stepper-tab ul li:nth-child(3) {
         z-index: 8;
-        margin-left: 410px;
+        margin-left: 445px;
     }
 
     .stepper-tab ul li:nth-child(4) {
         z-index: 7;
-        margin-left: 580px;
+        margin-left: 632px;
     }
 
 .stepper-tab .nav-link {

@@ -21,7 +21,7 @@
 
   "Roadm": {
     "shape": "circularImage",
-    "size": 10,
+    "size": 14,
     "image": "singlenode.svg",
     "node_type": "Roadm",
     "component_type": "node",
@@ -45,7 +45,7 @@
 
   "ILA": {
     "shape": "circularImage",
-    "size": 10,
+    "size": 14,
     "image": "amp3.svg",
     "node_type": "Amplifier",
     "amp_category": "ILA",
@@ -67,7 +67,7 @@
   },
   "Amplifier": {
     "shape": "circularImage",
-    "size": 10,
+    "size": 14,
     "image": "amptriangle.svg",
     "node_type": "Amplifier",
     "amp_category": "Amplifier",
@@ -87,10 +87,10 @@
 
     }
   },
-  
+
   "Fused": {
     "shape": "circularImage",
-    "size": 10,
+    "size": 14,
     "image": "rednode.svg",
     "node_type": "Fused",
     "component_type": "node",
@@ -112,7 +112,7 @@
   },
   "Transceiver": {
     "shape": "circularImage",
-    "size": 10,
+    "size": 14,
     "image": "transceiver.svg",
     "node_type": "Transceiver",
     "component_type": "node",
@@ -132,7 +132,16 @@
     }
 
   },
+  "Fiber": {
+    "options": {
+      "smooth": {
+        "enabled": false,
+        "roundness": 0.5,
+        "type": "continuous"
 
+      }
+    }
+  },
   "DualFiber": {
     "dashes": false,
     "component_type": "Fiber",
@@ -166,9 +175,9 @@
         "align": "top"
       },
       "smooth": {
-        "enabled": false,
-        "roundness": 0.5,
-        "type": "continuous"
+        "enabled": true,
+        "roundness": 0.1,
+        "type": "curvedCW"
 
       }
     }
@@ -206,9 +215,9 @@
         "align": "top"
       },
       "smooth": {
-        "enabled": false,
-        "roundness": 0.5,
-        "type": "continuous"
+        "enabled": true,
+        "roundness": 0.1,
+        "type": "curvedCW"
 
       }
     }
