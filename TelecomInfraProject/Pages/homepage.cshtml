@@ -57,9 +57,9 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-      Create
-      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-    </button> -->
+                  Create
+                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+                </button> -->
                 <!-- Create new Modal start -->
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
@@ -70,17 +70,17 @@
                                 <h5 class="modal-title" id="staticBackdropLabel">
                                     Simulation Parameters
                                 </h5>
-                                  <button type="button" class="close" id="btnCloseGP" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button> 
+                                <button type="button" class="close" id="btnCloseGP" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                      <h6 class="model-title">
-                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                        User Requester you to add Network Level Options
-                      </h6>
-                    </div> -->
+                                  <h6 class="model-title">
+                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                                    User Requester you to add Network Level Options
+                                  </h6>
+                                </div> -->
 
                                 <div class="container">
 
@@ -122,7 +122,7 @@
 
                             </div>
                             <div class="modal-footer">
-                                
+
                                 <button type="button" class="btn modal-btn" id="btnSaveGP">Apply</button>
                             </div>
                         </div>
@@ -193,7 +193,7 @@
                                     Create/Edit topology
                                 </a>
                             </li>
-                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(3)" id="step3" data-toggle="modal" data-target="#staticBackdrop6">
+                            <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(3)" id="step3">
                                 <a class="nav-link d-inline-flex" id="stepAddService" data-toggle="pill" href="#add-service"
                                    role="tab" aria-controls="pills-contact" aria-selected="false">
                                     <span class="material-icons">
@@ -246,7 +246,7 @@
                                                  title="ILA" />
                                         </div><span class="sidebar-text1">ILA</span>
                                     </div>
-                                    <div class="create-back" id="btnAddAmplifier">
+                                    <div class="create-back" id="btnAddAmplifier" style="display:none">
                                         <div class="card icon-group hover-show">
                                             <img src="~/Assets/img/amptriangle.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
@@ -263,7 +263,7 @@
                                         </div><span class="sidebar-text1">Dual fiber</span>
                                     </div>
 
-                                    <div class="create-back" id="btnAddSingleFiber">
+                                    <div class="create-back" id="btnAddSingleFiber" style="display:none">
                                         <div class="card icon-group hover-show">
                                             <img src="./Assets/img/singlefiber.svg"
                                                  class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
@@ -690,7 +690,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mutinode-drawer-container" id="transceiver">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
                         <label class="f-s-20 dark-heading mb-0">Transceiver Properties</label>
@@ -983,6 +983,8 @@
         </span>
         <a class="dropdown-item" id="rcServiceEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Service</span></a>
         <a class="dropdown-item" id="rcServiceDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Service</span></a>
+    </div>
+    <div class="dropdown-menu" id="hoverDiv" style="z-index:1001;padding:0px;" aria-labelledby="dropdownMenuButton">
     </div>
     <!-- Script language -->
     <script src="~/js/main.js"></script>

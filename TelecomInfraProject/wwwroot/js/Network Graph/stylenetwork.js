@@ -591,18 +591,7 @@ function draw(isImport) {
     network = new vis.Network(container, data, options);
 
     network.on("click", function (params) {
-        params.event = "[original event]";
-        if (this.getNodeAt(params.pointer.DOM)) {
-
-        }
-        //else if (this.getEdgeAt(params.pointer.DOM)) {
-        //    $("#txtNodeX").val(params.pointer.canvas.x);
-        //    $("#txtNodeY").val(params.pointer.canvas.y);
-        //}
-        //else {
-        //    $("#txtNodeX").val(params.pointer.canvas.x);
-        //    $("#txtNodeY").val(params.pointer.canvas.y);
-        //}
+        $("#hoverDiv").hide();
     });
     network.on("selectEdge", function (data) {
         //nodeMode = "";
@@ -678,7 +667,7 @@ function draw(isImport) {
     network.on("oncontext", function (data, callback) {
         //nodeMode = "";
         //data.preventDefault();
-
+        $("#hoverDiv").hide();
         var nodeDatas = this.body.nodes[this.getNodeAt(data.pointer.DOM)];
         var edgeDatas = this.body.edges[this.getEdgeAt(data.pointer.DOM)];
         var nodeData = "";
@@ -862,31 +851,143 @@ function draw(isImport) {
 
     network.on("hoverNode", function (params) {
         try {
-            var clickedNode = nodes.get(params.node);
-            var fromlabel = clickedNode.label;
-            $("#click").css({ left: (params.event.pageX + 20) + "px", top: (params.event.pageY - 40) + "px" });
-            $('#click').html(htmlTitle("label : " + fromlabel + "\n" + "type : " + clickedNode.componentType, clickedNode.color));
-            $('#click').show();
+            //displayNodesHover(params);
         }
         catch (e) { }
     });
     network.on("blurNode", function (params) {
-        $('#click').hide();
+        //$('#hoverDiv').hide();
     });
     network.on("hoverEdge", function (params) {
         try {
-            var clickedNode = edges.get(params.edge);
-            var fromlabel = "(" + nodes.get(clickedNode.from).label + " -> " + nodes.get(clickedNode.to).label + ")";
-            $("#click").css({ left: (params.event.pageX + 20) + "px", top: (params.event.pageY - 40) + "px" });
-            $('#click').html(htmlTitle("dir : " + fromlabel + "\n" + "type : " + clickedNode.componentType, clickedNode.color));
-            $('#click').show();
+            displayFiberHover(params);
         }
         catch (e) { }
     });
     network.on("blurEdge", function (params) {
-        //console.log("blurEdge Event:", params);
-        $('#click').hide();
+        $('#hoverDiv').hide();
     });
+}
+
+function displayNodesHover(params) {
+    var nodeDetails = nodes.get(params.node);
+    if (nodeDetails.component_type == roadmJSON.component_type) {
+
+        if (nodeDetails.node_type==roadmJSON.node_type)
+            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
+        else if (nodeDetails.node_type == fusedJSON.node_type)
+            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
+        else if (nodeDetails.node_type == transceiverJSON.node_type)
+            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
+        else if (nodeDetails.node_type == ILAJSON.node_type)
+            var hoverData = nodeDetails.amp_category + " - name : " + nodeDetails.label + "\n";
+        else if (nodeDetails.node_type == amplifierJSON.node_type)
+            var hoverData = nodeDetails.amp_category + " - name : " + nodeDetails.label + "\n";
+        //hoverData += "Source : " + nodes.get(fiberDetails.from).label + "\n";
+    }
+
+    $('#hoverDiv').html(htmlTitle(hoverData, "#6a6767"));
+    showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
+}
+function displayFiberHover(params) {
+    var fiberDetails = edges.get(params.edge);
+    var fiber_type = "";
+    var span_length = "0";
+    var loss_coefficient = "0";
+    var connector_in = "0";
+    var connector_out = "0";
+    var span_loss = "0";
+    if (fiberDetails.component_type == singleFiberJSON.component_type) {
+        if (fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
+            var fromlabel = "(" + nodes.get(fiberDetails.from).label + " -> " + nodes.get(fiberDetails.to).label + ")";
+            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            hoverData += "category : " + fiberDetails.fiber_category + "\n";
+            hoverData += "--------------------------\n";
+            var fromlabel = "Fiber A [" + nodes.get(fiberDetails.from).label + " -> " + nodes.get(fiberDetails.to).label + " ]";
+            hoverData += fromlabel + "\n";
+
+            if (fiberDetails.fiber_type)
+                fiber_type = fiberDetails.fiber_type;
+            if (fiberDetails.span_length)
+                span_length = fiberDetails.span_length;
+            if (fiberDetails.loss_coefficient)
+                loss_coefficient = fiberDetails.loss_coefficient;
+            if (fiberDetails.connector_in)
+                connector_in = fiberDetails.connector_in;
+            if (fiberDetails.connector_out)
+                connector_out = fiberDetails.connector_out;
+            if (fiberDetails.span_loss)
+                span_loss = fiberDetails.span_loss;
+
+            hoverData += "Fiber type : " + fiber_type + "\n";
+            hoverData += "Span length(in km) : " + span_length + "\n";
+            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            hoverData += "Span loss : " + span_loss + "\n";
+
+            hoverData += "--------------------------\n";
+
+            var rxToTx = fiberDetails.RxToTxFiber;
+            var fromlabel = "Fiber B [" + nodes.get(fiberDetails.to).label + " -> " + nodes.get(fiberDetails.from).label + " ]";
+            hoverData += fromlabel + "\n";
+
+            if (rxToTx.fiber_type)
+                fiber_type = rxToTx.fiber_type;
+            if (rxToTx.span_length)
+                span_length = rxToTx.span_length;
+            if (rxToTx.loss_coefficient)
+                loss_coefficient = rxToTx.loss_coefficient;
+            if (rxToTx.connector_in)
+                connector_in = rxToTx.connector_in;
+            if (rxToTx.connector_out)
+                connector_out = rxToTx.connector_out;
+            if (rxToTx.span_loss)
+                span_loss = rxToTx.span_loss;
+
+            hoverData += "Fiber type : " + fiber_type + "\n";
+            hoverData += "Span length(in km) : " + span_length + "\n";
+            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            hoverData += "Span loss : " + span_loss + "\n";
+        }
+        else if (fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
+            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            hoverData += "category : " + fiberDetails.fiber_category + "\n";
+            hoverData += "Source(Tx) : " + nodes.get(fiberDetails.from).label + "\n";
+            hoverData += "Destination(Rx) : " + nodes.get(fiberDetails.to).label + "\n";
+
+            if (fiberDetails.fiber_type)
+                fiber_type = fiberDetails.fiber_type;
+            if (fiberDetails.span_length)
+                span_length = fiberDetails.span_length;
+            if (fiberDetails.loss_coefficient)
+                loss_coefficient = fiberDetails.loss_coefficient;
+            if (fiberDetails.connector_in)
+                connector_in = fiberDetails.connector_in;
+            if (fiberDetails.connector_out)
+                connector_out = fiberDetails.connector_out;
+            if (fiberDetails.span_loss)
+                span_loss = fiberDetails.span_loss;
+
+            hoverData += "Fiber type : " + fiber_type + "\n";
+            hoverData += "Span length(in km) : " + span_length + "\n";
+            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            hoverData += "Span loss : " + span_loss + "\n";
+        }
+    }
+    if (fiberDetails.component_type == serviceJSON.component_type) {
+        var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+        hoverData += "Source : " + nodes.get(fiberDetails.from).label + "\n";
+        hoverData += "Destination : " + nodes.get(fiberDetails.to).label + "\n";
+        hoverData += "Bandwidth (in Gbps) : " + fiberDetails.band_width + "\n";
+        hoverData += "Central frequency(in GHz) : " + fiberDetails.central_frequency + "\n";
+    }
+    $('#hoverDiv').html(htmlTitle(hoverData, "#6a6767"));
+    showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 
 //1-roadm, 2-amp, 3-fused, 4-transceiver
@@ -903,7 +1004,9 @@ function htmlTitle(html, backcolor) {
     const container = document.createElement("pre");
     container.innerHTML = html;
     container.style.background = backcolor;
-    container.style.color = "black";
+    container.style.color = "white";
+    container.style.padding = "5px";
+    container.style.margin = "0px";
     container.style.transition = "all 1s ease-in-out";
     return container;
 }
@@ -2971,9 +3074,43 @@ function showContextMenu(x, y, menu) {
         $(element).css("left", "auto");
         $(element).css("bottom", "auto");
     }
-
     document.getElementById(menu).style.display = "block";
 }
+
+//show context menu on righ click of the component
+function showHoverDiv(x, y, menu) {
+
+    var windowHeight = $(window).height() / 2;
+    var windowWidth = $(window).width() / 2;
+
+    var element = "#" + menu;
+    if (y > windowHeight && x <= windowWidth) {
+        $(element).css("left", x);
+        $(element).css("bottom", $(window).height() - y);
+        $(element).css("right", "auto");
+        $(element).css("top", "auto");
+    } else if (y > windowHeight && x > windowWidth) {
+        //When user click on bottom-right part of window
+        $(element).css("right", $(window).width() - x);
+        $(element).css("bottom", $(window).height() - y);
+        $(element).css("left", "auto");
+        $(element).css("top", "auto");
+    } else if (y <= windowHeight && x <= windowWidth) {
+        //When user click on top-left part of window
+        $(element).css("left", x);
+        $(element).css("top", y);
+        $(element).css("right", "auto");
+        $(element).css("bottom", "auto");
+    } else {
+        //When user click on top-right part of window
+        $(element).css("right", $(window).width() - x);
+        $(element).css("top", y);
+        $(element).css("left", "auto");
+        $(element).css("bottom", "auto");
+    }
+    document.getElementById(menu).style.display = "block";
+}
+
 var showMenu = 0;
 function networkValidation() {
     var flag = false;
