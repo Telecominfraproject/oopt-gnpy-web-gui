@@ -36,6 +36,7 @@ var dualFiberJSON = "";
 var singleFiberJSON = "";
 var serviceJSON = "";
 var fiberJSON = "";
+var commonJSON = "";
 
 var configData = "";
 var styleData = "";
@@ -68,6 +69,7 @@ $(document).ready(function () {
         serviceJSON = data.Service;
         styleData = data;
         fiberJSON = data.Fiber;
+        commonJSON = data.common;
     }).fail(function () {
         console.log("An error has occurred1.");
     });
@@ -986,7 +988,7 @@ function displayFiberHover(params) {
         hoverData += "Bandwidth (in Gbps) : " + fiberDetails.band_width + "\n";
         hoverData += "Central frequency(in GHz) : " + fiberDetails.central_frequency + "\n";
     }
-    $('#hoverDiv').html(htmlTitle(hoverData, "#6a6767"));
+    $('#hoverDiv').html(htmlTitle(hoverData, commonJSON.background_color));
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 
@@ -1004,7 +1006,7 @@ function htmlTitle(html, backcolor) {
     const container = document.createElement("pre");
     container.innerHTML = html;
     container.style.background = backcolor;
-    container.style.color = "white";
+    container.style.color = commonJSON.font_color;
     container.style.padding = "5px";
     container.style.margin = "0px";
     container.style.transition = "all 1s ease-in-out";
@@ -2089,7 +2091,7 @@ function generateMatrix() {
         //table += tblheader+tblrow+"</table>"
         var table = "<table id='matrixTable'><tr><th id=r1_1></th>" + tblheader + "</tr>" + tblrow + "</table>"
         $("#matrixDiv").append(table);
-        console.log(multiarr);
+        //console.log(multiarr);
 
         $('#matrixTable tr td').click(function () {
             var cid = $(this).attr('id');
@@ -2800,6 +2802,7 @@ function updateDualFiber(fiberID) {
                     loss_coefficient: loss_coefficientB, connector_in: connector_inB, connector_out: connector_outB, span_loss: span_lossB,
                 }
             });
+            multipleFiberService(fiberDetails.from, fiberDetails.to);
             clearDualFiber();
         }
 
@@ -2882,6 +2885,7 @@ function updateSingleFiber(fiberID) {
                 id: id, label: label, fiber_type: fiber_type, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
+            multipleFiberService(fiberDetails.from, fiberDetails.to);
             clearSingleFiber();
         }
 
@@ -2921,9 +2925,9 @@ function deleteFiber(fiberID) {
     network.body.data.nodes.update({
         id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
-
+    var fiberDetails = edges.get(fiberID);
     edges.remove(fiberID);
-
+    multipleFiberService(fiberDetails.from, fiberDetails.to);
     network.unselectAll();
 
 
@@ -2953,14 +2957,16 @@ function updateService(serviceID) {
     var label = $("#txtServiceName").val().trim();
     var bandwidth = $("#txtBandwidth").val();
     var centralFrq = $("#ddlCentralFrq").val();
-    var component_type = edges.get(serviceID).component_type
+    var serviceDetails = edges.get(serviceID);
 
     if (nameLengthValidation("txtServiceName")) {
 
-        if (component_type == serviceJSON.component_type) {
+        if (serviceDetails.component_type == serviceJSON.component_type) {
             network.body.data.edges.update({
                 id: id, label: label, band_width: bandwidth, central_frequency: centralFrq
             });
+
+            multipleFiberService(serviceDetails.from, serviceDetails.to);
             clearService();
         }
 
@@ -2972,7 +2978,9 @@ function deleteService(serviceID) {
     if (!isDelete)
         return;
     document.getElementById("serviceMenu").style.display = "none";
+    var serviceDetails = edges.get(serviceID);
     edges.remove(serviceID);
+    multipleFiberService(serviceDetails.from, serviceDetails.to);
     network.unselectAll();
 }
 function clearService() {
@@ -3077,7 +3085,7 @@ function showContextMenu(x, y, menu) {
     document.getElementById(menu).style.display = "block";
 }
 
-//show context menu on righ click of the component
+//show fiber and service details when hover the mouse over on it 
 function showHoverDiv(x, y, menu) {
 
     var windowHeight = $(window).height() / 2;

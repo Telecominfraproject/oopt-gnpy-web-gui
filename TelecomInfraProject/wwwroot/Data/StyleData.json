@@ -1,5 +1,8 @@
 {
-
+  "common": {
+    "background_color": "#6a6767",
+    "font_color": "#ffffff"
+  },
   "options": {
     "physis": false,
 
