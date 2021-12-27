@@ -57,9 +57,9 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-      Create
-      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-    </button> -->
+                  Create
+                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+                </button> -->
                 <!-- Create new Modal start -->
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
@@ -76,11 +76,11 @@
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                      <h6 class="model-title">
-                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                        User Requester you to add Network Level Options
-                      </h6>
-                    </div> -->
+                                  <h6 class="model-title">
+                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                                    User Requester you to add Network Level Options
+                                  </h6>
+                                </div> -->
 
                                 <div class="container">
 
@@ -930,6 +930,7 @@
         </span>
         <a class="dropdown-item" id="rcRoadmEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit ROADM</span></a>
         <a class="dropdown-item" id="rcRoadmDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete ROADM</span></a>
+        <a class="dropdown-item" id="rcRoadmCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
     <div class="dropdown-menu" id="attenuatorMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('attenuatorMenu')">
@@ -937,6 +938,7 @@
         </span>
         <a class="dropdown-item" id="rcAttenuatorEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Attenuator</span></a>
         <a class="dropdown-item" id="rcAttenuatorDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Attenuator</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
     <div class="dropdown-menu" id="ILAMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('ILAMenu')">
@@ -944,6 +946,7 @@
         </span>
         <a class="dropdown-item" id="rcILAEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit ILA</span></a>
         <a class="dropdown-item" id="rcILADelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete ILA</span></a>
+        <a class="dropdown-item" id="rcILACopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
     <div class="dropdown-menu" id="amplifierMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('amplifierMenu')">
@@ -951,6 +954,7 @@
         </span>
         <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Amplifier</span></a>
         <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Amplifier</span></a>
+        <a class="dropdown-item" id="rcAmplifierCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
     <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
@@ -958,6 +962,13 @@
         </span>
         <a class="dropdown-item" id="rcTransceiverEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Transceiver</span></a>
         <a class="dropdown-item" id="rcTransceiverDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Transceiver</span></a>
+        <a class="dropdown-item" id="rcTransceiverCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
+    </div>
+    <div class="dropdown-menu" id="pasteMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('pasteMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="btnPasteNode" href="#"><img src="~/Assets/img/paste.svg" alt="" class="mr-2"> <span>Paste</span></a>
     </div>
     <div class="dropdown-menu" id="dualFiberMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('dualFiberMenu')">
@@ -965,17 +976,16 @@
         </span>
         <a class="dropdown-item" id="rcDualFiberEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Dual Fiber</span></a>
         <a class="dropdown-item" id="rcDualFiberDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Dual Fiber</span></a>
-        <a class="dropdown-item" id="rcDualCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
         <div class="accordion-fiber" style="height:34px;margin:1px;background-color:#99c6ef;display:-webkit-box">
             <span class="show-fiber" style="width:28px;height:26px;" id="menuInserNode">+</span><p class="title m-0 f-s-17" style="color:black;padding-left:10px;" id="jeomwspiybyhpvhdl4r9">Insert Node</p>
 
         </div>
         <div class="info-fiber" style="padding:0px;">
             <div class="panel">
-                <a class="dropdown-item" id="rcDualInsertROADM"  href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ROADM</span></a>
-                <a class="dropdown-item" id="rcDualInsertAttenuator"  href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Attenuator</span></a>
-                <a class="dropdown-item" id="rcDualInsertTransceiver"  href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Transceiver</span></a>
-                <a class="dropdown-item" id="rcDualInsertILA"  href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ILA</span></a>
+                <a class="dropdown-item" id="rcDualInsertROADM" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ROADM</span></a>
+                <a class="dropdown-item" id="rcDualInsertAttenuator" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Attenuator</span></a>
+                <a class="dropdown-item" id="rcDualInsertTransceiver" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Transceiver</span></a>
+                <a class="dropdown-item" id="rcDualInsertILA" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ILA</span></a>
             </div>
         </div>
 

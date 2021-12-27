@@ -18,7 +18,7 @@ var exportButton;
 var dropdownshape;
 var isService = 0;
 var counter = 0;
-var copy;
+var isCopy = false;
 localStorage.setItem("copyedgeid", "");
 localStorage.setItem("copynodeid", "");
 localStorage.setItem("deletenodeconectededge", "");
@@ -699,8 +699,12 @@ function draw(isImport) {
             fiber_category = edges.get(edgeData).fiber_category;
         }
         else {
+                if (isCopy) {
+                    showContextMenu(data.event.pageX, data.event.pageY, "pasteMenu");
+                }
             return;
         }
+        
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
             {
@@ -721,7 +725,7 @@ function draw(isImport) {
             }
 
         }
-        else {
+        else  {
             if (showMenu == 1)//2 enable node and fiber menus
             {
                 if (type == roadmJSON.node_type || type == ILAJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
@@ -741,6 +745,12 @@ function draw(isImport) {
                                 nodeData,
                                 callback
                             );
+                            document.getElementById("rcRoadmCopy").onclick = copyNode.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
@@ -754,6 +764,12 @@ function draw(isImport) {
                                 this,
                                 nodeData,
                                 callback
+                            );
+                            document.getElementById("rcAttenuatorCopy").onclick = copyNode.bind(
+                                this,
+                                nodeData,
+                                callback
+
                             );
                         }
                         else if (type == ILAJSON.node_type) {
@@ -770,6 +786,12 @@ function draw(isImport) {
                                     nodeData,
                                     callback
                                 );
+                                document.getElementById("rcILACopy").onclick = copyNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                             else if (amp_category == amplifierJSON.amp_category) {
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
@@ -783,6 +805,12 @@ function draw(isImport) {
                                     this,
                                     nodeData,
                                     callback
+                                );
+                                document.getElementById("rcAmplifierCopy").onclick = copyNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
                                 );
                             }
                         }
@@ -798,6 +826,12 @@ function draw(isImport) {
                                 this,
                                 nodeData,
                                 callback
+                            );
+                            document.getElementById("rcTransceiverCopy").onclick = copyNode.bind(
+                                this,
+                                nodeData,
+                                callback
+
                             );
                         }
                     }
@@ -835,8 +869,8 @@ function draw(isImport) {
                                 callback
                             );
 
-                            document.getElementById("rcDualCopy").onclick = copy.bind();
-                            //document.getElementById("rcPaste").onclick = paste.bind();
+                            //document.getElementById("rcDualCopy").onclick = isCopy.bind();
+                            //document.getElementById("rcPaste").onclick = pasteNode.bind();
                             document.getElementById("rcDualFiberEdit").onclick = dualFiberEdit.bind(
                                 this,
                                 edgeData,
@@ -853,8 +887,8 @@ function draw(isImport) {
                             document.getElementById("rcSingleInsertNode").addEventListener('click', function () {
                                 AddData(this, 0);
                             });
-                            document.getElementById("rcSingleCopy").onclick = copy.bind();
-                            //document.getElementById("rcPaste").onclick = paste.bind();
+                            //document.getElementById("rcSingleCopy").onclick = isCopy.bind();
+                            //document.getElementById("rcPaste").onclick = pasteNode.bind();
                             document.getElementById("rcSingleFiberEdit").onclick = singleFiberEdit.bind(
                                 this,
                                 edgeData,
@@ -871,14 +905,7 @@ function draw(isImport) {
                 }
             }
         }
-        if (copy == "Yes") {
-            document.getElementById("contextMenu").style.display = "none";
-            $("#pastecontextMenu").css({ left: (data.event.pageX + 20) + "px", top: (data.event.pageY + 20) + "px" });
-            document.getElementById("pastecontextMenu").style.display = "block";
-
-
-            document.getElementById("Paste").onclick = paste.bind();
-        }
+        
         _nodesDB().remove();
     });
 
@@ -2030,16 +2057,64 @@ function addServiceMode() {
     };
 }
 
-function copy() {
-    document.getElementById("edgecontextMenu").style.display = "none";
-    copyData.dataCopied = true;
-    copy = "Yes";
+function copyNode(nodeID, callback) {
+    showHideDrawerandMenu();
+    isCopy = true;
+    document.getElementById("btnPasteNode").onclick = pasteNode.bind(
+        this,
+        nodeID,
+        callback
+
+    );
 }
-function paste() {
-    if (copy == "Yes") {
-        document.getElementById("pastecontextMenu").style.display = "none";
-        getCopiedData();
-        copy = "No"
+function pasteNode(nodeId) {
+    if (isCopy) {
+        isCopy = false;
+        var nodeID = token();
+        var nodeData = nodes.get(nodeId);
+        var nodeDetails = configData.node[nodeData.node_type];
+        var node_type = nodeData.node_type;
+        //insertNodeX = network.body.nodes[nodeId].x + 5;
+        //insertNodeY = network.body.nodes[nodeId].y + 5;
+
+        if (node_type == roadmJSON.node_type) {
+            network.body.data.nodes.add({
+                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
+                shape: roadmJSON.shape, color: roadmJSON.color,
+                node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
+                //roadm_type_pro:nodeData.roadm_type_pro
+            });
+        }
+        else if (node_type == fusedJSON.node_type) {
+            network.body.data.nodes.add({
+                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodeData.number,
+                shape: fusedJSON.shape, color: fusedJSON.color,
+                node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
+            });
+        }
+        else if (node_type == transceiverJSON.node_type) {
+            network.body.data.nodes.add({
+                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodeData.number,
+                shape: transceiverJSON.shape, color: transceiverJSON.color,
+                node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
+                transceiver_type: nodeData.transceiver_type
+            });
+        }
+        else if (node_type == ILAJSON.node_type) {
+
+            if (nodeData.amp_category == ILAJSON.amp_category) {
+                network.body.data.nodes.add({
+                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodeData.number,
+                    shape: ILAJSON.shape, color: ILAJSON.color,
+                    node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
+                    pre_amp_type: nodeData.pre_amp_type, booster_type: nodeData.booster_type, amp_category: nodeData.amp_category
+                });
+            }
+        }
+
+       
+
+        document.getElementById("pasteMenu").style.display = "none";
     }
 }
 function UnSelectAll() {
@@ -2508,7 +2583,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     //}
 
 
-     var fiberDetails = edges.get(fiberID);
+    var fiberDetails = edges.get(fiberID);
     var fromNode = network.body.nodes[fiberDetails.from];
     var toNode = network.body.nodes[fiberDetails.to];
 
@@ -2545,7 +2620,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
             shape: transceiverJSON.shape, color: transceiverJSON.color,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
-            transceiver_type:nodeDetails.transceiver_type
+            transceiver_type: nodeDetails.transceiver_type
         });
     }
     else if (node_type == ILAJSON.amp_category) {
@@ -2562,7 +2637,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     var fiberStyle = network.body.edges[fiberID];
     var smooth = fiberStyle.options.smooth;
     var fiberDetails = edges.get(fiberID);
-    
+
     //network.body.data.edges.add({
     //    id: token(), from: fiberDetails.fromId, to: nodeID, label: fiberDetails.label,smooth:smooth
     //});
@@ -3002,7 +3077,7 @@ function clearCbxandAccordian() {
         $("#aFiberA").click();
     if ($("#aFiberB").text() == "-")
         $("#aFiberB").click();
-    
+
     $('#cbx_FiberALBL').prop('checked', false);
     $('#cbx_FiberBLBL').prop('checked', false);
     $('#cbx_clone').prop('checked', false);
