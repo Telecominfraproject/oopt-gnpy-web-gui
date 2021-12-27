@@ -595,6 +595,8 @@ function draw(isImport) {
     network = new vis.Network(container, data, options);
 
     network.on("click", function (params) {
+        $("#txtX").val(params.pointer.canvas.x);
+        $("#txtY").val(params.pointer.canvas.y);
         $("#hoverDiv").hide();
     });
     network.on("selectEdge", function (data) {
@@ -2504,6 +2506,17 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     //        id: token(), label: 'site '+i, x:xx , y:yy , shape: 'dot',node_type:roadmJSON.node_type
     //    });
     //}
+
+
+     var fiberDetails = edges.get(fiberID);
+    var fromNode = network.body.nodes[fiberDetails.from];
+    var toNode = network.body.nodes[fiberDetails.to];
+
+
+    var newX = (fromNode.x + toNode.x) / 2;
+    var newY = network.body.edges[fiberID].labelModule.size.yLine;
+    insertNodeX = newX;
+    insertNodeY = newY;
 
     var nodeID = token();
     nodeDetails = configData.node[node_type];
