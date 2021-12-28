@@ -56,6 +56,12 @@ var currentStepper = "";
 var insertNodeX = 0;
 var insertNodeY = 0;
 
+//undo and redo
+//initialize
+let history_list_back = [];
+let history_list_forward = [];
+
+
 $(document).ready(function () {
 
 
@@ -246,6 +252,105 @@ $(document).ready(function () {
         }
     });
 
+
+    //start undo and redo
+    redo_css_inactive();
+    undo_css_inactive();
+    $("#button_undo").on("click", function () {
+        if (history_list_back.length > 1) {
+            const current_nodes = data.nodes.get(data.nodes.getIds());
+            const current_edges = data.edges.get(data.edges.getIds());
+            const previous_nodes = history_list_back[1].nodes_his;
+            const previous_edges = history_list_back[1].edges_his;
+            // event off
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            // undo without events
+            if (current_nodes.length > previous_nodes.length) {
+                const previous_nodes_diff = _.differenceBy(
+                    current_nodes,
+                    previous_nodes,
+                    "id"
+                );
+                data.nodes.remove(previous_nodes_diff);
+            } else {
+                data.nodes.update(previous_nodes);
+            }
+
+            if (current_edges.length > previous_edges.length) {
+                const previous_edges_diff = _.differenceBy(
+                    current_edges,
+                    previous_edges,
+                    "id"
+                );
+                data.edges.remove(previous_edges_diff);
+            } else {
+                data.edges.update(previous_edges);
+            }
+            // recover event on
+            data.nodes.on("*", change_history_back);
+            data.edges.on("*", change_history_back);
+
+            history_list_forward.unshift({
+                nodes_his: history_list_back[0].nodes_his,
+                edges_his: history_list_back[0].edges_his
+            });
+            history_list_back.shift();
+            // apply css
+            css_for_undo_redo_chnage();
+            $(btnAddRoadm).removeClass('highlight');
+            $(btnAddFused).removeClass('highlight');
+            $(btnAddILA).removeClass('highlight');
+            $(btnAddAmplifier).removeClass('highlight');
+            $(btnAddTransceiver).removeClass('highlight')
+            nodeMode = 0;
+        }
+    });
+
+    $("#button_redo").on("click", function () {
+        if (history_list_forward.length > 0) {
+            const current_nodes = data.nodes.get(data.nodes.getIds());
+            const current_edges = data.edges.get(data.edges.getIds());
+            const forward_nodes = history_list_forward[0].nodes_his;
+            const forward_edges = history_list_forward[0].edges_his;
+            // event off
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            // redo without events
+            if (current_nodes.length > forward_nodes.length) {
+                const forward_nodes_diff = _.differenceBy(
+                    current_nodes,
+                    forward_nodes,
+                    "id"
+                );
+                data.nodes.remove(forward_nodes_diff);
+            } else {
+                data.nodes.update(forward_nodes);
+            }
+            if (current_edges.length > forward_edges.length) {
+                const forward_edges_diff = _.differenceBy(
+                    current_edges,
+                    forward_edges,
+                    "id"
+                );
+                data.edges.remove(forward_edges_diff);
+            } else {
+                data.edges.update(forward_edges);
+            }
+            // recover event on
+            data.nodes.on("*", change_history_back);
+            data.edges.on("*", change_history_back);
+            history_list_back.unshift({
+                nodes_his: history_list_forward[0].nodes_his,
+                edges_his: history_list_forward[0].edges_his
+            });
+            // history_list_forward
+            history_list_forward.shift();
+            // apply css
+            css_for_undo_redo_chnage();
+        }
+    });
+    //end undo and redo
 });
 function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
     var spanLength = "#" + eleSL;
@@ -928,6 +1033,16 @@ function draw(isImport) {
     network.on("blurEdge", function (params) {
         $('#hoverDiv').hide();
     });
+
+    // initial data
+    history_list_back.push({
+        nodes_his: data.nodes.get(data.nodes.getIds()),
+        edges_his: data.edges.get(data.edges.getIds())
+    });
+    // event on
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
+
 }
 
 function displayNodesHover(params) {
@@ -3429,3 +3544,67 @@ function getRoadmDetails(fiberID) {
         clearRoadm();
     }
 }
+
+
+
+function change_history_back() {
+    history_list_back.unshift({
+        nodes_his: data.nodes.get(data.nodes.getIds()),
+        edges_his: data.edges.get(data.edges.getIds())
+    });
+    //reset forward history
+    history_list_forward = [];
+    // apply css
+    css_for_undo_redo_chnage();
+}
+function redo_css_active() {
+    $("#button_undo").css({
+        "background-color": "inherit",
+        color: "white",
+        cursor: "pointer"
+    });
+};
+function undo_css_active() {
+    $("#button_redo").css({
+        "background-color": "inherit",
+        color: "white",
+        cursor: "pointer"
+    });
+};
+
+function redo_css_inactive() {
+    $("#button_undo").css({
+        "background-color": "inherit",
+        color: "#878787",
+        cursor: "inherit"
+    });
+};
+
+function undo_css_inactive() {
+    $("#button_redo").css({
+        "background-color": "inherit",
+        color: "#878787",
+        cursor: "inherit"
+    });
+};
+
+function css_for_undo_redo_chnage() {
+    if (history_list_back.length === 1) {
+        redo_css_inactive();
+    } else {
+        redo_css_active();
+    };
+    if (history_list_forward.length === 0) {
+        undo_css_inactive();
+    } else {
+        undo_css_active();
+    };
+};
+
+$(document).ready(function () {
+    // apply css
+    
+});
+
+
+

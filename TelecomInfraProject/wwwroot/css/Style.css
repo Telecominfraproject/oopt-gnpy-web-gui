@@ -1540,3 +1540,19 @@ select {
 .highlight {
     background: #143436 !important;
 }
+#button_undo,
+#button_redo {
+    position: relative;
+    display: inline-block;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    color: white;
+    cursor: pointer;
+}
+
+    #button_undo:hover,
+    #button_redo:hover {
+        background-color: #dadada;
+    }

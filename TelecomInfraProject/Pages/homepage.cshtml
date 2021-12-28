@@ -29,7 +29,14 @@
     <script src="~/js/Network Graph/FileSaver.js"></script>
     <script src="~/js/Network Graph/jsstore.js"></script>
     <script src="~/js/Network Graph/jsstore.worker.js"></script>
-    <script src="~/js/vis-network.min.js"></script>
+    @*<script src="~/js/vis-network.min.js"></script>*@
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+
     <script src="~/js/alea.js"></script>
     <script src="~/js/exampleUtil.js"></script>
     <script src="~/js/LocalDB/taffy.js"></script>
@@ -57,9 +64,9 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-                  Create
-                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-                </button> -->
+      Create
+      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+    </button> -->
                 <!-- Create new Modal start -->
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
@@ -76,11 +83,11 @@
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                                  <h6 class="model-title">
-                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                                    User Requester you to add Network Level Options
-                                  </h6>
-                                </div> -->
+                      <h6 class="model-title">
+                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                        User Requester you to add Network Level Options
+                      </h6>
+                    </div> -->
 
                                 <div class="container">
 
@@ -127,6 +134,14 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id="button_undo">
+                    undo
+                    <i class="fas fa-arrow-left "></i>
+                </div>
+                <div id="button_redo">
+                    redo
+                    <i class="fas fa-arrow-right  "></i>
                 </div>
                 <button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
