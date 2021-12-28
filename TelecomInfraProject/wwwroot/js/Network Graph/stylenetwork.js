@@ -583,11 +583,6 @@ function drag(ev) {
 
 var lastDownTarget, canvas;
 
-var copyData = {
-    nodes: [],
-    edges: [],
-    dataCopied: false
-}
 
 document.addEventListener('click', function (event) {
     lastDownTarget = event.target.tagName;
@@ -595,16 +590,22 @@ document.addEventListener('click', function (event) {
 
 
 document.addEventListener('keydown', function (event) {
-    if (lastDownTarget == "CANVAS") {
-        if (event.keyCode == 67 && event.ctrlKey) {
-            copyData.dataCopied = true;
+    //if (lastDownTarget == "CANVAS") {
+        //90 - z- undo, 89 - y - redo
+    if (event.target.type != "text") {
+        if (event.keyCode == 90 && event.ctrlKey) {
+            $("#button_undo").click();
+            showHideDrawerandMenu();
         }
-        if (event.keyCode == 86 && event.ctrlKey) {
-            if (copyData.dataCopied)
-                getCopiedData();
+        if (event.keyCode == 89 && event.ctrlKey) {
+            $("#button_redo").click();
+            showHideDrawerandMenu();
         }
     }
+    //}
 }, false);
+
+
 
 var rand = function () {
     return Math.random().toString(36).substr(2); // remove `0.`
@@ -706,14 +707,7 @@ function draw(isImport) {
     });
     network.on("selectEdge", function (data) {
         //nodeMode = "";
-        if (data.edges.length > 1 || data.edges.length == 0) {
-            copyData.edges = [];
-            copyData.nodes = [];
-            copyData.dataCopied = false;
-            return;
-        }
-        var clickedEdge = this.body.edges[data.edges[0]];
-        setCopyData(clickedEdge.options.id, '');
+       
     });
     network.on("selectNode", function (params) {
         //nodeMode = "";
@@ -722,7 +716,6 @@ function draw(isImport) {
         localStorage.setItem("deletenodeconectededge", deletenode.length);
         //_nodesDB().remove();
         //_nodesDB.insert({ "id": clickedNode.id, "type": nodes.get(clickedNode.id).node_type });
-        setCopyData('', clickedNode.options.id);
         if (isDualFiberMode == 1 || isSingleFiberMode == 1) {
             isAddService = 0;
             addServicData = {
@@ -1888,123 +1881,6 @@ function addConnections(elem, index) {
     elem.edges = network.getConnectedNodes(index);
 }
 
-/*copy and paste*/
-function setCopyData(edgeID, nodeID) {
-    copyData.edges = [];
-    copyData.nodes = [];
-
-    var edgeData = [];
-    var nodeDataFrom = '';
-    var nodeDataTo = '';
-
-
-    //copy edge/node pair
-    if (nodeID == '' && edgeID != '') {
-        edgeData = network.body.edges[edgeID];
-        nodeDataFrom = network.body.nodes[edgeData.fromId];
-        nodeDataTo = network.body.nodes[edgeData.toId];
-    }
-    //copy node
-    if (nodeID != '' && edgeID == '') {
-        edgeData = [];
-        nodeDataFrom = network.body.nodes[nodeID];
-        nodeDataTo = '';
-    }
-
-    var tempnode = [];
-    tempnode.push(nodeDataFrom);
-    tempnode.push(nodeDataTo);
-    copyData.edges = edgeData;
-    copyData.nodes = tempnode;
-}
-
-function getCopiedData() {
-
-    var dynamicid = [];
-    copyData.nodes.forEach(function (elem, index, array) {
-        counter = counter + 1;
-        localStorage.setItem("nodelength", counter);
-        //var nodelength = localStorage.getItem("nodelength");
-        if (elem == '')
-            return;
-        var dyid = token();
-        var xdir = Number($("#txtNodeX").val());
-        network.body.data.nodes.add({
-            id: dyid,
-            label: elem.options.label,
-            shape: elem.options.shape,
-            icon: elem.options.icon,
-            color: elem.options.color.background,
-            x: elem.x + 10,
-            y: elem.y + 10,
-            //x:Number($("#txtNodeX").val()),
-            //y:Number($("#txtNodeY").val()),
-            title: elem.options.title,
-            size: elem.options.size,
-            nodedegree: elem.options.nodedegree,
-            nodetype: elem.options.nodetype,
-            componentType: nodes.get(elem.options.id).componentType
-
-        });
-        dynamicid.push(dyid);
-    });
-
-    if (copyData.edges.length == 0)
-        return;
-    var elem = copyData.edges;
-    // add the connection
-    var fontstyle = {
-        align: '' + elem.options.font.align + '',
-    }
-    var arrows = {
-        to: {
-            enabled: elem.options.arrows.to.enabled,
-            type: elem.options.arrows.to.type,
-        },
-        from: {
-            enabled: elem.options.arrows.from.enabled,
-            type: elem.options.arrows.from.type,
-        },
-    }
-
-    var smooth = {
-        enabled: elem.options.smooth.enabled,
-        type: elem.options.smooth.type,
-        roundness: elem.options.smooth.roundness,
-    }
-
-    //var options = {
-    //    font: fontstyle,
-    //    arrows: arrows,
-    //    smooth: smooth
-    //}
-    network.body.data.edges.add({
-
-        id: 'eid' + Math.random().toString().replace('.', '0'),
-        from: dynamicid[0],
-        to: dynamicid[1],
-        dashes: elem.options.dashes,
-        label: elem.options.label,
-        //options: options,
-        font: fontstyle,
-        arrows: arrows,
-        smooth: smooth,
-        color: elem.options.color.color,
-        componentType: edges.get(elem.id).componentType
-        //label: elem.label,
-        //font: elem.font,
-        //arrows: elem.arrows,
-
-    });
-
-    copyData = {
-        edges: [],
-        nodes: [],
-        dataCopied: false
-    }
-
-
-}
 
 var storageData = {
     nodes: [],
