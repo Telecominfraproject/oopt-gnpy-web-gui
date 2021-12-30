@@ -64,9 +64,9 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-      Create
-      Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-    </button> -->
+                  Create
+                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+                </button> -->
                 <!-- Create new Modal start -->
 
                 <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
@@ -83,11 +83,11 @@
                             </div>
                             <div class="modal-body">
                                 <!-- <div>
-                      <h6 class="model-title">
-                        <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                        User Requester you to add Network Level Options
-                      </h6>
-                    </div> -->
+                                  <h6 class="model-title">
+                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
+                                    User Requester you to add Network Level Options
+                                  </h6>
+                                </div> -->
 
                                 <div class="container">
 
@@ -135,14 +135,14 @@
                         </div>
                     </div>
                 </div>
-                <div id="button_undo">
-                    undo
-                    <i class="fas fa-arrow-left "></i>
-                </div>
-                <div id="button_redo">
-                    redo
-                    <i class="fas fa-arrow-right  "></i>
-                </div>
+                @*<div id="button_undo">
+                        undo
+                        <i class="fas fa-arrow-left "></i>
+                    </div>
+                    <div id="button_redo">
+                        redo
+                        <i class="fas fa-arrow-right  "></i>
+                    </div>*@
                 <button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
                     <img src="./Assets/img/import.svg" class="mx-2" />
@@ -327,14 +327,23 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="float-right d-flex right-btn">
-                        <a href="#" id="btncaptureimagenetwork" class=" mx-2 icon-top-right" data-toggle="tooltip" data-placement="top" title="Camera">
-                            <img src="./Assets/img/camera.png" />
+
+                        <a href="#" id="button_undo"  data-toggle="tooltip" data-placement="top" title="Undo ( Ctrl+Z )">
+                            <img src="~/Assets/img/undo.png" />
+                        </a>
+                        <a href="#" id="button_redo"  data-toggle="tooltip" data-placement="top" title="Redo ( Ctrl+Y )">
+                            <img src="~/Assets/img/redo.png" />
+                        </a>
+                        <a href="#" id="btncaptureimagenetwork"  data-toggle="tooltip" data-placement="top" title="Camera">
+                            <img src="./Assets/img/cam.png" />
                         </a>
 
-                        <a href="#" id="btnSaveNetworkTop" class=" mx-2 icon-top-right" data-toggle="tooltip" data-placement="top" title="Save">
-                            <img src="./Assets/img/save.svg" width="15px" />
+                        <a href="#" id="btnSaveNetworkTop"  data-toggle="tooltip" data-placement="top" title="Save">
+                            <img src="./Assets/img/save.png" />
                         </a>
+
                     </div>
                     <div id="mynetwork" style="height: calc(100vh - 158px);margin-top: 40px;">
                     </div>
@@ -997,10 +1006,10 @@
         </div>
         <div class="info-fiber" style="padding:0px;">
             <div class="panel">
-                <a class="dropdown-item" id="rcDualInsertROADM" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ROADM</span></a>
-                <a class="dropdown-item" id="rcDualInsertAttenuator" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Attenuator</span></a>
-                <a class="dropdown-item" id="rcDualInsertTransceiver" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>Transceiver</span></a>
-                <a class="dropdown-item" id="rcDualInsertILA" href="#"><img src="~/Assets/img/add.svg" alt="" class="mr-2"> <span>ILA</span></a>
+                <a class="dropdown-item" id="rcDualInsertROADM" href="#"><img src="~/Assets/img/singlenode.svg" alt="" class="mr-2 middleNode"> <span>ROADM</span></a>
+                <a class="dropdown-item" id="rcDualInsertAttenuator" href="#"><img src="~/Assets/img/rednode.svg" alt="" class="mr-2 middleNode"> <span>Attenuator</span></a>
+                <a class="dropdown-item" id="rcDualInsertTransceiver" href="#"><img src="~/Assets/img/transceiver.svg" alt="" class="mr-2 middleNode"> <span>Transceiver</span></a>
+                <a class="dropdown-item" id="rcDualInsertILA" href="#"><img src="~/Assets/img/amp3.svg" alt="" class="mr-2 middleNode"> <span>ILA</span></a>
             </div>
         </div>
 

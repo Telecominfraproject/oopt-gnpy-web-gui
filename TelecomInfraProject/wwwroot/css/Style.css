@@ -1556,3 +1556,7 @@ select {
     #button_redo:hover {
         background-color: #dadada;
     }
+    .middleNode{
+        width:24px;
+        margin-left:-8px;
+    }
