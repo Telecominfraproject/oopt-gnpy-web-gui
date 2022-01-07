@@ -2101,7 +2101,7 @@ function pasteNode(nodeId) {
         if (node_type == roadmJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
-                shape: roadmJSON.shape, color: roadmJSON.color,
+                shape: roadmJSON.shape, color: roadmJSON.color,font:roadmJSON.font,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
                 roadm_type_pro:[]
             });
@@ -2109,14 +2109,14 @@ function pasteNode(nodeId) {
         else if (node_type == fusedJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodeData.number,
-                shape: fusedJSON.shape, color: fusedJSON.color,
+                shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
             });
         }
         else if (node_type == transceiverJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodeData.number,
-                shape: transceiverJSON.shape, color: transceiverJSON.color,
+                shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
                 transceiver_type: nodeData.transceiver_type
             });
@@ -2126,7 +2126,7 @@ function pasteNode(nodeId) {
             if (nodeData.amp_category == ILAJSON.amp_category) {
                 network.body.data.nodes.add({
                     id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodeData.number,
-                    shape: ILAJSON.shape, color: ILAJSON.color,
+                    shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
                     pre_amp_type: nodeData.pre_amp_type, booster_type: nodeData.booster_type, amp_category: nodeData.amp_category
                 });
@@ -2134,7 +2134,7 @@ function pasteNode(nodeId) {
             else if (nodeData.amp_category == amplifierJSON.amp_category) {
                 network.body.data.nodes.add({
                     id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodeData.number,
-                    shape: amplifierJSON.shape, color: amplifierJSON.color,
+                    shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
                     amp_type: nodeData.amp_type, amp_category: nodeData.amp_category
                 });
@@ -2533,15 +2533,19 @@ function addNodes(data, callback) {
     var nodeDetails = "";
     var nodeShape = "";
     var nodeColor = "";
+    var nodeFont = "";
     if (nodeMode == 1) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
+        nodeFont = roadmJSON.font;
+        
     }
     else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
         if (nodeMode == 2) {
             nodeDetails = configData.node[ILAJSON.amp_category];
             nodeShape = ILAJSON.shape;
             nodeColor = ILAJSON.color;
+            nodeFont = ILAJSON.font;
             data.image = DIR + ILAJSON.image;
             data.pre_amp_type = nodeDetails.default.pre_amp_type;
             data.booster_type = nodeDetails.default.booster_type;
@@ -2551,12 +2555,14 @@ function addNodes(data, callback) {
             nodeDetails = configData.node[fusedJSON.node_type];
             nodeShape = fusedJSON.shape;
             nodeColor = fusedJSON.color;
+            nodeFont = fusedJSON.font;
             data.image = DIR + fusedJSON.image;
         }
         else if (nodeMode == 4) {
             nodeDetails = configData.node[transceiverJSON.node_type];
             nodeShape = transceiverJSON.shape;
             nodeColor = transceiverJSON.color;
+            nodeFont = transceiverJSON.font;
             data.image = DIR + transceiverJSON.image;
             data.transceiver_type = nodeDetails.default.transceiver_type;
         }
@@ -2564,6 +2570,7 @@ function addNodes(data, callback) {
             nodeDetails = configData.node[amplifierJSON.amp_category];
             nodeShape = amplifierJSON.shape;
             nodeColor = amplifierJSON.color;
+            nodeFont = amplifierJSON.font;
             data.image = DIR + amplifierJSON.image;
             data.amp_type = nodeDetails.default.amp_type;
             data.amp_category = nodeDetails.default.amp_category;
@@ -2584,7 +2591,7 @@ function addNodes(data, callback) {
         nodelength = localStorage.getItem("transCount");
         nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
     }
-
+    data.font = nodeFont;
     data.id = token();
     data.number = nodelength;
     data.label = nodeLabel;
@@ -2641,21 +2648,21 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color,
+            shape: roadmJSON.shape, color: roadmJSON.color,font: roadmJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
-            shape: fusedJSON.shape, color: fusedJSON.color,
+            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
-            shape: transceiverJSON.shape, color: transceiverJSON.color,
+            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
         });
@@ -2663,7 +2670,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     else if (node_type == ILAJSON.amp_category) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodelength,
-            shape: ILAJSON.shape, color: ILAJSON.color,
+            shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
         });
@@ -2755,9 +2762,8 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 function singleFiberInsertNode(fiberID, node_type, callback) {
 
     var fiberDetails = network.body.data.edges.get(fiberID);
-    var fromNode = network.body.data.nodes.get(fiberDetails.from);
-    var toNode = network.body.data.nodes.get(fiberDetails.to);
-
+    var fromNode = network.body.nodes[fiberDetails.from];
+    var toNode = network.body.nodes[fiberDetails.to];
 
     var newX = (fromNode.x + toNode.x) / 2;
     var newY = network.body.edges[fiberID].labelModule.size.yLine;
@@ -2775,21 +2781,21 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color,
+            shape: roadmJSON.shape, color: roadmJSON.color,font:roadmJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
-            shape: fusedJSON.shape, color: fusedJSON.color,
+            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
-            shape: transceiverJSON.shape, color: transceiverJSON.color,
+            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
         });
@@ -2797,7 +2803,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     else if (node_type == amplifierJSON.amp_category) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
-            shape: amplifierJSON.shape, color: amplifierJSON.color,
+            shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
         });

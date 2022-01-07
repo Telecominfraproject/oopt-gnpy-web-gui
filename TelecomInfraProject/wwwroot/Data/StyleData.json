@@ -29,6 +29,7 @@
     "node_type": "Roadm",
     "component_type": "node",
     "icon": {},
+    "font": "12px verdana black",
     "color": {
       "border": "#2B7CE9",
       "background": "#97C2FC",
@@ -54,6 +55,7 @@
     "amp_category": "ILA",
     "component_type": "node",
     "icon": {},
+    "font": "12px verdana black",
     "color": {
       "border": "#2B7CE9",
       "background": "#97C2FC",
@@ -76,6 +78,7 @@
     "amp_category": "Amplifier",
     "component_type": "node",
     "icon": {},
+    "font": "12px verdana black",
     "color": {
       "border": "#2B7CE9",
       "background": "#97C2FC",
@@ -98,6 +101,7 @@
     "node_type": "Fused",
     "component_type": "node",
     "icon": {},
+    "font": "12px verdana black",
     "color": {
       "border": "#2B7CE9",
       "background": "#97C2FC",
@@ -120,6 +124,7 @@
     "node_type": "Transceiver",
     "component_type": "node",
     "icon": {},
+    "font": "12px verdana black",
     "color": {
       "border": "#2B7CE9",
       "background": "#97C2FC",
@@ -175,6 +180,9 @@
         }
       },
       "font": {
+        "color": "black",
+        "size": 12,
+        "face": "verdana",
         "align": "top"
       },
       "smooth": {
@@ -215,6 +223,9 @@
         }
       },
       "font": {
+        "color": "black",
+        "size": 12,
+        "face": "verdana",
         "align": "top"
       },
       "smooth": {
@@ -255,6 +266,9 @@
         }
       },
       "font": {
+        "color": "black",
+        "size": 12,
+        "face": "verdana",
         "align": "top"
       },
       "smooth": {
