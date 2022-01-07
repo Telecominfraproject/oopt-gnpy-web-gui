@@ -18,6 +18,7 @@ var exportButton;
 var dropdownshape;
 var isService = 0;
 var counter = 0;
+var transcount = 0;
 var isCopy = false;
 localStorage.setItem("copyedgeid", "");
 localStorage.setItem("copynodeid", "");
@@ -721,8 +722,15 @@ function draw(isImport) {
             enabled: false,
             addNode: function (data, callback) {
                 if (nodeMode > 0 && nodeMode < 6) {
-                    counter = counter + 1;
-                    localStorage.setItem("nodelength", counter);
+
+                    if (nodeMode == 4) {
+                        transcount = transcount + 1;
+                        localStorage.setItem("transCount", transcount);
+                    }
+                    else {
+                        counter = counter + 1;
+                        localStorage.setItem("nodelength", counter);
+                    }
                     addNodes(data, callback);
                 }
             },
@@ -834,7 +842,6 @@ function draw(isImport) {
         }
 
         if (type == serviceJSON.component_type) {
-            //showMenu = 2;//testing
             if (showMenu == 2)//enable service menu
             {
                 if (edgeData != undefined) {
@@ -855,12 +862,10 @@ function draw(isImport) {
 
         }
         else {
-            //showMenu = 1;//testing
             if (showMenu == 1)//2 enable node and fiber menus
             {
                 if (type == roadmJSON.node_type || type == ILAJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
                 {
-
                     if (nodeData != undefined) {
                         if (type == roadmJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
@@ -1252,7 +1257,7 @@ function init(isImport) {
 
 
 function exportNetwork(isSaveNetwork) {
-    testing();
+    //testing();
 
     //var nodesModel = [];
 
@@ -2075,12 +2080,30 @@ function pasteNode(nodeId) {
         //insertNodeX = network.body.data.nodes[nodeId].x + 5;
         //insertNodeY = network.body.data.nodes[nodeId].y + 5;
 
+        if (node_type == transceiverJSON.node_type) {
+            transcount = transcount + 1;
+            localStorage.setItem("transCount", transcount);
+            nodelength = localStorage.getItem("transCount");
+            nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+
+            nodeData.label = nodeLabel;
+            nodeData.number = nodelength;
+        }
+        else if (node_type == roadmJSON.node_type || node_type == fusedJSON.node_type || node_type == ILAJSON.node_type) {
+            counter = counter + 1;
+            localStorage.setItem("nodelength", counter);
+            var nodelength = localStorage.getItem("nodelength");
+            var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+            nodeData.label = nodeLabel;
+            nodeData.number = nodelength;
+        }
+
         if (node_type == roadmJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
                 shape: roadmJSON.shape, color: roadmJSON.color,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
-                //roadm_type_pro:nodeData.roadm_type_pro
+                roadm_type_pro:[]
             });
         }
         else if (node_type == fusedJSON.node_type) {
@@ -2108,11 +2131,21 @@ function pasteNode(nodeId) {
                     pre_amp_type: nodeData.pre_amp_type, booster_type: nodeData.booster_type, amp_category: nodeData.amp_category
                 });
             }
+            else if (nodeData.amp_category == amplifierJSON.amp_category) {
+                network.body.data.nodes.add({
+                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodeData.number,
+                    shape: amplifierJSON.shape, color: amplifierJSON.color,
+                    node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
+                    amp_type: nodeData.amp_type, amp_category: nodeData.amp_category
+                });
+            }
         }
+       
 
 
 
         document.getElementById("pasteMenu").style.display = "none";
+        $("#stepCreateTopology").click();
     }
 }
 function UnSelectAll() {
@@ -2543,11 +2576,18 @@ function addNodes(data, callback) {
     else
         return;
 
-    data.id = token();
+    
     var nodelength = localStorage.getItem("nodelength");
-    var nodeLable = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    
+    if (nodeMode == 4) {
+        nodelength = localStorage.getItem("transCount");
+        nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    }
+
+    data.id = token();
     data.number = nodelength;
-    data.label = nodeLable;
+    data.label = nodeLabel;
     //data.id = nodeLable;
     data.node_type = nodeDetails.default.node_type;
     data.node_degree = nodeDetails.default.node_degree;
@@ -2643,8 +2683,14 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     //    id: token(), from: nodeID, to: fiberDetails.toId, label: fiberDetails.label, smooth: smooth
     //});
     network.body.data.edges.remove(fiberID);
+
+    var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
+    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
+
+    labelvalue = countFiberService(true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
+
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: fiberDetails.label, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue,text:textvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -2652,15 +2698,20 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
         RxToTxFiber: {
             from: nodeID, to: fiberDetails.from, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
-            label: fiberDetails.label, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
+            label: labelvalue, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
             loss_coefficient: fiberDetails.loss_coefficientB, connector_in: fiberDetails.connector_inB, connector_out: fiberDetails.connector_outB, span_loss: fiberDetails.span_lossB,
         }
 
     });
 
     var newFiberID = token();
+
+    labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
+    textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    labelvalue = countFiberService(true, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
+
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: fiberDetails.label, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text:textvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -2668,7 +2719,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
         RxToTxFiber: {
             from: fiberDetails.to, to: nodeID, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
-            label: fiberDetails.label, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
+            label: labelvalue, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
             loss_coefficient: fiberDetails.loss_coefficientB, connector_in: fiberDetails.connector_inB, connector_out: fiberDetails.connector_outB, span_loss: fiberDetails.span_lossB,
         }
 
@@ -2765,9 +2816,16 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //network.body.data.edges.add({
     //    id: token(), from: nodeID, to: fiberDetails.toId, label: fiberDetails.label, smooth: smooth
     //});
+
     network.body.data.edges.remove(fiberID);
+
+    var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
+    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
+
+    labelvalue = countFiberService(false, true, false, fiberDetails.from, nodeID) + '-' + labelvalue;
+
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: fiberDetails.label, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text:textvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
@@ -2777,8 +2835,12 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     });
 
     var newFiberID = token();
+    labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
+    textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    labelvalue = countFiberService(false, true, false, nodeID, fiberDetails.to) + '-' + labelvalue;
+
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: fiberDetails.label, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text:textvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
@@ -3070,6 +3132,7 @@ function deleteNode(nodeID) {
     } else {
         //nodes.remove(nodeID);
         network.body.data.nodes.remove(nodeID);
+        $("#stepCreateTopology").click();
     }
     network.unselectAll();
 }
