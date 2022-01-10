@@ -45,8 +45,6 @@
     }
 
   },
-
-
   "ILA": {
     "shape": "circularImage",
     "size": 14,
@@ -93,7 +91,6 @@
 
     }
   },
-
   "Fused": {
     "shape": "circularImage",
     "size": 14,
@@ -181,7 +178,7 @@
       },
       "font": {
         "color": "black",
-        "size": 12,
+        "size": 11,
         "face": "verdana",
         "align": "top"
       },
@@ -224,7 +221,7 @@
       },
       "font": {
         "color": "black",
-        "size": 12,
+        "size": 11,
         "face": "verdana",
         "align": "top"
       },
@@ -267,7 +264,7 @@
       },
       "font": {
         "color": "black",
-        "size": 12,
+        "size": 11,
         "face": "verdana",
         "align": "top"
       },

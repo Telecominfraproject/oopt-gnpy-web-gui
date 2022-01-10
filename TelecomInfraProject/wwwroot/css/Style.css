@@ -1218,6 +1218,7 @@ select {
     /*border-top-right-radius: 20px;*/
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     /*border-bottom-right-radius: 20px;*/
+    border-radius: 1.25rem;
 }
 
 .stepper-tab .tap-pane {

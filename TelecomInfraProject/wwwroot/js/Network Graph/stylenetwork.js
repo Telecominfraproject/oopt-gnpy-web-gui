@@ -17,8 +17,6 @@ var importButton;
 var exportButton;
 var dropdownshape;
 var isService = 0;
-var counter = 0;
-var transcount = 0;
 var isCopy = false;
 localStorage.setItem("copyedgeid", "");
 localStorage.setItem("copynodeid", "");
@@ -690,8 +688,6 @@ function draw(isImport) {
 
                     nodes = getNodeData(tempData.nodes);
                     edges = getEdgeData(tempData.edges);
-                    counter = counter + Number(nodes.length);
-                    localStorage.setItem("nodelength", counter);
                     isLocalStorage = true;
                 }
             }
@@ -722,15 +718,6 @@ function draw(isImport) {
             enabled: false,
             addNode: function (data, callback) {
                 if (nodeMode > 0 && nodeMode < 6) {
-
-                    if (nodeMode == 4) {
-                        transcount = transcount + 1;
-                        localStorage.setItem("transCount", transcount);
-                    }
-                    else {
-                        counter = counter + 1;
-                        localStorage.setItem("nodelength", counter);
-                    }
                     addNodes(data, callback);
                 }
             },
@@ -1114,7 +1101,7 @@ function displayNodesHover(params) {
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 function displayFiberHover(params) {
-    var fiberDetails =network.body.data.edges.get(params.edge);
+    var fiberDetails = network.body.data.edges.get(params.edge);
     var fiber_type = "";
     var span_length = "0";
     var loss_coefficient = "0";
@@ -1646,11 +1633,7 @@ function importNode(index) {
     else
         return;
 
-   
-
-    counter = counter + 1;
-    localStorage.setItem("nodelength", counter)
-    var nodelength = localStorage.getItem("nodelength");
+    nodelength = nodeName(nodeDetails.default.node_type);
     var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
     var number = nodelength;
     var label = nodeLabel;
@@ -1664,13 +1647,13 @@ function importNode(index) {
         id: nodeID, label: label, x: x, y: y, image: image, number: number,
         shape: shape, color: color,
         node_type: node_type, node_degree: node_degree, component_type: component_type,
-        roadm_type_pro:[],
+        roadm_type_pro: [],
         transceiver_type: transceiver_type,//transceiver
         amp_type: amp_type,//amplifier
         pre_amp_type: pre_amp_type, booster_type: booster_type, amp_category: amp_category//ILA
     });
 
-    
+
     importNodes.push({
         id: nodeID,
         label: label,
@@ -1684,7 +1667,7 @@ function importNode(index) {
         transceiver_type: transceiver_type,
         pre_amp_type: pre_amp_type,
         booster_type: booster_type,
-        amp_type:amp_type,
+        amp_type: amp_type,
         amp_category: amp_category,
         roadm_type_pro: [],
         component_type: component_type,
@@ -1692,7 +1675,7 @@ function importNode(index) {
         node_type: nodeDetails.default.node_type
 
     });
-    
+
 }
 function getRandomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -1706,16 +1689,15 @@ function importNetwork() {
 
     nodes = [];
     edges = [];
-    
+
     var networkData = _import_json["network"][0].node;
-    $.each(networkData, function (index, item)
-    {
+    $.each(networkData, function (index, item) {
         importNode(index);
     });
 
     nodes = new vis.DataSet(importNodes);
     edges = new vis.DataSet(importEdges);
-  
+
 
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);
@@ -1907,7 +1889,6 @@ function SaveNetwork() {
 function StorageClear() {
     //localStorage.removeItem("networkData");
     disableFiberService();
-    counter = 0;
     deletedata("1");
     init();
 }
@@ -2029,7 +2010,7 @@ var addServiceData = {
 
 function addService() {
 
-    var fromDetails =network.body.data.nodes.get(addServiceData.from);
+    var fromDetails = network.body.data.nodes.get(addServiceData.from);
     var toDetails = network.body.data.nodes.get(addServiceData.to);
     if (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == transceiverJSON.node_type && fromDetails.transceiver_type == toDetails.transceiver_type) {
         var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
@@ -2080,30 +2061,17 @@ function pasteNode(nodeId) {
         //insertNodeX = network.body.data.nodes[nodeId].x + 5;
         //insertNodeY = network.body.data.nodes[nodeId].y + 5;
 
-        if (node_type == transceiverJSON.node_type) {
-            transcount = transcount + 1;
-            localStorage.setItem("transCount", transcount);
-            nodelength = localStorage.getItem("transCount");
-            nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
-
-            nodeData.label = nodeLabel;
-            nodeData.number = nodelength;
-        }
-        else if (node_type == roadmJSON.node_type || node_type == fusedJSON.node_type || node_type == ILAJSON.node_type) {
-            counter = counter + 1;
-            localStorage.setItem("nodelength", counter);
-            var nodelength = localStorage.getItem("nodelength");
-            var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
-            nodeData.label = nodeLabel;
-            nodeData.number = nodelength;
-        }
+        nodelength = nodeName(node_type);
+        nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+        nodeData.label = nodeLabel;
+        nodeData.number = nodelength;
 
         if (node_type == roadmJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
-                shape: roadmJSON.shape, color: roadmJSON.color,font:roadmJSON.font,
+                shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
-                roadm_type_pro:[]
+                roadm_type_pro: []
             });
         }
         else if (node_type == fusedJSON.node_type) {
@@ -2140,7 +2108,7 @@ function pasteNode(nodeId) {
                 });
             }
         }
-       
+
 
 
 
@@ -2538,7 +2506,7 @@ function addNodes(data, callback) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
-        
+
     }
     else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
         if (nodeMode == 2) {
@@ -2583,14 +2551,14 @@ function addNodes(data, callback) {
     else
         return;
 
-    
-    var nodelength = localStorage.getItem("nodelength");
+
+    var nodelength = nodeName(nodeDetails.default.node_type);
     var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
-    
+
     if (nodeMode == 4) {
-        nodelength = localStorage.getItem("transCount");
         nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
     }
+
     data.font = nodeFont;
     data.id = token();
     data.number = nodelength;
@@ -2639,29 +2607,27 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 
     var nodeID = token();
     nodeDetails = configData.node[node_type];
-    counter = counter + 1;
-    localStorage.setItem("nodelength", counter)
-    var nodelength = localStorage.getItem("nodelength");
-    var nodeLable = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
+    var nodelength = nodeName(node_type);
+    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color,font: roadmJSON.font,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
+            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
             shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
             shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
@@ -2669,7 +2635,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     }
     else if (node_type == ILAJSON.amp_category) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodelength,
             shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
@@ -2680,7 +2646,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 
     var fiberStyle = network.body.data.edges.get(fiberID);
     var smooth = fiberStyle.smooth;
-    var fiberDetails =network.body.data.edges.get(fiberID);
+    var fiberDetails = network.body.data.edges.get(fiberID);
 
     //network.body.data.edges.add({
     //    id: token(), from: fiberDetails.fromId, to: nodeID, label: fiberDetails.label,smooth:smooth
@@ -2692,12 +2658,12 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     network.body.data.edges.remove(fiberID);
 
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
-    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
+    //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
 
     labelvalue = countFiberService(true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
 
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue,text:textvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -2714,11 +2680,11 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     var newFiberID = token();
 
     labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
-    textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(true, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
 
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text:textvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -2733,7 +2699,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     });
 
     if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLable + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
         arrRoadmTypePro = [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
@@ -2772,29 +2738,27 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     var nodeID = token();
     nodeDetails = configData.node[node_type];
-    counter = counter + 1;
-    localStorage.setItem("nodelength", counter)
-    var nodelength = localStorage.getItem("nodelength");
-    var nodeLable = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
+    var nodelength = nodeName(node_type);
+    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color,font:roadmJSON.font,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
+            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
             shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
             shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
@@ -2802,7 +2766,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     }
     else if (node_type == amplifierJSON.amp_category) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLable, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
             shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
@@ -2826,12 +2790,12 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     network.body.data.edges.remove(fiberID);
 
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
-    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
+    //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
 
     labelvalue = countFiberService(false, true, false, fiberDetails.from, nodeID) + '-' + labelvalue;
 
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text:textvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
@@ -2842,11 +2806,11 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     var newFiberID = token();
     labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
-    textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(false, true, false, nodeID, fiberDetails.to) + '-' + labelvalue;
 
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text:textvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
@@ -2855,7 +2819,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     });
 
     if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLable + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
         arrRoadmTypePro = [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
@@ -2925,7 +2889,7 @@ function updateRoadm(nodeID) {
                 var lddlroadmtype = "#" + eleroadmtype + item.roadm_fiber_id;
                 var lddlpreamptype = "#" + elepreamptype + item.roadm_fiber_id;
                 var lddlboostertype = "#" + eleboostertype + item.roadm_fiber_id;
-                var edgeDetails =network.body.data.edges.get(item.roadm_fiber_id);
+                var edgeDetails = network.body.data.edges.get(item.roadm_fiber_id);
                 var llabelname = node_type + "- [" + label + ' - ' + network.body.data.nodes.get(edgeDetails.to).label + ' ]'
                 _roadmListDB({ "roadm_fiber_id": item.roadm_fiber_id, }).update({
                     "roadm_label": llabelname, "roadm_type": $(lddlroadmtype).val(),
@@ -3382,7 +3346,7 @@ function updateService(serviceID) {
     var label = $("#txtServiceName").val().trim();
     var bandwidth = $("#txtBandwidth").val();
     var centralFrq = $("#ddlCentralFrq").val();
-    var serviceDetails =network.body.data.edges.get(serviceID);
+    var serviceDetails = network.body.data.edges.get(serviceID);
 
     if (nameLengthValidation("txtServiceName")) {
 
@@ -3664,11 +3628,37 @@ function css_for_undo_redo_chnage() {
         undo_css_active();
     };
 };
+function nodeName(node_type) {
+    const number = [];
+    $.each(network.body.data.nodes.get(), function (index, item) {
 
-$(document).ready(function () {
-    // apply css
+        var splitName = item.label.split(' ');
+        
+        var checkNumber = Number(splitName[splitName.length - 1]);
+        if (node_type != transceiverJSON.node_type) {
+            if (item.node_type != transceiverJSON.node_type) {
 
-});
+                if (checkNumber)
+                    number.push(checkNumber);
+            }
+        }
+        else {
+            if (item.node_type == transceiverJSON.node_type) {
+                if (checkNumber)
+                    number.push(checkNumber);
+            }
+
+        }
+    });
+
+    
+    if (number.length > 0) {
+        return number.sort((f, s) => f - s)[number.length - 1] + 1;
+    }
+    else
+        return 1;
+}
+
 
 
 
