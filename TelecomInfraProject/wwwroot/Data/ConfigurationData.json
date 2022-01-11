@@ -16,7 +16,7 @@
     "Roadm": {
       "is_degree_validation": false,
       "default": {
-        "label": "site ",
+        "label": "Site ",
         "node_degree": 100,
         "node_type": "Roadm",
         "roadm_type": "",
@@ -28,7 +28,7 @@
     "ILA": {
       "is_degree_validation": true,
       "default": {
-        "label": "site ",
+        "label": "Site ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "ILA",
@@ -40,7 +40,7 @@
     "Amplifier": {
       "is_degree_validation": true,
       "default": {
-        "label": "site ",
+        "label": "Site ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "Amplifier",
@@ -51,7 +51,7 @@
     "Fused": {
       "is_degree_validation": true,
       "default": {
-        "label": "site ",
+        "label": "Site ",
         "node_degree": 2,
         "node_type": "Fused",
         "pre_amp_type": "none",
@@ -93,12 +93,12 @@
       "CD_coefficient": 16.7,
       "PMD_coefficient": 0.0400028124,
       "Span_length": 1.0,
-      "Loss_Co_eficient": 0.25,
-      "connector_in": 0.5,
-      "Conenctor_Out": 0.5,
-      "Ageing_Loss": 0.0,
+      "Loss_coefficient": 0.25,
+      "Connector_in": 0.0,
+      "Connector_out": 0.0,
+      "Ageing_loss": 0.0,
       "Length_based_loss": false,
-      "Span_Loss": 1.0
+      "Span_loss": 1.0
     }
   },
   "SingleFiber": {
@@ -123,12 +123,12 @@
       "CD_coefficient": 16.7,
       "PMD_coefficient": 0.0400028124,
       "Span_length": 1.0,
-      "Loss_Co_eficient": 0.25,
-      "connector_in": 0.5,
-      "Conenctor_Out": 0.5,
+      "Loss_coefficient": 0.25,
+      "Connector_in": 0.0,
+      "Connector_out": 0.0,
       "Ageing_Loss": 0.0,
       "Length_based_loss": false,
-      "Span_Loss": 1.0
+      "Span_loss": 1.0
     }
   },
 
@@ -168,8 +168,7 @@
       "Data_rate": "100G DP-QPSK",
       "Baud_rate": 27.95,
       "Grid_spacing": "50GHz",
-      "band_width": 100,
-      "central_frequency": "Auto"
+      "band_width": 100
     }
   }
 }

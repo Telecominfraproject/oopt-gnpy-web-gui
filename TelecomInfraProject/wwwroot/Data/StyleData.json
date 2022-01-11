@@ -1,7 +1,9 @@
 {
   "common": {
-    "background_color": "#6a6767",
-    "font_color": "#ffffff"
+    "background_color": "lightblue",
+    "font_color": "black",
+    "font_name": "verdana",
+    "font_size": "12px"
   },
   "options": {
     "physis": false,
@@ -177,7 +179,7 @@
         }
       },
       "font": {
-        "color": "black",
+        "color": "gray",
         "size": 11,
         "face": "verdana",
         "align": "top"
@@ -220,7 +222,7 @@
         }
       },
       "font": {
-        "color": "black",
+        "color": "gray",
         "size": 11,
         "face": "verdana",
         "align": "top"
@@ -263,7 +265,7 @@
         }
       },
       "font": {
-        "color": "black",
+        "color": "gray",
         "size": 11,
         "face": "verdana",
         "align": "top"

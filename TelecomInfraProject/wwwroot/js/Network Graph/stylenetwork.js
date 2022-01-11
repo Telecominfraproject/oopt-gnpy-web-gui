@@ -1112,7 +1112,7 @@ function displayFiberHover(params) {
         if (fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             var fromlabel = "(" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + ")";
             var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
-            hoverData += "category : " + fiberDetails.fiber_category + "\n";
+            //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "--------------------------\n";
             var fromlabel = "Fiber A [" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + " ]";
             hoverData += fromlabel + "\n";
@@ -1132,9 +1132,9 @@ function displayFiberHover(params) {
 
             hoverData += "Fiber type : " + fiber_type + "\n";
             hoverData += "Span length(in km) : " + span_length + "\n";
-            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
-            hoverData += "Connector IN(dB) : " + connector_in + "\n";
-            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            //hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            //hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            //hoverData += "Connector OUT(dB) : " + connector_out + "\n";
             hoverData += "Span loss : " + span_loss + "\n";
 
             hoverData += "--------------------------\n";
@@ -1158,14 +1158,14 @@ function displayFiberHover(params) {
 
             hoverData += "Fiber type : " + fiber_type + "\n";
             hoverData += "Span length(in km) : " + span_length + "\n";
-            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
-            hoverData += "Connector IN(dB) : " + connector_in + "\n";
-            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            //hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            //hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            //hoverData += "Connector OUT(dB) : " + connector_out + "\n";
             hoverData += "Span loss : " + span_loss + "\n";
         }
         else if (fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
             var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
-            hoverData += "category : " + fiberDetails.fiber_category + "\n";
+            //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "Source(Tx) : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
             hoverData += "Destination(Rx) : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
 
@@ -1184,9 +1184,9 @@ function displayFiberHover(params) {
 
             hoverData += "Fiber type : " + fiber_type + "\n";
             hoverData += "Span length(in km) : " + span_length + "\n";
-            hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
-            hoverData += "Connector IN(dB) : " + connector_in + "\n";
-            hoverData += "Connector OUT(dB) : " + connector_out + "\n";
+            //hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
+            //hoverData += "Connector IN(dB) : " + connector_in + "\n";
+            //hoverData += "Connector OUT(dB) : " + connector_out + "\n";
             hoverData += "Span loss : " + span_loss + "\n";
         }
     }
@@ -1195,7 +1195,6 @@ function displayFiberHover(params) {
         hoverData += "Source : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
         hoverData += "Destination : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
         hoverData += "Bandwidth (in Gbps) : " + fiberDetails.band_width + "\n";
-        hoverData += "Central frequency(in GHz) : " + fiberDetails.central_frequency + "\n";
     }
     $('#hoverDiv').html(htmlTitle(hoverData, commonJSON.background_color));
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
@@ -1216,6 +1215,8 @@ function htmlTitle(html, backcolor) {
     container.innerHTML = html;
     container.style.background = backcolor;
     container.style.color = commonJSON.font_color;
+    container.style.font = commonJSON.font_name;
+    container.style.fontSize = commonJSON.font_size;
     container.style.padding = "5px";
     container.style.margin = "0px";
     container.style.transition = "all 1s ease-in-out";
@@ -2372,31 +2373,59 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
             });
         }
 
+        //amplifier and attenuator fiber connection conditions - max 2
+        if (nodeDetails.node_type == fusedJSON.node_type || nodeDetails.node_type == ILAJSON.node_type)
+        {
+            var connectedEdges = network.getConnectedEdges(cfrom);
+            var fiberCount = 0;
+            $.each(connectedEdges, function (index, item) {
+                var fiber = network.body.data.edges.get(item);
+                if (fiber.from == cfrom)
+                    fiberCount++;
+            });
 
+            if (fiberCount > 1) {
+
+                if (nodeDetails.node_type == fusedJSON.node_type)
+                    alert('Attenuator node : ' + nodeDetails.label + ' can not have more than 2 fiber connection');
+                else if (nodeDetails.node_type == ILAJSON.node_type) {
+                    alert(nodeDetails.amp_category + ' node : '+nodeDetails.label +' can not have more than 2 fiber connection');
+                }
+                return;
+            }
+        }
 
         if (isDualFiberMode == 1) {
 
+
+            var fiber_config = configData[dualFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(true, false, false, cfrom, cto) + '-' + clabel;
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
                 component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
                 arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: dualFiberJSON.options.smooth,
                 width: dualFiberJSON.width,
+                fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+                loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
                 RxToTxFiber: {
                     from: cto, to: cfrom, label: clabel, text: clabel, fiber_category: dualFiberJSON.fiber_category,
-                    component_type: dualFiberJSON.component_type
+                    component_type: dualFiberJSON.component_type,
+                    fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+                    loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
                 }
 
             });
         }
         if (isSingleFiberMode == 1) {
+            var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(false, true, false, cfrom, cto) + '-' + clabel;
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
-                font: singleFiberJSON.options.font, smooth: singleFiberJSON.options.smooth
-
+                font: singleFiberJSON.options.font, smooth: singleFiberJSON.options.smooth,
+                fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+                loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
             });
         }
 
@@ -2490,7 +2519,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
         network.body.data.edges.add({
             id: token(), from: cfrom, to: cto, label: clabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
             component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background, arrows: serviceJSON.options.arrows, font: serviceJSON.options.font, smooth: serviceJSON.options.smooth,
-            band_width: configData[serviceJSON.component_type].default.band_width, central_frequency: configData[serviceJSON.component_type].default.central_frequency
+            band_width: configData[serviceJSON.component_type].default.band_width
         });
         multipleFiberService(cfrom, cto);
     }
@@ -2659,9 +2688,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
-
     labelvalue = countFiberService(true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
-
     network.body.data.edges.add({
         id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
@@ -2671,8 +2698,8 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
         RxToTxFiber: {
             from: nodeID, to: fiberDetails.from, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
-            label: labelvalue, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
-            loss_coefficient: fiberDetails.loss_coefficientB, connector_in: fiberDetails.connector_inB, connector_out: fiberDetails.connector_outB, span_loss: fiberDetails.span_lossB,
+            label: labelvalue, fiber_type: fiberDetails.RxToTxFiber.fiber_type, span_length: fiberDetails.RxToTxFiber.span_length,
+            loss_coefficient: fiberDetails.RxToTxFiber.loss_coefficient, connector_in: fiberDetails.RxToTxFiber.connector_in, connector_out: fiberDetails.RxToTxFiber.connector_out, span_loss: fiberDetails.RxToTxFiber.span_loss,
         }
 
     });
@@ -2683,17 +2710,21 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(true, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
 
+
+    var fiber_config = configData[dualFiberJSON.fiber_category.replace(' ', '')].default;
     network.body.data.edges.add({
         id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
-        fiber_type: fiberDetails.fiber_type, span_length: fiberDetails.span_length,
-        loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
+        fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+        loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
+    
         RxToTxFiber: {
             from: fiberDetails.to, to: nodeID, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
-            label: labelvalue, fiber_type: fiberDetails.fiber_typeB, span_length: fiberDetails.span_lengthB,
-            loss_coefficient: fiberDetails.loss_coefficientB, connector_in: fiberDetails.connector_inB, connector_out: fiberDetails.connector_outB, span_loss: fiberDetails.span_lossB,
+            label: labelvalue,
+            fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+            loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
         }
 
     });
@@ -2809,13 +2840,14 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(false, true, false, nodeID, fiberDetails.to) + '-' + labelvalue;
 
+    var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
     network.body.data.edges.add({
         id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
-        fiber_type: fiberDetails.fiber_type, span_length: fiberDetails.span_length,
-        loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
+        fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
+        loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
     });
 
     if (node_type == roadmJSON.node_type) {
@@ -3330,7 +3362,6 @@ function serviceEdit(serviceID, callback) {
     $("#txtServiceSrc").val(network.body.data.nodes.get(connectedNode[0]).label);
     $("#txtServiceDest").val(network.body.data.nodes.get(connectedNode[1]).label);
     $("#txtBandwidth").val(edgeDetails.band_width);
-    $("#ddlCentralFrq").val(edgeDetails.central_frequency);
     openDrawer('service');
     document.getElementById("btnUpdateService").onclick = updateService.bind(
         this,
@@ -3345,14 +3376,13 @@ function updateService(serviceID) {
     var id = serviceID;
     var label = $("#txtServiceName").val().trim();
     var bandwidth = $("#txtBandwidth").val();
-    var centralFrq = $("#ddlCentralFrq").val();
     var serviceDetails = network.body.data.edges.get(serviceID);
 
     if (nameLengthValidation("txtServiceName")) {
 
         if (serviceDetails.component_type == serviceJSON.component_type) {
             network.body.data.edges.update({
-                id: id, label: label, text: label, band_width: bandwidth, central_frequency: centralFrq
+                id: id, label: label, text: label, band_width: bandwidth
             });
 
             multipleFiberService(serviceDetails.from, serviceDetails.to);
