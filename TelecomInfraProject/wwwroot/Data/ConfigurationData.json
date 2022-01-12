@@ -170,5 +170,9 @@
       "Grid_spacing": "50GHz",
       "band_width": 100
     }
+  },
+
+  "Patch": {
+    "component_type": "Patch"
   }
 }
