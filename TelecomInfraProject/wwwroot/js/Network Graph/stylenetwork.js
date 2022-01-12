@@ -1169,10 +1169,9 @@ function displayFiberHover(params) {
     var fiberDetails = network.body.data.edges.get(params.edge);
     var fiber_type = "";
     var span_length = "0";
-    var loss_coefficient = "0";
-    var connector_in = "0";
-    var connector_out = "0";
     var span_loss = "0";
+    if (fiberDetails.component_type == patchJSON.component_type)
+        return;
     if (fiberDetails.component_type == singleFiberJSON.component_type) {
         if (fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             var fromlabel = "(" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + ")";
