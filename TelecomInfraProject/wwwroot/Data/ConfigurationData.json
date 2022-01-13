@@ -98,7 +98,7 @@
       "Connector_out": 0.0,
       "Ageing_loss": 0.0,
       "Length_based_loss": false,
-      "Span_loss": 1.0
+      "Span_loss": 0.0
     }
   },
   "SingleFiber": {
@@ -128,7 +128,7 @@
       "Connector_out": 0.0,
       "Ageing_Loss": 0.0,
       "Length_based_loss": false,
-      "Span_loss": 1.0
+      "Span_loss": 0.0
     }
   },
 

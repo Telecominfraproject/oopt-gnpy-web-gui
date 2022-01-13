@@ -769,7 +769,7 @@ function draw(isImport) {
                 addEdgeData.from = clickedNode.options.id
             else if (addEdgeData.to == '') {
                 if (addEdgeData.from == clickedNode.options.id) {
-                    alert('pls click destination '+roadmJSON.component_type);
+                    alert('pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addEdgeData.to = clickedNode.options.id
@@ -795,7 +795,7 @@ function draw(isImport) {
                 addServiceData.from = clickedNode.options.id
             else if (addServiceData.to == '') {
                 if (addServiceData.from == clickedNode.options.id) {
-                    alert('pls click destination '+roadmJSON.component_type);
+                    alert('pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addServiceData.to = clickedNode.options.id
@@ -822,7 +822,7 @@ function draw(isImport) {
                 addPatchData.from = clickedNode.options.id
             else if (addPatchData.to == '') {
                 if (addPatchData.from == clickedNode.options.id) {
-                    alert('pls click destination '+roadmJSON.component_type);
+                    alert('pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addPatchData.to = clickedNode.options.id
@@ -1278,12 +1278,14 @@ function htmlTitle(html) {
     const container = document.createElement("pre");
     container.innerHTML = html;
     container.style.background = commonJSON.background_color;
-    container.style.color = commonJSON.font_color;
-    container.style.font = commonJSON.font_name;
-    container.style.fontSize = commonJSON.font_size;
+    //container.style.color = commonJSON.font_color;
+    container.style.font = commonJSON.font;
+    //container.style.fontSize = commonJSON.font_size;
     container.style.padding = "5px";
     container.style.margin = "0px";
+    container.style.border = commonJSON.border;
     container.style.transition = "all 1s ease-in-out";
+    container.style.fontVariant = commonJSON.font_variant;
     return container;
 }
 
@@ -2087,13 +2089,15 @@ function addService() {
     var toDetails = network.body.data.nodes.get(addServiceData.to);
     if (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == transceiverJSON.node_type && fromDetails.transceiver_type == toDetails.transceiver_type) {
         var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
-        if (checkNodeConnection(addServiceData.from, addServiceData.to))
+        //if (checkNodeConnection(addServiceData.from, addServiceData.to))
+        //2 transceiver must have fiber/patch connection
+        if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
             addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
         else
-            alert("source "+roadmJSON.component_type+" : " + fromDetails.label + " ,destination "+roadmJSON.component_type+" : " + toDetails.label + " should have "+dualFiberJSON.component_type+"/"+patchJSON.component_type+" connection");
+            alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + patchJSON.component_type + " connection");
     }
     else {
-        alert("The "+serviceJSON.component_type+" should be between 2 "+transceiverJSON.node_type+" sites");
+        alert("The " + serviceJSON.component_type + " should be between 2 " + transceiverJSON.node_type + " sites");
     }
     addServiceData = {
         from: '',
@@ -2123,7 +2127,7 @@ function addPatch() {
         addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue);
     }
     else {
-        alert("The " + patchJSON.component_type+" should be between "+transceiverJSON.node_type+" and "+roadmJSON.node_type+" sites");
+        alert("The " + patchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
     }
     addPatchData = {
         from: '',
@@ -2462,7 +2466,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
         //Transeiver and Roadm rule - restrict to add fiber between transeiver and roadm
         var toNodeDetails = network.body.data.nodes.get(cto);
         if ((nodeDetails.node_type == roadmJSON.node_type && toNodeDetails.node_type == transceiverJSON.node_type) || (nodeDetails.node_type == transceiverJSON.node_type && toNodeDetails.node_type == roadmJSON.node_type)) {
-            alert("Can not add "+dualFiberJSON.component_type+" from " + nodeDetails.node_type + " "+roadmJSON.component_type+" : " + nodeDetails.label + " ,to " + toNodeDetails.node_type + " "+roadmJSON.component_type+" : " + toNodeDetails.label);
+            alert("Can not add " + dualFiberJSON.component_type + " from " + nodeDetails.node_type + " " + roadmJSON.component_type + " : " + nodeDetails.label + " ,to " + toNodeDetails.node_type + " " + roadmJSON.component_type + " : " + toNodeDetails.label);
             return;
         }
         //end
@@ -2492,26 +2496,53 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
         }
 
         //amplifier and attenuator fiber connection conditions - max limit 2
-        if (nodeDetails.node_type == fusedJSON.node_type || nodeDetails.node_type == ILAJSON.node_type) {
+        if (nodeDetails.node_type == fusedJSON.node_type || nodeDetails.node_type == ILAJSON.node_type || toNodeDetails.node_type == fusedJSON.node_type || toNodeDetails.node_type == ILAJSON.node_type) {
             var connectedEdges = network.getConnectedEdges(cfrom);
-            var fiberCount = 0;
-            $.each(connectedEdges, function (index, item) {
-                var fiber = network.body.data.edges.get(item);
-                if (fiber.from == cfrom)
-                    fiberCount++;
-            });
+            var fromCount = network.getConnectedEdges(cfrom).length;
+            var toCount = network.getConnectedEdges(cto).length;
+            //$.each(connectedEdges, function (index, item) {
+            //    var fiber = network.body.data.edges.get(item);
+            //    if (fiber.from == cfrom)
+            //        fromCount++;
+            //    if (fiber.to == cfrom)
+            //        toCount++;
+            //});
 
-            var degree = configData.node[nodeDetails.node_type].default.node_degree;
-            if (fiberCount > (degree-1)) {
-
-                if (nodeDetails.node_type == fusedJSON.node_type)
-                    alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + degree+' '+dualFiberJSON.component_type+' connection');
-                else if (nodeDetails.node_type == ILAJSON.node_type) {
-                    alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + degree+' ' + dualFiberJSON.component_type +' connection');
+            var fromDegree = configData.node[nodeDetails.node_type].default.node_degree;
+            var toDegree = configData.node[toNodeDetails.node_type].default.node_degree;
+            var msg = "";
+            var isLimit = false;
+            if (fromCount >= fromDegree) {
+                isLimit = true;
+                if (nodeDetails.node_type == fusedJSON.node_type) {
+                    msg = 'Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + fromDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                    //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + fromDegree+' '+dualFiberJSON.component_type+' connection');
                 }
+                else if (nodeDetails.node_type == ILAJSON.node_type) {
+                    msg = nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + fromDegree+' ' + dualFiberJSON.component_type +' connection';
+                    //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + fromDegree+' ' + dualFiberJSON.component_type +' connection');
+                }
+
+            }
+            if (toCount >= toDegree) {
+                if (isLimit)
+                    msg += " and ";
+                isLimit = true;
+                if (toNodeDetails.node_type == fusedJSON.node_type) {
+                    msg += 'Attenuator ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' can not have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                    //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + toDegree+' '+dualFiberJSON.component_type+' connection');
+                }
+                else if (toNodeDetails.node_type == ILAJSON.node_type) {
+                    msg += toNodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' can not have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                    //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' can not have more than ' + toDegree+' ' + dualFiberJSON.component_type +' connection');
+                }
+            }
+            if (isLimit) {
+                alert(msg);
                 return;
             }
         }
+
         //end
 
         if (isDualFiberMode == 1) {
@@ -2655,6 +2686,28 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
 function addPatchComponent(cmode, cfrom, cto, clabel) {
 
     if (cmode == 1) {
+
+        //we can not add more than 1 patch
+        isPatchAdded = false;
+        var connectedFiber = network.getConnectedEdges(cfrom);
+        connectedFiber.push(network.getConnectedEdges(cto));
+        $.each(connectedFiber, function (index, item) {
+            var fiberDetails = network.body.data.edges.get(item);
+                if (fiberDetails.component_type == patchJSON.component_type) {
+                    if ((fiberDetails.from == cfrom && fiberDetails.to == cto) || (fiberDetails.from == cto && fiberDetails.to == cfrom)) {
+                        isPatchAdded = true;
+                        return true;
+                    }
+                }
+        });
+
+        if (isPatchAdded) {
+            alert('we can not add more than 1 ' + patchJSON.component_type);
+            return;
+        }
+        //end
+
+
         clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
         network.body.data.edges.add({
             id: token(), from: cfrom, to: cto, label: clabel, text: clabel, dashes: patchJSON.dashes, width: patchJSON.width,
@@ -3301,7 +3354,7 @@ function deleteNode(nodeID) {
     document.getElementById("transceiverMenu").style.display = "none";
 
     if (network.getConnectedEdges(nodeID).length > 0) {
-        alert("Unpair "+roadmJSON.component_type+" then delete");
+        alert("Unpair " + roadmJSON.component_type + " then delete");
 
     } else {
         //nodes.remove(nodeID);
@@ -3369,7 +3422,7 @@ function updateDualFiber(fiberID) {
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type +' A : please enter valid span length.');
+        alert(dualFiberJSON.component_type + ' A : please enter valid span length.');
         return;
     }
 
@@ -3377,7 +3430,7 @@ function updateDualFiber(fiberID) {
 
     spanlen = Number(Bspan_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type +' B : please enter valid span length.');
+        alert(dualFiberJSON.component_type + ' B : please enter valid span length.');
         return;
     }
 
@@ -3504,10 +3557,10 @@ function deleteFiber(fiberID) {
 
     var fiber = network.body.data.edges.get(fiberID);
 
-    if (checkNodeServiceConnection(fiber.from, fiber.to)) {
-        alert('can not remove ' + fiber.fiber_category + ' : ' + fiber.label);
-        return;
-    }
+    //if (checkNodeServiceConnection(fiber.from, fiber.to)) {
+    //    alert('can not remove ' + fiber.fiber_category + ' : ' + fiber.label);
+    //    return;
+    //}
 
     var isDelete = confirm('do you want to delete ' + fiber.fiber_category + ' : ' + fiber.label + ' ?');
     if (!isDelete)
@@ -3773,7 +3826,7 @@ function networkValidation() {
     if (network.body.data.nodes.get().length > 0 || network.body.data.edges.get().length > 0)
         flag = true;
     else {
-        alert('Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/'+serviceJSON.component_type+'.');
+        alert('Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/' + serviceJSON.component_type + '.');
     }
 
     return flag;

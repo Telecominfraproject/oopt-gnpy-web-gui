@@ -1,9 +1,9 @@
 {
   "common": {
-    "background_color": "lightblue",
-    "font_color": "black",
-    "font_name": "verdana",
-    "font_size": "12px"
+    "background_color": "white",
+    "font": "14px Helvetica black",
+    "border": "1px solid black",
+    "font_variant": "small-caps"
   },
   "options": {
     "physis": false,
