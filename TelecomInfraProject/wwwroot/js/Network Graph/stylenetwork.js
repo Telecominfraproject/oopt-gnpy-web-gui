@@ -1162,7 +1162,7 @@ function displayNodesHover(params) {
         //hoverData += "Source : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
     }
 
-    $('#hoverDiv').html(htmlTitle(hoverData, "#6a6767"));
+    $('#hoverDiv').html(htmlTitle(hoverData));
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 function displayFiberHover(params) {
@@ -1274,10 +1274,10 @@ function AddNodeMode(nodemode) {
     }
 }
 
-function htmlTitle(html, backcolor) {
+function htmlTitle(html) {
     const container = document.createElement("pre");
     container.innerHTML = html;
-    container.style.background = backcolor;
+    container.style.background = commonJSON.background_color;
     container.style.color = commonJSON.font_color;
     container.style.font = commonJSON.font_name;
     container.style.fontSize = commonJSON.font_size;
@@ -2416,6 +2416,8 @@ function checkfiberconnection(fromNode, toNode) {
     return flag;
 }
 
+
+
 function getAllNode() {
     $("#nodeDiv").empty();
     var nodelist = network.body.data.nodes.get();
@@ -2672,6 +2674,23 @@ function checkNodeConnection(from, to) {
         if ((fiber.from == from && fiber.to == to) || (fiber.from == to && fiber.to == from)) {
             flag = true;
             return;
+        }
+    });
+    return flag;
+}
+
+//check node have service connection
+function checkNodeServiceConnection(from, to) {
+    var flag = false;
+    var fiberList = network.getConnectedEdges(from);
+    $.each(fiberList, function (index, item) {
+
+        var fiber = network.body.data.edges.get(item);
+        if (fiber.component_type == serviceJSON.component_type) {
+            if ((fiber.from == from && fiber.to == to) || (fiber.from == to && fiber.to == from)) {
+                flag = true;
+                return;
+            }
         }
     });
     return flag;
@@ -3482,13 +3501,21 @@ function clearSingleFiber() {
 }
 
 function deleteFiber(fiberID) {
-    var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(fiberID).fiber_category + ' : ' + network.body.data.edges.get(fiberID).label + ' ?');
+
+    var fiber = network.body.data.edges.get(fiberID);
+
+    if (checkNodeServiceConnection(fiber.from, fiber.to)) {
+        alert('can not remove ' + fiber.fiber_category + ' : ' + fiber.label);
+        return;
+    }
+
+    var isDelete = confirm('do you want to delete ' + fiber.fiber_category + ' : ' + fiber.label + ' ?');
     if (!isDelete)
         return;
     document.getElementById("dualFiberMenu").style.display = "none";
     document.getElementById("singleFiberMenu").style.display = "none";
 
-    var nodeDetails = network.body.data.nodes.get(network.body.data.edges.get(fiberID).from);
+    var nodeDetails = network.body.data.nodes.get(fiber.from);
     arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -3499,9 +3526,8 @@ function deleteFiber(fiberID) {
     network.body.data.nodes.update({
         id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
-    var fiberDetails = network.body.data.edges.get(fiberID);
     network.body.data.edges.remove(fiberID);
-    multipleFiberService(fiberDetails.from, fiberDetails.to);
+    multipleFiberService(fiber.from, fiber.to);
     network.unselectAll();
 
 
