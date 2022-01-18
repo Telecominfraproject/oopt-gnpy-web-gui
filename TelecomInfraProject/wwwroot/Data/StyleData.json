@@ -272,7 +272,7 @@
       },
       "smooth": {
         "enabled": true,
-        "roundness": ".2",
+        "roundness": "0.1",
         "type": "curvedCW"
       }
     }
@@ -313,7 +313,7 @@
         "align": "top"
       },
       "smooth": {
-        "enabled": true,
+        "enabled": false,
         "roundness": 0.1,
         "type": "curvedCW"
       }
