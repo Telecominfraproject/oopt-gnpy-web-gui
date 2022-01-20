@@ -409,6 +409,23 @@ $(document).ready(function () {
     $("#hoverDiv").mouseover(function () {
         $(this).hide();
     });
+
+    $("#toggleView").click(function () {
+
+        $("#btnAddAmplifier").hide();
+        $("#btnAddSingleFiber").hide();
+        $("#btnAddILA").hide();
+        $("#btnAddDualFiber").hide();
+
+        if ($("#toggleView").is(':checked')) {
+            $("#btnAddAmplifier").show();
+            $("#btnAddSingleFiber").show();
+        }
+        else {
+            $("#btnAddILA").show();
+            $("#btnAddDualFiber").show();
+        }
+    });
 });
 
 function showHideLabel() {
