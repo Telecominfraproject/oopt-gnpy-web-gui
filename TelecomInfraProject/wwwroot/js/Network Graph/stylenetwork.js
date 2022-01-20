@@ -1863,6 +1863,9 @@ function importNetwork() {
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
 
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         $("#toggleView").click();
     }
     catch
