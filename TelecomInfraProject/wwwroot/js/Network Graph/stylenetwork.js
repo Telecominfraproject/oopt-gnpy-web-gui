@@ -1834,12 +1834,12 @@ function importNode(index) {
 }
 
 function importEdge(index) {
-
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
     var from = edgeData["source"]["source-node"];
     if (edgeData["tip-photonic-topology:fiber"]) {
         isSingleFiberMode = 1;
+        isDualFiberMode = 0;
         var labelvalue = edgeData["link-id"];
         var textvalue = labelvalue;
         addFiberComponent(1, from, to, labelvalue, textvalue);
@@ -1872,11 +1872,9 @@ function importNetwork() {
         });
 
         var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
-
         $.each(edgeData, function (index, item) {
             importEdge(index);
         });
-
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
 
