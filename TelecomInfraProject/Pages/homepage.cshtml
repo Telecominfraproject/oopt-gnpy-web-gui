@@ -143,6 +143,7 @@
                         redo
                         <i class="fas fa-arrow-right  "></i>
                     </div>*@
+                @*X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />*@
                 <button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
                     <img src="./Assets/img/import.svg" class="mx-2" />
@@ -227,6 +228,7 @@
                                 </a>
                             </li>
                         </ul>
+
                         <div class="tab-content stp-tab" id="pills-tabContent">
                             <div class="tab-pane fade" id="edit-topology" role="tabpanel" aria-labelledby="pills-profile-tab">
                                 <div class="group-node">
@@ -350,6 +352,13 @@
                             <img src="./Assets/img/save.png" />
                         </a>
 
+                    </div>
+                    <div class="float-right d-flex right-btn" style="padding-right:25px;">
+                        <span style="padding:5px;color:#2c7c82;">Expand view</span>
+                        <label class="switch">
+                            <input type="checkbox" id="toggleView">
+                            <span class="slider round"></span>
+                        </label>
                     </div>
                     <div id="mynetwork" style="height: calc(100vh - 158px);margin-top: 40px;">
                     </div>

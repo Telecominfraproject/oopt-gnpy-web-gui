@@ -126,21 +126,45 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         enableDisableNode(1, "Roadm");
     });
     $("#btnAddILA").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         enableDisableNode(2, "ILA");
     });
     $("#btnAddAmplifier").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         enableDisableNode(5, "amplifier");
     });
     $("#btnAddFused").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         enableDisableNode(3, "fused");
     });
     $("#btnAddTransceiver").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         enableDisableNode(4, "transceiver");
     });
     $("#btnAddDualFiber").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         if (isDualFiberMode == 1) {
             modeHighLight();
             isDualFiberMode = 0;
@@ -151,6 +175,10 @@ $(document).ready(function () {
         }
     });
     $("#btnAddSingleFiber").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         if (isSingleFiberMode == 1) {
             modeHighLight();
             isSingleFiberMode = 0;
@@ -161,6 +189,10 @@ $(document).ready(function () {
         }
     });
     $("#btnServiceActive").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         if (networkValidation()) {
             if (isAddService == 1) {
                 modeHighLight();
@@ -173,6 +205,10 @@ $(document).ready(function () {
         }
     });
     $("#btnAddPatch").click(function () {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         if (isAddPatch == 1) {
             modeHighLight();
             isAddPatch = 0;
@@ -732,6 +768,10 @@ function draw(isImport) {
         manipulation: {
             enabled: false,
             addNode: function (data, callback) {
+
+                if ($("#toggleView").is(':checked')) {
+                    return;
+                }
                 if (nodeMode > 0 && nodeMode < 6) {
                     addNodes(data, callback);
                 }
@@ -741,8 +781,8 @@ function draw(isImport) {
     network = new vis.Network(container, data, options);
 
     network.on("click", function (params) {
-        $("#txtX").val(params.pointer.canvas.x);
-        $("#txtY").val(params.pointer.canvas.y);
+        //$("#txtX").val(params.pointer.canvas.x);
+        //$("#txtY").val(params.pointer.canvas.y);
         $("#hoverDiv").hide();
         //console.log(params.pointer.canvas.x, params.pointer.canvas.y);
     });
@@ -751,6 +791,10 @@ function draw(isImport) {
 
     });
     network.on("selectNode", function (params) {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         //nodeMode = "";
         var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
         var deletenode = network.getConnectedEdges(clickedNode.id);
@@ -847,6 +891,10 @@ function draw(isImport) {
         _nodesDB().remove();
     });
     network.on("oncontext", function (data, callback) {
+
+        if ($("#toggleView").is(':checked')) {
+            return;
+        }
         //nodeMode = "";
         //data.preventDefault();
         insertNodeX = data.pointer.canvas.x;
@@ -1647,12 +1695,29 @@ function importNode(index) {
     var x = getRandomNumberBetween(-230, 648);
     var y = getRandomNumberBetween(-230, 648);
 
+    try {
+        if (_import_json["network"][0].node[index]["metadata"]["location"].latitude)
+            x = _import_json["network"][0].node[index]["metadata"]["location"].latitude;
+        else
+            x = getRandomNumberBetween(-230, 648);
+            
+        if (_import_json["network"][0].node[index]["metadata"]["location"].longitude)
+            y = _import_json["network"][0].node[index]["metadata"]["location"].longitude;
+        else
+            y = getRandomNumberBetween(-230, 648);
+    }
+    catch
+    {
+    }
+
     var roadmData = _import_json["network"][0].node[index]['tip-photonic-topology:roadm'];
     var attenuatorData = _import_json["network"][0].node[index]['tip-photonic-topology:attenuator'];
     var transceiverData = _import_json["network"][0].node[index]['tip-photonic-topology:transceiver'];
     var amplifierData = _import_json["network"][0].node[index]['tip-photonic-topology:amplifier'];
     var ILAData = _import_json["network"][0].node[index]['tip-photonic-topology:ila'];
     //nodeID = _import_json["network"][0].node[index]["node-id"]
+
+
     if (roadmData) {
 
         nodeDetails = configData.node[roadmJSON.node_type];
@@ -1677,19 +1742,19 @@ function importNode(index) {
         image = DIR + fusedJSON.image;
     }
     else if (amplifierData) {
-        //nodeDetails = configData.node[amplifierJSON.amp_category];
-        //shape = amplifierJSON.shape;
-        //color = amplifierJSON.color;
-        //image = DIR + amplifierJSON.image;
-        //amp_type = amplifierData.model;
-        //amp_category = nodeDetails.default.amp_category;
-        nodeDetails = configData.node[ILAJSON.amp_category];
-        shape = ILAJSON.shape;
-        color = ILAJSON.color;
-        image = DIR + ILAJSON.image;
-        pre_amp_type = amplifierData.model;
-        booster_type = amplifierData.model;
+        nodeDetails = configData.node[amplifierJSON.amp_category];
+        shape = amplifierJSON.shape;
+        color = amplifierJSON.color;
+        image = DIR + amplifierJSON.image;
+        amp_type = amplifierData.model;
         amp_category = nodeDetails.default.amp_category;
+        //nodeDetails = configData.node[ILAJSON.amp_category];
+        //shape = ILAJSON.shape;
+        //color = ILAJSON.color;
+        //image = DIR + ILAJSON.image;
+        //pre_amp_type = amplifierData.model;
+        //booster_type = amplifierData.model;
+        //amp_category = nodeDetails.default.amp_category;
     }
     else if (ILAData) {
         nodeDetails = configData.node[ILAJSON.amp_category];
@@ -1756,41 +1821,52 @@ function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
     var from = edgeData["source"]["source-node"];
-    isDualFiberMode = 1;
-    var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(from).number + ' - ' + network.body.data.nodes.get(to).number;
-    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(from).label + ' - ' + network.body.data.nodes.get(to).label + " ]";
-    addFiberComponent(1, from, to, labelvalue, textvalue);
-    
-
+    if (edgeData["tip-photonic-topology:fiber"]) {
+        isSingleFiberMode = 1;
+        var labelvalue = edgeData["link-id"];
+        var textvalue = labelvalue;
+        addFiberComponent(1, from, to, labelvalue, textvalue);
+    }
+    if (edgeData["tip-photonic-topology:patch"]) {
+        isSingleFiberMode = 1;
+        var labelvalue = edgeData["link-id"];
+        var textvalue = labelvalue;
+        addPatchComponent(1, from, to, labelvalue, textvalue, true);
+    }
 }
 function getRandomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 function importNetwork() {
     //init(true);
-    if (network.body.data.nodes.length > 0) {
-        nodes.clear();
-        network.body.data.nodes.clear();
+
+    try {
+        if (network.body.data.nodes.length > 0) {
+            nodes.clear();
+            network.body.data.nodes.clear();
+        }
+
+        nodes = [];
+        edges = [];
+
+        var networkData = _import_json["network"][0].node;
+        $.each(networkData, function (index, item) {
+            importNode(index);
+        });
+
+        var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
+
+        $.each(edgeData, function (index, item) {
+            importEdge(index);
+        });
+
+        nodes = new vis.DataSet(importNodes);
+        edges = new vis.DataSet(importEdges);
+
+        $("#toggleView").click();
     }
-
-    nodes = [];
-    edges = [];
-
-    var networkData = _import_json["network"][0].node;
-    $.each(networkData, function (index, item) {
-        importNode(index);
-    });
-
-    var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
-
-    $.each(edgeData, function (index, item) {
-        importEdge(index);
-    });
-
-    nodes = new vis.DataSet(importNodes);
-    edges = new vis.DataSet(importEdges);
-
-
+    catch
+    { }
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);
     //data = {
@@ -2149,7 +2225,7 @@ function addPatch() {
     var toDetails = network.body.data.nodes.get(addPatchData.to);
     if ((fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == roadmJSON.node_type) || (fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == transceiverJSON.node_type)) {
         var labelvalue = patchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
-        addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue);
+        addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, false);
     }
     else {
         alert("The " + patchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
@@ -2780,7 +2856,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
 }
 
 //Add service//cmode 1-add
-function addPatchComponent(cmode, cfrom, cto, clabel) {
+function addPatchComponent(cmode, cfrom, cto, clabel,isImport) {
 
     if (cmode == 1) {
 
@@ -2798,7 +2874,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel) {
             }
         });
 
-        if (isPatchAdded) {
+        if (isPatchAdded && !isImport) {
             alert('we can not add more than 1 ' + patchJSON.component_type);
             return;
         }

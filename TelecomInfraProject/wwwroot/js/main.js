@@ -240,6 +240,7 @@ arrowbtn4.addEventListener("click", function () {
 
 
 function stepColor(index) {
+
     showMenu = 0;
     modeHighLight();
     
@@ -247,6 +248,7 @@ function stepColor(index) {
         case 1:
             break;
         case 2:
+
             currentStepper = "stepCreateTopology";
             showMenu = 1;
             let prev = document.querySelector("#step2").previousElementSibling;

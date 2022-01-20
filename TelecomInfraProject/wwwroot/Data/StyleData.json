@@ -73,7 +73,7 @@
   "Amplifier": {
     "shape": "circularImage",
     "size": 14,
-    "image": "amptriangle.svg",
+    "image": "amp1.svg",
     "node_type": "Amplifier",
     "amp_category": "Amplifier",
     "component_type": "node",
