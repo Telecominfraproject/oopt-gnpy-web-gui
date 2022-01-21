@@ -412,18 +412,15 @@ $(document).ready(function () {
 
     $("#toggleView").click(function () {
 
-        $("#btnAddAmplifier").hide();
-        $("#btnAddSingleFiber").hide();
-        $("#btnAddILA").hide();
-        $("#btnAddDualFiber").hide();
+        
 
         if ($("#toggleView").is(':checked')) {
-            $("#btnAddAmplifier").show();
-            $("#btnAddSingleFiber").show();
+            $("#edit-topology").hide();
+            $("#add-service").hide();
         }
         else {
-            $("#btnAddILA").show();
-            $("#btnAddDualFiber").show();
+            $("#edit-topology").show();
+            $("#add-service").show();
         }
     });
 });
@@ -2584,24 +2581,40 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
 
         //Transeiver and Roadm rule - restrict to add fiber between transeiver and roadm
         var toNodeDetails = network.body.data.nodes.get(cto);
-        if ((nodeDetails.node_type == roadmJSON.node_type && toNodeDetails.node_type == transceiverJSON.node_type) || (nodeDetails.node_type == transceiverJSON.node_type && toNodeDetails.node_type == roadmJSON.node_type)) {
-            alert("Can not add " + dualFiberJSON.component_type + " from " + nodeDetails.node_type + " " + roadmJSON.component_type + " : " + nodeDetails.label + " ,to " + toNodeDetails.node_type + " " + roadmJSON.component_type + " : " + toNodeDetails.label);
-            return;
-        }
+        //if ((nodeDetails.node_type == roadmJSON.node_type && toNodeDetails.node_type == transceiverJSON.node_type) || (nodeDetails.node_type == transceiverJSON.node_type && toNodeDetails.node_type == roadmJSON.node_type)) {
+        //    alert("Can not add " + dualFiberJSON.component_type + " from " + nodeDetails.node_type + " " + roadmJSON.component_type + " : " + nodeDetails.label + " ,to " + toNodeDetails.node_type + " " + roadmJSON.component_type + " : " + toNodeDetails.label);
+        //    return;
+        //}
         //end
 
         var fiberID = token();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
 
-        //add roadm list for from roadm node
-        if (nodeDetails.node_type == roadmJSON.node_type) {
+        //add roadm list for from roadm node or ILA
+        if (nodeDetails.node_type == roadmJSON.node_type || nodeDetails.amp_category == ILAJSON.amp_category) {
             arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
-            var roadm_label = ctext;
-            var roadm_config = configData.node[nodeDetails.node_type].default;
-            var roadm_type = roadm_config.roadm_type;
-            var pre_amp_type = roadm_config.pre_amp_type;
-            var booster_type = roadm_config.booster_type;
+
+            var roadm_label = "";
+            var roadm_type = "";
+            var pre_amp_type = "";
+            var booster_type = "";
+            if (nodeDetails.node_type == roadmJSON.node_type) {
+                roadm_label = ctext;
+                var roadm_config = configData.node[nodeDetails.node_type].default;
+                roadm_type = roadm_config.roadm_type;
+                pre_amp_type = roadm_config.pre_amp_type;
+                booster_type = roadm_config.booster_type;
+            }
+            if (nodeDetails.amp_category == ILAJSON.amp_category) {
+                roadm_label = ILAJSON.amp_category + "- [ " + network.body.data.nodes.get(cfrom).label + ' - ' + network.body.data.nodes.get(cto).label + " ]";;
+                var ILA_config = configData.node[nodeDetails.amp_category].default;
+                roadm_type = "";
+                pre_amp_type = ILA_config.pre_amp_type;//Amp A
+                booster_type = ILA_config.booster_type;//Amp B
+            }
+
+            
 
             var roadmTypePro = {
                 roadm_fiber_id: fiberID,
@@ -2616,16 +2629,30 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
                 id: cfrom, roadm_type_pro: arrRoadmTypePro
             });
         }
-        //add roadm list to to roadm node
-        if (toNodeDetails.node_type == roadmJSON.node_type) {
-            var txtvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(addEdgeData.to).label + ' - ' + network.body.data.nodes.get(addEdgeData.from).label + " ]";
-
+        //add roadm list to to roadm node or ILA
+        if (toNodeDetails.node_type == roadmJSON.node_type || toNodeDetails.amp_category == ILAJSON.amp_category) {
             arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
-            var roadm_label = txtvalue;
-            var roadm_config = configData.node[toNodeDetails.node_type].default;
-            var roadm_type = roadm_config.roadm_type;
-            var pre_amp_type = roadm_config.pre_amp_type;
-            var booster_type = roadm_config.booster_type;
+
+            var roadm_label = "";
+            var roadm_type = "";
+            var pre_amp_type = "";
+            var booster_type = "";
+            if (toNodeDetails.node_type == roadmJSON.node_type) {
+                roadm_label = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(cto).label + ' - ' + network.body.data.nodes.get(cfrom).label + " ]";
+                var roadm_config = configData.node[toNodeDetails.node_type].default;
+                roadm_type = roadm_config.roadm_type;
+                pre_amp_type = roadm_config.pre_amp_type;
+                booster_type = roadm_config.booster_type;
+            }
+            if (toNodeDetails.amp_category == ILAJSON.amp_category) {
+                roadm_label = ILAJSON.amp_category + "- [ " + network.body.data.nodes.get(cto).label + ' - ' + network.body.data.nodes.get(cfrom).label + " ]";;
+                var ILA_config = configData.node[toNodeDetails.amp_category].default;
+                roadm_type = "";
+                pre_amp_type = ILA_config.pre_amp_type;//Amp A
+                booster_type = ILA_config.booster_type;//Amp B
+            }
+
+           
 
             var roadmTypePro = {
                 roadm_fiber_id: fiberID,
@@ -2759,7 +2786,6 @@ function multipleFiberService1(cfrom, cto) {
         var fiberDetails = network.body.data.edges.get(item);
         if (fiberDetails.fiber_category == dualFiberJSON.fiber_category || fiberDetails.fiber_category == singleFiberJSON.fiber_category || fiberDetails.component_type == serviceJSON.component_type || fiberDetails.component_type == patchJSON.component_type) {
             fiberSmooth = singleFiberJSON.options.smooth;
-            //debugger;
             if (fiberDetails.from == cfrom && fiberDetails.to == cto) {
                 fiberCount++;
                 if (fiberCount == 1) {
@@ -3125,14 +3151,6 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 
     network.body.data.edges.remove(fiberID);
 
-    //network.body.data.edges.add({
-    //    id: token(), from: fiberDetails.fromId, to: nodeID, label: fiberDetails.label,smooth:smooth
-    //});
-
-    //network.body.data.edges.add({
-    //    id: token(), from: nodeID, to: fiberDetails.toId, label: fiberDetails.label, smooth: smooth
-    //});
-
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
     labelvalue = countFiberService(true, false, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
@@ -3152,12 +3170,17 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     });
 
     //add roadm list for left side fiber - new node
-    if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
+    if (node_type == roadmJSON.node_type || node_type == ILAJSON.amp_category) {
+
+        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
         arrRoadmTypePro = [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
+
+        var roadm_type = "";
+        if (roadm_config.roadm_type)
+            roadm_type = roadm_config.roadm_type;
+
         var pre_amp_type = roadm_config.pre_amp_type;
         var booster_type = roadm_config.booster_type;
 
@@ -3205,12 +3228,17 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     
     //add roadm list for newly added fiber right side - new node
     nodeDetails = network.body.data.nodes.get(nodeID);
-    if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    if (node_type == roadmJSON.node_type || node_type==ILAJSON.amp_category) {
+        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
         arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
+
+        var roadm_type = "";
+
+        if (roadm_config.roadm_type)
+            roadm_type = roadm_config.roadm_type;
+
         var pre_amp_type = roadm_config.pre_amp_type;
         var booster_type = roadm_config.booster_type;
 
@@ -3348,12 +3376,13 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     });
 
     //add roadm list for left side fiber - new node
-    if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
+    if (node_type == roadmJSON.node_type || node_type==amplifierJSON.amp_category) {
+        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
         arrRoadmTypePro = [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
+        if (roadm_config.roadm_type)
+            roadm_type = roadm_config.roadm_type;
         var pre_amp_type = roadm_config.pre_amp_type;
         var booster_type = roadm_config.booster_type;
 
@@ -3390,12 +3419,13 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     //add roadm list for newly added fiber right side - new node
     nodeDetails = network.body.data.nodes.get(nodeID);
-    if (node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    if (node_type == roadmJSON.node_type || node_type == amplifierJSON.amp_category) {
+        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
         arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
         var roadm_label = textvalue;
         var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
+        if (roadm_config.roadm_type)
+            roadm_type = roadm_config.roadm_type;
         var pre_amp_type = roadm_config.pre_amp_type;
         var booster_type = roadm_config.booster_type;
 
@@ -3463,7 +3493,7 @@ function roadmEdit(nodeID, callback) {
         
         $.each(connectedFiber, function (index, item) {
             if (network.body.data.edges.get(item).component_type == dualFiberJSON.component_type)
-                loadRoadmType(item, nodeID, nodeDetails.node_type);
+                loadRoadmType(item, nodeID, nodeDetails.node_type, "divRoadmPro");
         });
     }
 
@@ -3557,12 +3587,27 @@ function clearAttenuator() {
 }
 
 function ILAEdit(nodeID, callback) {
+    _roadmListDB().remove();
     document.getElementById("ILAMenu").style.display = "none";
     openDrawer('ILA');
     var nodeDetails = network.body.data.nodes.get(nodeID);
     $("#txtILAName").val(nodeDetails.label);
-    $("#ddlPreAmpType").val(nodeDetails.pre_amp_type);
-    $("#ddlBoosterType").val(nodeDetails.booster_type);
+    //$("#ddlPreAmpType").val(nodeDetails.pre_amp_type);
+    //$("#ddlBoosterType").val(nodeDetails.booster_type);
+
+    $("#divILAPro").hide();
+    $("#divILAPro").empty();
+
+    if (nodeDetails.amp_category == ILAJSON.amp_category) {
+        arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
+        _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
+        var connectedFiber = network.getConnectedEdges(nodeID);
+
+        $.each(connectedFiber, function (index, item) {
+            if (network.body.data.edges.get(item).component_type == dualFiberJSON.component_type)
+                loadRoadmType(item, nodeID, nodeDetails.amp_category, "divILAPro");
+        });
+    }
 
     document.getElementById("btnILAUpdate").onclick = updateILA.bind(
         this,
@@ -3577,17 +3622,29 @@ function updateILA(nodeID) {
 
     var id = nodeID;
     var label = $("#txtILAName").val().trim();
-    var node_type = network.body.data.nodes.get(nodeID).node_type
+    var nodeDetails = network.body.data.nodes.get(nodeID);
 
     if (nameLengthValidation("txtILAName")) {
 
-        if (node_type == ILAJSON.node_type) {
+        var roadmtypeprodata = _roadmListDB().get();
+        if (nodeDetails.amp_category == ILAJSON.amp_category) {
+
+            $.each(roadmtypeprodata, function (index, item) {
+                var lddlpreamptype = "#" + elepreamptype + item.roadm_fiber_id;
+                var lddlboostertype = "#" + eleboostertype + item.roadm_fiber_id;
+                var edgeDetails = network.body.data.edges.get(item.roadm_fiber_id);
+                var llabelname = nodeDetails.amp_category + "- [" + label + ' - ' + network.body.data.nodes.get(edgeDetails.to).label + ' ]'
+                _roadmListDB({ "roadm_fiber_id": item.roadm_fiber_id, }).update({
+                    "roadm_label": llabelname,
+                    "pre_amp_type": $(lddlpreamptype).val(), "booster_type": $(lddlboostertype).val(),
+                });
+            });
+            roadmtypeprodata = _roadmListDB().get();
             network.body.data.nodes.update({
-                id: id, label: label, pre_amp_type: $("#ddlPreAmpType").val(), booster_type: $("#ddlBoosterType").val(),
+                id: id, label: label, roadm_type_pro: roadmtypeprodata
             });
             clearILA();
         }
-
 
     }
 
@@ -3596,8 +3653,10 @@ function clearILA() {
     $("#txtILAName").val('');
     $("#ddlPreAmpType").val('');
     $("#ddlBoosterType").val('');
+    $("#divILAPro").empty();
     closeDrawer('ILA');
     network.unselectAll();
+    _roadmListDB().remove();
 }
 
 function amplifierEdit(nodeID, callback) {
@@ -4091,7 +4150,7 @@ function appendSinglePreAmpandBoosterType() {
 }
 
 //append node, preamp, booster type for dynamic ele
-function appendPreAmpandBoosterType(nodeType, ddlID) {
+function appendPreAmpandBoosterType(ddlID) {
 
     var preAmpType = [];
     var boosterType = [];
@@ -4204,16 +4263,17 @@ function networkValidation() {
     return flag;
 }
 
-function loadRoadmType(fiberID, nodeID, node_type) {
+function loadRoadmType(fiberID, nodeID, node_type, appendElement) {
+    var appendDiv="#"+appendElement
     var fiberDetails = network.body.data.edges.get(fiberID);
     var roadmType = "";
     if (fiberDetails.from == nodeID || fiberDetails.to == nodeID) {
-        $("#divRoadmPro").show();
+        $(appendDiv).show();
         var connectedNodes = network.getConnectedNodes(fiberID);
         if (fiberDetails.from == nodeID)
-            roadmType = node_type + "- [" + network.body.data.nodes.get(connectedNodes[0]).label + ' - ' + network.body.data.nodes.get(connectedNodes[1]).label + ' ]';
+            roadmType = node_type.toUpperCase() + "- [" + network.body.data.nodes.get(connectedNodes[0]).label + ' - ' + network.body.data.nodes.get(connectedNodes[1]).label + ' ]';
         if (fiberDetails.to == nodeID)
-            roadmType = node_type + "- [" + network.body.data.nodes.get(connectedNodes[1]).label + ' - ' + network.body.data.nodes.get(connectedNodes[0]).label + ' ]';
+            roadmType = node_type.toUpperCase() + "- [" + network.body.data.nodes.get(connectedNodes[1]).label + ' - ' + network.body.data.nodes.get(connectedNodes[0]).label + ' ]';
 
         var roadmAccordian = "";
         roadmAccordian = "<div class='accordion-fiber'>";
@@ -4223,16 +4283,18 @@ function loadRoadmType(fiberID, nodeID, node_type) {
 
         roadmAccordian += "<div class='info-fiber'><div class='panel'>";
 
-        roadmAccordian += generateAccordianEle("ROADM Type", eleroadmtype + fiberID);
+        if (node_type == roadmJSON.node_type) {
+            roadmAccordian += generateAccordianEle("ROADM Type", eleroadmtype + fiberID);
+        }
         roadmAccordian += generateAccordianEle("Amplifier A", elepreamptype + fiberID);
         roadmAccordian += generateAccordianEle("Amplifier B", eleboostertype + fiberID);
 
         roadmAccordian += "</div></div>";
 
-        $("#divRoadmPro").append(roadmAccordian);
+        $(appendDiv).append(roadmAccordian);
         accordianFun();
-        appendPreAmpandBoosterType(node_type, fiberID)
-        getRoadmDetails(fiberID);
+        appendPreAmpandBoosterType(fiberID);
+        getRoadmDetails(fiberID, node_type);
     }
 }
 function generateAccordianEle(label, ddlEleID) {
@@ -4245,18 +4307,23 @@ function generateAccordianEle(label, ddlEleID) {
 }
 
 
-function getRoadmDetails(fiberID) {
+function getRoadmDetails(fiberID, node_type) {
     if (_roadmListDB({ roadm_fiber_id: fiberID }).count() > 0) {
         var roadmDetails = _roadmListDB({ roadm_fiber_id: fiberID }).first();
         var lroadmtype = "#" + eleroadmtype + fiberID;
         var lpreamptype = "#" + elepreamptype + fiberID;
         var lboostertype = "#" + eleboostertype + fiberID;
-        $(lroadmtype).val(roadmDetails.roadm_type);
+        if (node_type==roadmJSON.node_type) {
+            $(lroadmtype).val(roadmDetails.roadm_type);
+        }
         $(lpreamptype).val(roadmDetails.pre_amp_type);
         $(lboostertype).val(roadmDetails.booster_type);
     }
     else {
-        clearRoadm();
+        if (node_type == roadmJSON.node_type) 
+            clearRoadm();
+        if (node_type == ILAJSON.amp_category)
+            clearILA();
     }
 }
 
