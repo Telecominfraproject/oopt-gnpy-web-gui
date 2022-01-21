@@ -3260,12 +3260,26 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
 
     //add roadm list for right side roadm node
     nodeDetails = network.body.data.nodes.get(fiberDetails.to);
-    if (network.body.data.nodes.get(fiberDetails.to).node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.to).label + ' - ' + nodeLabel + " ]";
+    if (nodeDetails.node_type == roadmJSON.node_type || nodeDetails.amp_category == ILAJSON.amp_category) {
+
+
+        var textvalue = "";
+        var roadm_config = "";
+        var roadm_type = "";
+
+        if (nodeDetails.node_type == roadmJSON.node_type) {
+            textvalue = nodeDetails.node_type.toUpperCase() + "- [ " + network.body.data.nodes.get(fiberDetails.to).label + ' - ' + nodeLabel + " ]";
+            roadm_config = configData.node[nodeDetails.node_type].default;
+            roadm_type = roadm_config.roadm_type;
+        }
+        if (nodeDetails.amp_category == ILAJSON.amp_category) {
+            textvalue = nodeDetails.amp_category.toUpperCase() + "- [ " + network.body.data.nodes.get(fiberDetails.to).label + ' - ' + nodeLabel + " ]";
+            roadm_config = configData.node[nodeDetails.amp_category].default;
+        }
+
         arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
         var roadm_label = textvalue;
-        var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
+        
         var pre_amp_type = roadm_config.pre_amp_type;
         var booster_type = roadm_config.booster_type;
 
