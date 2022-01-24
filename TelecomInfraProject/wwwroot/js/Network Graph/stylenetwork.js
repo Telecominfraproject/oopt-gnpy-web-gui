@@ -423,37 +423,102 @@ $(document).ready(function () {
         }
         $("#edit-topology").hide();
         $("#add-service").show();
-    }); 
+    });
     $("#stepSaveNetwork").click(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
-    }); 
+    });
     $("#collapseView").click(function () {
-       
+
         if ($("#collapseView").is(':checked')) {
             $('#expandView').prop('checked', false);
-            expandAndCollapse();
+            networkMenuHide();
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            expandAndCollapseView(false);
         }
-        else { 
+        else {
             $('#expandView').click();
-            
-    }
-       
-    }); 
+
+        }
+
+    });
     $("#expandView").click(function () {
 
         if ($("#expandView").is(':checked')) {
             $('#collapseView').prop('checked', false);
             $("#edit-topology").hide();
             $("#add-service").hide();
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            expandAndCollapseView(true);
         }
         else {
             $('#collapseView').click();
-            expandAndCollapse();
+            networkMenuHide();
         }
     });
 });
-function expandAndCollapse() {
+
+function expandAndCollapseView(isExpand) {
+    var edge = network.body.data.edges.get();
+    var node = network.body.data.nodes.get();
+
+    $.each(edge, function (index, item) {
+        if (isExpand) {
+            if (item.import) {
+                network.body.data.edges.update({
+                    id: item.id, hidden: false
+                });
+            }
+            else {
+                network.body.data.edges.update({
+                    id: item.id, hidden: true
+                });
+            }
+        }
+        else {
+            if (item.import) {
+                network.body.data.edges.update({
+                    id: item.id, hidden: true
+                });
+            }
+            else {
+                network.body.data.edges.update({
+                    id: item.id, hidden: false
+                });
+            }
+        }
+    });
+    $.each(node, function (index, item) {
+        if (isExpand) {
+            if (item.import) {
+                network.body.data.nodes.update({
+                    id: item.id, hidden: false
+                });
+            }
+            else {
+                network.body.data.nodes.update({
+                    id: item.id, hidden: true
+                });
+            }
+        }
+        else {
+            if (item.import) {
+                network.body.data.nodes.update({
+                    id: item.id, hidden: true
+                });
+            }
+            else {
+                network.body.data.nodes.update({
+                    id: item.id, hidden: false
+                });
+            }
+        }
+    });
+}
+
+function networkMenuHide() {
     if (currentStepper) {
         if (currentStepper == "stepCreateTopology") {
             showMenu = 1;
@@ -1837,6 +1902,7 @@ function importNode(index) {
 
     network.body.data.nodes.add({
         id: nodeID, label: label, x: x, y: y, image: image, number: number,
+        import: true, hidden: false,
         shape: shape, color: color,
         node_type: node_type, node_degree: node_degree, component_type: component_type,
         roadm_type_pro: [],
@@ -1879,7 +1945,7 @@ function importEdge(index) {
         isDualFiberMode = 0;
         var labelvalue = edgeData["link-id"];
         var textvalue = labelvalue;
-        addFiberComponent(1, from, to, labelvalue, textvalue);
+        addFiberComponent(1, from, to, labelvalue, textvalue, true);
     }
     if (edgeData["tip-photonic-topology:patch"]) {
         isSingleFiberMode = 1;
@@ -2197,7 +2263,7 @@ function addFiber() {
 
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(addEdgeData.from).number + ' - ' + network.body.data.nodes.get(addEdgeData.to).number;
     var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(addEdgeData.from).label + ' - ' + network.body.data.nodes.get(addEdgeData.to).label + " ]";
-    addFiberComponent(1, addEdgeData.from, addEdgeData.to, labelvalue, textvalue);
+    addFiberComponent(1, addEdgeData.from, addEdgeData.to, labelvalue, textvalue, false);
     addEdgeData = {
         from: '',
         to: ''
@@ -2280,7 +2346,7 @@ function addPatch() {
     var toDetails = network.body.data.nodes.get(addPatchData.to);
     if ((fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == roadmJSON.node_type) || (fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == transceiverJSON.node_type)) {
         var labelvalue = patchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
-        addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, false);
+        addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
     }
     else {
         alert("The " + patchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
@@ -2614,7 +2680,7 @@ function getAllNode() {
 }
 
 //Add fiber//cmode 1-add
-function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
+function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
     if (cmode == 1) {
 
         var nodeDetails = network.body.data.nodes.get(cfrom);
@@ -2786,7 +2852,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext) {
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
             network.body.data.edges.add({
-                id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+                id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel,
+                import: isImport, hidden: false,
+                dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
                 font: singleFiberJSON.options.font, smooth: fiberSmooth,
@@ -2966,7 +3034,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
 }
 
 //Add service//cmode 1-add
-function addPatchComponent(cmode, cfrom, cto, clabel, isImport) {
+function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
     if (cmode == 1) {
 
@@ -2989,13 +3057,13 @@ function addPatchComponent(cmode, cfrom, cto, clabel, isImport) {
             return;
         }
         //end
-
-
         clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
         network.body.data.edges.add({
-            id: token(), from: cfrom, to: cto, label: clabel, text: clabel, dashes: patchJSON.dashes, width: patchJSON.width,
+            id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
+            dashes: patchJSON.dashes, width: patchJSON.width,
             component_type: patchJSON.component_type, color: patchJSON.options.color, background: patchJSON.options.background,
-            arrows: patchJSON.options.arrows, font: patchJSON.options.font, smooth: patchJSON.options.smooth
+            arrows: patchJSON.options.arrows, font: patchJSON.options.font, smooth: patchJSON.options.smooth,
+            import: isImport, hidden: false,
         });
         //multipleFiberService(cfrom, cto);
     }
