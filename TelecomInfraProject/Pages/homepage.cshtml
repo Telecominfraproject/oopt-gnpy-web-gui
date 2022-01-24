@@ -337,7 +337,7 @@
                     </div>
 
                     <div class="float-right d-flex right-btn">
-                        <i id="showHideEle" style="padding-top:15px;padding-right:18px;cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
+                        <i id="showHideEle" style="padding-top:15px;padding-right:6px;padding-left:6px;cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
                         <a href="#" id="button_undo" data-toggle="tooltip" data-placement="top" title="Undo ( Ctrl+Z )">
                             <img src="~/Assets/img/undo.png" />
                         </a>
@@ -353,13 +353,21 @@
                         </a>
 
                     </div>
-                    <div class="float-right d-flex right-btn" style="padding-right:25px;">
-                        <span style="padding:5px;color:#2c7c82;">Expand view</span>
-                        <label class="switch">
-                            <input type="checkbox" id="toggleView">
+                    <div class="float-right d-flex right-btn" style="padding-right:5px;padding-top:5px;">
+                        <span style="padding:5px;color:#2c7c82;font-size:small">Expand view</span>
+                        <label class="switch" style="margin-top:5px;">
+                            <input type="checkbox" id="expandView">
                             <span class="slider round"></span>
                         </label>
                     </div>
+                    <div class="float-right d-flex right-btn" style="padding-right:5px;padding-top:5px;">
+                        <span style="padding:5px;color:#2c7c82;font-size:small">Collapse view</span>
+                        <label class="switch" style="margin-top:5px;">
+                            <input type="checkbox" id="collapseView" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
                     <div id="mynetwork" style="height: calc(100vh - 158px);margin-top: 40px;">
                     </div>
                 </div>
