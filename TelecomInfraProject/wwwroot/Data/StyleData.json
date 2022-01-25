@@ -25,9 +25,9 @@
 
 
   "Roadm": {
-    "shape": "circularImage",
+    "shape": "image",
     "size": 14,
-    "image": "singlenode.svg",
+    "image": "newroadm.svg",
     "node_type": "Roadm",
     "component_type": "node",
     "icon": {},
@@ -71,9 +71,9 @@
     }
   },
   "Amplifier": {
-    "shape": "circularImage",
+    "shape": "image",
     "size": 14,
-    "image": "amp1.svg",
+    "image": "newamp.svg",
     "node_type": "Amplifier",
     "amp_category": "Amplifier",
     "component_type": "node",
@@ -94,9 +94,9 @@
     }
   },
   "Fused": {
-    "shape": "circularImage",
+    "shape": "image",
     "size": 14,
-    "image": "rednode.svg",
+    "image": "newattenuator.svg",
     "node_type": "Fused",
     "component_type": "node",
     "icon": {},
@@ -117,9 +117,9 @@
 
   },
   "Transceiver": {
-    "shape": "circularImage",
+    "shape": "image",
     "size": 14,
-    "image": "transceiver.svg",
+    "image": "newtransceiver.svg",
     "node_type": "Transceiver",
     "component_type": "node",
     "icon": {},

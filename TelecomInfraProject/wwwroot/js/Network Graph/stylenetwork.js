@@ -3049,10 +3049,13 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             return;
         }
         //end
+
+        var patchDashes = isImport;
+
         clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
         network.body.data.edges.add({
             id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
-            dashes: patchJSON.dashes, width: patchJSON.width,
+            dashes: patchDashes, width: patchJSON.width,
             component_type: patchJSON.component_type, color: patchJSON.options.color, background: patchJSON.options.background,
             arrows: patchJSON.options.arrows, font: patchJSON.options.font, smooth: patchJSON.options.smooth,
             import: isImport, hidden: false,

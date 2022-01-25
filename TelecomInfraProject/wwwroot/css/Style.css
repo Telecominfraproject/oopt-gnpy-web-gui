@@ -1577,7 +1577,7 @@ select {
 
 .flex-item-left {
     padding: 4px;
-    height:30px;
+    height:29px;
     flex: 50%;
     border-radius: 10px 0px 0px 10px;
     color: #000;
@@ -1588,7 +1588,7 @@ select {
 
 .flex-item-right {
     padding: 4px;
-    height:30px;
+    height:29px;
     flex: 50%;
     border-radius: 0px 10px 10px 0px;
     color: #000;
