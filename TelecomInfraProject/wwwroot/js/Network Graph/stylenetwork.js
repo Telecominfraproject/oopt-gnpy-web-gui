@@ -59,6 +59,7 @@ let history_list_back = [];
 let history_list_forward = [];
 
 var isShow = true;
+var isExpandedView = false;
 
 
 $(document).ready(function () {
@@ -127,42 +128,42 @@ $(document).ready(function () {
 
     $("#btnAddRoadm").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         enableDisableNode(1, "Roadm");
     });
     $("#btnAddILA").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         enableDisableNode(2, "ILA");
     });
     $("#btnAddAmplifier").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         enableDisableNode(5, "amplifier");
     });
     $("#btnAddFused").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         enableDisableNode(3, "fused");
     });
     $("#btnAddTransceiver").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         enableDisableNode(4, "transceiver");
     });
     $("#btnAddDualFiber").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         if (isDualFiberMode == 1) {
@@ -176,7 +177,7 @@ $(document).ready(function () {
     });
     $("#btnAddSingleFiber").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         if (isSingleFiberMode == 1) {
@@ -190,7 +191,7 @@ $(document).ready(function () {
     });
     $("#btnServiceActive").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         if (networkValidation()) {
@@ -206,7 +207,7 @@ $(document).ready(function () {
     });
     $("#btnAddPatch").click(function () {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         if (isAddPatch == 1) {
@@ -411,14 +412,14 @@ $(document).ready(function () {
     });
 
     $("#stepCreateTopology").click(function () {
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         $("#edit-topology").show();
         $("#add-service").hide();
     });
     $("#stepAddService").click(function () {
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         $("#edit-topology").hide();
@@ -429,34 +430,25 @@ $(document).ready(function () {
         $("#add-service").hide();
     });
     $("#collapseView").click(function () {
-
-        if ($("#collapseView").is(':checked')) {
-            $('#expandView').prop('checked', false);
-            networkMenuHide();
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            expandAndCollapseView(false);
-        }
-        else {
-            $('#expandView').click();
-
-        }
-
+        isExpandedView = false;
+        $("#expandView").removeClass('viewActive');
+        $("#collapseView").addClass('viewActive');
+        networkMenuHide();
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
+        expandAndCollapseView(false);
+        
     });
     $("#expandView").click(function () {
-
-        if ($("#expandView").is(':checked')) {
-            $('#collapseView').prop('checked', false);
-            $("#edit-topology").hide();
-            $("#add-service").hide();
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            expandAndCollapseView(true);
-        }
-        else {
-            $('#collapseView').click();
-            networkMenuHide();
-        }
+        isExpandedView = true;
+        $("#expandView").addClass('viewActive');
+        $("#collapseView").removeClass('viewActive');
+        $("#edit-topology").hide();
+        $("#add-service").hide();
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
+        expandAndCollapseView(true);
+        
     });
 });
 
@@ -888,7 +880,7 @@ function draw(isImport) {
             enabled: false,
             addNode: function (data, callback) {
 
-                if ($("#expandView").is(':checked')) {
+                if (isExpandedView) {
                     return;
                 }
                 if (nodeMode > 0 && nodeMode < 6) {
@@ -911,7 +903,7 @@ function draw(isImport) {
     });
     network.on("selectNode", function (params) {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         //nodeMode = "";
@@ -1011,7 +1003,7 @@ function draw(isImport) {
     });
     network.on("oncontext", function (data, callback) {
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         //nodeMode = "";
@@ -1981,7 +1973,7 @@ function importNetwork() {
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
 
-        if ($("#expandView").is(':checked')) {
+        if (isExpandedView) {
             return;
         }
         $("#expandView").click();

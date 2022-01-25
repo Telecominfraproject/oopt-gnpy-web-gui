@@ -1562,64 +1562,49 @@ select {
         margin-left:-8px;
     }
 
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 44px;
-    height: 22px;
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid #2b7082;
+    border-radius: 14px;
+    min-width: 225px;
+    height: 30px;
 }
 
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
 
-.slider {
-    position: absolute;
+
+.flex-item-left {
+    padding: 4px;
+    height:30px;
+    flex: 50%;
+    border-radius: 10px 0px 0px 10px;
+    color: #000;
     cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
 }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 14px;
-        width: 13px;
-        left: 4px;
-        bottom: 4px;
-        right:4px;
-        background-color: white;
-        -webkit-transition: .4s;
-        transition: .4s;
+
+
+.flex-item-right {
+    padding: 4px;
+    height:30px;
+    flex: 50%;
+    border-radius: 0px 10px 10px 0px;
+    color: #000;
+    cursor: pointer;
+}
+
+.viewActive {
+    background-color: #2b7082 !important;
+    color: white;
+}
+
+
+
+@media (max-width: 800px) {
+    .flex-container {
+        flex-direction: column;
     }
-
-input:checked + .slider {
-    background-color: #2196F3;
 }
-
-input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
-}
-
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
-}
-
-/* Rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-
-    .slider.round:before {
-        border-radius: 50%;
-    }
 
