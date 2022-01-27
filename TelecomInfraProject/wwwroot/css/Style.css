@@ -238,11 +238,11 @@ height: 100vh;
 
 .network-area {
     background: #fff;
-    height: calc(100vh - 88px);
+    height: calc(100vh - 114px);
     width: calc(100vw - 21px);
     margin-left: 10px;
     margin-top: 15px;
-    border-radius: 20px;
+    border-radius: 5px;
     background-repeat: no-repeat;
     background-size: cover;
 }
@@ -315,9 +315,8 @@ height: 100vh;
 
 .inner-body {
     display: flex;
-    border: 1px solid #e5e5e5;
-    height: calc(100vh - 88px);
-    border-radius: 20px;
+    height: calc(100vh - 114px);
+    border-radius: 5px;
 }
 
 ul {
@@ -337,6 +336,54 @@ ul {
             /* background: #b0d0d4; */
             color: white;
         }
+
+.nav-pills li {
+    padding: 6px 0;
+    border: none;
+    position: relative;
+    width: 25%;
+    padding-top:0;
+    padding-bottom:0;
+}
+
+    .nav-pills li a {
+        border-radius: 0 !important;
+    }
+
+.stepper-tab .nav-pills .nav-item .nav-link:before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 21px solid transparent;
+    border-bottom: 19px solid transparent;
+    border-left: 20px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    margin-left: 2px;
+    left: 100%;
+    z-index: 1;
+}
+
+.stepper-tab .nav-pills .nav-item .nav-link:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 21px solid transparent;
+    border-bottom: 19px solid transparent;
+    border-left: 20px solid #cbe8f3;
+    position: absolute;
+    top: 50%;
+    margin-top: -20px;
+    left: 100%;
+    z-index: 2;
+}
+
+.stepper-tab .nav-pills .nav-link.active:after {
+    border-left-color: #305b72 !important;
+}
 
 .work_area {
     overflow-wrap: anywhere;
@@ -784,7 +831,7 @@ background-color: #fff;
 
 .map-bg {
     background-image: url(../Assets/img/map-bg.png);
-    z-index: 1000;
+    z-index: 1;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -1189,10 +1236,10 @@ select {
 /*stepper design*/
 
 .stepper-tab .tab-content {
-    z-index:9999;
+    z-index: 1000;
     position: absolute;
     left: 0px;
-    top: 50%;
+    top: 60%;
     transform: translate(0,-50%);
     /*  max-width: 57px;
   width: 100%;*/
@@ -1207,18 +1254,19 @@ select {
 }
 
 .stepper-tab .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-    color: #fff;
-    background: linear-gradient(45deg, #255a5c, #365b7e);
+    color: #fff !important;
+    background: #305b72 !important;
     /*border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;*/
 }
 
 .stepper-tab .nav-pills .nav-link {
-    background: #f3fbfe;
-    /*border-top-right-radius: 20px;*/
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    /*border-bottom-right-radius: 20px;*/
-    border-radius: 1.25rem;
+    background: #cbe8f3;
+    justify-content: center;
+    width: 100%;
+    /* border-top-right-radius: 20px; */
+    /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
+    /* border-bottom-right-radius: 20px; */
 }
 
 .stepper-tab .tap-pane {
@@ -1228,28 +1276,7 @@ select {
     align-items: center;
 }
 
-.stepper-tab ul li {
-    position: absolute;
-}
 
-    .stepper-tab ul li:nth-child(1) {
-        z-index: 10;
-    }
-
-    .stepper-tab ul li:nth-child(2) {
-        z-index: 9;
-        margin-left: 230px;
-    }
-
-    .stepper-tab ul li:nth-child(3) {
-        z-index: 8;
-        margin-left: 445px;
-    }
-
-    .stepper-tab ul li:nth-child(4) {
-        z-index: 7;
-        margin-left: 632px;
-    }
 
 .stepper-tab .nav-link {
     color: #2c7c82;
@@ -1305,25 +1332,6 @@ select {
         font-size: 12px;
     }
 
-    .stepper-tab ul li:nth-child(2) {
-        z-index: 9;
-        margin-left: 125px;
-    }
-
-    .stepper-tab ul li:nth-child(3) {
-        z-index: 8;
-        margin-left: 273px;
-    }
-
-    .stepper-tab ul li:nth-child(4) {
-        z-index: 7;
-        margin-left: 433px;
-    }
-
-    .stepper-tab ul li:nth-child(5) {
-        z-index: 6;
-        margin-left: 568px;
-    }
 
     .btn-white {
         background-color: #47a2a9;
@@ -1361,34 +1369,7 @@ select {
         font-size: 10px;
     }
 
-    .stepper-tab ul li:nth-child(1) {
-        z-index: 10;
-        margin-top: 42px;
-    }
 
-    .stepper-tab ul li:nth-child(2) {
-        z-index: 9;
-        margin-left: 0px;
-        margin-top: 83px;
-    }
-
-    .stepper-tab ul li:nth-child(3) {
-        z-index: 8;
-        margin-left: 0px;
-        margin-top: 122px;
-    }
-
-    .stepper-tab ul li:nth-child(4) {
-        z-index: 7;
-        margin-left: 0px;
-        margin-top: 164px;
-    }
-
-    .stepper-tab ul li:nth-child(5) {
-        z-index: 6;
-        margin-left: 0px;
-        margin-top: 200px;
-    }
 
     .btn-white {
         background-color: #47a2a9;
@@ -1431,6 +1412,10 @@ select {
 .tab-nav-completed {
     background-color: #5c9ca1 !important;
 }
+
+    .tab-nav-completed:after {
+        border-left-color: #5c9ca1 !important;
+    }
 
 
 .text-tab-completed {
@@ -1524,6 +1509,7 @@ select {
     font-size: 15px;
     margin-top: -1px;
 }
+
 .close-btnn1 {
     cursor: pointer;
     color: #1eabbc;
@@ -1538,9 +1524,11 @@ select {
     background: #efefef !important;
     border-radius: 50px !important;
 }
+
 .highlight {
     background: #143436 !important;
 }
+
 #button_undo,
 #button_redo {
     position: relative;
@@ -1557,10 +1545,11 @@ select {
     #button_redo:hover {
         background-color: #dadada;
     }
-    .middleNode{
-        width:24px;
-        margin-left:-8px;
-    }
+
+.middleNode {
+    width: 24px;
+    margin-left: -8px;
+}
 
 .flex-container {
     display: flex;
@@ -1577,7 +1566,7 @@ select {
 
 .flex-item-left {
     padding: 4px;
-    height:29px;
+    height: 29px;
     flex: 50%;
     border-radius: 10px 0px 0px 10px;
     color: #000;
@@ -1588,7 +1577,7 @@ select {
 
 .flex-item-right {
     padding: 4px;
-    height:29px;
+    height: 29px;
     flex: 50%;
     border-radius: 0px 10px 10px 0px;
     color: #000;
@@ -1608,3 +1597,9 @@ select {
     }
 }
 
+.collapseepandview {
+    position: absolute;
+    top: 63px;
+    right: 28px;
+    z-index: 999;
+}
