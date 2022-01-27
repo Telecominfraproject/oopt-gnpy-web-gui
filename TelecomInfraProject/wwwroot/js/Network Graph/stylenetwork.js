@@ -437,7 +437,7 @@ $(document).ready(function () {
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(false);
-        
+
     });
     $("#expandView").click(function () {
         isExpandedView = true;
@@ -448,7 +448,7 @@ $(document).ready(function () {
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(true);
-        
+
     });
 });
 
@@ -2301,14 +2301,20 @@ function addService() {
 
     var fromDetails = network.body.data.nodes.get(addServiceData.from);
     var toDetails = network.body.data.nodes.get(addServiceData.to);
-    if (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == transceiverJSON.node_type && fromDetails.transceiver_type == toDetails.transceiver_type) {
-        var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
-        //if (checkNodeConnection(addServiceData.from, addServiceData.to))
-        //2 transceiver must have fiber/patch connection
-        if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
-            addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
+    if (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == transceiverJSON.node_type) {
+
+        if ((fromDetails.transceiver_type != "" && toDetails.transceiver_type != "") && (fromDetails.transceiver_type == toDetails.transceiver_type)) {
+            var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
+            //if (checkNodeConnection(addServiceData.from, addServiceData.to))
+            //2 transceiver must have fiber/patch connection
+            if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
+                addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
+            else
+                alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + patchJSON.component_type + " connection");
+        }
         else
-            alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + patchJSON.component_type + " connection");
+            alert(serviceJSON.component_type + " can be created only between " + transceiverJSON.node_type + " of same type");
+
     }
     else {
         alert("The " + serviceJSON.component_type + " should be between 2 " + transceiverJSON.node_type + " sites");
@@ -3838,15 +3844,51 @@ function updateTransceiver(nodeID) {
 
     var id = nodeID;
     var label = $("#txtTransceiverName").val().trim();
-    var node_type = network.body.data.nodes.get(nodeID).node_type
+    var nodeDetails = network.body.data.nodes.get(nodeID);
+    var transceiverType = $("#ddlTransceiverType").val();
+    if (transceiverType == null || transceiverType == "") {
+        alert('Please select transceiver type');
+        return;
+    }
 
     if (nameLengthValidation("txtTransceiverName")) {
 
-        if (node_type == transceiverJSON.node_type) {
-            network.body.data.nodes.update({
-                id: id, label: label, transceiver_type: $("#ddlTransceiverType").val()
-            });
-            clearTransceiver();
+        var connectedEdges = network.getConnectedEdges(nodeID);
+        var fromTransType = "";
+        var toTransType = "";
+        var isOk = true;
+        $.each(connectedEdges, function (index, item) {
+
+            if (!isOk)
+                return;
+            var edgeDetails = network.body.data.edges.get(item);
+            if (edgeDetails.component_type == serviceJSON.component_type) {
+                if (edgeDetails.from == nodeID) {
+
+                    fromTransType = transceiverType;
+                    toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
+                }
+                else if (edgeDetails.to == nodeID) {
+                    toTransType = transceiverType;
+                    fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
+                }
+
+                if (toTransType != fromTransType) {
+                    isOk = false;
+                    alert(serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                    return;
+                }
+            }
+
+        });
+
+        if (isOk) {
+            if (nodeDetails.node_type == transceiverJSON.node_type) {
+                network.body.data.nodes.update({
+                    id: id, label: label, transceiver_type: transceiverType
+                });
+                clearTransceiver();
+            }
         }
 
     }

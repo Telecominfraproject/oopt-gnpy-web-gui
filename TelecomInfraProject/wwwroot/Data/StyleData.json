@@ -48,9 +48,9 @@
 
   },
   "ILA": {
-    "shape": "circularImage",
+    "shape": "image",
     "size": 14,
-    "image": "amp3.svg",
+    "image": "ILA.svg",
     "node_type": "Amplifier",
     "amp_category": "ILA",
     "component_type": "node",
