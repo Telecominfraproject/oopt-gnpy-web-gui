@@ -322,6 +322,7 @@ height: 100vh;
 
 ul {
     padding-left: 0;
+    border-top: 3px solid #ebf1f3 !important;
 }
 
     ul li {
@@ -343,8 +344,8 @@ ul {
     border: none;
     position: relative;
     width: 25%;
-    padding-top:0;
-    padding-bottom:0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
     .nav-pills li a {
@@ -374,7 +375,7 @@ ul {
     height: 0;
     border-top: 21px solid transparent;
     border-bottom: 19px solid transparent;
-    border-left: 20px solid #cbe8f3;
+    border-left: 20px solid #1eabbc;
     position: absolute;
     top: 50%;
     margin-top: -20px;
@@ -1257,14 +1258,14 @@ select {
 .stepper-tab .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff !important;
     background: #2b7c80 !important;
-    border-top: 1px solid #ddd8d8;
-    /*background: #305b72 !important;*/
+    /* border-top: 1px solid #ddd8d8;
+    background: #305b72 !important;*/
     /*border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;*/
 }
 
 .stepper-tab .nav-pills .nav-link {
-    background: #cbe8f3;
+    background: #1eabbc;
     justify-content: center;
     width: 100%;
     /* border-top-right-radius: 20px; */
@@ -1282,7 +1283,7 @@ select {
 
 
 .stepper-tab .nav-link {
-    color: #2c7c82;
+    color: #fff;
 }
 
 .toggle-arrow {
@@ -1492,17 +1493,17 @@ select {
     font-size: 10px;
 }
 
-/*.upload-btn:hover {
+    /*.upload-btn:hover {
     background-color: #2b7082 !important;
     color: #fff;
     font-size: 16px;
 }*/
 
-.download-btn:hover {
-    background-color: #445d5e !important;
-    color: #fff;
-    font-size: 10px;
-}
+    .download-btn:hover {
+        background-color: #445d5e !important;
+        color: #fff;
+        font-size: 10px;
+    }
 
 .create-back1 {
     background: #2b7c80;
