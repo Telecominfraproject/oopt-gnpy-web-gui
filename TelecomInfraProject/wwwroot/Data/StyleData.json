@@ -278,9 +278,53 @@
     }
   },
 
-  "Patch": {
+  "SinglePatch": {
     "dashes": true,
     "component_type": "Patch",
+    "patch_category": "Single Patch",
+    "width": 2,
+    "options": {
+      "color": {
+        "color": "black",
+        "highlight": "black",
+        "hover": "black",
+        "inherit": false,
+        "opacity": 1
+      },
+      "background": {
+        "color": "black",
+        "dashes": false,
+        "enabled": false,
+        "size": 10
+      },
+      "arrows": {
+        "from": {
+          "enabled": false,
+          "type": "arrow"
+        },
+        "to": {
+          "enabled": false,
+          "type": "arrow"
+        }
+      },
+      "font": {
+        "color": "gray",
+        "size": 11,
+        "face": "verdana",
+        "align": "top"
+      },
+      "smooth": {
+        "enabled": false,
+        "roundness": 0.1,
+        "type": "curvedCW"
+      }
+    }
+  },
+
+  "DualPatch": {
+    "dashes": false,
+    "component_type": "Patch",
+    "patch_category": "Dual Patch",
     "width": 2,
     "options": {
       "color": {
