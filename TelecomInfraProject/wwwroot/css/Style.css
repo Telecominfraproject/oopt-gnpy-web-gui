@@ -173,11 +173,12 @@ height: 100vh;
 }
 
 .background_img {
-    background: url(../Assets/img/back.png);
+    /*background: url(../Assets/img/back.png);*/
     height: 100vh;
     width: 100%;
-    background-size: cover;
-    object-fit: cover;
+    background-color: #ebf1f3;
+    /*background-size: cover;
+    object-fit: cover;*/
 }
 
 .logo {
@@ -382,7 +383,7 @@ ul {
 }
 
 .stepper-tab .nav-pills .nav-link.active:after {
-    border-left-color: #305b72 !important;
+    border-left-color: #2b7c80 !important;
 }
 
 .work_area {
@@ -649,7 +650,7 @@ ul {
 }
 
 .nav-clr {
-    background: #00000040;
+    background: #2b7c80;
 }
 
 .navbar {
@@ -1255,7 +1256,9 @@ select {
 
 .stepper-tab .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff !important;
-    background: #305b72 !important;
+    background: #2b7c80 !important;
+    border-top: 1px solid #ddd8d8;
+    /*background: #305b72 !important;*/
     /*border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;*/
 }
@@ -1477,8 +1480,8 @@ select {
 }
 
 .upload-btn {
-    background-color: #2b7082 !important;
-    color: #fff;
+    background-color: #cbe8f3 !important;
+    color: #000;
     font-size: 16px;
 }
 
@@ -1489,11 +1492,11 @@ select {
     font-size: 10px;
 }
 
-.upload-btn:hover {
+/*.upload-btn:hover {
     background-color: #2b7082 !important;
     color: #fff;
     font-size: 16px;
-}
+}*/
 
 .download-btn:hover {
     background-color: #445d5e !important;

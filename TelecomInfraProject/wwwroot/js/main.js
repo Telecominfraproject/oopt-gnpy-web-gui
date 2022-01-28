@@ -251,31 +251,31 @@ function stepColor(index) {
 
             currentStepper = "stepCreateTopology";
             showMenu = 1;
-            let prev = document.querySelector("#step2").previousElementSibling;
-            if (prev.id === "step1") {
-                let step1 = document.getElementById("step1").childNodes;
-                step1[1].classList.add("tab-nav-completed");
-                step1[1].classList.add("text-tab-completed")
-            }
+            //let prev = document.querySelector("#step2").previousElementSibling;
+            //if (prev.id === "step1") {
+            //    let step1 = document.getElementById("step1").childNodes;
+            //    step1[1].classList.add("tab-nav-completed");
+            //    step1[1].classList.add("text-tab-completed")
+            //}
             break;
         case 3:
             currentStepper = "stepAddService";
             showMenu = 2;
-            let prev1 = document.querySelector("#step3").previousElementSibling;
-            if (prev1.id === "step2") {
-                let step1 = document.getElementById("step2").childNodes;
-                step1[1].classList.add("tab-nav-completed");
-                step1[1].classList.add("text-tab-completed")
-            }
+            //let prev1 = document.querySelector("#step3").previousElementSibling;
+            //if (prev1.id === "step2") {
+            //    let step1 = document.getElementById("step2").childNodes;
+            //    step1[1].classList.add("tab-nav-completed");
+            //    step1[1].classList.add("text-tab-completed")
+            //}
             break;
         case 4:
             currentStepper = "stepSaveNetwork";
-            let prev2 = document.querySelector("#step4").previousElementSibling;
-            if (prev2.id === "step3") {
-                let step1 = document.getElementById("step3").childNodes;
-                step1[1].classList.add("tab-nav-completed");
-                step1[1].classList.add("text-tab-completed")
-            }
+            //let prev2 = document.querySelector("#step4").previousElementSibling;
+            //if (prev2.id === "step3") {
+            //    let step1 = document.getElementById("step3").childNodes;
+            //    step1[1].classList.add("tab-nav-completed");
+            //    step1[1].classList.add("text-tab-completed")
+            //}
             break;
     }
 }

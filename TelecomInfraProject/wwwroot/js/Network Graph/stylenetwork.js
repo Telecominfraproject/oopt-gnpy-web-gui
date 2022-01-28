@@ -2317,21 +2317,25 @@ function addService() {
     var toDetails = network.body.data.nodes.get(addServiceData.to);
     if (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == transceiverJSON.node_type) {
 
-        if ((fromDetails.transceiver_type != "" && toDetails.transceiver_type != "") && (fromDetails.transceiver_type == toDetails.transceiver_type)) {
-            var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
-            //if (checkNodeConnection(addServiceData.from, addServiceData.to))
-            //2 transceiver must have fiber/patch connection
-            if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
-                addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
+        if (fromDetails.transceiver_type != "" && toDetails.transceiver_type != "") {
+            if (fromDetails.transceiver_type == toDetails.transceiver_type) {
+                var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
+                //if (checkNodeConnection(addServiceData.from, addServiceData.to))
+                //2 transceiver must have fiber/patch connection
+                if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
+                    addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
+                else
+                    alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + patchJSON.component_type + " connection");
+            }
             else
-                alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + patchJSON.component_type + " connection");
+                alert(serviceJSON.component_type + " can be created only between " + transceiverJSON.node_type.toString().toLowerCase() + " of same type");
         }
         else
-            alert(serviceJSON.component_type + " can be created only between " + transceiverJSON.node_type + " of same type");
+            alert(serviceJSON.component_type + " can be created only when " + transceiverJSON.node_type.toString().toLowerCase() + "s are forced");
 
     }
     else {
-        alert("The " + serviceJSON.component_type + " should be between 2 " + transceiverJSON.node_type + " sites");
+        alert("The " + serviceJSON.component_type + " should be between 2 " + transceiverJSON.node_type.toString().toLowerCase() + " sites");
     }
     addServiceData = {
         from: '',
