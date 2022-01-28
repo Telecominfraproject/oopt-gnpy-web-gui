@@ -128,42 +128,42 @@ $(document).ready(function () {
 
     $("#btnAddRoadm").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         enableDisableNode(1, "Roadm");
     });
     $("#btnAddILA").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         enableDisableNode(2, "ILA");
     });
     $("#btnAddAmplifier").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         enableDisableNode(5, "amplifier");
     });
     $("#btnAddFused").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         enableDisableNode(3, "fused");
     });
     $("#btnAddTransceiver").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         enableDisableNode(4, "transceiver");
     });
     $("#btnAddDualFiber").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         if (isDualFiberMode == 1) {
@@ -177,7 +177,7 @@ $(document).ready(function () {
     });
     $("#btnAddSingleFiber").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         if (isSingleFiberMode == 1) {
@@ -191,7 +191,7 @@ $(document).ready(function () {
     });
     $("#btnServiceActive").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         if (networkValidation()) {
@@ -207,7 +207,7 @@ $(document).ready(function () {
     });
     $("#btnAddPatch").click(function () {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         if (isAddPatch == 1) {
@@ -412,14 +412,14 @@ $(document).ready(function () {
     });
 
     $("#stepCreateTopology").click(function () {
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         $("#edit-topology").show();
         $("#add-service").hide();
     });
     $("#stepAddService").click(function () {
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         $("#edit-topology").hide();
@@ -880,7 +880,7 @@ function draw(isImport) {
             enabled: false,
             addNode: function (data, callback) {
 
-                if (isExpandedView) {
+                if (isExpandedView || isImportJSON) {
                     return;
                 }
                 if (nodeMode > 0 && nodeMode < 6) {
@@ -903,7 +903,7 @@ function draw(isImport) {
     });
     network.on("selectNode", function (params) {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         //nodeMode = "";
@@ -1003,7 +1003,7 @@ function draw(isImport) {
     });
     network.on("oncontext", function (data, callback) {
 
-        if (isExpandedView) {
+        if (isExpandedView || isImportJSON) {
             return;
         }
         //nodeMode = "";
@@ -1928,15 +1928,27 @@ function importNode(index) {
 
 }
 
+var tSpanLength = "";
+var tType = "";
+var tConnector_in = "";
+var tConnector_out = "";
 function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
     var from = edgeData["source"]["source-node"];
     if (edgeData["tip-photonic-topology:fiber"]) {
+        tSpanLengh = "";
+        tType = "";
+        tConnector_in = "";
+        tConnector_out = "";
         isSingleFiberMode = 1;
         isDualFiberMode = 0;
         var labelvalue = edgeData["link-id"];
         var textvalue = labelvalue;
+        tType = edgeData["tip-photonic-topology:fiber"].type;
+        tSpanLength = edgeData["tip-photonic-topology:fiber"].length;
+        tConnector_in = edgeData["tip-photonic-topology:fiber"]["conn-att-in"];
+        tConnector_out = edgeData["tip-photonic-topology:fiber"]["conn-att-out"];
         addFiberComponent(1, from, to, labelvalue, textvalue, true);
     }
     if (edgeData["tip-photonic-topology:patch"]) {
@@ -1949,6 +1961,7 @@ function importEdge(index) {
 function getRandomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
+var isImportJSON = false;
 function importNetwork() {
     //init(true);
 
@@ -1972,6 +1985,7 @@ function importNetwork() {
         });
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
+        isImportJSON = true;
 
         if (isExpandedView) {
             return;
@@ -2849,6 +2863,23 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         if (isSingleFiberMode == 1) {
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
+            var span_Length = fiber_config.Span_length;
+            var loss_Coefficient = fiber_config.Loss_coefficient;
+            var span_Loss = fiber_config.Span_loss;
+            var fiber_Type = fiber_config.fiber_type;
+            var connector_IN = fiber_config.Connector_in;
+            var connector_OUT = fiber_config.Connector_out;
+
+            if (isImport) {
+                span_Length = Number(tSpanLength);
+                loss_Coefficient = Number(loss_Coefficient);
+                span_Loss = span_Length * loss_Coefficient;
+                fiber_Type = tType;
+                connector_IN = tConnector_in;
+                connector_OUT = tConnector_out;
+                
+            }
+
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel,
                 import: isImport, hidden: false,
@@ -2856,8 +2887,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
                 font: singleFiberJSON.options.font, smooth: fiberSmooth,
-                fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
-                loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
+                fiber_type: fiber_Type, span_length:span_Length,
+                loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
+                span_loss: span_Loss,
             });
         }
 
