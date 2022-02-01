@@ -3128,7 +3128,11 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             });
         }
 
-        //multipleFiberService(cfrom, cto);
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
+        multipleFiberService(cfrom, cto);
+        data.nodes.on("*", change_history_back);
+        data.edges.on("*", change_history_back);
     }
 }
 
@@ -4201,10 +4205,18 @@ function deleteFiber(fiberID) {
     var isDelete = confirm('do you want to delete ' + fiber.fiber_category + ' : ' + fiber.label + ' ?');
     if (!isDelete)
         return;
+
+    var nodeDetails = network.body.data.nodes.get(fiber.from);
+    var toNodeDetails = network.body.data.nodes.get(fiber.to);
+
+    if (checkFiberPatchServiceCon(fiber.from, fiber.to, fiber.component_type))
+        return;
+
+
     document.getElementById("dualFiberMenu").style.display = "none";
     document.getElementById("singleFiberMenu").style.display = "none";
     //remove roadm list from from roadm node
-    var nodeDetails = network.body.data.nodes.get(fiber.from);
+    
     arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4216,7 +4228,7 @@ function deleteFiber(fiberID) {
         id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
     //remove roadm list from to roadm node
-    var toNodeDetails = network.body.data.nodes.get(fiber.to);
+    
     arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4233,6 +4245,58 @@ function deleteFiber(fiberID) {
     network.unselectAll();
 
 
+}
+
+function checkFiberPatchServiceCon(from, to, edgeType) {
+    var isOk = false;
+    var nodeDetails = network.body.data.nodes.get(from);
+    var toNodeDetails = network.body.data.nodes.get(to);
+
+    var fromCount = 0;
+    var toCount = 0;
+
+    if (nodeDetails.node_type == transceiverJSON.node_type) {
+        var fromConnection = network.getConnectedEdges(from);
+        var isServiceCon = false;
+        $.each(fromConnection, function (index, item) {
+            var fiberDetails = network.body.data.edges.get(item);
+            if (fiberDetails.component_type == dualFiberJSON.component_type || fiberDetails.component_type == dualPatchJSON.component_type) {
+                fromCount++;
+            }
+            else if (fiberDetails.component_type == serviceJSON.component_type)
+                isServiceCon = true;
+        });
+
+        if (isServiceCon) {
+            if (fromCount == 1) {
+                alert('cannot remove ' + edgeType+', '+transceiverJSON.node_type+' '+transceiverJSON.component_type+' - '+nodeDetails.label+' should have one '+dualFiberJSON.component_type+'/'+dualPatchJSON.component_type+' connection');
+                return true;
+            }
+        }
+
+    }
+
+    if (toNodeDetails.node_type == transceiverJSON.node_type) {
+        var toConnection = network.getConnectedEdges(to);
+        var isServiceCon = false;
+        $.each(toConnection, function (index, item) {
+            var fiberDetails = network.body.data.edges.get(item);
+            if (fiberDetails.component_type == dualFiberJSON.component_type || fiberDetails.component_type == dualPatchJSON.component_type) {
+                toCount++;
+            }
+            else if (fiberDetails.component_type == serviceJSON.component_type)
+                isServiceCon = true;
+        });
+
+        if (isServiceCon) {
+            if (toCount == 1) {
+                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + toNodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
+                return true;
+            }
+        }
+    }
+
+    return isOk;
 }
 
 function patchEdit(patchID, callback) {
@@ -4261,7 +4325,12 @@ function updatePatch(patchID) {
                 id: id, label: label, text: label
             });
 
+            
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
             multipleFiberService(patchDetails.from, patchDetails.to);
+            data.nodes.on("*", change_history_back);
+            data.edges.on("*", change_history_back);
             clearPatch();
         }
 
@@ -4270,10 +4339,12 @@ function updatePatch(patchID) {
 }
 function deletePatch(patchID) {
     var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(patchID).component_type + ' : ' + network.body.data.edges.get(patchID).label + ' ?');
+    var patchDetails = network.body.data.edges.get(patchID);
     if (!isDelete)
         return;
+    if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
+        return;
     document.getElementById("patchMenu").style.display = "none";
-    var patchDetails = network.body.data.edges.get(patchID);
     network.body.data.edges.remove(patchID);
     multipleFiberService(patchDetails.from, patchDetails.to);
     network.unselectAll();
