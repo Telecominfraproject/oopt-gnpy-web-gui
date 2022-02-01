@@ -1,0 +1,138 @@
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\About icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Add Fiber icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Add Service icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\add.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\amp.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\amp1.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\amp3.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\amp3.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Amplifier grey icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\amptriangle.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Analyze icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\analyze.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\back-map.jpg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\back.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\cam.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\camera icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\client logo 01.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\client logo 02.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\copy icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\copy.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Create Network icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create-f.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create1.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create2.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create3.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\create4.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\delete icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\delete.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\dualfiber.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\edit.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Export File icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export-f.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export1.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\fav.PNG
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\fiber icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\fiber.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\full screen-icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\hand icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Help icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\help.jpg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\help1.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Hero img.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Icon awesome-camera.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Icon ionic-ios-expand.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\ILA.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Import Network icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import-icon.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import1.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import2.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import3.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import4.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\inner-img.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Innerpage_bg.jpg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\landingpage_bg.jpg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\left.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\left1.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\leftamp.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Logo icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Logo.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\map icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\map-bg.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu-icon.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Model Icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\multinode.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Multiple node icon.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Multiple node icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newamp.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newattenuator.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newdualfiber.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newdualpatch.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newroadm.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\newtransceiver.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Node icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\node_patch.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\page.gif
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\paste icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\paste.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\rednode.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\redo.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\right.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\right1.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Save icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\save.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\save1.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\service -icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\service.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\share.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Single Node icon.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Single Node icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Single node.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlefiber.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlenode-img.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlenode.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\telecom-favicon.ico
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\transceiver.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\undo.png
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-out-icon.svg
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\css\Style.css
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\ConfigurationData.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\eqpt_config.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\StyleData.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\yang.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\alea.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\exampleUtil.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\jquery-2.0.3.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\jquery.min.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\LocalDB\taffy-min.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\LocalDB\taffy.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\main.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\canvas-toBlob.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\FileSaver.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\IndexedDB.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\jquery.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\jsstore.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\jsstore.js.map
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\jsstore.worker.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\jsstore.worker.js.map
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\NetworkGraph.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\NetworkGraph.min.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\NetworkTool.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\stylenetwork.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\validation.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\vis-network.min.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\visunminify.js
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.Development.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\appsettings.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.dll
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.runtimeconfig.json
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.pdb
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.Views.dll
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.Views.pdb
+D:\TFS1\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\TelecomInfraProject.deps.json
