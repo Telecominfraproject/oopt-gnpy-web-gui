@@ -1969,16 +1969,19 @@ function importNetwork() {
 
     try {
 
-        var allNode = network.body.data.nodes.get();
-        var allEdge = network.body.data.edges.get();
+        //var allNode = network.body.data.nodes.get();
+        //var allEdge = network.body.data.edges.get();
 
-        $.each(allEdge, function (index, item) {
-            network.body.data.edges.remove({ id: item.id });
-        });
+        //$.each(allEdge, function (index, item) {
+        //    network.body.data.edges.remove({ id: item.id });
+        //});
 
-        $.each(allNode, function (index, item) {
-            network.body.data.nodes.remove({ id: item.id });
-        });
+        //$.each(allNode, function (index, item) {
+        //    network.body.data.nodes.remove({ id: item.id });
+        //});
+
+        network.body.data.edges.clear();
+        network.body.data.nodes.clear();
         
 
         nodes = [];
