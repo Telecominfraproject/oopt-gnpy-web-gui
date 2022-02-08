@@ -424,7 +424,7 @@ $(document).ready(function () {
         }
         $("#edit-topology").show();
         $("#add-service").hide();
-        displaySimulationandNetwork();       
+        hideSimulationParameter();       
     });
     $("#stepAddService").click(function () {
         if (isExpandedView || isImportJSON) {
@@ -432,12 +432,12 @@ $(document).ready(function () {
         }
         $("#edit-topology").hide();
         $("#add-service").show();
-        displaySimulationandNetwork();
+        hideSimulationParameter();
     });
     $("#stepSaveNetwork").click(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
-        displaySimulationandNetwork();
+        hideSimulationParameter();
     });
     $("#ddlNetworkView").change(function () {
         networkView($(this).val());
@@ -4718,10 +4718,8 @@ function nodeName(node_type) {
         return 1;
 }
 
-function displaySimulationandNetwork() {
-
+function hideSimulationParameter() {
     $("#simulation-topology").hide();
-    $('#network').show();
 }
 
 
