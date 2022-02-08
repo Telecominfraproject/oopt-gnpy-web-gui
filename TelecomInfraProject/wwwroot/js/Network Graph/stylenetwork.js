@@ -226,19 +226,20 @@ $(document).ready(function () {
     });
 
     $("#btnSaveGP, #btnCloseGP").click(function () {
-        $("#staticBackdrop4").modal('hide');     
-        if (currentStepper) {
-            var stepperID = "#" + currentStepper;
-            $(stepperID).addClass('active');
-            $('#stepGP').removeClass('active');
-            if (currentStepper == "stepCreateTopology")
-                showMenu = 1;
-            else if (currentStepper == "stepAddService")
-                showMenu = 2;
+        //$("#staticBackdrop4").modal('hide');     
+        //if (currentStepper) {
+        //    var stepperID = "#" + currentStepper;
+        //    $(stepperID).addClass('active');
+        //    $('#stepGP').removeClass('active');
+        //    if (currentStepper == "stepCreateTopology")
+        //        showMenu = 1;
+        //    else if (currentStepper == "stepAddService")
+        //        showMenu = 2;
 
-        }
-        else
-            $("#stepCreateTopology").click();
+        //}
+        //else
+        //    $("#stepCreateTopology").click();
+        alert('applied successfully');
     });
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
@@ -300,6 +301,7 @@ $(document).ready(function () {
                     load_EqptConfig(true);
                     _import_json = eqptData['ietf-network:networks'];
                     importNetwork();
+                    $("#importEqpt").val('');
                 }
             });
         }
@@ -419,20 +421,20 @@ $(document).ready(function () {
     });
 
     $("#stepCreateTopology").click(function () {
+        hideSimulationParameter();
         if (isExpandedView || isImportJSON) {
             return;
         }
         $("#edit-topology").show();
         $("#add-service").hide();
-        hideSimulationParameter();       
     });
     $("#stepAddService").click(function () {
+        hideSimulationParameter();
         if (isExpandedView || isImportJSON) {
             return;
         }
         $("#edit-topology").hide();
         $("#add-service").show();
-        hideSimulationParameter();
     });
     $("#stepSaveNetwork").click(function () {
         $("#edit-topology").hide();
@@ -1989,6 +1991,7 @@ function importNetwork() {
 
         network.body.data.edges.clear();
         network.body.data.nodes.clear();
+        importNodes = [];
         
 
         nodes = [];
@@ -2006,7 +2009,7 @@ function importNetwork() {
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
         isImportJSON = true;
-
+        $("#ddlNetworkView").val(2);
         if (isExpandedView) {
             return;
         }
@@ -2014,7 +2017,7 @@ function importNetwork() {
     }
     catch
     { }
-    $("#importEqpt").val('');
+    
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);
     //data = {
