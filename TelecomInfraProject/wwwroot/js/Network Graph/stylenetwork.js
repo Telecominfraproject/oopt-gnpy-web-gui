@@ -62,6 +62,10 @@ let history_list_forward = [];
 var isShow = true;
 var isExpandedView = false;
 
+var tSpanLength = "";
+var tType = "";
+var tConnector_in = "";
+var tConnector_out = "";
 
 $(document).ready(function () {
 
@@ -431,28 +435,31 @@ $(document).ready(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
     });
-    $("#collapseView").click(function () {
+    $("#ddlNetworkView").change(function () {
+        networkView($(this).val());
+    });
+   
+});
+
+function networkView(view) {
+    if (view == 1)//expanded view
+    {
         isExpandedView = false;
-        $("#expandView").removeClass('viewActive');
-        $("#collapseView").addClass('viewActive');
         networkMenuHide();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(false);
-
-    });
-    $("#expandView").click(function () {
+    }
+    else if (view == 2)//collapsed view
+    {
         isExpandedView = true;
-        $("#expandView").addClass('viewActive');
-        $("#collapseView").removeClass('viewActive');
         $("#edit-topology").hide();
         $("#add-service").hide();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(true);
-
-    });
-});
+    }
+}
 
 function expandAndCollapseView(isExpand) {
     var edge = network.body.data.edges.get();
@@ -1930,10 +1937,6 @@ function importNode(index) {
 
 }
 
-var tSpanLength = "";
-var tType = "";
-var tConnector_in = "";
-var tConnector_out = "";
 function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
@@ -2003,7 +2006,7 @@ function importNetwork() {
         if (isExpandedView) {
             return;
         }
-        $("#expandView").click();
+        networkView(2)//expanded view
     }
     catch
     { }

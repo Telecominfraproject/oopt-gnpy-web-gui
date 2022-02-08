@@ -144,10 +144,10 @@
                         <i class="fas fa-arrow-right  "></i>
                     </div>*@
                 @*X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />*@
-                <button type="button" id="importEqptLink" class="btn upload-btn">
+                @*<button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
                     <img src="~/Assets/img/import-icon.png" class="mx-2" />
-                </button>
+                </button>*@
                 <input style="display:none" type="file" id="importEqpt" value="Upload File" />
                 <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
                     <img src="./Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
@@ -342,13 +342,21 @@
 
                         <div class="col-lg-6">
 
-                            <h4 class="mb-0"></h4>
+                            <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
+                                Import data
+                                <img src="/Assets/img/import-icon.png" class="mx-2">
+                            </button>
 
                         </div>
 
                         <div class="col-lg-6">
 
                             <div class="float-right d-flex">
+                                <select id="ddlNetworkView" class="form-control" style="margin-top:5px;">
+                                    <option value="1"> Collapsed View </option>
+                                    <option value="2"> Expanded View </option>
+                                    <option value="3" style="color:lightgray"> Functional View </option>
+                                </select>
                                 <i id="showHideEle" style="padding-top:15px;padding-right:6px;padding-left:6px;cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
                                 <a href="#" id="button_undo" data-toggle="tooltip" data-placement="top" title="Undo ( Ctrl+Z )">
                                     <img src="~/Assets/img/undo.png" />
@@ -368,16 +376,6 @@
 
                         </div>
 
-
-                    </div>
-
-                    <div class="float-right mt-2 collapseepandview">
-
-                        <div class="flex-container">
-                            <div id="collapseView" class="flex-item-left viewActive">Collapsed view</div>
-                            <div id="expandView" class="flex-item-right">Expanded view</div>
-
-                        </div>
 
                     </div>
 
