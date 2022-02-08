@@ -69,72 +69,7 @@
                 </button> -->
                 <!-- Create new Modal start -->
 
-                <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
-                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered global-modal-w">
-                        <div class="modal-content modal-content-borderless mt-5">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="staticBackdropLabel">
-                                    Simulation Parameters
-                                </h5>
-                                <button type="button" class="close" id="btnCloseGP" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- <div>
-                                  <h6 class="model-title">
-                                    <img src="./Assets/img/Model Icon.svg" alt="" srcset="" />
-                                    User Requester you to add Network Level Options
-                                  </h6>
-                                </div> -->
-
-                                <div class="container">
-
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">Frequency Min</label>
-                                            <input type="text" class="form-control" id="txtFrgMin" placeholder="Enter Frequency Min Value" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">Frequency Max</label>
-                                            <input type="text" class="form-control" id="txtFrqMax" placeholder="Enter Frequency Max Value" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">Grid spacing</label>
-                                            <input type="number" step="12.5" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">No of Channels</label>
-                                            <input type="text" class="form-control" id="txtNoOfChannel" placeholder="Enter No of Channels" />
-                                        </div>
-                                    </div>
-
-
-                                    <div class="col-md-6 col-lg-6 col-xl-6">
-                                        <div class="form-group">
-                                            <label for="">Ageing Margin</label>
-                                            <input type="text" class="form-control" id="txtAgeingMargin" placeholder="Enter Ageing Margin" />
-                                        </div>
-                                    </div>
-
-
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-
-                                <button type="button" class="btn modal-btn" id="btnSaveGP">Apply</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
                 @*<div id="button_undo">
                         undo
                         <i class="fas fa-arrow-left "></i>
@@ -161,17 +96,18 @@
         </nav>
 
         <div class="row align-items-center bg-white">
-            <div class="row stepper-tab w-100">
-                <ul class="nav nav-pills w-100" id="pills-tab" role="tablist">
-                    <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1" data-toggle="modal" data-target="#staticBackdrop4">
-                        <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#global"
-                           role="tab" aria-controls="pills-profile" aria-selected="false">
+            <div class="stepper-tab w-100">
+                <ul class="nav nav-pills w-100" id="pills-tab" role="tablist">                  
+                    <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1">
+                        <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#simulation-topology"
+                           role="tab" aria-controls="pills-topo " aria-selected="false">
                             <span class="material-icons pr-2">
                                 speed
                             </span>
-                            Simulation parameters
+                            Define Simulation parameters
                         </a>
                     </li>
+
                     <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(2)" id="step2">
                         <a class="nav-link d-inline-flex" id="stepCreateTopology" data-toggle="pill" href="#edit-topology"
                            role="tab" aria-controls="pills-profile" aria-selected="false">
@@ -202,6 +138,52 @@
                 </ul>
 
                 <div class="tab-content stp-tab" id="pills-tabContent">
+                    <div class="tab-pane active first-tab" id="simulation-topology" role="tabpanel" aria-labelledby="pills-topo-tab"style="display:none">
+                        <div class="container">
+                            <div class="row mt-3 mb-1">
+
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label for="">Frequency Min</label>
+                                        <input type="text" class="form-control" id="txtFrgMin" placeholder="Enter Frequency Min Value" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label for="">Frequency Max</label>
+                                        <input type="text" class="form-control" id="txtFrqMax" placeholder="Enter Frequency Max Value" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label for="">Grid spacing</label>
+                                        <input type="number" step="12.5" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label for="">No of Channels</label>
+                                        <input type="text" class="form-control" id="txtNoOfChannel" placeholder="Enter No of Channels" />
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 col-lg-6 col-xl-6">
+                                    <div class="form-group">
+                                        <label for="">Ageing Margin</label>
+                                        <input type="text" class="form-control" id="txtAgeingMargin" placeholder="Enter Ageing Margin" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-lg-2 col-xl-2 button-margin">
+                                    <button type="button" class="btn modal-btn w-100" id="btnSaveGP">Apply</button>
+                                </div>
+                                <div class="col-md-2 col-lg-2 col-xl-2 mt-4 button-margin">
+                                    <button type="button" class="btn modal-btn-close w-100" id="btnCloseGP">close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="tab-pane fade" id="edit-topology" role="tabpanel" aria-labelledby="pills-profile-tab">
                         <div class="group-node">
                             <div class="create-back" id="btnAddRoadm">
@@ -335,7 +317,7 @@
             </div>
         </div>
 
-        <div class="card network-area ">
+        <div class="card network-area " id="network">
             <div class="inner-body inner-height">
                 <div class="work_area map-bg pt-0">
                     <div class="  row bg-white border-bottom align-items-center" style="height:47px;">

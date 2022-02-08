@@ -1236,8 +1236,10 @@ select {
     float: right;
 }
 /*stepper design*/
-
-.stepper-tab .tab-content {
+.stepper-tab .tab-content #edit-topology,
+.stepper-tab .tab-content #add-service,
+.stepper-tab .tab-content #save-network
+ {
     z-index: 1000;
     position: absolute;
     left: 0px;
@@ -1606,4 +1608,23 @@ select {
     top: 63px;
     right: 28px;
     z-index: 999;
+}
+.first-tab {
+    position: relative;
+    top: 0;
+    z-index: 99;
+    left: 0;
+    transform: none;
+    height: 100vh;
+    margin-top: 10%;
+}
+
+.button-margin {
+    margin-top: 2rem !important;
+}
+
+.modal-btn-close {
+    background: linear-gradient( 180deg, #1eabbc, #1eabbc);
+    border-radius: 20px;
+    color: #fff;
 }
