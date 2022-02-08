@@ -55,7 +55,7 @@
 <body class="body-index" onload="init();">
     <div class="background_img">
         <nav class="navbar navbar-light pb-0 nav-clr">
-            <a class="navbar-brand logo" href="/">
+            <a class="navbar-brand logo" href="homepage">
                 <img src="./Assets/img/Logo icon.svg" width="30" height="30" class="d-inline-block align-top d-mbl-none"
                      alt="" />
                 GNPy Optical network planning tool
@@ -138,7 +138,7 @@
                             <span class="material-icons">
                                 post_add
                             </span>
-                            Add/edit services
+                            Add/Edit services
                         </a>
                     </li>
                     <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(4)" id="step4">
@@ -349,7 +349,7 @@
                                 <select id="ddlNetworkView" class="form-control" style="margin-top:5px;">
                                     <option value="1"> Collapsed View </option>
                                     <option value="2"> Expanded View </option>
-                                    <option value="3" style="color:lightgray"> Functional View </option>
+                                    <option value="3" style="color:lightgray !important" disabled> Functional View </option>
                                 </select>
                                 <i id="showHideEle" style="padding-top:15px;padding-right:6px;padding-left:6px;cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
                                 <a href="#" id="button_undo" data-toggle="tooltip" data-placement="top" title="Undo ( Ctrl+Z )">
