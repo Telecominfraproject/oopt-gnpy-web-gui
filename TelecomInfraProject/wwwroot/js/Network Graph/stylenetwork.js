@@ -269,12 +269,9 @@ $(document).ready(function () {
     });
 
     $("#importEqptLink").click(function () {
-
-        var conMsg = confirm('Do you want to override existing data and replace with new data?');
-        if (conMsg)
+        if (confirm('Do you want to override existing data and replace with new data ?')) {
             $("#importEqpt").click();
-
-
+        }
     });
     function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
@@ -295,13 +292,19 @@ $(document).ready(function () {
 
                 var eqptData = "";
                 if (text) {
-                    eqptData = JSON.parse(text);
-                    isEqptFile = true;
-                    eqpt_config = eqptData;
-                    load_EqptConfig(true);
-                    _import_json = eqptData['ietf-network:networks'];
-                    importNetwork();
-                    $("#importEqpt").val('');
+                    try {
+                        eqptData = JSON.parse(text);
+                        isEqptFile = true;
+                        eqpt_config = eqptData;
+                        load_EqptConfig(true);
+                        _import_json = eqptData['ietf-network:networks'];
+                        importNetwork();
+                        $("#importEqpt").val('');
+                        $('#divSelection').hide();
+                    }
+                    catch {
+                        alert("keyError:'elements', try again");
+                    }
                 }
             });
         }
@@ -443,6 +446,10 @@ $(document).ready(function () {
     });
     $("#ddlNetworkView").change(function () {
         networkView($(this).val());
+    });
+    $('#btn_CreateNetwork').click(function () {
+        $('#divSelection').hide();
+        $("#stepGP").click();
     });
    
 });
@@ -2016,7 +2023,9 @@ function importNetwork() {
         networkView(2)//expanded view
     }
     catch
-    { }
+    {
+        
+    }
     
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);

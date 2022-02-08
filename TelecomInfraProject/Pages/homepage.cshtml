@@ -64,20 +64,18 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-                  Create
-                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-                </button> -->
+              Create
+              Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+            </button> -->
                 <!-- Create new Modal start -->
-
-                
                 @*<div id="button_undo">
-                        undo
-                        <i class="fas fa-arrow-left "></i>
-                    </div>
-                    <div id="button_redo">
-                        redo
-                        <i class="fas fa-arrow-right  "></i>
-                    </div>*@
+                    undo
+                    <i class="fas fa-arrow-left "></i>
+                </div>
+                <div id="button_redo">
+                    redo
+                    <i class="fas fa-arrow-right  "></i>
+                </div>*@
                 @*X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />*@
                 @*<button type="button" id="importEqptLink" class="btn upload-btn">
                     Import data
@@ -94,10 +92,27 @@
             </div>
             <!-- button section End -->
         </nav>
-
+        <div class="container-fluid" id="divSelection">
+            <div class="row align-items-center rowheightset">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3 text-btn-right">
+                    <div class="bg-card-change select-box">
+                        <img src="./Assets/img/create-icon.png" class="select-in-img p-3">
+                        <button class="select-role-btn w-100 font-weight-bold" id="btn_CreateNetwork">Create Network</button>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-btn-left">
+                    <div class="bg-card-change select-box">
+                        <img src="./Assets/img/import-icon-1.png" class="select-in-img1 p-3">
+                        <button class="select-role-btn w-100 font-weight-bold" id="importEqptLink">Import Network with JSON</button>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </div>
         <div class="row align-items-center bg-white">
             <div class="stepper-tab w-100">
-                <ul class="nav nav-pills w-100" id="pills-tab" role="tablist">                  
+                <ul class="nav nav-pills w-100" id="pills-tab" role="tablist">
                     <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1">
                         <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#simulation-topology"
                            role="tab" aria-controls="pills-topo " aria-selected="false">
@@ -138,7 +153,7 @@
                 </ul>
 
                 <div class="tab-content stp-tab" id="pills-tabContent">
-                    <div class="tab-pane active first-tab" id="simulation-topology" role="tabpanel" aria-labelledby="pills-topo-tab"style="display:none">
+                    <div class="tab-pane active first-tab" id="simulation-topology" role="tabpanel" aria-labelledby="pills-topo-tab" style="display:none">
                         <div class="container">
                             <div class="row mt-3 mb-1">
 
@@ -321,17 +336,14 @@
             <div class="inner-body inner-height">
                 <div class="work_area map-bg pt-0">
                     <div class="  row bg-white border-bottom align-items-center" style="height:47px;">
-
-                        <div class="col-lg-6">
-
+                        @*<div class="col-lg-6">
                             <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
                                 Import data
                                 <img src="/Assets/img/import-icon.png" class="mx-2">
                             </button>
+                        </div>*@
 
-                        </div>
-
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
 
                             <div class="float-right d-flex">
                                 <select id="ddlNetworkView" class="form-control" style="margin-top:5px;">
@@ -853,10 +865,10 @@
         </div>
 
         <!--
-          <div class="footer">
-            <p class="m-0">Powered by Vayu Group and Telecom Infra Project</p>
-            <p class="m-0">Privacy</p>
-          </div> -->
+      <div class="footer">
+        <p class="m-0">Powered by Vayu Group and Telecom Infra Project</p>
+        <p class="m-0">Privacy</p>
+      </div> -->
         <!-- Export Modal Start -->
     </div>
     <div class="modal fade" id="staticBackdrop1" data-backdrop="static" data-keyboard="false" tabindex="-1"

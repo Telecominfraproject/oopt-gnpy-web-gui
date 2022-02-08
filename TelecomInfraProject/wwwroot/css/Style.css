@@ -1628,3 +1628,95 @@ select {
     border-radius: 20px;
     color: #fff;
 }
+.bg-card-change {
+    background-color: #2b7c804d !important;
+}
+
+.instruction-text {
+    font-size: 28px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.rowheightset {
+    height: 100vh !important;
+}
+
+.create-btn-set {
+    background: #2b7c82;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+    .create-btn-set:hover {
+        background: #2b7c82;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: unset;
+        border-left: 2px solid white;
+        font-size: 14px;
+    }
+
+.import-btn-set {
+    background: #5db9c3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+    .import-btn-set:hover {
+        background: #5db9c3;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: unset;
+        border-left: 2px solid white;
+        font-size: 14px;
+    }
+
+.text-btn-right {
+    text-align: right;
+}
+
+.text-btn-left {
+    text-align: left;
+}
+
+.select-box {
+    border-radius: 10px;
+}
+
+    .select-box:hover {
+        box-shadow: 0px 0px 80px rgb(0 0 0 / 15%);
+        transform: scale(1.1);
+        transition: 0.5s ease-in-out;
+    }
+
+.select-in-img {
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.select-in-img1 {
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.select-role-btn {
+    border: none;
+    background-color: #2b7c82;
+    padding: 12px 20px;
+    font-size: 17px;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
