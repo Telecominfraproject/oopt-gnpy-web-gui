@@ -169,44 +169,50 @@
 
                 <div class="tab-content stp-tab" id="pills-tabContent">
                     <div class="tab-pane active first-tab" id="simulation-topology" role="tabpanel" aria-labelledby="pills-topo-tab" style="display:none">
-                        <div class="container">
+                        <div class="container simulator-card">
+                            <h3 class="simulation-heading text-center">Define Simulation Parameters</h3>
                             <div class="row mt-3 mb-1">
 
                                 <div class="col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label for="">Frequency Min</label>
-                                        <input type="text" class="form-control" id="txtFrgMin" placeholder="Enter Frequency Min Value" />
+                                        <label class="input-label" for="">Frequency Min</label>
+                                        <input type="text" class="form-control border-dark" id="txtFrgMin" placeholder="Enter Frequency Min Value" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label for="">Frequency Max</label>
-                                        <input type="text" class="form-control" id="txtFrqMax" placeholder="Enter Frequency Max Value" />
+                                        <label class="input-label" for="">Frequency Max</label>
+                                        <input type="text" class="form-control border-dark" id="txtFrqMax" placeholder="Enter Frequency Max Value" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label for="">Grid spacing</label>
-                                        <input type="number" step="12.5" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
+                                        <label class="input-label" for="">Grid spacing</label>
+                                        <input type="number" step="12.5" class="form-control border-dark" id="txtGridSpac" placeholder="Enter Grid spacing" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label for="">No of Channels</label>
-                                        <input type="text" class="form-control" id="txtNoOfChannel" placeholder="Enter No of Channels" />
+                                        <label class="input-label" for="">No of Channels</label>
+                                        <input type="text" class="form-control border-dark" id="txtNoOfChannel" placeholder="Enter No of Channels" />
                                     </div>
                                 </div>
 
 
                                 <div class="col-md-6 col-lg-6 col-xl-6">
                                     <div class="form-group">
-                                        <label for="">Ageing Margin</label>
-                                        <input type="text" class="form-control" id="txtAgeingMargin" placeholder="Enter Ageing Margin" />
+                                        <label class="input-label" for="">Ageing Margin</label>
+                                        <input type="text" class="form-control border-dark" id="txtAgeingMargin" placeholder="Enter Ageing Margin" />
                                     </div>
                                 </div>
 
-                                <div class="col-md-2 col-lg-2 col-xl-2 button-margin">
-                                    <button type="button" class="btn modal-btn w-100" id="btnSaveGP">Apply</button>
+                                <div class="col-md-6 col-lg-6 col-xl-6 d-flex">
+                                    <div class="col-md-4 col-lg-4 col-xl-4 button-margin">
+                                        <button type="button" class="btn modal-btn w-100 " id="btnSaveGP">Apply</button>
+                                    </div>
+                                    <div class="col-md-4 col-lg-4 col-xl-4 button-margin">
+                                        <button type="button" class="btn cancel-btn w-100" id="btnCloseGP">Cancel</button>
+                                    </div>
                                 </div>
                                 @*<div class="col-md-2 col-lg-2 col-xl-2 mt-4 button-margin">
                                         <button type="button" class="btn modal-btn-close w-100" id="btnCloseGP">close</button>
@@ -352,19 +358,19 @@
                 <div class="work_area map-bg pt-0">
                     <div class="  row bg-white border-bottom align-items-center" style="height:47px;">
                         @*<div class="col-lg-6">
-                                <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
-                                    Import data
-                                    <img src="/Assets/img/import-icon.png" class="mx-2">
-                                </button>
-                            </div>*@
+                            <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
+                                Import data
+                                <img src="/Assets/img/import-icon.png" class="mx-2">
+                            </button>
+                        </div>*@
 
                         <div class="col-lg-12">
 
                             <div class="float-right d-flex">
                                 <select id="ddlNetworkView" class="form-control" style="margin-top:5px;">
-                                    <option value="1"> Collapsed View </option>
-                                    <option value="2"> Expanded View </option>
-                                    <option value="3" style="color:lightgray !important" disabled> Functional View </option>
+                                    <option value="1"> NE View </option>
+                                    <option value="2"> Functional View </option>
+                                    <option value="3" style="color:lightgray !important" disabled> Geographical View </option>
                                 </select>
                                 <i id="showHideEle" style="padding-top:15px;padding-right:6px;padding-left:6px;cursor:pointer;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
                                 <a href="#" id="button_undo" data-toggle="tooltip" data-placement="top" title="Undo ( Ctrl+Z )">

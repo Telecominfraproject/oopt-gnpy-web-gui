@@ -226,7 +226,9 @@ $(document).ready(function () {
     });
 
     $("#btnSaveGP, #btnCloseGP").click(function () {
-        //$("#staticBackdrop4").modal('hide');     
+        $("#simulation-topology").hide();
+        $("#stepCreateTopology").click();
+        showMenu = 1
         //if (currentStepper) {
         //    var stepperID = "#" + currentStepper;
         //    $(stepperID).addClass('active');
@@ -238,8 +240,8 @@ $(document).ready(function () {
 
         //}
         //else
-        //    $("#stepCreateTopology").click();
-        alert('applied successfully');
+           
+       // alert('applied successfully');
     });
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
@@ -431,6 +433,7 @@ $(document).ready(function () {
         }
         $("#edit-topology").show();
         $("#add-service").hide();
+        $("#btnAddPatch").hide();
     });
     $("#stepAddService").click(function () {
         hideSimulationParameter();
