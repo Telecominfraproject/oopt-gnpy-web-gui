@@ -53,6 +53,21 @@
 </head>
 
 <body class="body-index" onload="init();">
+    <div class="toast success-toast hide" role="alert" aria-live="assertive" aria-atomic="true" id="toast" 
+         data-autohide="false" data-delay="10000" style="position: absolute; top: 40px; right: 20px; z-index:999;">
+        <div class="toast-header">
+            <div class="d-flex align-items-start">
+                <img src="./Assets/img/success-toaster.png" class="rounded mr-2" alt="...">
+                <div class="w-80 text-break">
+                    <strong class="mr-auto">Success</strong>
+                    <p>Anyone with access can view your invited visitors</p>
+                </div>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="background_img">
         <nav class="navbar navbar-light pb-0 nav-clr">
             <a class="navbar-brand logo" href="homepage">
@@ -64,23 +79,23 @@
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
-              Create
-              Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
-            </button> -->
+                  Create
+                  Network<img src="./Assets/img/Create.svg" class="mx-2 mb-1" />
+                </button> -->
                 <!-- Create new Modal start -->
                 @*<div id="button_undo">
-                    undo
-                    <i class="fas fa-arrow-left "></i>
-                </div>
-                <div id="button_redo">
-                    redo
-                    <i class="fas fa-arrow-right  "></i>
-                </div>*@
+                        undo
+                        <i class="fas fa-arrow-left "></i>
+                    </div>
+                    <div id="button_redo">
+                        redo
+                        <i class="fas fa-arrow-right  "></i>
+                    </div>*@
                 @*X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />*@
                 @*<button type="button" id="importEqptLink" class="btn upload-btn">
-                    Import data
-                    <img src="~/Assets/img/import-icon.png" class="mx-2" />
-                </button>*@
+                        Import data
+                        <img src="~/Assets/img/import-icon.png" class="mx-2" />
+                    </button>*@
                 <input style="display:none" type="file" id="importEqpt" value="Upload File" />
                 <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
                     <img src="./Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
@@ -96,15 +111,15 @@
             <div class="row align-items-center rowheightset">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-3 text-btn-right">
-                    <div class="bg-card-change select-box">
+                    <div class="bg-card-change select-box" id="btn_CreateNetwork">
                         <img src="./Assets/img/create-icon.png" class="select-in-img p-3">
-                        <button class="select-role-btn w-100 font-weight-bold" id="btn_CreateNetwork">Create New network</button>
+                        <button class="select-role-btn w-100 font-weight-bold">Create New network</button>
                     </div>
                 </div>
                 <div class="col-lg-3 text-btn-left">
-                    <div class="bg-card-change select-box">
+                    <div class="bg-card-change select-box" id="importEqptLink">
                         <img src="./Assets/img/import-icon-1.png" class="select-in-img1 p-3">
-                        <button class="select-role-btn w-100 font-weight-bold" id="importEqptLink">Import Network using JSON</button>
+                        <button class="select-role-btn w-100 font-weight-bold">Import Network using JSON</button>
                     </div>
                 </div>
                 <div class="col-lg-3"></div>
@@ -194,8 +209,8 @@
                                     <button type="button" class="btn modal-btn w-100" id="btnSaveGP">Apply</button>
                                 </div>
                                 @*<div class="col-md-2 col-lg-2 col-xl-2 mt-4 button-margin">
-                                    <button type="button" class="btn modal-btn-close w-100" id="btnCloseGP">close</button>
-                                </div>*@
+                                        <button type="button" class="btn modal-btn-close w-100" id="btnCloseGP">close</button>
+                                    </div>*@
                             </div>
                         </div>
                     </div>
@@ -337,11 +352,11 @@
                 <div class="work_area map-bg pt-0">
                     <div class="  row bg-white border-bottom align-items-center" style="height:47px;">
                         @*<div class="col-lg-6">
-                            <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
-                                Import data
-                                <img src="/Assets/img/import-icon.png" class="mx-2">
-                            </button>
-                        </div>*@
+                                <button type="button" id="importEqptLink" style="margin-bottom:5px;" class="btn upload-btn">
+                                    Import data
+                                    <img src="/Assets/img/import-icon.png" class="mx-2">
+                                </button>
+                            </div>*@
 
                         <div class="col-lg-12">
 
@@ -865,10 +880,10 @@
         </div>
 
         <!--
-      <div class="footer">
-        <p class="m-0">Powered by Vayu Group and Telecom Infra Project</p>
-        <p class="m-0">Privacy</p>
-      </div> -->
+        <div class="footer">
+          <p class="m-0">Powered by Vayu Group and Telecom Infra Project</p>
+          <p class="m-0">Privacy</p>
+        </div> -->
         <!-- Export Modal Start -->
     </div>
     <div class="modal fade" id="staticBackdrop1" data-backdrop="static" data-keyboard="false" tabindex="-1"

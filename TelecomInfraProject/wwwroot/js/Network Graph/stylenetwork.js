@@ -132,7 +132,7 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
-
+        debugger;
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -271,6 +271,7 @@ $(document).ready(function () {
     $("#importEqptLink").click(function () {
         if (confirm('Do you want to override existing data and replace with new data ?')) {
             $("#importEqpt").click();
+           /* $(".success-toast").toast('show')*/
         }
     });
     function readTextFile(file, callback) {
@@ -449,7 +450,9 @@ $(document).ready(function () {
     });
     $('#btn_CreateNetwork').click(function () {
         $('#divSelection').hide();
-        $("#stepGP").click();
+
+        /////$("#stepGP").click();
+        $("#stepCreateTopology").click();
     });
    
 });

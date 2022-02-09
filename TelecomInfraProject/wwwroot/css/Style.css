@@ -1690,12 +1690,14 @@ select {
 
 .select-box {
     border-radius: 10px;
+    cursor:pointer;
 }
 
     .select-box:hover {
         box-shadow: 0px 0px 80px rgb(0 0 0 / 15%);
         transform: scale(1.1);
         transition: 0.5s ease-in-out;
+        cursor: pointer;
     }
 
 .select-in-img {
@@ -1720,3 +1722,37 @@ select {
     color: white;
     border-radius: 0 0 10px 10px;
 }
+/*////boostra*/
+.success-toast {
+    border-left: 4px solid #28a745;
+}
+
+.info-toast {
+    border-left: 4px solid #17a2b8;
+}
+
+.danger-toast {
+    border-left: 4px solid #dc3545;
+}
+
+.warning-toast {
+    border-left: 4px solid #ffc107;
+}
+
+.success-toast {
+    min-width: 220px;
+}
+
+.toast .w-80 {
+    width: 80%;
+}
+
+.toast .row {
+    padding-left: 4%;
+    align-items: baseline;
+    padding-right: 4%;
+    justify-content: space-between;
+}
+
+
+
