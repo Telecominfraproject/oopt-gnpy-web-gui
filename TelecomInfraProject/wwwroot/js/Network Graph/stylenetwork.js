@@ -4708,24 +4708,20 @@ function nodeName(node_type) {
     $.each(network.body.data.nodes.get(), function (index, item) {
         var splitName = item.label.split(' ');
         var checkNumber = Number(splitName[splitName.length - 1]);
-        if (node_type != transceiverJSON.node_type && node_type != roadmJSON.node_type) {
-            if (item.node_type != transceiverJSON.node_type && item.node_type != roadmJSON.node_type ) {
+        if (node_type != transceiverJSON.node_type) {
+            if (item.node_type != transceiverJSON.node_type) {
                 if (checkNumber)
                     number.push(checkNumber);
             }
         }
-        else if (node_type == transceiverJSON.node_type) {
+        else
+        {
             if (item.node_type == transceiverJSON.node_type) {
                 if (checkNumber)
                     number.push(checkNumber);
             }
         }
-        else if (node_type == roadmJSON.node_type) {
-            if (item.node_type == roadmJSON.node_type) {
-                if (checkNumber)
-                    number.push(checkNumber);
-            }
-        }
+        
     });
 
     if (number.length > 0) {

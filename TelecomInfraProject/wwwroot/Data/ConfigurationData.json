@@ -28,7 +28,7 @@
     "ILA": {
       "is_degree_validation": true,
       "default": {
-        "label": "Site ",
+        "label": "NE ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "ILA",
@@ -40,7 +40,7 @@
     "Amplifier": {
       "is_degree_validation": true,
       "default": {
-        "label": "Site ",
+        "label": "NE ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "Amplifier",
@@ -51,7 +51,7 @@
     "Fused": {
       "is_degree_validation": true,
       "default": {
-        "label": "Site ",
+        "label": "NE ",
         "node_degree": 2,
         "node_type": "Fused",
         "pre_amp_type": "none",
