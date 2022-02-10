@@ -16,7 +16,7 @@
     "Roadm": {
       "is_degree_validation": false,
       "default": {
-        "label": "Site ",
+        "label": "NE ",
         "node_degree": 100,
         "node_type": "Roadm",
         "roadm_type": "",

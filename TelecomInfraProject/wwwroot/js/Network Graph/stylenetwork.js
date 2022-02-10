@@ -132,7 +132,6 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
-        debugger;
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -433,7 +432,6 @@ $(document).ready(function () {
         }
         $("#edit-topology").show();
         $("#add-service").hide();
-        $("#btnAddPatch").hide();
     });
     $("#stepAddService").click(function () {
         hideSimulationParameter();
@@ -4708,26 +4706,27 @@ function css_for_undo_redo_chnage() {
 function nodeName(node_type) {
     const number = [];
     $.each(network.body.data.nodes.get(), function (index, item) {
-
         var splitName = item.label.split(' ');
-
         var checkNumber = Number(splitName[splitName.length - 1]);
-        if (node_type != transceiverJSON.node_type) {
-            if (item.node_type != transceiverJSON.node_type) {
-
+        if (node_type != transceiverJSON.node_type && node_type != roadmJSON.node_type) {
+            if (item.node_type != transceiverJSON.node_type && item.node_type != roadmJSON.node_type ) {
                 if (checkNumber)
                     number.push(checkNumber);
             }
         }
-        else {
+        else if (node_type == transceiverJSON.node_type) {
             if (item.node_type == transceiverJSON.node_type) {
                 if (checkNumber)
                     number.push(checkNumber);
             }
-
+        }
+        else if (node_type == roadmJSON.node_type) {
+            if (item.node_type == roadmJSON.node_type) {
+                if (checkNumber)
+                    number.push(checkNumber);
+            }
         }
     });
-
 
     if (number.length > 0) {
         return number.sort((f, s) => f - s)[number.length - 1] + 1;
