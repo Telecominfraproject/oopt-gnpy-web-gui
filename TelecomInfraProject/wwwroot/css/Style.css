@@ -1236,9 +1236,7 @@ select {
     float: right;
 }
 /*stepper design*/
-.stepper-tab .tab-content #edit-topology,
-.stepper-tab .tab-content #add-service,
-.stepper-tab .tab-content #save-network
+.stepper-tab .tab-content
  {
     z-index: 1000;
     position: absolute;
@@ -1438,37 +1436,6 @@ select {
     max-width: 800px;
 }
 
-/*simulator page css
-*/
-
-.simulator-card {
-    /*background: #F7FCFD;*/
-    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.06);
-    border: 1px solid #2b7c80;
-    padding: 3rem;
-    border-radius: 6px;
-}
-
-.simulation-heading {
-    color: #2B7C80;
-    margin-bottom:1.5rem;
-   
-}
-.input-label{
-   font-size:1rem;
-   font-weight:600;
-}
-
-.border-dark{
-    border: 1px solid #131313;
-}
-
-.cancel-btn {
-    background: #C6C6C6;
-    color:#131313;
-    border-radius:20px;
-}
-
 @media only screen and (max-width: 1213px) {
     .right-btn {
         margin-top: 32px;
@@ -1523,6 +1490,11 @@ select {
     color: #fff;
     margin-top: -1px;
     font-size: 10px;
+}
+.cancel-btn {
+    background: #C6C6C6;
+    color: #131313;
+    border-radius: 20px;
 }
 
     /*.upload-btn:hover {
@@ -1646,7 +1618,7 @@ select {
     left: 0;
     transform: none;
     height: 100vh;
-    margin-top: 7%;
+    margin-top: 10%;
 }
 
 .button-margin {

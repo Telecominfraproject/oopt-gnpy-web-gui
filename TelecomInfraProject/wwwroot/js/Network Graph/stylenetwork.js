@@ -225,9 +225,7 @@ $(document).ready(function () {
     });
 
     $("#btnSaveGP, #btnCloseGP").click(function () {
-        $("#simulation-topology").hide();
-        $("#stepCreateTopology").click();
-        showMenu = 1
+        $("#staticBackdrop4").modal('hide');
         //if (currentStepper) {
         //    var stepperID = "#" + currentStepper;
         //    $(stepperID).addClass('active');
@@ -239,8 +237,7 @@ $(document).ready(function () {
 
         //}
         //else
-           
-       // alert('applied successfully');
+        //    $("#stepCreateTopology").click();
     });
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
@@ -421,12 +418,7 @@ $(document).ready(function () {
     $("#hoverDiv").mouseover(function () {
         $(this).hide();
     });
-    $("#stepGP").click(function () {      
-        $("#simulation-topology").show();    
-    });
-
     $("#stepCreateTopology").click(function () {
-        hideSimulationParameter();
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -434,7 +426,6 @@ $(document).ready(function () {
         $("#add-service").hide();
     });
     $("#stepAddService").click(function () {
-        hideSimulationParameter();
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -444,7 +435,6 @@ $(document).ready(function () {
     $("#stepSaveNetwork").click(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
-        hideSimulationParameter();
     });
     $("#ddlNetworkView").change(function () {
         networkView($(this).val());
@@ -4729,10 +4719,6 @@ function nodeName(node_type) {
     }
     else
         return 1;
-}
-
-function hideSimulationParameter() {
-    $("#simulation-topology").hide();
 }
 
 
