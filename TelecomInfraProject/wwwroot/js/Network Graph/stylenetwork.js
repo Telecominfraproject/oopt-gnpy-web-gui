@@ -3190,14 +3190,14 @@ function addNodes(data, callback) {
     var nodeShape = "";
     var nodeColor = "";
     var nodeFont = "";
-    if (nodeMode == 1) {
+    if (nodeMode == nodeType.ROADM) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
 
     }
-    else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
-        if (nodeMode == 2) {
+    else if (nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier) {
+        if (nodeMode == nodeType.ILA) {
             nodeDetails = configData.node[ILAJSON.amp_category];
             nodeShape = ILAJSON.shape;
             nodeColor = ILAJSON.color;
@@ -3207,14 +3207,14 @@ function addNodes(data, callback) {
             data.booster_type = nodeDetails.default.booster_type;
             data.amp_category = nodeDetails.default.amp_category;
         }
-        else if (nodeMode == 3) {
+        else if (nodeMode == nodeType.Attenuator) {
             nodeDetails = configData.node[fusedJSON.node_type];
             nodeShape = fusedJSON.shape;
             nodeColor = fusedJSON.color;
             nodeFont = fusedJSON.font;
             data.image = DIR + fusedJSON.image;
         }
-        else if (nodeMode == 4) {
+        else if (nodeMode == nodeType.Transceiver) {
             nodeDetails = configData.node[transceiverJSON.node_type];
             nodeShape = transceiverJSON.shape;
             nodeColor = transceiverJSON.color;
@@ -3222,7 +3222,7 @@ function addNodes(data, callback) {
             data.image = DIR + transceiverJSON.image;
             data.transceiver_type = nodeDetails.default.transceiver_type;
         }
-        else if (nodeMode == 5) {
+        else if (nodeMode == nodeType.Amplifier) {
             nodeDetails = configData.node[amplifierJSON.amp_category];
             nodeShape = amplifierJSON.shape;
             nodeColor = amplifierJSON.color;
@@ -3243,7 +3243,7 @@ function addNodes(data, callback) {
     var nodelength = nodeName(nodeDetails.default.node_type);
     var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
-    if (nodeMode == 4) {
+    if (nodeMode == nodeType.Transceiver) {
         nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
     }
 
@@ -3257,7 +3257,7 @@ function addNodes(data, callback) {
     data.component_type = roadmJSON.component_type;
     callback(data);
 
-    if (nodeMode == 1 || nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5)
+    if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier)
         network.addNodeMode();
 
 
