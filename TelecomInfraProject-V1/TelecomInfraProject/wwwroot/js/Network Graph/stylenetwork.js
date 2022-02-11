@@ -62,9 +62,12 @@ let history_list_forward = [];
 var isShow = true;
 var isExpandedView = false;
 
+var tSpanLength = "";
+var tType = "";
+var tConnector_in = "";
+var tConnector_out = "";
 
 $(document).ready(function () {
-
 
     $.getJSON("/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
@@ -129,7 +132,6 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
-
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -222,21 +224,20 @@ $(document).ready(function () {
         }
     });
 
-
     $("#btnSaveGP, #btnCloseGP").click(function () {
         $("#staticBackdrop4").modal('hide');
-        if (currentStepper) {
-            var stepperID = "#" + currentStepper;
-            $(stepperID).addClass('active');
-            $('#stepGP').removeClass('active');
-            if (currentStepper == "stepCreateTopology")
-                showMenu = 1;
-            else if (currentStepper == "stepAddService")
-                showMenu = 2;
+        //if (currentStepper) {
+        //    var stepperID = "#" + currentStepper;
+        //    $(stepperID).addClass('active');
+        //    $('#stepGP').removeClass('active');
+        //    if (currentStepper == "stepCreateTopology")
+        //        showMenu = 1;
+        //    else if (currentStepper == "stepAddService")
+        //        showMenu = 2;
 
-        }
-        else
-            $("#stepCreateTopology").click();
+        //}
+        //else
+        //    $("#stepCreateTopology").click();
     });
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
@@ -266,12 +267,10 @@ $(document).ready(function () {
     });
 
     $("#importEqptLink").click(function () {
-
-        var conMsg = confirm('Do you want to override existing data and replace with new data?');
-        if (conMsg)
+        if (confirm('Do you want to override existing data and replace with new data ?')) {
             $("#importEqpt").click();
-
-
+            /* $(".success-toast").toast('show')*/
+        }
     });
     function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
@@ -292,12 +291,19 @@ $(document).ready(function () {
 
                 var eqptData = "";
                 if (text) {
-                    eqptData = JSON.parse(text);
-                    isEqptFile = true;
-                    eqpt_config = eqptData;
-                    load_EqptConfig(true);
-                    _import_json = eqptData['ietf-network:networks'];
-                    importNetwork();
+                    try {
+                        eqptData = JSON.parse(text);
+                        isEqptFile = true;
+                        eqpt_config = eqptData;
+                        load_EqptConfig(true);
+                        _import_json = eqptData['ietf-network:networks'];
+                        importNetwork();
+                        $("#importEqpt").val('');
+                        $('#divSelection').hide();
+                    }
+                    catch {
+                        alert("keyError:'elements', try again");
+                    }
                 }
             });
         }
@@ -412,7 +418,6 @@ $(document).ready(function () {
     $("#hoverDiv").mouseover(function () {
         $(this).hide();
     });
-
     $("#stepCreateTopology").click(function () {
         if (isExpandedView || isImportJSON) {
             return;
@@ -431,28 +436,37 @@ $(document).ready(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
     });
-    $("#collapseView").click(function () {
+    $("#ddlNetworkView").change(function () {
+        networkView($(this).val());
+    });
+    $('#btn_CreateNetwork').click(function () {
+        $('#divSelection').hide();
+
+        /////$("#stepGP").click();
+        $("#stepCreateTopology").click();
+    });
+
+});
+
+function networkView(view) {
+    if (view == 1)//expanded view
+    {
         isExpandedView = false;
-        $("#expandView").removeClass('viewActive');
-        $("#collapseView").addClass('viewActive');
         networkMenuHide();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(false);
-
-    });
-    $("#expandView").click(function () {
+    }
+    else if (view == 2)//collapsed view
+    {
         isExpandedView = true;
-        $("#expandView").addClass('viewActive');
-        $("#collapseView").removeClass('viewActive');
         $("#edit-topology").hide();
         $("#add-service").hide();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(true);
-
-    });
-});
+    }
+}
 
 function expandAndCollapseView(isExpand) {
     var edge = network.body.data.edges.get();
@@ -1930,10 +1944,6 @@ function importNode(index) {
 
 }
 
-var tSpanLength = "";
-var tType = "";
-var tConnector_in = "";
-var tConnector_out = "";
 function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
@@ -1982,7 +1992,8 @@ function importNetwork() {
 
         network.body.data.edges.clear();
         network.body.data.nodes.clear();
-        
+        importNodes = [];
+
 
         nodes = [];
         edges = [];
@@ -1999,15 +2010,17 @@ function importNetwork() {
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
         isImportJSON = true;
-
+        $("#ddlNetworkView").val(2);
         if (isExpandedView) {
             return;
         }
-        $("#expandView").click();
+        networkView(2)//expanded view
     }
     catch
-    { }
-    $("#importEqpt").val('');
+    {
+
+    }
+
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);
     //data = {
@@ -2897,7 +2910,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 fiber_Type = tType;
                 connector_IN = tConnector_in;
                 connector_OUT = tConnector_out;
-                
+
             }
 
             network.body.data.edges.add({
@@ -2907,7 +2920,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
                 font: singleFiberJSON.options.font, smooth: fiberSmooth,
-                fiber_type: fiber_Type, span_length:span_Length,
+                fiber_type: fiber_Type, span_length: span_Length,
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
                 span_loss: span_Loss,
             });
@@ -3177,14 +3190,14 @@ function addNodes(data, callback) {
     var nodeShape = "";
     var nodeColor = "";
     var nodeFont = "";
-    if (nodeMode == 1) {
+    if (nodeMode == nodeType.ROADM) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
 
     }
-    else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
-        if (nodeMode == 2) {
+    else if (nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier) {
+        if (nodeMode == nodeType.ILA) {
             nodeDetails = configData.node[ILAJSON.amp_category];
             nodeShape = ILAJSON.shape;
             nodeColor = ILAJSON.color;
@@ -3194,14 +3207,14 @@ function addNodes(data, callback) {
             data.booster_type = nodeDetails.default.booster_type;
             data.amp_category = nodeDetails.default.amp_category;
         }
-        else if (nodeMode == 3) {
+        else if (nodeMode == nodeType.Attenuator) {
             nodeDetails = configData.node[fusedJSON.node_type];
             nodeShape = fusedJSON.shape;
             nodeColor = fusedJSON.color;
             nodeFont = fusedJSON.font;
             data.image = DIR + fusedJSON.image;
         }
-        else if (nodeMode == 4) {
+        else if (nodeMode == nodeType.Transceiver) {
             nodeDetails = configData.node[transceiverJSON.node_type];
             nodeShape = transceiverJSON.shape;
             nodeColor = transceiverJSON.color;
@@ -3209,7 +3222,7 @@ function addNodes(data, callback) {
             data.image = DIR + transceiverJSON.image;
             data.transceiver_type = nodeDetails.default.transceiver_type;
         }
-        else if (nodeMode == 5) {
+        else if (nodeMode == nodeType.Amplifier) {
             nodeDetails = configData.node[amplifierJSON.amp_category];
             nodeShape = amplifierJSON.shape;
             nodeColor = amplifierJSON.color;
@@ -3230,7 +3243,7 @@ function addNodes(data, callback) {
     var nodelength = nodeName(nodeDetails.default.node_type);
     var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
 
-    if (nodeMode == 4) {
+    if (nodeMode == nodeType.Transceiver) {
         nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
     }
 
@@ -3244,7 +3257,7 @@ function addNodes(data, callback) {
     data.component_type = roadmJSON.component_type;
     callback(data);
 
-    if (nodeMode == 1 || nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5)
+    if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier)
         network.addNodeMode();
 
 
@@ -4219,7 +4232,7 @@ function deleteFiber(fiberID) {
     document.getElementById("dualFiberMenu").style.display = "none";
     document.getElementById("singleFiberMenu").style.display = "none";
     //remove roadm list from from roadm node
-    
+
     arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4231,7 +4244,7 @@ function deleteFiber(fiberID) {
         id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
     //remove roadm list from to roadm node
-    
+
     arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4272,7 +4285,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (fromCount == 1) {
-                alert('cannot remove ' + edgeType+', '+transceiverJSON.node_type+' '+transceiverJSON.component_type+' - '+nodeDetails.label+' should have one '+dualFiberJSON.component_type+'/'+dualPatchJSON.component_type+' connection');
+                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
                 return true;
             }
         }
@@ -4328,7 +4341,7 @@ function updatePatch(patchID) {
                 id: id, label: label, text: label
             });
 
-            
+
             data.nodes.off("*", change_history_back);
             data.edges.off("*", change_history_back);
             multipleFiberService(patchDetails.from, patchDetails.to);
@@ -4683,13 +4696,10 @@ function css_for_undo_redo_chnage() {
 function nodeName(node_type) {
     const number = [];
     $.each(network.body.data.nodes.get(), function (index, item) {
-
         var splitName = item.label.split(' ');
-
         var checkNumber = Number(splitName[splitName.length - 1]);
         if (node_type != transceiverJSON.node_type) {
             if (item.node_type != transceiverJSON.node_type) {
-
                 if (checkNumber)
                     number.push(checkNumber);
             }
@@ -4699,10 +4709,9 @@ function nodeName(node_type) {
                 if (checkNumber)
                     number.push(checkNumber);
             }
-
         }
-    });
 
+    });
 
     if (number.length > 0) {
         return number.sort((f, s) => f - s)[number.length - 1] + 1;

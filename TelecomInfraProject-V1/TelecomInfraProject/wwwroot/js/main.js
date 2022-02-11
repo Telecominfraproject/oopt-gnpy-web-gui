@@ -243,7 +243,7 @@ function stepColor(index) {
 
     showMenu = 0;
     modeHighLight();
-    
+
     switch (index) {
         case 1:
             break;
@@ -285,7 +285,7 @@ var btnAddILA = "#btnAddILA";
 var btnAddAmplifier = "#btnAddAmplifier";
 var btnAddTransceiver = "#btnAddTransceiver";
 var btnAddDualFiber = "#btnAddDualFiber";
-var btnAddSingleFiber = "#btnAddSingleFiber"; 
+var btnAddSingleFiber = "#btnAddSingleFiber";
 var btnServiceActive = "#btnServiceActive";
 var btnAddPatch = "#btnAddPatch";
 function modeHighLight(node) {
@@ -385,7 +385,7 @@ function modeHighLight(node) {
             $(btnAddSingleFiber).removeClass('highlight');
             $(btnServiceActive).removeClass('highlight');
             $(btnAddPatch).removeClass('highlight');
-           
+
     }
 }
 
@@ -399,7 +399,7 @@ function showHideDrawerandMenu() {
     document.getElementById("singleFiberMenu").style.display = "none";
     document.getElementById("dualFiberMenu").style.display = "none";
     document.getElementById("patchMenu").style.display = "none";
-    
+
     closeDrawer('roadm');
     closeDrawer('attenuator');
     closeDrawer('ILA');

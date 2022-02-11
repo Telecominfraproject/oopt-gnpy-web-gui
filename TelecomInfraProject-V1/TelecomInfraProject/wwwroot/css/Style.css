@@ -343,7 +343,7 @@ ul {
     padding: 6px 0;
     border: none;
     position: relative;
-    width: 25%;
+    width: 33.33%;
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -1236,7 +1236,6 @@ select {
     float: right;
 }
 /*stepper design*/
-
 .stepper-tab .tab-content {
     z-index: 1000;
     position: absolute;
@@ -1436,7 +1435,6 @@ select {
     max-width: 800px;
 }
 
-
 @media only screen and (max-width: 1213px) {
     .right-btn {
         margin-top: 32px;
@@ -1493,17 +1491,23 @@ select {
     font-size: 10px;
 }
 
-    /*.upload-btn:hover {
+.cancel-btn {
+    background: #C6C6C6;
+    color: #131313;
+    border-radius: 20px;
+}
+
+/*.upload-btn:hover {
     background-color: #2b7082 !important;
     color: #fff;
     font-size: 16px;
 }*/
 
-    .download-btn:hover {
-        background-color: #445d5e !important;
-        color: #fff;
-        font-size: 10px;
-    }
+.download-btn:hover {
+    background-color: #445d5e !important;
+    color: #fff;
+    font-size: 10px;
+}
 
 .create-back1 {
     background: #2b7c80;
@@ -1606,4 +1610,150 @@ select {
     top: 63px;
     right: 28px;
     z-index: 999;
+}
+
+.first-tab {
+    position: relative;
+    top: 0;
+    z-index: 99;
+    left: 0;
+    transform: none;
+    height: 100vh;
+    margin-top: 10%;
+}
+
+.button-margin {
+    margin-top: 2rem !important;
+}
+
+.modal-btn-close {
+    background: linear-gradient( 180deg, #1eabbc, #1eabbc);
+    border-radius: 20px;
+    color: #fff;
+}
+
+.bg-card-change {
+    background-color: #2b7c804d !important;
+}
+
+.instruction-text {
+    font-size: 28px;
+    font-weight: 500;
+    color: #fff;
+}
+
+.rowheightset {
+    height: 100vh !important;
+}
+
+.create-btn-set {
+    background: #2b7c82;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+    .create-btn-set:hover {
+        background: #2b7c82;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: unset;
+        border-left: 2px solid white;
+        font-size: 14px;
+    }
+
+.import-btn-set {
+    background: #5db9c3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+    .import-btn-set:hover {
+        background: #5db9c3;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: unset;
+        border-left: 2px solid white;
+        font-size: 14px;
+    }
+
+.text-btn-right {
+    text-align: right;
+}
+
+.text-btn-left {
+    text-align: left;
+}
+
+.select-box {
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .select-box:hover {
+        box-shadow: 0px 0px 80px rgb(0 0 0 / 15%);
+        transform: scale(1.1);
+        transition: 0.5s ease-in-out;
+        cursor: pointer;
+    }
+
+.select-in-img {
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.select-in-img1 {
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.select-role-btn {
+    border: none;
+    background-color: #2b7c82;
+    padding: 12px 20px;
+    font-size: 17px;
+    color: white;
+    border-radius: 0 0 10px 10px;
+}
+/*////boostra*/
+.success-toast {
+    border-left: 4px solid #28a745;
+}
+
+.info-toast {
+    border-left: 4px solid #17a2b8;
+}
+
+.danger-toast {
+    border-left: 4px solid #dc3545;
+}
+
+.warning-toast {
+    border-left: 4px solid #ffc107;
+}
+
+.success-toast {
+    min-width: 220px;
+}
+
+.toast .w-80 {
+    width: 80%;
+}
+
+.toast .row {
+    padding-left: 4%;
+    align-items: baseline;
+    padding-right: 4%;
+    justify-content: space-between;
 }
