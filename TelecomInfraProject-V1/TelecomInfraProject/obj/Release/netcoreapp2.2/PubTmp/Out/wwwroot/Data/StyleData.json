@@ -72,7 +72,7 @@
   },
   "Amplifier": {
     "shape": "image",
-    "size": 14,
+    "size": 10,
     "image": "newamp.svg",
     "node_type": "Amplifier",
     "amp_category": "Amplifier",
@@ -95,7 +95,7 @@
   },
   "RamanAmplifier": {
     "shape": "image",
-    "size": 14,
+    "size": 10,
     "image": "ramanamp.svg",
     "node_type": "Amplifier",
     "amp_category": "RamanAmplifier",
