@@ -491,7 +491,7 @@ function networkView(view) {
         //}
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
-        expandAndCollapseView(false);
+        expandAndCollapseView(topologyView.NE_View);
     }
     else if (view == topologyView.Functional_View)//expanded view/Functional View
     {
@@ -510,10 +510,10 @@ function networkView(view) {
         data.edges.off("*", change_history_back);
 
         //if (isImportJSON) {
-            //$("#edit-topology").hide();
-            //$("#add-service").hide();
-            //isExpandedView = true;
-            expandAndCollapseView(true);
+        //$("#edit-topology").hide();
+        //$("#add-service").hide();
+        //isExpandedView = true;
+        expandAndCollapseView(topologyView.Functional_View);
         //}
         //else {
         //    isExpandedView = false;
@@ -522,62 +522,85 @@ function networkView(view) {
     }
 }
 
-function expandAndCollapseView(isExpand) {
-    var edge = network.body.data.edges.get();
-    var node = network.body.data.nodes.get();
+function expandAndCollapseView(view) {
+    //var edge = network.body.data.edges.get();
+    //var node = network.body.data.nodes.get();
 
-    $.each(edge, function (index, item) {
-        if (isExpand) {
-            if (item.import) {
-                network.body.data.edges.update({
-                    id: item.id, hidden: false
-                });
-            }
-            else {
-                network.body.data.edges.update({
-                    id: item.id, hidden: true
-                });
-            }
-        }
-        else {
-            if (item.import) {
-                network.body.data.edges.update({
-                    id: item.id, hidden: true
-                });
-            }
-            else {
-                network.body.data.edges.update({
-                    id: item.id, hidden: false
-                });
-            }
+    var FVEdges = network.body.data.edges.get({
+        filter: function (item) {
+            return (item.view == topologyView.Functional_View);
         }
     });
-    $.each(node, function (index, item) {
-        if (isExpand) {
-            if (item.import) {
-                network.body.data.nodes.update({
-                    id: item.id, hidden: false
-                });
-            }
-            else {
-                network.body.data.nodes.update({
-                    id: item.id, hidden: true
-                });
-            }
-        }
-        else {
-            if (item.import) {
-                network.body.data.nodes.update({
-                    id: item.id, hidden: true
-                });
-            }
-            else {
-                network.body.data.nodes.update({
-                    id: item.id, hidden: false
-                });
-            }
+
+    var FVNodes = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.view == topologyView.Functional_View);
         }
     });
+
+    var NVEdges = network.body.data.edges.get({
+        filter: function (item) {
+            return (item.view == topologyView.NE_View);
+        }
+    });
+
+    var NVNodes = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.view == topologyView.NE_View);
+        }
+    });
+
+    if (view == topologyView.Functional_View) {
+        $.each(FVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: false
+            });
+        });
+        $.each(FVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: false
+            });
+        });
+
+        $.each(NVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: true
+            });
+        });
+        $.each(NVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: true
+            });
+        });
+
+
+    }
+    else if (view == topologyView.NE_View) {
+        $.each(FVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: true
+            });
+        });
+        $.each(FVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: true
+            });
+        });
+
+        $.each(NVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: false
+            });
+        });
+        $.each(NVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: false
+            });
+        });
+    }
+   
+
+    
 }
 
 function networkMenuHide() {
@@ -590,6 +613,10 @@ function networkMenuHide() {
             showMenu = 2;
             $("#stepAddService").click();
         }
+    }
+    else {
+        showMenu = 1;
+        $("#stepCreateTopology").click();
     }
 }
 function showHideLabel() {
@@ -2023,8 +2050,8 @@ function importNode(index) {
 
     network.body.data.nodes.add({
         id: nodeID, label: label, x: x, y: y, image: image, number: number,
-        import: true, hidden: false,
-        shape: shape, color: color, size:nodeSize,
+        view: topologyView.Functional_View, hidden: false,
+        shape: shape, color: color, size: nodeSize,
         node_type: node_type, node_degree: node_degree, component_type: component_type,
         roadm_type_pro: [],
         transceiver_type: transceiver_type,//transceiver
@@ -2039,7 +2066,7 @@ function importNode(index) {
         shape: shape,
         image: image,
         color: color,
-        size:nodeSize,
+        size: nodeSize,
         //edges: elem.edges[0],
         x: x,
         y: y,
@@ -2589,7 +2616,8 @@ function pasteNode(nodeId) {
         if (node_type == roadmJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
-                shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size:roadmJSON.size,
+                shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
+                view: $("#ddlNetworkView").val(), hidden:false,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
                 roadm_type_pro: []
             });
@@ -2597,14 +2625,16 @@ function pasteNode(nodeId) {
         else if (node_type == fusedJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodeData.number,
-                shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size:fusedJSON.size,
+                shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size: fusedJSON.size,
+                view: $("#ddlNetworkView").val(), hidden: false,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
             });
         }
         else if (node_type == transceiverJSON.node_type) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodeData.number,
-                shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size:transceiverJSON.size,
+                shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size: transceiverJSON.size,
+                view: $("#ddlNetworkView").val(), hidden: false,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
                 transceiver_type: nodeData.transceiver_type
             });
@@ -2614,7 +2644,8 @@ function pasteNode(nodeId) {
             if (nodeData.amp_category == ILAJSON.amp_category) {
                 network.body.data.nodes.add({
                     id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodeData.number,
-                    shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font, size:ILAJSON.size,
+                    shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font, size: ILAJSON.size,
+                    view: $("#ddlNetworkView").val(), hidden: false,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
                     pre_amp_type: nodeData.pre_amp_type, booster_type: nodeData.booster_type, amp_category: nodeData.amp_category
                 });
@@ -2622,7 +2653,8 @@ function pasteNode(nodeId) {
             else if (nodeData.amp_category == amplifierJSON.amp_category) {
                 network.body.data.nodes.add({
                     id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodeData.number,
-                    shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font, size:amplifierJSON.size,
+                    shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font, size: amplifierJSON.size,
+                    view: $("#ddlNetworkView").val(), hidden: false,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
                     amp_type: nodeData.amp_type, amp_category: nodeData.amp_category
                 });
@@ -2630,7 +2662,8 @@ function pasteNode(nodeId) {
             else if (nodeData.amp_category == ramanampJSON.amp_category) {
                 network.body.data.nodes.add({
                     id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.image, number: nodeData.number,
-                    shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font, size:ramanampJSON.size,
+                    shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font, size: ramanampJSON.size,
+                    view: $("#ddlNetworkView").val(), hidden: false,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ramanampJSON.component_type,
                     amp_type: nodeData.amp_type, amp_category: nodeData.amp_category, category: nodeData.category
                 });
@@ -3041,6 +3074,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
                 arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: fiberSmooth,
                 width: dualFiberJSON.width,
+                view: topologyView.NE_View, hidden: false,
                 fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
                 loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
                 RxToTxFiber: {
@@ -3074,7 +3108,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel,
-                import: isImport, hidden: false,
+                view: topologyView.Functional_View, hidden: false,
                 dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
@@ -3271,7 +3305,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: singlePatchJSON.component_type, patch_category: singlePatchJSON.patch_category,
                 color: singlePatchJSON.options.color, background: singlePatchJSON.options.background,
                 arrows: singlePatchJSON.options.arrows, font: singlePatchJSON.options.font, smooth: singlePatchJSON.options.smooth,
-                import: isImport, hidden: false,
+                view: topologyView.Functional_View, hidden: false,
             });
         }
         if (isDualPatchMode == 1) {
@@ -3300,7 +3334,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: dualPatchJSON.component_type, patch_category: dualPatchJSON.patch_category,
                 color: dualPatchJSON.options.color, background: dualPatchJSON.options.background,
                 arrows: dualPatchJSON.options.arrows, font: dualPatchJSON.options.font, smooth: dualPatchJSON.options.smooth,
-                import: isImport, hidden: false,
+                view: topologyView.NE_View, hidden: false,
             });
         }
 
@@ -3432,6 +3466,8 @@ function addNodes(data, callback) {
     data.node_type = nodeDetails.default.node_type;
     data.node_degree = nodeDetails.default.node_degree;
     data.component_type = roadmJSON.component_type;
+    data.hidden = false;
+    data.view = $("#ddlNetworkView").val();
     callback(data);
 
     if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
@@ -3489,21 +3525,24 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size:roadmJSON.size,
+            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
-            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size:fusedJSON.size,
+            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size: fusedJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
-            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size:transceiverJSON.size,
+            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size: transceiverJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
         });
@@ -3511,7 +3550,8 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     else if (node_type == ILAJSON.amp_category) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.image, number: nodelength,
-            shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font, size:ILAJSON.size,
+            shape: ILAJSON.shape, color: ILAJSON.color, font: ILAJSON.font, size: ILAJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ILAJSON.component_type,
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
         });
@@ -3529,6 +3569,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
+        view: $("#ddlNetworkView").val(), hidden: false,
         fiber_type: fiberDetails.fiber_type, span_length: fiberDetails.span_length,
         loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
         RxToTxFiber: {
@@ -3583,6 +3624,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
+        view: $("#ddlNetworkView").val(), hidden: false,
         fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
         loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
 
@@ -3703,21 +3745,24 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
-            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size:roadmJSON.size,
+            shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
         });
     }
     else if (node_type == fusedJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.image, number: nodelength,
-            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size:fusedJSON.size,
+            shape: fusedJSON.shape, color: fusedJSON.color, font: fusedJSON.font, size: fusedJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: fusedJSON.component_type,
         });
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
-            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size:transceiverJSON.size,
+            shape: transceiverJSON.shape, color: transceiverJSON.color, font: transceiverJSON.font, size: transceiverJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: transceiverJSON.component_type,
             transceiver_type: nodeDetails.transceiver_type
         });
@@ -3725,7 +3770,8 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     else if (node_type == amplifierJSON.amp_category) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
-            shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font, size:amplifierJSON.size,
+            shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font, size: amplifierJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
             //amp_type: nodeDetails.default.amp_type,
             //amp_category: nodeDetails.default.amp_category
@@ -3735,7 +3781,8 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     else if (node_type == ramanampJSON.amp_category) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.image, number: nodelength,
-            shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font, size:ramanampJSON.size,
+            shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font, size: ramanampJSON.size,
+            view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ramanampJSON.component_type,
             amp_type: nodeDetails.default.amp_type,
             amp_category: nodeDetails.default.amp_category,
@@ -3768,6 +3815,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
+        view: $("#ddlNetworkView").val(), hidden: false,
         fiber_type: fiberDetails.fiber_type, span_length: fiberDetails.span_length,
         loss_coefficient: fiberDetails.loss_coefficient, connector_in: fiberDetails.connector_in, connector_out: fiberDetails.connector_out, span_loss: fiberDetails.span_loss,
 
@@ -3811,6 +3859,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
+        view: $("#ddlNetworkView").val(), hidden: false,
         fiber_type: fiber_config.fiber_type, span_length: fiber_config.Span_length,
         loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
     });
@@ -4996,14 +5045,14 @@ function nodeName(node_type, amp_category) {
             if (node_type == ramanampJSON.amp_category) {
                 nodeList = network.body.data.nodes.get({
                     filter: function (item) {
-                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category);
+                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category && item.view==topologyView.Functional_View);
                     }
                 });
             }
             else {
                 nodeList = network.body.data.nodes.get({
                     filter: function (item) {
-                        return (item.node_type == node_type && item.amp_category == amp_category);
+                        return (item.node_type == node_type && item.amp_category == amp_category && item.view == topologyView.Functional_View);
                     }
                 });
             }
@@ -5011,7 +5060,7 @@ function nodeName(node_type, amp_category) {
         else {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type == node_type);
+                    return (item.node_type == node_type && item.view == topologyView.Functional_View);
                 }
             });
         }
@@ -5021,14 +5070,14 @@ function nodeName(node_type, amp_category) {
         if (node_type == transceiverJSON.node_type) {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type == transceiverJSON.node_type);
+                    return (item.node_type == transceiverJSON.node_type && item.view == topologyView.NE_View);
                 }
             });
         }
         else {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type != transceiverJSON.node_type);
+                    return (item.node_type != transceiverJSON.node_type && item.view == topologyView.NE_View);
                 }
             });
         }
