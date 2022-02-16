@@ -523,8 +523,8 @@ function networkView(view) {
 }
 
 function expandAndCollapseView(view) {
-    var edge = network.body.data.edges.get();
-    var node = network.body.data.nodes.get();
+    //var edge = network.body.data.edges.get();
+    //var node = network.body.data.nodes.get();
 
     var FVEdges = network.body.data.edges.get({
         filter: function (item) {
@@ -550,13 +550,57 @@ function expandAndCollapseView(view) {
         }
     });
 
-    $.each(edge, function (index, item) {
-        
-    });
+    if (view == topologyView.Functional_View) {
+        $.each(FVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: false
+            });
+        });
+        $.each(FVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: false
+            });
+        });
 
-    $.each(node, function (index, item) {
-       
-    });
+        $.each(NVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: true
+            });
+        });
+        $.each(NVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: true
+            });
+        });
+
+
+    }
+    else if (view == topologyView.NE_View) {
+        $.each(FVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: true
+            });
+        });
+        $.each(FVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: true
+            });
+        });
+
+        $.each(NVEdges, function (index, item) {
+            network.body.data.edges.update({
+                id: item.id, hidden: false
+            });
+        });
+        $.each(NVNodes, function (index, item) {
+            network.body.data.nodes.update({
+                id: item.id, hidden: false
+            });
+        });
+    }
+   
+
+    
 }
 
 function networkMenuHide() {
@@ -569,6 +613,10 @@ function networkMenuHide() {
             showMenu = 2;
             $("#stepAddService").click();
         }
+    }
+    else {
+        showMenu = 1;
+        $("#stepCreateTopology").click();
     }
 }
 function showHideLabel() {
@@ -4997,14 +5045,14 @@ function nodeName(node_type, amp_category) {
             if (node_type == ramanampJSON.amp_category) {
                 nodeList = network.body.data.nodes.get({
                     filter: function (item) {
-                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category);
+                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category && item.view==topologyView.Functional_View);
                     }
                 });
             }
             else {
                 nodeList = network.body.data.nodes.get({
                     filter: function (item) {
-                        return (item.node_type == node_type && item.amp_category == amp_category);
+                        return (item.node_type == node_type && item.amp_category == amp_category && item.view == topologyView.Functional_View);
                     }
                 });
             }
@@ -5012,7 +5060,7 @@ function nodeName(node_type, amp_category) {
         else {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type == node_type);
+                    return (item.node_type == node_type && item.view == topologyView.Functional_View);
                 }
             });
         }
@@ -5022,14 +5070,14 @@ function nodeName(node_type, amp_category) {
         if (node_type == transceiverJSON.node_type) {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type == transceiverJSON.node_type);
+                    return (item.node_type == transceiverJSON.node_type && item.view == topologyView.NE_View);
                 }
             });
         }
         else {
             nodeList = network.body.data.nodes.get({
                 filter: function (item) {
-                    return (item.node_type != transceiverJSON.node_type);
+                    return (item.node_type != transceiverJSON.node_type && item.view == topologyView.NE_View);
                 }
             });
         }

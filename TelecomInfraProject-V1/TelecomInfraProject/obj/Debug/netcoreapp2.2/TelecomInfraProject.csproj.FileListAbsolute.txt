@@ -78,7 +78,6 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.RazorCoreGenerate.cache
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\Razor\Pages\help.cshtml.g.cs
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\Razor\Pages\homepage.cshtml.g.cs
-D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\Razor\Pages\homepage1.cshtml.g.cs
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\Razor\Pages\Index.cshtml.g.cs
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.RazorTargetAssemblyInfo.cache
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.RazorTargetAssemblyInfo.cs
