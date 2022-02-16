@@ -17,6 +17,7 @@
       "is_degree_validation": false,
       "default": {
         "label": "Site ",
+        "FV_label": "ROADM ",
         "node_degree": 100,
         "node_type": "Roadm",
         "roadm_type": "",
@@ -29,6 +30,7 @@
       "is_degree_validation": true,
       "default": {
         "label": "Site ",
+        "FV_label": "ILA ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "ILA",
@@ -41,9 +43,22 @@
       "is_degree_validation": true,
       "default": {
         "label": "Site ",
+        "FV_label": "Amplifier ",
         "node_degree": 2,
         "node_type": "Amplifier",
         "amp_category": "Amplifier",
+        "pre_amp_type": "",
+        "component_type": "node"
+      }
+    },
+    "RamanAmplifier": {
+      "is_degree_validation": true,
+      "default": {
+        "label": "Site ",
+        "FV_label": "RamanAmp ",
+        "node_degree": 2,
+        "node_type": "Amplifier",
+        "amp_category": "RamanAmplifier",
         "pre_amp_type": "",
         "component_type": "node"
       }
@@ -52,6 +67,7 @@
       "is_degree_validation": true,
       "default": {
         "label": "Site ",
+        "FV_label": "Attenuator ",
         "node_degree": 2,
         "node_type": "Fused",
         "pre_amp_type": "none",
@@ -63,6 +79,7 @@
       "is_degree_validation": false,
       "default": {
         "label": "TCVR ",
+        "FV_label": "Transceiver ",
         "node_degree": 100,
         "node_type": "Transceiver",
         "transceiver_type": "",

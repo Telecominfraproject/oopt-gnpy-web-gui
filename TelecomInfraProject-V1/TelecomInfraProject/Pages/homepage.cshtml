@@ -257,42 +257,56 @@
                             </div>
                         </div>
                         <div class="group-node mt-2">
-                            <div class="create-back" id="btnAddILA">
+                            <div class="create-back" id="btnAddILA" style="display:none">
                                 <div class="card icon-group hover-show">
                                     <img src="./Assets/img/ILA.svg"
                                          class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
                                          title="ILA" />
                                 </div><span class="sidebar-text1">ILA</span>
                             </div>
-                            <div class="create-back" id="btnAddAmplifier" style="display:none">
+                            <div class="create-back" id="btnAddAmplifier">
                                 <div class="card icon-group hover-show">
-                                    <img src="~/Assets/img/amptriangle.svg"
+                                    <img src="~/Assets/img/newamp.svg"
                                          class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
                                          title="Amplifier" style="padding: 1px;" />
                                 </div><span class="sidebar-text1">Amplifier</span>
                             </div>
+                            <div class="create-back" id="btnAddRamAmp">
+                                <div class="card icon-group hover-show">
+                                    <img src="~/Assets/img/ramanamp.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Raman Amplifier" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Raman Amplifier</span>
+                            </div>
                         </div>
                         <div class="group-node mt-2">
-                            <div class="create-back" id="btnAddDualFiber">
+                            <div class="create-back" id="btnAddDualFiber" style="display:none">
                                 <div class="card icon-group hover-show">
                                     <img src="~/Assets/img/newdualfiber.svg"
                                          class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
                                          title="Dual fiber" style="padding: 1px;" />
                                 </div><span class="sidebar-text1">Dual fiber</span>
                             </div>
-                            <div class="create-back" id="btnAddSingleFiber" style="display:none">
+                            <div class="create-back" id="btnAddSingleFiber">
                                 <div class="card icon-group hover-show">
                                     <img src="~/Assets/img/newdualfiber.svg"
                                          class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
                                          title="Single fiber" style="padding: 1px;" />
                                 </div><span class="sidebar-text1">Single fiber</span>
                             </div>
-                            <div class="create-back" id="btnAddPatch" style="display:none;">
+                            <div class="create-back" id="btnAddDualPatch" style="display:none">
                                 <div class="card icon-group hover-show">
                                     <img src="~/Assets/img/newdualpatch.svg"
                                          class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
-                                         title="Patch" style="padding: 1px;" />
-                                </div><span class="sidebar-text1">Patch</span>
+                                         title="Dual Patch" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Dual Patch</span>
+                            </div>
+                            <div class="create-back" id="btnAddSinglePatch">
+                                <div class="card icon-group hover-show">
+                                    <img src="~/Assets/img/newdualpatch.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Single Patch" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Single Patch</span>
                             </div>
                         </div>
 
@@ -384,8 +398,8 @@
 
                             <div class="float-right d-flex">
                                 <select id="ddlNetworkView" class="form-control" style="margin-top:5px;">
-                                    <option value="1"> NE View </option>
                                     <option value="2"> Functional View </option>
+                                    <option value="1"> NE View </option>
                                     <option value="3" style="color:lightgray !important" disabled> Geographical View </option>
                                 </select>
                                 <i id="showHideEle" style="padding-top: 15px; padding-right: 6px; padding-left: 6px; cursor: pointer; color: #2b7c80;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>
@@ -622,11 +636,11 @@
                     </div>
                 </div>
 
-                <div class="mutinode-drawer-container" id="patch">
+                <div class="mutinode-drawer-container" id="singlepatch">
                     <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
-                        <label class="f-s-20 dark-heading mb-0">Patch Properties</label>
+                        <label class="f-s-20 dark-heading mb-0">Single Patch Properties</label>
                         <div data-tab="multi">
-                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('patch')">
+                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('singlepatch')">
                                 <span aria-hidden="true">&times;</span>
                             </span>
                         </div>
@@ -637,16 +651,45 @@
                     <div class="multinode-body pl-3 pr-3">
                         <div class="form-group">
                             <label class="f-s-17">Patch name</label><span class="f-s-12" id="siteLength"></span>
-                            <input id="txtPatchName" type="text" placeholder="Enter Patch name" class="form-control" />
+                            <input id="txtSinglePatchName" type="text" placeholder="Enter Patch name" class="form-control" />
                         </div>
                     </div>
                     <div class="multinode-footer pl-3 pr-3">
                         <div class="row">
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button id="btnUpdatePatch" class="btn btn-primary-n w-100">Apply</button>
+                                <button id="btnUpdateSinglePatch" class="btn btn-primary-n w-100">Apply</button>
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
-                                <button id="btnClosePatch" class="btn btn-gray-n w-100">Cancel</button>
+                                <button id="btnCloseSinglePatch" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mutinode-drawer-container" id="dualpatch">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Dual Patch Properties</label>
+                        <div data-tab="multi">
+                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('dualpatch')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Patch name</label><span class="f-s-12" id="siteLength"></span>
+                            <input id="txtDualPatchName" type="text" placeholder="Enter Patch name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateDualPatch" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseDualPatch" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -808,6 +851,51 @@
                             </div>
                             <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
                                 <button id="btnCloseAmplifier" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="ramanamp">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Raman Amplifier Properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="amplifier" onclick="closeDrawer('ramanamp')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtRamanAmpName" placeholder="Enter Amplifier name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier Type</label>
+                            <select id="ddlRamanAmpType" class="form-control">
+                                <option value="Raman Amp1">Raman Amp1</option>
+                                <option value="Raman Amp2">Raman Amp2</option>
+                                <option value="Raman Amp3">Raman Amp3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier Category</label>
+                            <select id="ddlRamanAmpCategory" class="form-control">
+                                <option value="Counter Propagating">Counter Propagating</option>
+                                <option value="Co-Propagating">Co-Propagating</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnRamanAmpUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseRamanAmp" class="btn btn-gray-n w-100">Cancel</button>
                             </div>
                         </div>
                     </div>
@@ -1073,6 +1161,14 @@
         <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Amplifier</span></a>
         <a class="dropdown-item" id="rcAmplifierCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
     </div>
+    <div class="dropdown-menu" id="ramanAmpMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('ramanAmpMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="rcRamanAmpEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Raman Amplifier</span></a>
+        <a class="dropdown-item" id="rcRamanAmpDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Raman Amplifier</span></a>
+        <a class="dropdown-item" id="rcRamanAmpCopy" href="#"><img src="~/Assets/img/copy.svg" alt="" class="mr-2"> <span>Copy</span></a>
+    </div>
     <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
             <span aria-hidden="true">×</span>
@@ -1122,15 +1218,23 @@
                 <a class="dropdown-item" id="rcSingleInsertAttenuator" href="#"><img src="~/Assets/img/newtransceiver.svg" alt="" class="mr-2 middleNode"> <span>Attenuator</span></a>
                 @*<a class="dropdown-item" id="rcSingleInsertTransceiver" href="#"><img src="~/Assets/img/transceiver.svg" alt="" class="mr-2 middleNode"> <span>Transceiver</span></a>*@
                 <a class="dropdown-item" id="rcSingleInsertAmplifier" href="#"><img src="~/Assets/img/newamp.svg" alt="" class="mr-2 middleNode"> <span>Amplifier</span></a>
+                <a class="dropdown-item" id="rcSingleInsertRamanAmp" href="#"><img src="~/Assets/img/ramanamp.svg" alt="" class="mr-2 middleNode"> <span>Raman Amplifier</span></a>
             </div>
         </div>
     </div>
-    <div class="dropdown-menu" id="patchMenu" aria-labelledby="dropdownMenuButton">
-        <span class="close close-btnn1" onclick="closeMenu('patchMenu')">
+    <div class="dropdown-menu" id="singlePatchMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('singlePatchMenu')">
             <span aria-hidden="true">×</span>
         </span>
-        <a class="dropdown-item" id="rcPatchEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Patch</span></a>
-        <a class="dropdown-item" id="rcPatchDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Patch</span></a>
+        <a class="dropdown-item" id="rcSinglePatchEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Single Patch</span></a>
+        <a class="dropdown-item" id="rcSinglePatchDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Single Patch</span></a>
+    </div>
+    <div class="dropdown-menu" id="dualPatchMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('dualPatchMenu')">
+            <span aria-hidden="true">×</span>
+        </span>
+        <a class="dropdown-item" id="rcDualPatchEdit" href="#"><img src="~/Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Dual Patch</span></a>
+        <a class="dropdown-item" id="rcDualPatchDelete" href="#"><img src="~/Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Dual Patch</span></a>
     </div>
     <div class="dropdown-menu" id="serviceMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('serviceMenu')" data-tab="single">

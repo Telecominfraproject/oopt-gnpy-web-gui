@@ -26,6 +26,7 @@ var optionsJSON = "";
 var roadmJSON = "";
 var ILAJSON = "";
 var amplifierJSON = "";
+var ramanampJSON = "";
 var fusedJSON = "";
 var transceiverJSON = "";
 var dualFiberJSON = "";
@@ -62,15 +63,19 @@ let history_list_forward = [];
 var isShow = true;
 var isExpandedView = false;
 
+var tSpanLength = "";
+var tType = "";
+var tConnector_in = "";
+var tConnector_out = "";
 
 $(document).ready(function () {
-
 
     $.getJSON("/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
         ILAJSON = data.ILA;
         amplifierJSON = data.Amplifier;
+        ramanampJSON = data.RamanAmplifier;
         fusedJSON = data.Fused;
         transceiverJSON = data.Transceiver;
         dualFiberJSON = data.DualFiber;
@@ -129,7 +134,6 @@ $(document).ready(function () {
     });
 
     $("#btnAddRoadm").click(function () {
-
         if (isExpandedView || isImportJSON) {
             return;
         }
@@ -148,6 +152,13 @@ $(document).ready(function () {
             return;
         }
         enableDisableNode(5, "amplifier");
+    });
+    $("#btnAddRamAmp").click(function () {
+
+        if (isExpandedView || isImportJSON) {
+            return;
+        }
+        enableDisableNode(6, "ramanamp");
     });
     $("#btnAddFused").click(function () {
 
@@ -207,36 +218,49 @@ $(document).ready(function () {
             }
         }
     });
-    $("#btnAddPatch").click(function () {
+    $("#btnAddDualPatch").click(function () {
 
         if (isExpandedView || isImportJSON) {
             return;
         }
-        if (isAddPatch == 1) {
+        if (isDualPatchMode == 1) {
             modeHighLight();
-            isAddPatch = 0;
+            isDualPatchMode = 0;
         }
         else {
-            modeHighLight('patch');
-            addPatchMode();
+            modeHighLight('dualpatch');
+            dualPatchMode();
+        }
+    });
+    $("#btnAddSinglePatch").click(function () {
+
+        if (isExpandedView || isImportJSON) {
+            return;
+        }
+        if (isSinglePatchMode == 1) {
+            modeHighLight();
+            isSinglePatchMode = 0;
+        }
+        else {
+            modeHighLight('singlepatch');
+            singlePatchMode();
         }
     });
 
-
     $("#btnSaveGP, #btnCloseGP").click(function () {
         $("#staticBackdrop4").modal('hide');
-        if (currentStepper) {
-            var stepperID = "#" + currentStepper;
-            $(stepperID).addClass('active');
-            $('#stepGP').removeClass('active');
-            if (currentStepper == "stepCreateTopology")
-                showMenu = 1;
-            else if (currentStepper == "stepAddService")
-                showMenu = 2;
+        //if (currentStepper) {
+        //    var stepperID = "#" + currentStepper;
+        //    $(stepperID).addClass('active');
+        //    $('#stepGP').removeClass('active');
+        //    if (currentStepper == "stepCreateTopology")
+        //        showMenu = 1;
+        //    else if (currentStepper == "stepAddService")
+        //        showMenu = 2;
 
-        }
-        else
-            $("#stepCreateTopology").click();
+        //}
+        //else
+        //    $("#stepCreateTopology").click();
     });
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
@@ -266,12 +290,10 @@ $(document).ready(function () {
     });
 
     $("#importEqptLink").click(function () {
-
-        var conMsg = confirm('Do you want to override existing data and replace with new data?');
-        if (conMsg)
+        if (confirm('Do you want to override existing data and replace with new data ?')) {
             $("#importEqpt").click();
-
-
+            /* $(".success-toast").toast('show')*/
+        }
     });
     function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
@@ -292,12 +314,19 @@ $(document).ready(function () {
 
                 var eqptData = "";
                 if (text) {
-                    eqptData = JSON.parse(text);
-                    isEqptFile = true;
-                    eqpt_config = eqptData;
-                    load_EqptConfig(true);
-                    _import_json = eqptData['ietf-network:networks'];
-                    importNetwork();
+                    try {
+                        eqptData = JSON.parse(text);
+                        isEqptFile = true;
+                        eqpt_config = eqptData;
+                        load_EqptConfig(true);
+                        _import_json = eqptData['ietf-network:networks'];
+                        importNetwork();
+                        $("#importEqpt").val('');
+                        $('#divSelection').hide();
+                    }
+                    catch {
+                        alert("keyError:'elements', try again");
+                    }
                 }
             });
         }
@@ -412,7 +441,6 @@ $(document).ready(function () {
     $("#hoverDiv").mouseover(function () {
         $(this).hide();
     });
-
     $("#stepCreateTopology").click(function () {
         if (isExpandedView || isImportJSON) {
             return;
@@ -431,28 +459,68 @@ $(document).ready(function () {
         $("#edit-topology").hide();
         $("#add-service").hide();
     });
-    $("#collapseView").click(function () {
-        isExpandedView = false;
-        $("#expandView").removeClass('viewActive');
-        $("#collapseView").addClass('viewActive');
+    $("#ddlNetworkView").change(function () {
+        networkView($(this).val());
+    });
+    $('#btn_CreateNetwork').click(function () {
+        $('#divSelection').hide();
+
+        /////$("#stepGP").click();
+        $("#stepCreateTopology").click();
+    });
+
+});
+
+function networkView(view) {
+    if (view == topologyView.NE_View)//collapsed view /NE view
+    {
         networkMenuHide();
+        $("#btnAddSingleFiber").hide();
+        $("#btnAddSinglePatch").hide();
+        $("#btnAddRamAmp").hide();
+        $("#btnAddAmplifier").hide();
+
+        $("#btnAddILA").show();
+        $("#btnAddDualFiber").show();
+        $("#btnAddDualPatch").show();
+        isExpandedView = false;
+
+        if (isImportJSON) {
+            $("#edit-topology").hide();
+            $("#add-service").hide();
+        }
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         expandAndCollapseView(false);
+    }
+    else if (view == topologyView.Functional_View)//expanded view/Functional View
+    {
+        networkMenuHide();
+        $("#btnAddSingleFiber").show();
+        $("#btnAddSinglePatch").show();
+        $("#btnAddRamAmp").show();
+        $("#btnAddAmplifier").show();
 
-    });
-    $("#expandView").click(function () {
-        isExpandedView = true;
-        $("#expandView").addClass('viewActive');
-        $("#collapseView").removeClass('viewActive');
-        $("#edit-topology").hide();
-        $("#add-service").hide();
+        $("#btnAddILA").hide();
+        $("#btnAddDualFiber").hide();
+        $("#btnAddDualPatch").hide();
+
+
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
-        expandAndCollapseView(true);
 
-    });
-});
+        if (isImportJSON) {
+            $("#edit-topology").hide();
+            $("#add-service").hide();
+            isExpandedView = true;
+            expandAndCollapseView(true);
+        }
+        else {
+            isExpandedView = false;
+            expandAndCollapseView(false);
+        }
+    }
+}
 
 function expandAndCollapseView(isExpand) {
     var edge = network.body.data.edges.get();
@@ -885,7 +953,7 @@ function draw(isImport) {
                 if (isExpandedView || isImportJSON) {
                     return;
                 }
-                if (nodeMode > 0 && nodeMode < 6) {
+                if (nodeMode > 0 && nodeMode < 7) {
                     addNodes(data, callback);
                 }
             },
@@ -920,7 +988,8 @@ function draw(isImport) {
                 from: '',
                 to: ''
             };
-            isAddPatch = 0;
+            isDualPatchMode = 0;
+            isSinglePatchMode = 0;
             addPatchData = {
                 from: '',
                 to: ''
@@ -941,7 +1010,8 @@ function draw(isImport) {
         if (isAddService == 1) {
             isDualFiberMode = 0;
             isSingleFiberMode = 0;
-            isAddPatch = 0;
+            isDualPatchMode = 0;
+            isSinglePatchMode = 0;
             addEdgeData = {
                 from: '',
                 to: ''
@@ -965,7 +1035,7 @@ function draw(isImport) {
                 addService();
 
         }
-        if (isAddPatch == 1) {
+        if (isDualPatchMode == 1 || isSinglePatchMode == 1) {
             isDualFiberMode = 0;
             isSingleFiberMode = 0;
             isAddService = 0;
@@ -988,8 +1058,14 @@ function draw(isImport) {
                 addPatchData.to = clickedNode.options.id
             }
 
-            if (addPatchData.from != '' && addPatchData.to != '')
-                addPatch();
+            if (addPatchData.from != '' && addPatchData.to != '') {
+                if (isDualPatchMode == 1)
+                    addDualPatch();
+                if (isSinglePatchMode == 1)
+                    addSinglePatch();
+
+            }
+
 
         }
     });
@@ -1025,6 +1101,7 @@ function draw(isImport) {
 
         var type = "";
         var fiber_category = "";
+        var patch_category = "";
         var amp_category = "";
         if ((nodeData != '' && edgeData != '') || nodeData != '') {
             type = network.body.data.nodes.get(nodeData).node_type;
@@ -1033,6 +1110,7 @@ function draw(isImport) {
         else if (edgeData != '') {
             type = network.body.data.edges.get(edgeData).component_type;
             fiber_category = network.body.data.edges.get(edgeData).fiber_category;
+            patch_category = network.body.data.edges.get(edgeData).patch_category;
         }
         else {
             if (isCopy) {
@@ -1148,6 +1226,26 @@ function draw(isImport) {
 
                                 );
                             }
+                            else if (amp_category == ramanampJSON.amp_category) {
+                                showContextMenu(data.event.pageX, data.event.pageY, "ramanAmpMenu");
+                                document.getElementById("rcRamanAmpEdit").onclick = ramanAmpEdit.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
+                                document.getElementById("rcRamanAmpDelete").onclick = deleteNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+                                );
+                                document.getElementById("rcRamanAmpCopy").onclick = copyNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
+                            }
                         }
                         else if (type == transceiverJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
@@ -1242,6 +1340,12 @@ function draw(isImport) {
                                 'Amplifier',
                                 callback
                             );
+                            document.getElementById("rcSingleInsertRamanAmp").onclick = singleFiberInsertNode.bind(
+                                this,
+                                edgeData,
+                                'RamanAmplifier',
+                                callback
+                            );
                             document.getElementById("rcSingleFiberEdit").onclick = singleFiberEdit.bind(
                                 this,
                                 edgeData,
@@ -1257,19 +1361,36 @@ function draw(isImport) {
 
                 }
                 else if (type == dualPatchJSON.component_type) {
+
                     if (edgeData != undefined) {
 
-                        showContextMenu(data.event.pageX, data.event.pageY, "patchMenu");
-                        document.getElementById("rcPatchEdit").onclick = patchEdit.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
-                        document.getElementById("rcPatchDelete").onclick = deletePatch.bind(
-                            this,
-                            edgeData,
-                            callback
-                        );
+                        if (patch_category == singlePatchJSON.patch_category) {
+
+                            showContextMenu(data.event.pageX, data.event.pageY, "singlePatchMenu");
+                            document.getElementById("rcSinglePatchEdit").onclick = singlePatchEdit.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                            document.getElementById("rcSinglePatchDelete").onclick = deletePatch.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                        }
+                        if (patch_category == dualPatchJSON.patch_category) {
+                            showContextMenu(data.event.pageX, data.event.pageY, "dualPatchMenu");
+                            document.getElementById("rcDualPatchEdit").onclick = dualPatchEdit.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                            document.getElementById("rcDualPatchDelete").onclick = deletePatch.bind(
+                                this,
+                                edgeData,
+                                callback
+                            );
+                        }
                     }
                 }
             }
@@ -1428,12 +1549,12 @@ function displayFiberHover(params) {
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 
-//1-roadm, 2-amp, 3-fused, 4-transceiver
+//1-roadm, 2-amp, 3-fused, 4-transceiver, 6- raman amp
 function AddNodeMode(nodemode) {
 
     nodeMode = nodemode;
     if (nodeMode) {
-        if (nodeMode > 0 && nodeMode < 6)
+        if (nodeMode > 0 && nodeMode < 7)
             network.addNodeMode();
     }
 }
@@ -1881,9 +2002,9 @@ function importNode(index) {
     else
         return;
 
-    nodelength = nodeName(nodeDetails.default.node_type);
+    var result = nodeName(nodeDetails.default.node_type, nodeDetails.default.amp_category);
     //var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
-    var number = nodelength;
+    var number = result.nodelength;
     //var label = nodeLabel;
 
     var label = _import_json["network"][0].node[index]["node-id"];
@@ -1930,10 +2051,6 @@ function importNode(index) {
 
 }
 
-var tSpanLength = "";
-var tType = "";
-var tConnector_in = "";
-var tConnector_out = "";
 function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
@@ -1954,7 +2071,8 @@ function importEdge(index) {
         addFiberComponent(1, from, to, labelvalue, textvalue, true);
     }
     if (edgeData["tip-photonic-topology:patch"]) {
-        isSingleFiberMode = 1;
+        isSinglePatchMode = 1;
+        isDualPatchMode = 0;
         var labelvalue = edgeData["link-id"];
         var textvalue = labelvalue;
         addPatchComponent(1, from, to, labelvalue, textvalue, true);
@@ -1969,17 +2087,21 @@ function importNetwork() {
 
     try {
 
-        var allNode = network.body.data.nodes.get();
-        var allEdge = network.body.data.edges.get();
+        //var allNode = network.body.data.nodes.get();
+        //var allEdge = network.body.data.edges.get();
 
-        $.each(allEdge, function (index, item) {
-            network.body.data.edges.remove({ id: item.id });
-        });
+        //$.each(allEdge, function (index, item) {
+        //    network.body.data.edges.remove({ id: item.id });
+        //});
 
-        $.each(allNode, function (index, item) {
-            network.body.data.nodes.remove({ id: item.id });
-        });
-        
+        //$.each(allNode, function (index, item) {
+        //    network.body.data.nodes.remove({ id: item.id });
+        //});
+
+        network.body.data.edges.clear();
+        network.body.data.nodes.clear();
+        importNodes = [];
+
 
         nodes = [];
         edges = [];
@@ -1996,15 +2118,17 @@ function importNetwork() {
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
         isImportJSON = true;
-
+        $("#ddlNetworkView").val(topologyView.Functional_View);
         if (isExpandedView) {
             return;
         }
-        $("#expandView").click();
+        networkView(2)//expanded view
     }
     catch
-    { }
-    $("#importEqpt").val('');
+    {
+
+    }
+
     //nodes = getNodeData(inputData.nodes);
     //edges = getEdgeData(inputData.edges);
     //data = {
@@ -2244,38 +2368,38 @@ function addFiber() {
     }
 
     //to restrict amplifier on singelfiber connection
-    if (isSingleFiberMode == 1) {
-        var msg = "";
-        if (srcNode.amp_category == ILAJSON.amp_category) {
-            msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
-        }
-        else {
-            isSrcOk = true;
-            if (srcNode.amp_category)
-                msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
-            else
-                msg = srcNode.node_type + " type : " + srcNode.label + " to ";
-        }
-        if (DestNode.amp_category == ILAJSON.amp_category) {
-            msg += DestNode.amp_category + " type : " + DestNode.label;
-        }
-        else {
-            isDestOk = true;
-            if (DestNode.amp_category)
-                msg += DestNode.amp_category + " type : " + DestNode.label;
-            else
-                msg += DestNode.node_type + " type : " + DestNode.label;
-        }
+    if (isSingleFiberMode == 1) {//comment for functional view
+        //var msg = "";
+        //if (srcNode.amp_category == ILAJSON.amp_category) {
+        //    msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
+        //}
+        //else {
+        //    isSrcOk = true;
+        //    if (srcNode.amp_category)
+        //        msg = srcNode.amp_category + " type : " + srcNode.label + " to ";
+        //    else
+        //        msg = srcNode.node_type + " type : " + srcNode.label + " to ";
+        //}
+        //if (DestNode.amp_category == ILAJSON.amp_category) {
+        //    msg += DestNode.amp_category + " type : " + DestNode.label;
+        //}
+        //else {
+        //    isDestOk = true;
+        //    if (DestNode.amp_category)
+        //        msg += DestNode.amp_category + " type : " + DestNode.label;
+        //    else
+        //        msg += DestNode.node_type + " type : " + DestNode.label;
+        //}
 
-        if (!isSrcOk || !isDestOk) {
-            alert("cannot add " + singleFiberJSON.fiber_category + " from " + msg);
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-            UnSelectAll();
-            return;
-        }
+        //if (!isSrcOk || !isDestOk) {
+        //    alert("cannot add " + singleFiberJSON.fiber_category + " from " + msg);
+        //    addEdgeData = {
+        //        from: '',
+        //        to: ''
+        //    };
+        //    UnSelectAll();
+        //    return;
+        //}
     }
 
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(addEdgeData.from).number + ' - ' + network.body.data.nodes.get(addEdgeData.to).number;
@@ -2292,7 +2416,8 @@ function dualFiberMode() {
     isDualFiberMode = 1;
     isSingleFiberMode = 0;
     isAddService = 0;
-    isAddPatch = 0;
+    isSinglePatchMode = 0;
+    isDualPatchMode = 0;
     addEdgeData = {
         from: '',
         to: ''
@@ -2303,7 +2428,8 @@ function singleFiberMode() {
     isSingleFiberMode = 1;
     isDualFiberMode = 0;
     isAddService = 0;
-    isAddPatch = 0;
+    isDualPatchMode = 0;
+    isSinglePatchMode = 0;
     addEdgeData = {
         from: '',
         to: ''
@@ -2316,7 +2442,8 @@ var addServiceData = {
     to: ''
 };
 
-var isAddPatch = 0;
+var isDualPatchMode = 0;
+var isSinglePatchMode = 0;
 var addPatchData = {
     from: '',
     to: ''
@@ -2362,14 +2489,15 @@ function addServiceMode() {
     isAddService = 1;
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
-    isAddPatch = 0;
+    isSinglePatchMode = 0;
+    isDualPatchMode = 0;
     addServiceData = {
         from: '',
         to: ''
     };
 }
 
-function addPatch() {
+function addDualPatch() {
 
     var fromDetails = network.body.data.nodes.get(addPatchData.from);
     var toDetails = network.body.data.nodes.get(addPatchData.to);
@@ -2387,9 +2515,34 @@ function addPatch() {
     UnSelectAll();
 
 }
-function addPatchMode() {
+function addSinglePatch() {
+    var labelvalue = dualPatchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
+    addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
+
+    addPatchData = {
+        from: '',
+        to: ''
+    };
     UnSelectAll();
-    isAddPatch = 1;
+
+}
+
+function dualPatchMode() {
+    UnSelectAll();
+    isDualPatchMode = 1;
+    isSinglePatchMode = 0;
+    isAddService = 0;
+    isDualFiberMode = 0;
+    isSingleFiberMode = 0;
+    addPatchData = {
+        from: '',
+        to: ''
+    };
+}
+function singlePatchMode() {
+    UnSelectAll();
+    isDualPatchMode = 0;
+    isSinglePatchMode = 1;
     isAddService = 0;
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
@@ -2419,8 +2572,10 @@ function pasteNode(nodeId) {
         //insertNodeX = network.body.data.nodes[nodeId].x + 5;
         //insertNodeY = network.body.data.nodes[nodeId].y + 5;
 
-        nodelength = nodeName(node_type);
-        nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+        var result = nodeName(node_type, nodeData.amp_category);
+
+        nodelength = result.nodeLength
+        nodeLabel = result.label
         nodeData.label = nodeLabel;
         nodeData.number = nodelength;
 
@@ -2463,6 +2618,14 @@ function pasteNode(nodeId) {
                     shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font,
                     node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
                     amp_type: nodeData.amp_type, amp_category: nodeData.amp_category
+                });
+            }
+            else if (nodeData.amp_category == ramanampJSON.amp_category) {
+                network.body.data.nodes.add({
+                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.image, number: nodeData.number,
+                    shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font,
+                    node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ramanampJSON.component_type,
+                    amp_type: nodeData.amp_type, amp_category: nodeData.amp_category, category: nodeData.category
                 });
             }
         }
@@ -2511,7 +2674,8 @@ function disableFiberService() {
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
     isAddService = 0;
-    isAddPatch = 0;
+    isDualPatchMode = 0;
+    isSinglePatchMode = 0;
     addEdgeData = {
         from: '',
         to: ''
@@ -2804,53 +2968,57 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         }
 
         //amplifier and attenuator fiber connection conditions - max limit 2
-        if (nodeDetails.node_type == fusedJSON.node_type || nodeDetails.node_type == ILAJSON.node_type || toNodeDetails.node_type == fusedJSON.node_type || toNodeDetails.node_type == ILAJSON.node_type) {
-            var connectedEdges = network.getConnectedEdges(cfrom);
-            var fromCount = network.getConnectedEdges(cfrom).length;
-            var toCount = network.getConnectedEdges(cto).length;
-            //$.each(connectedEdges, function (index, item) {
-            //    var fiber = network.body.data.edges.get(item);
-            //    if (fiber.from == cfrom)
-            //        fromCount++;
-            //    if (fiber.to == cfrom)
-            //        toCount++;
-            //});
 
-            var fromDegree = configData.node[nodeDetails.node_type].default.node_degree;
-            var toDegree = configData.node[toNodeDetails.node_type].default.node_degree;
-            var msg = "";
-            var isLimit = false;
-            if (fromCount >= fromDegree) {
-                isLimit = true;
-                if (nodeDetails.node_type == fusedJSON.node_type) {
-                    msg = 'Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree + ' ' + dualFiberJSON.component_type + ' connection';
-                    //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree+' '+dualFiberJSON.component_type+' connection');
+        if (isDualFiberMode == 1)//removed restriction for single fiber mode
+        {
+            if (nodeDetails.node_type == fusedJSON.node_type || nodeDetails.node_type == ILAJSON.node_type || toNodeDetails.node_type == fusedJSON.node_type || toNodeDetails.node_type == ILAJSON.node_type) {
+                var connectedEdges = network.getConnectedEdges(cfrom);
+                var fromCount = network.getConnectedEdges(cfrom).length;
+                var toCount = network.getConnectedEdges(cto).length;
+                //$.each(connectedEdges, function (index, item) {
+                //    var fiber = network.body.data.edges.get(item);
+                //    if (fiber.from == cfrom)
+                //        fromCount++;
+                //    if (fiber.to == cfrom)
+                //        toCount++;
+                //});
+
+                var fromDegree = configData.node[nodeDetails.node_type].default.node_degree;
+                var toDegree = configData.node[toNodeDetails.node_type].default.node_degree;
+                var msg = "";
+                var isLimit = false;
+                if (fromCount >= fromDegree) {
+                    isLimit = true;
+                    if (nodeDetails.node_type == fusedJSON.node_type) {
+                        msg = 'Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                        //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree+' '+dualFiberJSON.component_type+' connection');
+                    }
+                    else if (nodeDetails.node_type == ILAJSON.node_type) {
+                        msg = nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                        //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree+' ' + dualFiberJSON.component_type +' connection');
+                    }
+
                 }
-                else if (nodeDetails.node_type == ILAJSON.node_type) {
-                    msg = nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree + ' ' + dualFiberJSON.component_type + ' connection';
-                    //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + fromDegree+' ' + dualFiberJSON.component_type +' connection');
+                if (toCount >= toDegree) {
+                    if (isLimit)
+                        msg += " and ";
+                    isLimit = true;
+                    if (toNodeDetails.node_type == fusedJSON.node_type) {
+                        msg += 'Attenuator ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' cannot have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                        //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + toDegree+' '+dualFiberJSON.component_type+' connection');
+                    }
+                    else if (toNodeDetails.node_type == ILAJSON.node_type) {
+                        msg += toNodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' cannot have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
+                        //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + toDegree+' ' + dualFiberJSON.component_type +' connection');
+                    }
                 }
 
-            }
-            if (toCount >= toDegree) {
-                if (isLimit)
-                    msg += " and ";
-                isLimit = true;
-                if (toNodeDetails.node_type == fusedJSON.node_type) {
-                    msg += 'Attenuator ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' cannot have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
-                    //alert('Attenuator ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + toDegree+' '+dualFiberJSON.component_type+' connection');
+                if (isLimit) {
+                    alert(msg);
+                    return;
                 }
-                else if (toNodeDetails.node_type == ILAJSON.node_type) {
-                    msg += toNodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + toNodeDetails.label + ' cannot have more than ' + toDegree + ' ' + dualFiberJSON.component_type + ' connection';
-                    //alert(nodeDetails.amp_category + ' ' + roadmJSON.component_type + ' : ' + nodeDetails.label + ' cannot have more than ' + toDegree+' ' + dualFiberJSON.component_type +' connection');
-                }
-            }
-            if (isLimit) {
-                alert(msg);
-                return;
             }
         }
-
         //end
 
         data.nodes.on("*", change_history_back);
@@ -2894,7 +3062,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 fiber_Type = tType;
                 connector_IN = tConnector_in;
                 connector_OUT = tConnector_out;
-                
+
             }
 
             network.body.data.edges.add({
@@ -2904,7 +3072,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
                 font: singleFiberJSON.options.font, smooth: fiberSmooth,
-                fiber_type: fiber_Type, span_length:span_Length,
+                fiber_type: fiber_Type, span_length: span_Length,
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
                 span_loss: span_Loss,
             });
@@ -3085,29 +3253,11 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
     if (cmode == 1) {
 
-        //we cannot add more than 1 patch
-        isPatchAdded = false;
-        var connectedFiber = network.getConnectedEdges(cfrom);
-        connectedFiber.push(network.getConnectedEdges(cto));
-        $.each(connectedFiber, function (index, item) {
-            var fiberDetails = network.body.data.edges.get(item);
-            if (fiberDetails.component_type == dualPatchJSON.component_type) {
-                if ((fiberDetails.from == cfrom && fiberDetails.to == cto) || (fiberDetails.from == cto && fiberDetails.to == cfrom)) {
-                    isPatchAdded = true;
-                    return true;
-                }
-            }
-        });
 
-        if (isPatchAdded && !isImport) {
-            alert('we cannot add more than 1 ' + dualPatchJSON.component_type);
-            return;
-        }
-        //end
 
         clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
 
-        if (isImport) {
+        if (isSinglePatchMode == 1) {
             network.body.data.edges.add({
                 id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
                 dashes: singlePatchJSON.dashes, width: singlePatchJSON.width,
@@ -3117,7 +3267,26 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 import: isImport, hidden: false,
             });
         }
-        else {
+        if (isDualPatchMode == 1) {
+            //we cannot add more than 1 patch
+            isPatchAdded = false;
+            var connectedFiber = network.getConnectedEdges(cfrom);
+            connectedFiber.push(network.getConnectedEdges(cto));
+            $.each(connectedFiber, function (index, item) {
+                var fiberDetails = network.body.data.edges.get(item);
+                if (fiberDetails.component_type == dualPatchJSON.component_type) {
+                    if ((fiberDetails.from == cfrom && fiberDetails.to == cto) || (fiberDetails.from == cto && fiberDetails.to == cfrom)) {
+                        isPatchAdded = true;
+                        return true;
+                    }
+                }
+            });
+
+            if (isPatchAdded && !isImport) {
+                alert('we cannot add more than 1 ' + dualPatchJSON.patch_category);
+                return;
+            }
+            //end
             network.body.data.edges.add({
                 id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
                 dashes: dualPatchJSON.dashes, width: dualPatchJSON.width,
@@ -3174,14 +3343,15 @@ function addNodes(data, callback) {
     var nodeShape = "";
     var nodeColor = "";
     var nodeFont = "";
-    if (nodeMode == 1) {
+    var amp_category = "";
+    if (nodeMode == nodeType.ROADM) {
         nodeDetails = configData.node[roadmJSON.node_type];
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
 
     }
-    else if (nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5) {
-        if (nodeMode == 2) {
+    else if (nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier) {
+        if (nodeMode == nodeType.ILA) {
             nodeDetails = configData.node[ILAJSON.amp_category];
             nodeShape = ILAJSON.shape;
             nodeColor = ILAJSON.color;
@@ -3191,14 +3361,14 @@ function addNodes(data, callback) {
             data.booster_type = nodeDetails.default.booster_type;
             data.amp_category = nodeDetails.default.amp_category;
         }
-        else if (nodeMode == 3) {
+        else if (nodeMode == nodeType.Attenuator) {
             nodeDetails = configData.node[fusedJSON.node_type];
             nodeShape = fusedJSON.shape;
             nodeColor = fusedJSON.color;
             nodeFont = fusedJSON.font;
             data.image = DIR + fusedJSON.image;
         }
-        else if (nodeMode == 4) {
+        else if (nodeMode == nodeType.Transceiver) {
             nodeDetails = configData.node[transceiverJSON.node_type];
             nodeShape = transceiverJSON.shape;
             nodeColor = transceiverJSON.color;
@@ -3206,7 +3376,7 @@ function addNodes(data, callback) {
             data.image = DIR + transceiverJSON.image;
             data.transceiver_type = nodeDetails.default.transceiver_type;
         }
-        else if (nodeMode == 5) {
+        else if (nodeMode == nodeType.Amplifier) {
             nodeDetails = configData.node[amplifierJSON.amp_category];
             nodeShape = amplifierJSON.shape;
             nodeColor = amplifierJSON.color;
@@ -3214,6 +3384,16 @@ function addNodes(data, callback) {
             data.image = DIR + amplifierJSON.image;
             data.amp_type = nodeDetails.default.amp_type;
             data.amp_category = nodeDetails.default.amp_category;
+        }
+        else if (nodeMode == nodeType.RamanAmplifier) {
+            nodeDetails = configData.node[ramanampJSON.amp_category];
+            nodeShape = ramanampJSON.shape;
+            nodeColor = ramanampJSON.color;
+            nodeFont = ramanampJSON.font;
+            data.image = DIR + ramanampJSON.image;
+            data.amp_type = nodeDetails.default.amp_type;
+            data.amp_category = nodeDetails.default.amp_category;
+            data.category = nodeDetails.default.category;
         }
 
         data.shape = nodeShape;
@@ -3224,12 +3404,10 @@ function addNodes(data, callback) {
         return;
 
 
-    var nodelength = nodeName(nodeDetails.default.node_type);
-    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    var result = nodeName(nodeDetails.default.node_type, nodeDetails.default.amp_category);
 
-    if (nodeMode == 4) {
-        nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
-    }
+    var nodelength = result.nodeLength;
+    var nodeLabel = result.label;
 
     data.font = nodeFont;
     data.id = token();
@@ -3241,7 +3419,7 @@ function addNodes(data, callback) {
     data.component_type = roadmJSON.component_type;
     callback(data);
 
-    if (nodeMode == 1 || nodeMode == 2 || nodeMode == 3 || nodeMode == 4 || nodeMode == 5)
+    if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
         network.addNodeMode();
 
 
@@ -3280,8 +3458,10 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     var nodeID = token();
     nodeDetails = configData.node[node_type];
 
-    var nodelength = nodeName(node_type);
-    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    var result = nodeName(node_type, nodeDetails.default.amp_category);
+
+    var nodelength = result.nodeLength;
+    var nodeLabel = result.label;
 
     var fiberStyle = network.body.data.edges.get(fiberID);
     var smooth = fiberStyle.smooth;
@@ -3493,8 +3673,10 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     var nodeID = token();
     nodeDetails = configData.node[node_type];
 
-    var nodelength = nodeName(node_type);
-    var nodeLabel = nodeDetails.default.label + (nodelength == null ? "1" : nodelength).toString();
+    var result = nodeName(node_type, nodeDetails.default.amp_category);
+
+    var nodelength = result.nodeLength;
+    var nodeLabel = result.label;
 
     var fiberStyle = network.body.data.edges.get(fiberID);
     var smooth = fiberStyle.smooth;
@@ -3530,7 +3712,19 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
             shape: amplifierJSON.shape, color: amplifierJSON.color, font: amplifierJSON.font,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: amplifierJSON.component_type,
+            //amp_type: nodeDetails.default.amp_type,
+            //amp_category: nodeDetails.default.amp_category
             pre_amp_type: nodeDetails.default.pre_amp_type, booster_type: nodeDetails.default.booster_type, amp_category: nodeDetails.default.amp_category
+        });
+    }
+    else if (node_type == ramanampJSON.amp_category) {
+        network.body.data.nodes.add({
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.image, number: nodelength,
+            shape: ramanampJSON.shape, color: ramanampJSON.color, font: ramanampJSON.font,
+            node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: ramanampJSON.component_type,
+            amp_type: nodeDetails.default.amp_type,
+            amp_category: nodeDetails.default.amp_category,
+            category: nodeDetails.default.category
         });
     }
 
@@ -3890,6 +4084,50 @@ function clearAmplifier() {
     network.unselectAll();
 }
 
+function ramanAmpEdit(nodeID, callback) {
+    document.getElementById("ramanAmpMenu").style.display = "none";
+    openDrawer('ramanamp');
+    var nodeDetails = network.body.data.nodes.get(nodeID);
+    $("#txtRamanAmpName").val(nodeDetails.label);
+    $("#ddlRamanAmpType").val(nodeDetails.amp_type);
+    $("#ddlRamanAmpCategory").val(nodeDetails.category);
+
+    document.getElementById("btnRamanAmpUpdate").onclick = updateRamanAmp.bind(
+        this,
+        nodeID,
+        callback
+    );
+
+    document.getElementById("btnCloseRamanAmp").onclick = clearRamanAmp.bind(
+    );
+}
+function updateRamanAmp(nodeID) {
+
+    var id = nodeID;
+    var label = $("#txtRamanAmpName").val().trim();
+    var amp_category = network.body.data.nodes.get(nodeID).amp_category
+
+    if (nameLengthValidation("txtRamanAmpName")) {
+
+        if (amp_category == ramanampJSON.amp_category) {
+            network.body.data.nodes.update({
+                id: id, label: label, amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
+            });
+            clearRamanAmp();
+        }
+
+
+    }
+
+}
+function clearRamanAmp() {
+    $("#txtRamanAmpName").val('');
+    $("#ddlRamanAmpType").val('');
+    $("#ddlRamanAmpCategory").val('');
+    closeDrawer('ramanamp');
+    network.unselectAll();
+}
+
 function transceiverEdit(nodeID, callback) {
     document.getElementById("transceiverMenu").style.display = "none";
     openDrawer('transceiver');
@@ -4216,7 +4454,7 @@ function deleteFiber(fiberID) {
     document.getElementById("dualFiberMenu").style.display = "none";
     document.getElementById("singleFiberMenu").style.display = "none";
     //remove roadm list from from roadm node
-    
+
     arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4228,7 +4466,7 @@ function deleteFiber(fiberID) {
         id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
     //remove roadm list from to roadm node
-    
+
     arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
     _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
@@ -4269,7 +4507,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (fromCount == 1) {
-                alert('cannot remove ' + edgeType+', '+transceiverJSON.node_type+' '+transceiverJSON.component_type+' - '+nodeDetails.label+' should have one '+dualFiberJSON.component_type+'/'+dualPatchJSON.component_type+' connection');
+                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
                 return true;
             }
         }
@@ -4299,60 +4537,107 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
     return isOk;
 }
 
-function patchEdit(patchID, callback) {
-    document.getElementById("patchMenu").style.display = "none";
+function singlePatchEdit(patchID, callback) {
+    document.getElementById("singlePatchMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(patchID);
-    $("#txtPatchName").val(edgeDetails.label);
-    openDrawer('patch');
-    document.getElementById("btnUpdatePatch").onclick = updatePatch.bind(
+    $("#txtSinglePatchName").val(edgeDetails.label);
+    openDrawer('singlepatch');
+    document.getElementById("btnUpdateSinglePatch").onclick = updateSinglePatch.bind(
         this,
         patchID,
         callback
     );
-    document.getElementById("btnClosePatch").onclick = clearPatch.bind(
+    document.getElementById("btnCloseSinglePatch").onclick = clearSinglePatch.bind(
     );
 }
-function updatePatch(patchID) {
+function updateSinglePatch(patchID) {
 
     var id = patchID;
-    var label = $("#txtPatchName").val().trim();
+    var label = $("#txtSinglePatchName").val().trim();
     var patchDetails = network.body.data.edges.get(patchID);
 
-    if (nameLengthValidation("txtPatchName")) {
+    if (nameLengthValidation("txtSinglePatchName")) {
 
         if (patchDetails.component_type == dualPatchJSON.component_type) {
             network.body.data.edges.update({
                 id: id, label: label, text: label
             });
 
-            
+
             data.nodes.off("*", change_history_back);
             data.edges.off("*", change_history_back);
             multipleFiberService(patchDetails.from, patchDetails.to);
             data.nodes.on("*", change_history_back);
             data.edges.on("*", change_history_back);
-            clearPatch();
+            clearSinglePatch();
         }
 
     }
 
 }
 function deletePatch(patchID) {
-    var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(patchID).component_type + ' : ' + network.body.data.edges.get(patchID).label + ' ?');
+    var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(patchID).patch_category + ' : ' + network.body.data.edges.get(patchID).label + ' ?');
     var patchDetails = network.body.data.edges.get(patchID);
     if (!isDelete)
         return;
     if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
         return;
-    document.getElementById("patchMenu").style.display = "none";
+    document.getElementById("singlePatchMenu").style.display = "none";
+    document.getElementById("dualPatchMenu").style.display = "none";
     network.body.data.edges.remove(patchID);
     multipleFiberService(patchDetails.from, patchDetails.to);
     network.unselectAll();
 }
-function clearPatch() {
+function clearSinglePatch() {
 
-    $("#txtPatchName").val('');
-    closeDrawer('patch');
+    $("#txtSinglePatchName").val('');
+    closeDrawer('singlepatch');
+    network.unselectAll();
+}
+
+
+function dualPatchEdit(patchID, callback) {
+    document.getElementById("dualPatchMenu").style.display = "none";
+    var edgeDetails = network.body.data.edges.get(patchID);
+    $("#txtDualPatchName").val(edgeDetails.label);
+    openDrawer('dualpatch');
+    document.getElementById("btnUpdateDualPatch").onclick = updateDualPatch.bind(
+        this,
+        patchID,
+        callback
+    );
+    document.getElementById("btnCloseDualPatch").onclick = clearDualPatch.bind(
+    );
+}
+function updateDualPatch(patchID) {
+
+    var id = patchID;
+    var label = $("#txtDualPatchName").val().trim();
+    var patchDetails = network.body.data.edges.get(patchID);
+
+    if (nameLengthValidation("txtDualPatchName")) {
+
+        if (patchDetails.component_type == dualPatchJSON.component_type) {
+            network.body.data.edges.update({
+                id: id, label: label, text: label
+            });
+
+
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            multipleFiberService(patchDetails.from, patchDetails.to);
+            data.nodes.on("*", change_history_back);
+            data.edges.on("*", change_history_back);
+            clearDualPatch();
+        }
+
+    }
+
+}
+function clearDualPatch() {
+
+    $("#txtDualPatchName").val('');
+    closeDrawer('dualpatch');
     network.unselectAll();
 }
 
@@ -4677,35 +4962,70 @@ function css_for_undo_redo_chnage() {
         undo_css_active();
     };
 };
-function nodeName(node_type) {
+function nodeName(node_type, amp_category) {
     const number = [];
-    $.each(network.body.data.nodes.get(), function (index, item) {
+    var nodeList = [];
+    var nodeDetails = configData.node[node_type];
+    var labelName = "";
+    var nodeCount = 1;
 
-        var splitName = item.label.split(' ');
+    if ($("#ddlNetworkView").val() == topologyView.Functional_View) {
+        labelName = nodeDetails.default.FV_label;
+        if (amp_category) {
 
-        var checkNumber = Number(splitName[splitName.length - 1]);
-        if (node_type != transceiverJSON.node_type) {
-            if (item.node_type != transceiverJSON.node_type) {
-
-                if (checkNumber)
-                    number.push(checkNumber);
+            if (node_type == ramanampJSON.amp_category) {
+                nodeList = network.body.data.nodes.get({
+                    filter: function (item) {
+                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category);
+                    }
+                });
+            }
+            else {
+                nodeList = network.body.data.nodes.get({
+                    filter: function (item) {
+                        return (item.node_type == node_type && item.amp_category == amp_category);
+                    }
+                });
             }
         }
         else {
-            if (item.node_type == transceiverJSON.node_type) {
-                if (checkNumber)
-                    number.push(checkNumber);
-            }
-
+            nodeList = network.body.data.nodes.get({
+                filter: function (item) {
+                    return (item.node_type == node_type);
+                }
+            });
         }
+    }
+    else if ($("#ddlNetworkView").val() == topologyView.NE_View) {
+        labelName = nodeDetails.default.label;
+        if (node_type == transceiverJSON.node_type) {
+            nodeList = network.body.data.nodes.get({
+                filter: function (item) {
+                    return (item.node_type == transceiverJSON.node_type);
+                }
+            });
+        }
+        else {
+            nodeList = network.body.data.nodes.get({
+                filter: function (item) {
+                    return (item.node_type != transceiverJSON.node_type);
+                }
+            });
+        }
+    }
+
+    $.each(nodeList, function (index, item) {
+        var splitName = item.label.split(' ');
+        var checkNumber = Number(splitName[splitName.length - 1]);
+        if (checkNumber)
+            number.push(checkNumber);
     });
 
+    if (number.length > 0)
+        nodeCount = number.sort((f, s) => f - s)[number.length - 1] + 1;
 
-    if (number.length > 0) {
-        return number.sort((f, s) => f - s)[number.length - 1] + 1;
-    }
-    else
-        return 1;
+    return { label: labelName+nodeCount, nodeLength: nodeCount };
+
 }
 
 

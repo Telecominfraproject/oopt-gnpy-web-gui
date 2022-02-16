@@ -93,6 +93,29 @@
 
     }
   },
+  "RamanAmplifier": {
+    "shape": "image",
+    "size": 14,
+    "image": "ramanamp.svg",
+    "node_type": "Amplifier",
+    "amp_category": "RamanAmplifier",
+    "component_type": "node",
+    "icon": {},
+    "font": "12px verdana black",
+    "color": {
+      "border": "#2B7CE9",
+      "background": "#97C2FC",
+      "highlight": {
+        "border": "green",
+        "background": "green"
+      },
+      "hover": {
+        "border": "yellow",
+        "background": "yellow"
+      }
+
+    }
+  },
   "Fused": {
     "shape": "image",
     "size": 14,
@@ -217,7 +240,7 @@
           "type": "arrow"
         },
         "to": {
-          "enabled": false,
+          "enabled": true,
           "type": "arrow"
         }
       },
@@ -303,7 +326,7 @@
           "type": "arrow"
         },
         "to": {
-          "enabled": false,
+          "enabled": true,
           "type": "arrow"
         }
       },
