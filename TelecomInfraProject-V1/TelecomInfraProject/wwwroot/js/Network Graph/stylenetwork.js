@@ -247,7 +247,21 @@ $(document).ready(function () {
         }
     });
 
-    $("#btnSaveGP, #btnCloseGP").click(function () {
+    $("#stepGP").click(function () {
+        $("#staticBackdrop4").modal('show');
+        var simulationData = JSON.parse(sessionStorage.getItem("simulationParameters"));
+        $("#txtFrgMin").val(simulationData["frequency-min"]);
+        $("#txtFrqMax").val(simulationData["frequency-max"]);
+        $("#txtGridSpac").val(simulationData["spacing"]);
+        $("#txtNoOfChannel").val(simulationData["noOfChannel"]);
+        $("#txtAgeingMargin").val(simulationData["system-margin"]);
+    });
+
+    $("#btnSaveGP").click(function () {
+        saveSimulations($("#txtFrgMin").val(), $("#txtFrqMax").val(), $("#txtGridSpac").val(), $("#txtNoOfChannel").val(), $("#txtAgeingMargin").val());
+        $("#staticBackdrop4").modal('hide');
+    });
+    $("#btnCloseSP, #btnCloseGP").click(function () {
         $("#staticBackdrop4").modal('hide');
         //if (currentStepper) {
         //    var stepperID = "#" + currentStepper;
@@ -262,6 +276,7 @@ $(document).ready(function () {
         //else
         //    $("#stepCreateTopology").click();
     });
+
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
             fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
@@ -598,9 +613,9 @@ function expandAndCollapseView(view) {
             });
         });
     }
-   
 
-    
+
+
 }
 
 function networkMenuHide() {
@@ -1107,7 +1122,6 @@ function draw(isImport) {
         _nodesDB().remove();
     });
     network.on("oncontext", function (data, callback) {
-
         //if (isExpandedView || isImportJSON) {
         //    return;
         //}
@@ -1901,11 +1915,7 @@ function load_EqptConfig(isFileUpload) {
         if (eqpt_config['tip-photonic-simulation:simulation']) {
             var simulationsData = eqpt_config['tip-photonic-simulation:simulation'];
             var simulations = simulationsData["grid"];
-            $("#txtFrgMin").val(simulations["frequency-min"]);
-            $("#txtFrqMax").val(simulations["frequency-max"]);
-            $("#txtGridSpac").val(simulations.spacing);
-            $("#txtNoOfChannel").val('40');
-            $("#txtAgeingMargin").val(simulationsData["system-margin"]);
+            saveSimulations(simulations["frequency-min"], simulations["frequency-max"], simulations.spacing, "40", simulationsData["system-margin"]);
         }
 
         if (eqpt_config['tip-photonic-equipment:transceiver']) {
@@ -2443,7 +2453,7 @@ function addFiber() {
         //}
     }
 
-    var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(addEdgeData.from).number + ' - ' + network.body.data.nodes.get(addEdgeData.to).number;
+    var labelvalue = getLabel(addEdgeData.from, addEdgeData.to, singleFiberJSON.component_type);
     var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(addEdgeData.from).label + ' - ' + network.body.data.nodes.get(addEdgeData.to).label + " ]";
     addFiberComponent(1, addEdgeData.from, addEdgeData.to, labelvalue, textvalue, false);
     addEdgeData = {
@@ -2501,7 +2511,8 @@ function addService() {
         if (fromDetails.transceiver_type != "" && toDetails.transceiver_type != "") {
             //same transceiver type checking
             if (fromDetails.transceiver_type == toDetails.transceiver_type) {
-                var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
+                var labelvalue = getLabel(addServiceData.from, addServiceData.to, serviceJSON.component_type);
+                //var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
                 //2 transceiver must have fiber/patch connection
                 if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
                     addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
@@ -2543,6 +2554,7 @@ function addDualPatch() {
     var fromDetails = network.body.data.nodes.get(addPatchData.from);
     var toDetails = network.body.data.nodes.get(addPatchData.to);
     if ((fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == roadmJSON.node_type) || (fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == transceiverJSON.node_type)) {
+
         var labelvalue = dualPatchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
         addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
     }
@@ -2557,7 +2569,9 @@ function addDualPatch() {
 
 }
 function addSinglePatch() {
-    var labelvalue = dualPatchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
+
+    var labelvalue = getLabel(addPatchData.from, addPatchData.to, singlePatchJSON.component_type);
+    //var labelvalue = dualPatchJSON.component_type + ' ' + network.body.data.nodes.get(addPatchData.from).number + ' - ' + network.body.data.nodes.get(addPatchData.to).number;
     addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
 
     addPatchData = {
@@ -2625,7 +2639,7 @@ function pasteNode(nodeId) {
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
                 shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
                 view: $("#ddlNetworkView").val(), hidden: false,
-                roadm_type:nodeDetails.default.roadm_type,
+                roadm_type: nodeDetails.default.roadm_type,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
                 roadm_type_pro: []
             });
@@ -3400,7 +3414,7 @@ function addNodes(data, callback) {
         nodeFont = roadmJSON.font;
         nodeSize = roadmJSON.size;
 
-        if ($("#ddlNetworkView").val()==topologyView.Functional_View)
+        if ($("#ddlNetworkView").val() == topologyView.Functional_View)
             data.roadm_type = nodeDetails.default.roadm_type;
 
     }
@@ -3759,7 +3773,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
             shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
             view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
-            roadm_type:nodeDetails.default.roadm_type
+            roadm_type: nodeDetails.default.roadm_type
         });
     }
     else if (node_type == fusedJSON.node_type) {
@@ -3816,10 +3830,8 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //});
 
     network.body.data.edges.remove(fiberID);
-
-    var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
+    var labelvalue = getLabel(fiberDetails.from, nodeID, singleFiberJSON.component_type);
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
-
     labelvalue = countFiberService(false, true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
 
     network.body.data.edges.add({
@@ -3861,7 +3873,8 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //}
 
     var newFiberID = token();
-    labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
+    var labelvalue = getLabel(nodeID, fiberDetails.to, singleFiberJSON.component_type);
+    //labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
     //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(false, true, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
 
@@ -3959,7 +3972,7 @@ function roadmEdit(nodeID, callback) {
     else if (nodeDetails.node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
         $("#divRoadmType").show();
         if (nodeDetails.roadm_type)
-            $("#ddlRoadmType").val(nodeDetails.roadm_type)
+            $("#ddlRoadmType").val(nodeDetails.roadm_type);
         else
             $("#ddlRoadmType").val('');
     }
@@ -5052,6 +5065,7 @@ function css_for_undo_redo_chnage() {
         undo_css_active();
     };
 };
+
 function nodeName(node_type, amp_category) {
     const number = [];
     var nodeList = [];
@@ -5071,7 +5085,7 @@ function nodeName(node_type, amp_category) {
             if (node_type == ramanampJSON.amp_category) {
                 nodeList = network.body.data.nodes.get({
                     filter: function (item) {
-                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category && item.view==topologyView.Functional_View);
+                        return (item.node_type == ramanampJSON.node_type && item.amp_category == amp_category && item.view == topologyView.Functional_View);
                     }
                 });
             }
@@ -5121,6 +5135,34 @@ function nodeName(node_type, amp_category) {
 
     return { label: labelName + nodeCount, nodeLength: nodeCount };
 
+}
+
+function getLabel(from, to, component_type) {
+    var flabel;
+    var tlabel;
+
+    if (network.body.data.nodes.get(from).number)
+        flabel = network.body.data.nodes.get(from).number;
+    else
+        flabel = network.body.data.nodes.get(from).label;
+
+    if (network.body.data.nodes.get(to).number)
+        tlabel = network.body.data.nodes.get(to).number;
+    else
+        tlabel = network.body.data.nodes.get(to).label;
+
+    return component_type + " " + flabel + ' - ' + tlabel;
+}
+
+function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
+    var simulationPara = {
+        "frequency-min": fre_min,
+        "frequency-max": frq_max,
+        "spacing": spacing,
+        "noOfChannel": channel,
+        "system-margin": margin
+    }
+    sessionStorage.setItem("simulationParameters", JSON.stringify(simulationPara));
 }
 
 

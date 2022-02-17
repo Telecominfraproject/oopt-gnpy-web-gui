@@ -17,3 +17,9 @@ var topologyView = {
     NE_View: 1,
     Functional_View: 2
 }
+
+var edgeType = {
+    fiber: 1,
+    patch: 2,
+    service: 3
+}

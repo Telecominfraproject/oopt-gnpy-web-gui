@@ -294,10 +294,8 @@ arrowbtn4.addEventListener("click", function () {
 
 
 function stepColor(index) {
-
     showMenu = 0;
     modeHighLight();
-
     switch (index) {
         case 1:
             break;
