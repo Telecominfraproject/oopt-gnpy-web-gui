@@ -3105,13 +3105,13 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 connector_OUT = tConnector_out;
 
             }
-
             network.body.data.edges.add({
                 id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel,
                 view: topologyView.Functional_View, hidden: false,
                 dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
-                background: singleFiberJSON.options.background, arrows: singleFiberJSON.options.arrows,
+                background: singleFiberJSON.options.background,
+                arrows: singleFiberJSON.options.arrows,
                 font: singleFiberJSON.options.font, smooth: fiberSmooth,
                 fiber_type: fiber_Type, span_length: span_Length,
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,

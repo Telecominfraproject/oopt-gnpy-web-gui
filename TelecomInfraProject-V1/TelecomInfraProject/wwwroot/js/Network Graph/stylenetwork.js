@@ -1895,6 +1895,7 @@ function load_EqptConfig(isFileUpload) {
         $('#ddlPreAmpType').empty();
         $('#ddlBoosterType').empty();
         $('#ddlAmplifierType').empty();
+        $('#ddlRoadmType').empty();
 
 
         if (eqpt_config['tip-photonic-simulation:simulation']) {
@@ -1920,6 +1921,12 @@ function load_EqptConfig(isFileUpload) {
 
             });
         }
+        if (eqpt_config["tip-photonic-equipment:roadm"]) {
+            $.each(eqpt_config["tip-photonic-equipment:roadm"], function (index, item) {
+                $("#ddlRoadmType").append('<option value="' + item.type + '">' + item.type + '</option>');
+            });
+        }
+
         appendSinglePreAmpandBoosterType();
     }
     catch {
@@ -2617,7 +2624,8 @@ function pasteNode(nodeId) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
                 shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
-                view: $("#ddlNetworkView").val(), hidden:false,
+                view: $("#ddlNetworkView").val(), hidden: false,
+                roadm_type:nodeDetails.default.roadm_type,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
                 roadm_type_pro: []
             });
@@ -3377,7 +3385,7 @@ function checkNodeServiceConnection(from, to) {
     return flag;
 }
 
-//Add node nodeMode - 1-roadm, 2-ILA, 3=fused/attenuator, 4-transceiver,5-amplifier
+//Add node nodeMode - 1-roadm, 2-ILA, 3=fused/attenuator, 4-transceiver,5-amplifier, 6- raman amplifier
 function addNodes(data, callback) {
 
     var nodeDetails = "";
@@ -3391,6 +3399,9 @@ function addNodes(data, callback) {
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
         nodeSize = roadmJSON.size;
+
+        if ($("#ddlNetworkView").val()==topologyView.Functional_View)
+            data.roadm_type = nodeDetails.default.roadm_type;
 
     }
     else if (nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier) {
@@ -3748,6 +3759,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
             shape: roadmJSON.shape, color: roadmJSON.color, font: roadmJSON.font, size: roadmJSON.size,
             view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
+            roadm_type:nodeDetails.default.roadm_type
         });
     }
     else if (node_type == fusedJSON.node_type) {
@@ -3821,32 +3833,32 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     });
 
-    //add roadm list for left side fiber - new node
-    if (node_type == roadmJSON.node_type || node_type == amplifierJSON.amp_category) {
-        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
-        arrRoadmTypePro = [];
-        var roadm_label = textvalue;
-        var roadm_config = configData.node[node_type].default;
-        if (roadm_config.roadm_type)
-            roadm_type = roadm_config.roadm_type;
-        var pre_amp_type = roadm_config.pre_amp_type;
-        var booster_type = roadm_config.booster_type;
+    //add roadm list for left side fiber - new node  --  code comment for functional view roadm will contain only roadm type
+    //if (node_type == roadmJSON.node_type || node_type == amplifierJSON.amp_category) {
+    //    var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.from).label + " ]";
+    //    arrRoadmTypePro = [];
+    //    var roadm_label = textvalue;
+    //    var roadm_config = configData.node[node_type].default;
+    //    if (roadm_config.roadm_type)
+    //        roadm_type = roadm_config.roadm_type;
+    //    var pre_amp_type = roadm_config.pre_amp_type;
+    //    var booster_type = roadm_config.booster_type;
 
-        var roadmTypePro = {
-            roadm_fiber_id: fiberID,
-            roadm_label: roadm_label,
-            roadm_type: roadm_type,
-            pre_amp_type: pre_amp_type,
-            booster_type: booster_type
-        };
+    //    var roadmTypePro = {
+    //        roadm_fiber_id: fiberID,
+    //        roadm_label: roadm_label,
+    //        roadm_type: roadm_type,
+    //        pre_amp_type: pre_amp_type,
+    //        booster_type: booster_type
+    //    };
 
-        arrRoadmTypePro.push(roadmTypePro);
+    //    arrRoadmTypePro.push(roadmTypePro);
 
-        network.body.data.nodes.update({
-            id: nodeID, roadm_type_pro: arrRoadmTypePro
-        });
+    //    network.body.data.nodes.update({
+    //        id: nodeID, roadm_type_pro: arrRoadmTypePro
+    //    });
 
-    }
+    //}
 
     var newFiberID = token();
     labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
@@ -3864,60 +3876,60 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
         loss_coefficient: fiber_config.Loss_coefficient, connector_in: fiber_config.Connector_in, connector_out: fiber_config.Connector_out, span_loss: fiber_config.Span_loss,
     });
 
-    //add roadm list for newly added fiber right side - new node
+    //add roadm list for newly added fiber right side - new node --- comment for functional view also roadm have only roadm type
     nodeDetails = network.body.data.nodes.get(nodeID);
-    if (node_type == roadmJSON.node_type || node_type == amplifierJSON.amp_category) {
-        var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
-        arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
-        var roadm_label = textvalue;
-        var roadm_config = configData.node[node_type].default;
-        if (roadm_config.roadm_type)
-            roadm_type = roadm_config.roadm_type;
-        var pre_amp_type = roadm_config.pre_amp_type;
-        var booster_type = roadm_config.booster_type;
+    //if (node_type == roadmJSON.node_type || node_type == amplifierJSON.amp_category) {
+    //    var textvalue = node_type.toUpperCase() + "- [ " + nodeLabel + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
+    //    arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
+    //    var roadm_label = textvalue;
+    //    var roadm_config = configData.node[node_type].default;
+    //    if (roadm_config.roadm_type)
+    //        roadm_type = roadm_config.roadm_type;
+    //    var pre_amp_type = roadm_config.pre_amp_type;
+    //    var booster_type = roadm_config.booster_type;
 
-        var roadmTypePro = {
-            roadm_fiber_id: newFiberID,
-            roadm_label: roadm_label,
-            roadm_type: roadm_type,
-            pre_amp_type: pre_amp_type,
-            booster_type: booster_type
-        };
+    //    var roadmTypePro = {
+    //        roadm_fiber_id: newFiberID,
+    //        roadm_label: roadm_label,
+    //        roadm_type: roadm_type,
+    //        pre_amp_type: pre_amp_type,
+    //        booster_type: booster_type
+    //    };
 
-        arrRoadmTypePro.push(roadmTypePro);
+    //    arrRoadmTypePro.push(roadmTypePro);
 
-        network.body.data.nodes.update({
-            id: nodeID, roadm_type_pro: arrRoadmTypePro
-        });
+    //    network.body.data.nodes.update({
+    //        id: nodeID, roadm_type_pro: arrRoadmTypePro
+    //    });
 
-    }
+    //}
 
-    //add roadm list for right side roadm node
-    nodeDetails = network.body.data.nodes.get(fiberDetails.to);
-    if (network.body.data.nodes.get(fiberDetails.to).node_type == roadmJSON.node_type) {
-        var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.to).label + ' - ' + nodeLabel + " ]";
-        arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
-        var roadm_label = textvalue;
-        var roadm_config = configData.node[node_type].default;
-        var roadm_type = roadm_config.roadm_type;
-        var pre_amp_type = roadm_config.pre_amp_type;
-        var booster_type = roadm_config.booster_type;
+    //add roadm list for right side roadm node -- commented for functional view also roadm have only roadm type
+    //nodeDetails = network.body.data.nodes.get(fiberDetails.to);
+    //if (network.body.data.nodes.get(fiberDetails.to).node_type == roadmJSON.node_type) {
+    //    var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.to).label + ' - ' + nodeLabel + " ]";
+    //    arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
+    //    var roadm_label = textvalue;
+    //    var roadm_config = configData.node[node_type].default;
+    //    var roadm_type = roadm_config.roadm_type;
+    //    var pre_amp_type = roadm_config.pre_amp_type;
+    //    var booster_type = roadm_config.booster_type;
 
-        var roadmTypePro = {
-            roadm_fiber_id: newFiberID,
-            roadm_label: roadm_label,
-            roadm_type: roadm_type,
-            pre_amp_type: pre_amp_type,
-            booster_type: booster_type
-        };
+    //    var roadmTypePro = {
+    //        roadm_fiber_id: newFiberID,
+    //        roadm_label: roadm_label,
+    //        roadm_type: roadm_type,
+    //        pre_amp_type: pre_amp_type,
+    //        booster_type: booster_type
+    //    };
 
-        arrRoadmTypePro.push(roadmTypePro);
+    //    arrRoadmTypePro.push(roadmTypePro);
 
-        network.body.data.nodes.update({
-            id: fiberDetails.to, roadm_type_pro: arrRoadmTypePro
-        });
+    //    network.body.data.nodes.update({
+    //        id: fiberDetails.to, roadm_type_pro: arrRoadmTypePro
+    //    });
 
-    }
+    //}
 
     document.getElementById("singleFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
@@ -3933,7 +3945,8 @@ function roadmEdit(nodeID, callback) {
     $("#txtRoadmName").val(nodeDetails.label);
     $("#divRoadmPro").hide();
     $("#divRoadmPro").empty();
-    if (nodeDetails.node_type == roadmJSON.node_type) {
+    $("#divRoadmType").hide();
+    if (nodeDetails.node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.NE_View) {
         arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
         _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
         var connectedFiber = network.getConnectedEdges(nodeID);
@@ -3942,6 +3955,13 @@ function roadmEdit(nodeID, callback) {
             if (network.body.data.edges.get(item).component_type == dualFiberJSON.component_type)
                 loadRoadmType(item, nodeID, nodeDetails.node_type, "divRoadmPro");
         });
+    }
+    else if (nodeDetails.node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
+        $("#divRoadmType").show();
+        if (nodeDetails.roadm_type)
+            $("#ddlRoadmType").val(nodeDetails.roadm_type)
+        else
+            $("#ddlRoadmType").val('');
     }
 
     document.getElementById("btnUpdateRoadm").onclick = updateRoadm.bind(
@@ -3962,7 +3982,7 @@ function updateRoadm(nodeID) {
     if (nameLengthValidation("txtRoadmName")) {
 
         var roadmtypeprodata = _roadmListDB().get();
-        if (node_type == roadmJSON.node_type) {
+        if (node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.NE_View) {
 
             $.each(roadmtypeprodata, function (index, item) {
                 var lddlroadmtype = "#" + eleroadmtype + item.roadm_fiber_id;
@@ -3979,15 +3999,21 @@ function updateRoadm(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, roadm_type_pro: roadmtypeprodata
             });
-            clearRoadm();
-        }
 
+        }
+        else if (node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
+            network.body.data.nodes.update({
+                id: id, label: label, roadm_type: $("#ddlRoadmType").val()
+            });
+        }
+        clearRoadm();
     }
 
 }
 function clearRoadm() {
     $("#txtRoadmName").val('');
     $("#divRoadmPro").empty();
+    $("#ddlRoadmType").val('');
     closeDrawer('roadm');
     network.unselectAll();
     _roadmListDB().remove();
@@ -4787,7 +4813,6 @@ function appendSinglePreAmpandBoosterType() {
             $('#ddlAmplifierType').append('<option value="' + item.type + '">' + item.type + '</option>');
         });
     }
-
 }
 
 //append node, preamp, booster type for dynamic ele
@@ -4818,6 +4843,7 @@ function appendPreAmpandBoosterType(ddlID) {
             //    $(ddlboostertype).append('<option value="' + boosterAmp + '">' + boosterAmp + '</option>');
             //});
             $(ddlroadmtype).append('<option value="' + item.type + '">' + item.type + '</option>');
+
         });
     }
 }

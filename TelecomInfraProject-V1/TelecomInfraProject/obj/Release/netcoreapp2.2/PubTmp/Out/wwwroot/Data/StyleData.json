@@ -241,7 +241,8 @@
         },
         "to": {
           "enabled": true,
-          "type": "arrow"
+          "type": "arrow",
+          "scaleFactor": ".5"
         }
       },
       "font": {
@@ -280,11 +281,13 @@
       "arrows": {
         "from": {
           "enabled": true,
-          "type": "arrow"
+          "type": "arrow",
+          "scaleFactor": ".5"
         },
         "to": {
           "enabled": true,
-          "type": "arrow"
+          "type": "arrow",
+          "scaleFactor": ".5"
         }
       },
       "font": {
@@ -327,7 +330,8 @@
         },
         "to": {
           "enabled": true,
-          "type": "arrow"
+          "type": "arrow",
+          "scaleFactor": ".5"
         }
       },
       "font": {
