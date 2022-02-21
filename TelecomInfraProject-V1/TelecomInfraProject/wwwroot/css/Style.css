@@ -1757,3 +1757,31 @@ select {
     padding-right: 4%;
     justify-content: space-between;
 }
+
+.d-flex-nav {
+    display: flex !important;
+    justify-content: space-between;
+    displdisplay: flex !important;
+    justify-content: space-between;
+    ay: flex !important;
+}
+
+.dflex-nav {
+    display: flex !important;
+    justify-content: space-between;
+}
+.top-right-section select
+{
+    width: auto !important;
+}
+.custom-control-input:checked ~ .custom-control-label::before {
+    color: #fff;
+    border-color: #1eabbc !important;
+    background-color: #1eabbc !important;
+}
+.custom-control-label {
+    color: #2b7c80 !important;
+    font-size: 15px;
+    font-weight: 500;
+    cursor:pointer;
+}
