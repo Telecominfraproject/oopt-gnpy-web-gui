@@ -1,5 +1,6 @@
 {
   "project": {
+    "network_id": "GNPy",
     "network_platform_layout": [
       "ANSI",
       "ETSI"
