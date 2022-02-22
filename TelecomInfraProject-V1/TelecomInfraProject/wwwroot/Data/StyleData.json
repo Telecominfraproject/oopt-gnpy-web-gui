@@ -3,7 +3,7 @@
     "background_color": "white",
     "font": "14px Helvetica black",
     "border": "1px solid black",
-    "font_variant": "small-caps"
+    "font_variant": "normal"
   },
   "options": {
     "physis": false,

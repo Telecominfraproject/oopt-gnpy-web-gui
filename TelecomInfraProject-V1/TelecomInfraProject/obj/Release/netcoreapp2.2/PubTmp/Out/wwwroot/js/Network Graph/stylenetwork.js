@@ -60,7 +60,7 @@ var insertNodeY = 0;
 let history_list_back = [];
 let history_list_forward = [];
 
-var isShow = true;
+var isShow = false;
 var isExpandedView = false;
 
 var tSpanLength = "";
@@ -1501,7 +1501,7 @@ function displayFiberHover(params) {
     if (fiberDetails.component_type == singleFiberJSON.component_type) {
         if (fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             var fromlabel = "(" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + ")";
-            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
             //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "--------------------------\n";
             var fromlabel = "Fiber A [" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + " ]";
@@ -1554,7 +1554,7 @@ function displayFiberHover(params) {
             hoverData += "Span loss : " + span_loss + "\n";
         }
         else if (fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
-            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
             //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "Source(Tx) : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
             hoverData += "Destination(Rx) : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
@@ -1581,7 +1581,7 @@ function displayFiberHover(params) {
         }
     }
     if (fiberDetails.component_type == serviceJSON.component_type) {
-        var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+        var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
         hoverData += "Source : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
         hoverData += "Destination : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
         hoverData += "Bandwidth (in Gbps) : " + fiberDetails.band_width + "\n";
@@ -3088,11 +3088,16 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         var fiberSmooth = multipleFiberService1(cfrom, cto);
         if (!fiberSmooth)
             fiberSmooth = fiberJSON.options.smooth;
+
+        var elabel = "";
         if (isDualFiberMode == 1) {
             var fiber_config = configData[dualFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(true, false, false, false, cfrom, cto) + '-' + clabel;
+            elabel = clabel;
+            if (!isShow)
+                elabel = "";
             network.body.data.edges.add({
-                id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+                id: fiberID, from: cfrom, to: cto, label: elabel, text: clabel, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
                 component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
                 arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: fiberSmooth,
                 width: dualFiberJSON.width,
@@ -3111,6 +3116,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         if (isSingleFiberMode == 1) {
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
             clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
+            elabel = clabel;
+            if (!isShow)
+                elabel = "";
             var span_Length = fiber_config.Span_length;
             var loss_Coefficient = fiber_config.Loss_coefficient;
             var span_Loss = fiber_config.Span_loss;
@@ -3128,7 +3136,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
             }
             network.body.data.edges.add({
-                id: fiberID, from: cfrom, to: cto, label: clabel, text: clabel,
+                id: fiberID, from: cfrom, to: cto, label: elabel, text: clabel,
                 view: topologyView.Functional_View, hidden: false,
                 dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, width: singleFiberJSON.width,
@@ -3293,11 +3301,14 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
 
 
         clabel = countFiberService(false, false, true, false, cfrom, cto) + '-' + clabel;
+        elabel = clabel;
+        if (!isShow)
+            elabel = "";
         var fiberSmooth = multipleFiberService1(cfrom, cto);
         if (!fiberSmooth)
             fiberSmooth = fiberJSON.options.smooth;
         network.body.data.edges.add({
-            id: token(), from: cfrom, to: cto, label: clabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
+            id: token(), from: cfrom, to: cto, label: elabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
             component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background,
             arrows: serviceJSON.options.arrows, font: serviceJSON.options.font, smooth: fiberSmooth,
             band_width: configData[serviceJSON.component_type].default.band_width
@@ -3319,10 +3330,12 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
 
         clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
-
+        elabel = clabel;
+        if (!isShow)
+            elabel = "";
         if (isSinglePatchMode == 1) {
             network.body.data.edges.add({
-                id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
+                id: token(), from: cfrom, to: cto, label: elabel, text: ctext,
                 dashes: singlePatchJSON.dashes, width: singlePatchJSON.width,
                 component_type: singlePatchJSON.component_type, patch_category: singlePatchJSON.patch_category,
                 color: singlePatchJSON.options.color, background: singlePatchJSON.options.background,
@@ -3351,7 +3364,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             }
             //end
             network.body.data.edges.add({
-                id: token(), from: cfrom, to: cto, label: clabel, text: ctext,
+                id: token(), from: cfrom, to: cto, label: elabel, text: ctext,
                 dashes: dualPatchJSON.dashes, width: dualPatchJSON.width,
                 component_type: dualPatchJSON.component_type, patch_category: dualPatchJSON.patch_category,
                 color: dualPatchJSON.options.color, background: dualPatchJSON.options.background,
@@ -3589,8 +3602,14 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     var labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(fiberDetails.from).number + ' - ' + network.body.data.nodes.get(nodeID).number;
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
     labelvalue = countFiberService(true, false, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
+
+    var elabel = "";
+    elabel = labelvalue;
+    if (!isShow)
+        elabel = "";
+
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: elabel, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -3642,10 +3661,12 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
     //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(true, false, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
-
+    elabel = labelvalue;
+    if (!isShow)
+        elabel = "";
     var fiber_config = configData[dualFiberJSON.fiber_category.replace(' ', '')].default;
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: elabel, text: labelvalue, dashes: dualFiberJSON.dashes, fiber_category: dualFiberJSON.fiber_category,
         component_type: dualFiberJSON.component_type, color: dualFiberJSON.options.color, background: dualFiberJSON.options.background,
         arrows: dualFiberJSON.options.arrows, font: dualFiberJSON.options.font, smooth: smooth,
         width: dualFiberJSON.width,
@@ -3833,9 +3854,13 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     var labelvalue = getLabel(fiberDetails.from, nodeID, singleFiberJSON.component_type);
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
     labelvalue = countFiberService(false, true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
+    var elabel = "";
+    elabel = labelvalue;
+    if (!isShow)
+        elabel = "";
 
     network.body.data.edges.add({
-        id: fiberID, from: fiberDetails.from, to: nodeID, label: labelvalue, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: fiberID, from: fiberDetails.from, to: nodeID, label: elabel, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,
@@ -3877,10 +3902,13 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //labelvalue = dualFiberJSON.component_type + " " + network.body.data.nodes.get(nodeID).number + ' - ' + network.body.data.nodes.get(fiberDetails.to).number;
     //textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(nodeID).label + ' - ' + network.body.data.nodes.get(fiberDetails.to).label + " ]";
     labelvalue = countFiberService(false, true, false, false, nodeID, fiberDetails.to) + '-' + labelvalue;
+    elabel = labelvalue;
+    if (!isShow)
+        elabel = "";
 
     var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
     network.body.data.edges.add({
-        id: newFiberID, from: nodeID, to: fiberDetails.to, label: labelvalue, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
+        id: newFiberID, from: nodeID, to: fiberDetails.to, label: elabel, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
         component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows, font: singleFiberJSON.options.font, smooth: smooth,
         width: singleFiberJSON.width,

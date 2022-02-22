@@ -1501,7 +1501,7 @@ function displayFiberHover(params) {
     if (fiberDetails.component_type == singleFiberJSON.component_type) {
         if (fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
             var fromlabel = "(" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + ")";
-            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
             //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "--------------------------\n";
             var fromlabel = "Fiber A [" + network.body.data.nodes.get(fiberDetails.from).label + " -> " + network.body.data.nodes.get(fiberDetails.to).label + " ]";
@@ -1554,7 +1554,7 @@ function displayFiberHover(params) {
             hoverData += "Span loss : " + span_loss + "\n";
         }
         else if (fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
-            var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+            var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
             //hoverData += "category : " + fiberDetails.fiber_category + "\n";
             hoverData += "Source(Tx) : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
             hoverData += "Destination(Rx) : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
@@ -1581,7 +1581,7 @@ function displayFiberHover(params) {
         }
     }
     if (fiberDetails.component_type == serviceJSON.component_type) {
-        var hoverData = fiberDetails.component_type + " - name : " + fiberDetails.label + "\n";
+        var hoverData = fiberDetails.component_type + " name : " + fiberDetails.text + "\n";
         hoverData += "Source : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
         hoverData += "Destination : " + network.body.data.nodes.get(fiberDetails.to).label + "\n";
         hoverData += "Bandwidth (in Gbps) : " + fiberDetails.band_width + "\n";
@@ -1636,7 +1636,7 @@ function init(isImport) {
 }
 
 
-function exportNetwork(isSaveNetwork) {
+function exportNetwork_Old(isSaveNetwork) {
     //testing();
 
     //var nodesModel = [];
@@ -1857,6 +1857,269 @@ function exportNetwork(isSaveNetwork) {
     var model = {
         elements: final,
         connections: edgearay
+    }
+    //end test
+    var exportValue = JSON.stringify(model, undefined, 2);
+
+    if (isSaveNetwork) {
+        addNetworData(exportValue);
+        return;
+    }
+
+    var filename = $("#txtFileName").val() + ".json";
+
+    var blob = new Blob([exportValue], {
+        type: "text/plain;charset=utf-8"
+    });
+
+    saveAs(blob, filename);
+}
+
+function exportNetwork(isSaveNetwork) {
+    //testing();
+
+    //var nodesModel = [];
+
+    //var edgesModel = [];
+    //$.each(network.body.nodes, function (i) {
+    //    var data = {
+    //        id: network.body.nodes[i].options.id,
+    //        label: network.body.nodes[i].options.label,
+    //        x: network.body.nodes[i].x,
+    //        y: network.body.nodes[i].y,
+    //        shape: network.body.nodes[i].options.shape,
+    //        size: network.body.nodes[i].options.size,
+    //        nodedegree: network.body.nodes[i].options.nodedegree,
+    //        nodetype: network.body.nodes[i].options.nodetype,
+    //        componentType: nodes.get(network.body.nodes[i].options.id).componentType,
+    //        icon:
+    //            network.body.nodes[i].options.icon,
+    //        color: [
+    //            {
+    //                border: network.body.nodes[i].options.color.border,
+    //                background: network.body.nodes[i].options.color.background,
+    //                highlight: [
+    //                    {
+    //                        border: network.body.nodes[i].options.color.border,
+    //                        background: network.body.nodes[i].options.color.background,
+    //                    }
+    //                ],
+    //                hover: [
+    //                    {
+    //                        border: network.body.nodes[i].options.color.border,
+    //                        background: network.body.nodes[i].options.color.background,
+    //                    }
+    //                ]
+    //            }
+    //        ],
+    //        edges: network.getConnectedNodes(network.body.nodes[i].options.id)
+    //    };
+
+    //    let str = network.body.nodes[i].options.id;
+    //    let checktext;
+    //    try {
+    //        checktext = str.substring(0, 7);
+    //    }
+    //    catch (e) { }
+
+    //    if (data.x != undefined && data.y != undefined && checktext != "edgeId:")
+    //        nodesModel.push(data);
+    //});
+
+    //$.each(network.body.edges, function (i) {
+    //    var data = {
+    //        id: network.body.edges[i].id,
+    //        label: network.body.edges[i].options.label,
+    //        //title: network.body.edges[i].title,
+    //        from: network.body.edges[i].fromId,
+    //        to: network.body.edges[i].toId,
+    //        dashes: network.body.edges[i].options.dashes,
+    //        length: network.body.edges[i].options.length,
+    //        value: network.body.edges[i].options.value,
+    //        componentType: edges.get(network.body.edges[i].id).componentType,
+    //        options: [
+    //            {
+    //                color: [
+    //                    {
+    //                        color: network.body.edges[i].options.color.color,
+    //                        highlight: network.body.edges[i].options.color.highlight,
+    //                        hover: network.body.edges[i].options.color.hover,
+    //                        inherit: network.body.edges[i].options.color.inherit,
+    //                        opacity: network.body.edges[i].options.color.opacity,
+
+    //                    }
+    //                ],
+    //                background: [
+    //                    {
+    //                        color: network.body.edges[i].options.background.color,
+    //                        dashes: network.body.edges[i].options.background.dashes,
+    //                        enabled: network.body.edges[i].options.background.enabled,
+    //                        size: network.body.edges[i].options.background.size,
+    //                    }
+    //                ],
+    //                arrows: [
+    //                    {
+    //                        from: [
+    //                            {
+    //                                enabled: network.body.edges[i].options.arrows.from.enabled,
+    //                                type: network.body.edges[i].options.arrows.from.type
+    //                            }
+    //                        ],
+    //                        to: [
+    //                            {
+    //                                enabled: network.body.edges[i].options.arrows.to.enabled,
+    //                                type: network.body.edges[i].options.arrows.to.type
+    //                            }
+    //                        ],
+    //                    }
+    //                ],
+    //                font: [
+    //                    {
+    //                        align: network.body.edges[i].options.font.align
+    //                    }
+    //                ],
+    //                smooth: [
+    //                    {
+    //                        enabled: network.body.edges[i].options.smooth.enabled,
+    //                        roundness: network.body.edges[i].options.smooth.roundness,
+    //                        type: network.body.edges[i].options.smooth.type
+    //                    }
+    //                ],
+
+    //            }
+    //        ]
+
+    //    };
+    //    edgesModel.push(data);
+    //});
+
+
+
+
+
+    //start test
+    var eqptData = [];
+    var final = [];
+
+    var transceiverarr = [];
+    var roadmarr = [];
+    $.each(network.body.data.nodes.get(), function (index, item) {
+        if (item.node_type == transceiverJSON.node_type) {
+            var node = {
+                uid: item.id,
+                type: item.node_type,
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: item.label,
+                        region: null
+                    }
+                }
+            }
+            final.push(node);
+        }
+        else if (item.node_type == roadmJSON.node_type) {
+            var node = {
+                uid: item.id,
+                type: item.node_type,
+                params: {
+                    target_pch_out_db: -0,
+                    restrictions: {
+                        preamp_variety_list: [
+                        ],
+                        booster_variety_list: [
+                        ]
+                    }
+
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: item.label,
+                        region: null
+                    }
+                }
+            }
+            final.push(node);
+        }
+        else if (item.node_type == fusedJSON.node_type) {
+            var node = {
+                uid: item.id,
+                type: item.node_type,
+                params: {
+                    loss: 1
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: item.label,
+                        region: ""
+                    }
+                }
+            }
+            final.push(node);
+        }
+        else if (item.node_type == ILAJSON.node_type) {
+            var node = {
+                uid: item.id,
+                type: "Edfa",
+                type_variety: "std_low_gain",
+                operational: {
+                    gain_target: 21.0,
+                    delta_p: 1.0,
+                    tilt_target: 0,
+                    out_voa: 0
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: item.label,
+                        region: ""
+                    }
+                }
+            }
+            final.push(node);
+        }
+    });
+    var edgearay = [];
+    $.each(network.body.data.edges.get(), function (index, item) {
+        var edge = {
+            from_node: item.from,
+            to_node: item.to
+        }
+        edgearay.push(edge);
+    });
+    //final.push(transceiverarr);
+    //final.push(roadmarr);
+
+    if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
+        alert("keyError:'elements', try again");
+        return;
+    }
+
+    var topology = {
+            'network-id': "GNPy",
+            'network-types': {
+                'tip-photonic-topology:photonic-topology': {}
+            },
+            node: final,
+            'ietf-network-topology:link': edgearay
+    }
+    var topologyArray = [];
+    topologyArray.push(topology);
+    var model = {
+        'tip-photonic-equipment:amplifier': eqpt_config['tip-photonic-equipment:amplifier'],
+        'tip-photonic-equipment:fiber': eqpt_config['tip-photonic-equipment:fiber'],
+        'tip-photonic-equipment:transceiver': eqpt_config['tip-photonic-equipment:transceiver'],
+        'tip-photonic-equipment:roadm': eqpt_config['tip-photonic-equipment:roadm'],
+        'tip-photonic-simulation:simulation': eqpt_config['tip-photonic-simulation:simulation'],
+        'ietf-network:networks': {
+            'network': topologyArray
+        }
     }
     //end test
     var exportValue = JSON.stringify(model, undefined, 2);
