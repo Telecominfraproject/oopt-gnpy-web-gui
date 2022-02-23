@@ -67,6 +67,7 @@ var tSpanLength = "";
 var tType = "";
 var tConnector_in = "";
 var tConnector_out = "";
+var tBandwidth = "";
 
 $(document).ready(function () {
 
@@ -2020,6 +2021,20 @@ function exportNetwork(isSaveNetwork) {
             }
             edgeList.push(edge);
         }
+        else if (item.component_type == serviceJSON.component_type) {
+            edge = {
+                "link-id": item.id,
+                "source": {
+                    "source-node": item.from
+                },
+                "destination": {
+                    "dest-node": item.to
+                },
+                "tip-photonic-topology:service": {
+                }
+            }
+            edgeList.push(edge);
+        }
         
     });
   
@@ -2324,6 +2339,15 @@ function importEdge(index) {
         var labelvalue = edgeData["link-id"];
         var textvalue = labelvalue;
         addPatchComponent(1, from, to, labelvalue, textvalue, true);
+    }
+    if (edgeData["tip-photonic-topology:service"]) {
+        isSinglePatchMode = 0;
+        isDualPatchMode = 0;
+        isAddService = 1;
+        var labelvalue = edgeData["link-id"];
+        var textvalue = labelvalue;
+        tBandwidth = edgeData["tip-photonic-topology:service"]["band-width"];
+        addServiceComponent(1, from, to, labelvalue, textvalue, true);
     }
 }
 function getRandomNumberBetween(min, max) {
@@ -2712,7 +2736,7 @@ function addService() {
                 //var labelvalue = serviceJSON.component_type + ' ' + network.body.data.nodes.get(addServiceData.from).number + ' - ' + network.body.data.nodes.get(addServiceData.to).number;
                 //2 transceiver must have fiber/patch connection
                 if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
-                    addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue);
+                    addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue, false);
                 else
                     alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + dualPatchJSON.component_type + " connection");
             }
@@ -3492,10 +3516,13 @@ function countFiberService(isdualfiber, issinglefiber, isservice, ispatch, cfrom
 }
 
 //Add service//cmode 1-add
-function addServiceComponent(cmode, cfrom, cto, clabel) {
+function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
 
     if (cmode == 1) {
 
+        var bandwidth = configData[serviceJSON.component_type].default.band_width;
+        if (isImport)
+            bandwidth = tBandwidth;
 
         clabel = countFiberService(false, false, true, false, cfrom, cto) + '-' + clabel;
         elabel = clabel;
@@ -3508,7 +3535,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel) {
             id: token(), from: cfrom, to: cto, label: elabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
             component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background,
             arrows: serviceJSON.options.arrows, font: serviceJSON.options.font, smooth: fiberSmooth,
-            band_width: configData[serviceJSON.component_type].default.band_width
+            band_width: bandwidth
         });
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
