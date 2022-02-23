@@ -1401,7 +1401,7 @@ function draw(isImport) {
                     }
 
                 }
-                else if (type == dualPatchJSON.component_type) {
+                else if (type == singlePatchJSON.component_type) {
 
                     if (edgeData != undefined) {
 
@@ -1636,7 +1636,7 @@ function init(isImport) {
 }
 
 
-function exportNetwork(isSaveNetwork) {
+function exportNetwork_Old(isSaveNetwork) {
     //testing();
 
     //var nodesModel = [];
@@ -1875,6 +1875,192 @@ function exportNetwork(isSaveNetwork) {
     saveAs(blob, filename);
 }
 
+function exportNetwork(isSaveNetwork) {
+
+    //start test
+    var nodeList = [];
+    var edgeList = [];
+    var topologyArray = [];
+    var network_id = configData.project.network_id;
+    
+    if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
+        alert("keyError:'elements', try again");
+        return;
+    }
+    var elabel = "";
+    $.each(network.body.data.nodes.get(), function (index, item) {
+
+        
+        if (item.label=="")
+            elabel = item.text;
+        else
+            elabel = item.label;
+
+        if (item.node_type == transceiverJSON.node_type) {
+            var node = {
+                'node-id': item.id,
+                'tip-photonic-topology:transceiver': {
+                    "model": item.transceiver_type
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: elabel,
+                        region: null
+                    }
+                }
+            }
+            nodeList.push(node);
+        }
+        else if (item.node_type == roadmJSON.node_type) {
+            var node = {
+                'node-id': item.id,
+                'tip-photonic-topology:roadm': {
+                    "model": item.roadm_type
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: elabel,
+                        region: null
+                    }
+                }
+            }
+            nodeList.push(node);
+        }
+        else if (item.node_type == fusedJSON.node_type) {
+            var node = {
+                'node-id': item.id,
+                'tip-photonic-topology:attenuator': {
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: elabel,
+                        region: null
+                    }
+                }
+            }
+            nodeList.push(node);
+        }
+        else if (item.node_type == amplifierJSON.node_type) {
+            var node = {
+                'node-id': item.id,
+                'tip-photonic-topology:amplifier': {
+                    "model": item.amp_type,
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: elabel,
+                        region: ""
+                    }
+                }
+            }
+            nodeList.push(node);
+        }
+        else if (item.node_type == ramanampJSON.node_type) {
+            var node = {
+                'node-id': item.id,
+                'tip-photonic-topology:ramanamplifier': {
+                    'model': item.amp_type,
+                    'category': item.category
+                },
+                metadata: {
+                    location: {
+                        latitude: item.x,
+                        longitude: item.y,
+                        city: elabel,
+                        region: ""
+                    }
+                }
+            }
+            nodeList.push(node);
+        }
+    });
+
+    $.each(network.body.data.edges.get(), function (index, item) {
+        var edge;
+        if (item.component_type == singleFiberJSON.component_type) {
+            edge = {
+                "link-id": item.id,
+                "source": {
+                    "source-node": item.from
+                },
+                "destination": {
+                    "dest-node": item.to
+                },
+                "tip-photonic-topology:fiber": {
+                    "type": item.fiber_type,
+                    "length": item.span_length,
+                    "attenuation-in": "0.0",
+                    "conn-att-in": item.connector_in,
+                    "conn-att-out": item.connector_out,
+                    "loss_coef": item.loss_coefficient,
+                    "span-loss": item.span_loss
+                }
+            }
+        }
+        else if (item.component_type == singlePatchJSON.component_type) {
+            edge = {
+                "link-id": item.id,
+                "source": {
+                    "source-node": item.from
+                },
+                "destination": {
+                    "dest-node": item.to
+                },
+                "tip-photonic-topology:patch": {
+                }
+            }
+        }
+        edgeList.push(edge);
+    });
+  
+    if (eqpt_config["ietf-network:networks"].network[0]["network-id"])
+        network_id = eqpt_config["ietf-network:networks"].network[0]["network-id"];
+
+    var topology = {
+        'network-id': network_id,
+        'network-types': {
+            'tip-photonic-topology:photonic-topology': {}
+        },
+        node: nodeList,
+        'ietf-network-topology:link': edgeList
+    }
+    
+    topologyArray.push(topology);
+    var model = {
+        'tip-photonic-equipment:amplifier': eqpt_config['tip-photonic-equipment:amplifier'],
+        'tip-photonic-equipment:fiber': eqpt_config['tip-photonic-equipment:fiber'],
+        'tip-photonic-equipment:transceiver': eqpt_config['tip-photonic-equipment:transceiver'],
+        'tip-photonic-equipment:roadm': eqpt_config['tip-photonic-equipment:roadm'],
+        'tip-photonic-simulation:simulation': eqpt_config['tip-photonic-simulation:simulation'],
+        'ietf-network:networks': {
+            'network': topologyArray
+        }
+    }
+    //end test
+    var exportValue = JSON.stringify(model, undefined, 2);
+
+    if (isSaveNetwork) {
+        addNetworData(exportValue);
+        return;
+    }
+
+    var filename = $("#txtFileName").val() + ".json";
+
+    var blob = new Blob([exportValue], {
+        type: "text/plain;charset=utf-8"
+    });
+
+    saveAs(blob, filename);
+}
+
 var importNodes = [];
 var importEdges = [];
 
@@ -1973,6 +2159,7 @@ function importNode(index) {
     var booster_type = "";
     var x = getRandomNumberBetween(-230, 648);
     var y = getRandomNumberBetween(-230, 648);
+    
 
     try {
         if (_import_json["network"][0].node[index]["metadata"]["location"].latitude)
@@ -2059,6 +2246,14 @@ function importNode(index) {
 
     var label = _import_json["network"][0].node[index]["node-id"];
     var nodeID = label;
+
+    try {
+        if(_import_json["network"][0].node[index]["metadata"].location.city) {
+            label = _import_json["network"][0].node[index]["metadata"].location.city;
+        }
+    }
+    catch { }
+
     var node_type = nodeDetails.default.node_type;
     var node_degree = nodeDetails.default.node_degree;
     var component_type = roadmJSON.component_type;
@@ -4371,7 +4566,7 @@ function dualFiberEdit(fiberID, callback) {
     var connectedNode = network.getConnectedNodes(fiberID);
 
 
-    $("#txtFiberName").val(edgeDetails.label);
+    $("#txtFiberName").val(edgeDetails.text);
     //fiber A details
     $("#ddlFiberAType").val(edgeDetails.fiber_type);
     $("#txtFiberASL").val(edgeDetails.span_length);
@@ -4439,8 +4634,13 @@ function updateDualFiber(fiberID) {
     if (nameLengthValidation("txtFiberName")) {
         if (fiberDetails.component_type == dualFiberJSON.component_type && fiberDetails.fiber_category == dualFiberJSON.fiber_category) {
 
+            var elabel = "";
+            elabel = label;
+            if (!isShow)
+                elabel = "";
+
             network.body.data.edges.update({
-                id: id, label: label, text: label, fiber_type: fiber_type, span_length: span_length,
+                id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss,
                 RxToTxFiber: {
                     from: fiberDetails.to, to: fiberDetails.from, fiber_category: fiberDetails.fiber_category, component_type: fiberDetails.component_type,
@@ -4492,7 +4692,7 @@ function singleFiberEdit(fiberID, callback) {
     document.getElementById("singleFiberMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(fiberID);
     var connectedNode = network.getConnectedNodes(fiberID);
-    $("#txtSinlgeFiberName").val(edgeDetails.label);
+    $("#txtSinlgeFiberName").val(edgeDetails.text);
     $("#txtSource").val(network.body.data.nodes.get(connectedNode[0]).label);
     $("#txtDestination").val(network.body.data.nodes.get(connectedNode[1]).label);
     $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
@@ -4532,8 +4732,14 @@ function updateSingleFiber(fiberID) {
     if (nameLengthValidation("txtSinlgeFiberName")) {
 
         if (fiberDetails.component_type == singleFiberJSON.component_type && fiberDetails.fiber_category == singleFiberJSON.fiber_category) {
+
+            var elabel = "";
+            elabel = label;
+            if (!isShow)
+                elabel = "";
+
             network.body.data.edges.update({
-                id: id, label: label, text: label, fiber_type: fiber_type, span_length: span_length,
+                id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
             data.nodes.off("*", change_history_back);
@@ -4671,7 +4877,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 function singlePatchEdit(patchID, callback) {
     document.getElementById("singlePatchMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(patchID);
-    $("#txtSinglePatchName").val(edgeDetails.label);
+    $("#txtSinglePatchName").val(edgeDetails.text);
     openDrawer('singlepatch');
     document.getElementById("btnUpdateSinglePatch").onclick = updateSinglePatch.bind(
         this,
@@ -4689,9 +4895,14 @@ function updateSinglePatch(patchID) {
 
     if (nameLengthValidation("txtSinglePatchName")) {
 
+        var elabel = "";
+        elabel = label;
+        if (!isShow)
+            elabel = "";
+
         if (patchDetails.component_type == dualPatchJSON.component_type) {
             network.body.data.edges.update({
-                id: id, label: label, text: label
+                id: id, label: elabel, text: label
             });
 
 
@@ -4730,7 +4941,7 @@ function clearSinglePatch() {
 function dualPatchEdit(patchID, callback) {
     document.getElementById("dualPatchMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(patchID);
-    $("#txtDualPatchName").val(edgeDetails.label);
+    $("#txtDualPatchName").val(edgeDetails.text);
     openDrawer('dualpatch');
     document.getElementById("btnUpdateDualPatch").onclick = updateDualPatch.bind(
         this,
@@ -4749,10 +4960,15 @@ function updateDualPatch(patchID) {
     if (nameLengthValidation("txtDualPatchName")) {
 
         if (patchDetails.component_type == dualPatchJSON.component_type) {
-            network.body.data.edges.update({
-                id: id, label: label, text: label
-            });
 
+            var elabel = "";
+            elabel = label;
+            if (!isShow)
+                elabel = "";
+
+            network.body.data.edges.update({
+                id: id, label: elabel, text: label
+            });
 
             data.nodes.off("*", change_history_back);
             data.edges.off("*", change_history_back);
@@ -4775,7 +4991,7 @@ function clearDualPatch() {
 function serviceEdit(serviceID, callback) {
     document.getElementById("serviceMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(serviceID);
-    $("#txtServiceName").val(edgeDetails.label);
+    $("#txtServiceName").val(edgeDetails.text);
     var connectedNode = network.getConnectedNodes(serviceID);
     $("#txtServiceSrc").val(network.body.data.nodes.get(connectedNode[0]).label);
     $("#txtServiceDest").val(network.body.data.nodes.get(connectedNode[1]).label);
@@ -4799,8 +5015,14 @@ function updateService(serviceID) {
     if (nameLengthValidation("txtServiceName")) {
 
         if (serviceDetails.component_type == serviceJSON.component_type) {
+
+            var elabel = "";
+            elabel = label;
+            if (!isShow)
+                elabel = "";
+
             network.body.data.edges.update({
-                id: id, label: label, text: label, band_width: bandwidth
+                id: id, label: elabel, text: label, band_width: bandwidth
             });
             data.nodes.off("*", change_history_back);
             data.edges.off("*", change_history_back);

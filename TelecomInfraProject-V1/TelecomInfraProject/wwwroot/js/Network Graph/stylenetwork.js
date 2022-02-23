@@ -2004,6 +2004,7 @@ function exportNetwork(isSaveNetwork) {
                     "span-loss": item.span_loss
                 }
             }
+            edgeList.push(edge);
         }
         else if (item.component_type == singlePatchJSON.component_type) {
             edge = {
@@ -2017,8 +2018,9 @@ function exportNetwork(isSaveNetwork) {
                 "tip-photonic-topology:patch": {
                 }
             }
+            edgeList.push(edge);
         }
-        edgeList.push(edge);
+        
     });
   
     if (eqpt_config["ietf-network:networks"].network[0]["network-id"])
