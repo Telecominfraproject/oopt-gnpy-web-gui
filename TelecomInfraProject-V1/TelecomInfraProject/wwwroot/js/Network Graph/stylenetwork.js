@@ -69,6 +69,7 @@ var tType = "";
 var tConnector_in = "";
 var tConnector_out = "";
 var tBandwidth = "";
+var eqptData = "";
 
 $(document).ready(function () {
 
@@ -328,20 +329,16 @@ $(document).ready(function () {
         if (file) {
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
-
-                var eqptData = "";
+                
                 if (text) {
                     try {
                         eqptData = JSON.parse(text);
                         isEqptFile = true;
                         eqpt_config = eqptData;
                         load_EqptConfig(true);
-                        _import_json = eqptData['ietf-network:networks'];
-                        importNetwork();
-                        $("#importEqpt").val('');
-                        $('#divSelection').hide();
+                       
                     }
-                    catch {
+                    catch (e) {
                         alert("keyError:'elements', try again");
                     }
                 }
@@ -648,7 +645,7 @@ function showHideLabel() {
         if (isShow)
             label = item.text;
         else
-            label = " ";
+            label = "";
         network.body.data.edges.update({
             id: item.id, label: label
         });
@@ -1984,8 +1981,7 @@ function exportNetwork(isSaveNetwork) {
         var edge;
         var fromLabel = network.body.data.nodes.get(item.from).label;
         var toLabel = network.body.data.nodes.get(item.to).label;
-
-        if (item.label == "")
+        if (item.label.trim() == "")
             elabel = item.text;
         else
             elabel = item.label;
@@ -2054,13 +2050,30 @@ function exportNetwork(isSaveNetwork) {
         'ietf-network-topology:link': edgeList
     }
 
+    var simData = eqpt_config['tip-photonic-simulation:simulation'];;
+    var simGrid = simData["grid"];
+    var simAD = simData["autodesign"];
+    var simSM = simData["system-margin"];
+    var simulationData = JSON.parse(sessionStorage.getItem("simulationParameters"));
+
+    simGrid["frequency-min"] = simulationData["frequency-min"];
+    simGrid["frequency-max"] = simulationData["frequency-max"];
+    simGrid["spacing"] = simulationData["spacing"];
+    simGrid["frequency-min"] = simulationData["frequency-min"];
+    simSM = simulationData["system-margin"];
+    var simPara = {
+        grid: simGrid,
+        autodesign: simAD,
+        'system-margin':simSM
+    }
+
     topologyArray.push(topology);
     var model = {
         'tip-photonic-equipment:amplifier': eqpt_config['tip-photonic-equipment:amplifier'],
         'tip-photonic-equipment:fiber': eqpt_config['tip-photonic-equipment:fiber'],
         'tip-photonic-equipment:transceiver': eqpt_config['tip-photonic-equipment:transceiver'],
         'tip-photonic-equipment:roadm': eqpt_config['tip-photonic-equipment:roadm'],
-        'tip-photonic-simulation:simulation': eqpt_config['tip-photonic-simulation:simulation'],
+        'tip-photonic-simulation:simulation': simPara,
         'ietf-network:networks': {
             'network': topologyArray
         }
@@ -2092,14 +2105,18 @@ var isEqptFile = false;
 function load_EqptConfig(isFileUpload) {
     try {
 
-
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
-            alert("keyError:'elements', try again");
+            alert("keyError:'equipment elements', try again");
             return;
         }
         else {
-            if (isFileUpload)
+            if (isFileUpload) {
+                _import_json = eqptData['ietf-network:networks'];
+                importNetwork();
+                $("#importEqpt").val('');
+                $('#divSelection').hide();
                 alert("json file loaded successfully ");
+            }
         }
         $("#txtFrgMin").val('');
         $("#txtFrqMax").val('');
@@ -2147,8 +2164,8 @@ function load_EqptConfig(isFileUpload) {
         appendSinglePreAmpandBoosterType();
     }
     catch {
-        console.log("keyError:'elements', try again");
-        //alert("keyError:'elements', try again");
+        //console.log("keyError:'elements', try again");
+        alert("keyError:'elements', try again");
     }
 }
 
@@ -2408,6 +2425,7 @@ function importNetwork() {
     //    return;
     //}
     networkView(2)//expanded view
+    //network.fit();
 
 }
 
