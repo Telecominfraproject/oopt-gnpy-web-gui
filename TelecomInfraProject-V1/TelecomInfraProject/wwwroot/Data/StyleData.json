@@ -10,7 +10,7 @@
 
     "interaction": {
       "navigationButtons": true,
-      "keyboard": true,
+      "keyboard": false,
       "dragView": true,
       "multiselect": true,
       "hover": true
