@@ -1785,3 +1785,18 @@ select {
     font-weight: 500;
     cursor:pointer;
 }
+.custom-switch .custom-control-label::before {
+    left: -2.4rem !important;
+    top: 0.0rem !important;
+    width: 2.3rem !important;
+    height: 1.3rem !important;
+    pointer-events: all;
+    border-radius: 0.5rem;
+    border: 2px solid #2b7c80 !important;
+}
+.custom-switch .custom-control-label::after {
+    top: calc(0.25rem + 0px) !important;
+    left: calc(-2.5rem + 8px) !important;
+    width: calc(1rem - 2px) !important;
+    height: calc(1rem - 2px) !important;
+}

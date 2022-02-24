@@ -23,3 +23,9 @@ var edgeType = {
     patch: 2,
     service: 3
 }
+var alertType = {
+    Success: 1,
+    Info: 2,
+    Error: 3,
+    Warning: 4,
+}

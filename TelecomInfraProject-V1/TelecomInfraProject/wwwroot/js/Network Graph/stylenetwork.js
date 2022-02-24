@@ -329,17 +329,17 @@ $(document).ready(function () {
         if (file) {
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
-                
+
                 if (text) {
                     try {
                         eqptData = JSON.parse(text);
                         isEqptFile = true;
                         eqpt_config = eqptData;
                         load_EqptConfig(true);
-                       
+
                     }
                     catch (e) {
-                        alert("keyError:'elements', try again");
+                        showMessage(alertType.Error, "keyError:'elements', try again");
                     }
                 }
             });
@@ -681,7 +681,7 @@ $(document).bind("contextmenu", function (e) {
 });
 
 if (!window.indexedDB) {
-    window.alert("Your browser doesn't support a stable version of IndexedDB.")
+    showMessage(alertType.Warning, "Your browser doesn't support a stable version of IndexedDB.");
 }
 
 var jsstoreCon = new JsStore.Connection();
@@ -781,7 +781,7 @@ function _addNetworData() {
                         noOfDataInserted = _context3.sent;
 
                         if (noOfDataInserted === 1) {
-                            alert('successfully added');
+                            showMessage(alertType.Success, "successfully added");
                         }
 
                         _context3.next = 14;
@@ -805,7 +805,7 @@ function _addNetworData() {
                         noOfDataInserted = _context3.sent;
 
                         if (noOfDataInserted === 1) {
-                            alert('successfully updated');
+                            showMessage(alertType.Success, "successfully updated");
                         }
 
                     case 14:
@@ -846,7 +846,7 @@ function _deletedata() {
                     case 6:
                         _context4.prev = 6;
                         _context4.t0 = _context4["catch"](0);
-                        alert(_context4.t0.message);
+                        showMessage(alertType.Info, _context4.t0.message);
 
                     case 9:
                     case "end":
@@ -1039,7 +1039,7 @@ function draw(isImport) {
                 addEdgeData.from = clickedNode.options.id
             else if (addEdgeData.to == '') {
                 if (addEdgeData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addEdgeData.to = clickedNode.options.id
@@ -1066,7 +1066,7 @@ function draw(isImport) {
                 addServiceData.from = clickedNode.options.id
             else if (addServiceData.to == '') {
                 if (addServiceData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addServiceData.to = clickedNode.options.id
@@ -1093,7 +1093,7 @@ function draw(isImport) {
                 addPatchData.from = clickedNode.options.id
             else if (addPatchData.to == '') {
                 if (addPatchData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addPatchData.to = clickedNode.options.id
@@ -1883,7 +1883,7 @@ function exportNetwork(isSaveNetwork) {
     var network_id = configData.project.network_id;
 
     if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
-        alert("keyError:'elements', try again");
+        showMessage(alertType.Error, "keyError:'elements', try again");
         return;
     }
     var elabel = "";
@@ -2064,7 +2064,7 @@ function exportNetwork(isSaveNetwork) {
     var simPara = {
         grid: simGrid,
         autodesign: simAD,
-        'system-margin':simSM
+        'system-margin': simSM
     }
 
     topologyArray.push(topology);
@@ -2106,7 +2106,7 @@ function load_EqptConfig(isFileUpload) {
     try {
 
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
-            alert("keyError:'equipment elements', try again");
+            showMessage(alertType.Error, "keyError:'equipment elements', try again");
             return;
         }
         else {
@@ -2115,7 +2115,7 @@ function load_EqptConfig(isFileUpload) {
                 importNetwork();
                 $("#importEqpt").val('');
                 $('#divSelection').hide();
-                alert("json file loaded successfully ");
+                showMessage(alertType.Success, "json file loaded successfully");
             }
         }
         $("#txtFrgMin").val('');
@@ -2164,8 +2164,7 @@ function load_EqptConfig(isFileUpload) {
         appendSinglePreAmpandBoosterType();
     }
     catch {
-        //console.log("keyError:'elements', try again");
-        alert("keyError:'elements', try again");
+        showMessage(alertType.Error, "keyError:'elements', try again");
     }
 }
 
@@ -2623,7 +2622,7 @@ function addFiber() {
         }
 
         if (!isSrcOk || !isDestOk) {
-            alert("cannot add " + dualFiberJSON.fiber_category + " from " + msg);
+            showMessage(alertType.Warning, "cannot add " + dualFiberJSON.fiber_category + " from " + msg);
             addEdgeData = {
                 from: '',
                 to: ''
@@ -2732,17 +2731,17 @@ function addService() {
                 if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
                     addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue, false);
                 else
-                    alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + dualPatchJSON.component_type + " connection");
+                    showMessage(alertType.Warning, "source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + dualPatchJSON.component_type + " connection");
             }
             else
-                alert(serviceJSON.component_type + " can be created only between " + transNode + " of same type");
+                showMessage(alertType.Warning, serviceJSON.component_type + " can be created only between " + transNode + " of same type");
         }
         else
-            alert(serviceJSON.component_type + " can be created only when " + transNode + "s are forced");
+            showMessage(alertType.Warning, serviceJSON.component_type + " can be created only when " + transNode + "s are forced");
 
     }
     else {
-        alert("The " + serviceJSON.component_type + " should be between 2 " + transNode + " sites");
+        showMessage(alertType.Warning, "The " + serviceJSON.component_type + " should be between 2 " + transNode + " sites");
     }
     addServiceData = {
         from: '',
@@ -2774,7 +2773,7 @@ function addDualPatch() {
         addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
     }
     else {
-        alert("The " + dualPatchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
+        showMessage(alertType.Warning, "The " + dualPatchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
     }
     addPatchData = {
         from: '',
@@ -3291,7 +3290,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 }
 
                 if (isLimit) {
-                    alert(msg);
+                    showMessage(alertType.Info, msg);
                     return;
                 }
             }
@@ -3330,7 +3329,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         }
         if (isSingleFiberMode == 1) {
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
-            if(!isImport)
+            if (!isImport)
                 clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
             elabel = clabel;
             if (!isShow)
@@ -3520,7 +3519,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
             bandwidth = tBandwidth;
         else
             clabel = countFiberService(false, false, true, false, cfrom, cto) + '-' + clabel;
-        
+
         elabel = clabel;
         if (!isShow)
             elabel = "";
@@ -3581,7 +3580,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             });
 
             if (isPatchAdded && !isImport) {
-                alert('we cannot add more than 1 ' + dualPatchJSON.patch_category);
+                showMessage(alertType.Warning, 'we cannot add more than 1 ' + dualPatchJSON.patch_category);
                 return;
             }
             //end
@@ -4504,7 +4503,7 @@ function updateTransceiver(nodeID) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     var transceiverType = $("#ddlTransceiverType").val();
     if (transceiverType == null || transceiverType == "") {
-        alert('Please select transceiver type');
+        showMessage(alertType.Warning, 'Please select transceiver type');
         return;
     }
 
@@ -4532,7 +4531,7 @@ function updateTransceiver(nodeID) {
 
                 if (toTransType != fromTransType) {
                     isOk = false;
-                    alert(serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                    showMessage(alertType.Warning, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
                     return;
                 }
             }
@@ -4574,7 +4573,7 @@ function deleteNode(nodeID) {
     document.getElementById("transceiverMenu").style.display = "none";
 
     if (network.getConnectedEdges(nodeID).length > 0) {
-        alert("Unpair " + roadmJSON.component_type + " then delete");
+        showMessage(alertType.Warning, "Unpair " + roadmJSON.component_type + " then delete");
 
     } else {
         //nodes.remove(nodeID);
@@ -4642,7 +4641,7 @@ function updateDualFiber(fiberID) {
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type + ' A : please enter valid span length.');
+        showMessage(alertType.Warning, dualFiberJSON.component_type + ' A : please enter valid span length.');
         return;
     }
 
@@ -4650,7 +4649,7 @@ function updateDualFiber(fiberID) {
 
     spanlen = Number(Bspan_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type + ' B : please enter valid span length.');
+        showMessage(alertType.Warning, dualFiberJSON.component_type + ' B : please enter valid span length.');
         return;
     }
 
@@ -4750,7 +4749,7 @@ function updateSingleFiber(fiberID) {
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
-        alert('pleae enter valid span length.');
+        showMessage(alertType.Warning, 'pleae enter valid span length.');
         return;
     }
 
@@ -4871,7 +4870,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (fromCount == 1) {
-                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
+                showMessage(alertType.Warning, 'cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
                 return true;
             }
         }
@@ -4892,7 +4891,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (toCount == 1) {
-                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + toNodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
+                showMessage(alertType.Warning, 'cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + toNodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection')
                 return true;
             }
         }
@@ -5214,7 +5213,7 @@ function networkValidation() {
     if (network.body.data.nodes.get().length > 0 || network.body.data.edges.get().length > 0)
         flag = true;
     else {
-        alert('Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/' + serviceJSON.component_type + '.');
+        showMessage(alertType.Info, 'Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/' + serviceJSON.component_type + '.');
     }
 
     return flag;
@@ -5440,6 +5439,53 @@ function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
         "system-margin": margin
     }
     sessionStorage.setItem("simulationParameters", JSON.stringify(simulationPara));
+}
+
+function showMessage(messageType, textmsg) {
+    switch (messageType) {
+        case alertType.Success:
+
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Success));
+            var successrc1 = "./Assets/img/success-toaster.png";
+            $("#img_src").attr("src", successrc1);
+            $('#toast').addClass("success-toast");
+            $(".success-toast").toast('show');
+            break;
+        case alertType.Info:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Info));
+            var infosrc = "./Assets/img/info-toaster.png";
+            $("#img_src").attr("src", infosrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').addClass("info-toast");
+            $(".info-toast").toast('show');
+            break;
+        case alertType.Error:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
+            var dangersrc = "./Assets/img/error-toaster.png";
+            $("#img_src").attr("src", dangersrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').removeClass("info-toast");
+            $('#toast').addClass("danger-toast");
+            $(".danger-toast").toast('show');
+
+            break;
+        case alertType.Warning:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Warning));
+            var warningsrc = "./Assets/img/warning-toaster.png";
+            $("#img_src").attr("src", warningsrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').removeClass("info-toast");
+            $('#toast').removeClass("danger-toast");
+            $('#toast').addClass("warning-toast");
+            $(".warning-toast").toast('show');
+            break;
+    }
+
+
 }
 
 

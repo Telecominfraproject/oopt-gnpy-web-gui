@@ -1800,3 +1800,6 @@ select {
     width: calc(1rem - 2px) !important;
     height: calc(1rem - 2px) !important;
 }
+.custom-control-input:focus ~ .custom-control-label::before {
+    box-shadow: none !important;
+}

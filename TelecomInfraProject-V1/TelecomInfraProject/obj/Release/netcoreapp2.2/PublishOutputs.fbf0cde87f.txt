@@ -109,7 +109,11 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\css\Style.css
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\ConfigurationData.json
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\eqpt_config.json
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\Equipment_Config_MAster.json
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\Equipment_JSON_MOD2.json
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\StyleData.json
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\test_without_service.json
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\test_with_service.json
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Data\yang.json
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\alea.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\exampleUtil.js
