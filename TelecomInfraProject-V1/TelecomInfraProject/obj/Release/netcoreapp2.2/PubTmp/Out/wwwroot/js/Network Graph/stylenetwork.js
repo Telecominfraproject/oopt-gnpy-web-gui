@@ -125,6 +125,13 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
+            $("#txtFileName").val('');
+            $("#staticBackdrop1").modal('show');
+        }
+    });
+
+    $("#exportNetwork").click(function () {
+        if (networkValidation()) {
             $("#staticBackdrop1").modal('show');
         }
     });
@@ -308,10 +315,25 @@ $(document).ready(function () {
     });
 
     $("#importEqptLink").click(function () {
-        if (confirm('Do you want to override existing data and replace with new data ?')) {
-            $("#importEqpt").click();
-            /* $(".success-toast").toast('show')*/
-        }
+
+        //Swal.fire({
+        //    icon: 'warning',
+        //    title: '',
+        //    text: 'Do you want to override existing data and replace with new data ?',
+        //    showCancelButton: true,
+        //    confirmButtonText: "OK",
+        //    closeOnConfirm: true,
+        //    confirmButtonColor: '#49508a',
+        //    width: 375,
+        //    height: 200,
+        //    allowOutsideClick: false
+        //}).then((result) => {
+        //    if (result.value) {
+        $("#importEqpt").click();
+        //    }
+        //});
+
+
     });
     function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
@@ -329,17 +351,17 @@ $(document).ready(function () {
         if (file) {
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
-                
+
                 if (text) {
                     try {
                         eqptData = JSON.parse(text);
                         isEqptFile = true;
                         eqpt_config = eqptData;
                         load_EqptConfig(true);
-                       
+
                     }
                     catch (e) {
-                        alert("keyError:'elements', try again");
+                        showMessage(alertType.Error, "keyError:'elements', try again");
                     }
                 }
             });
@@ -634,18 +656,19 @@ function networkMenuHide() {
     }
 }
 function showHideLabel() {
-
     if (isShow)
         isShow = false;
     else
         isShow = true;
+
     var edge = network.body.data.edges.get();
     var label = "";
     $.each(edge, function (index, item) {
         if (isShow)
             label = item.text;
         else
-            label = "";
+            label = " ";
+
         network.body.data.edges.update({
             id: item.id, label: label
         });
@@ -681,7 +704,7 @@ $(document).bind("contextmenu", function (e) {
 });
 
 if (!window.indexedDB) {
-    window.alert("Your browser doesn't support a stable version of IndexedDB.")
+    showMessage(alertType.Warning, "Your browser doesn't support a stable version of IndexedDB.");
 }
 
 var jsstoreCon = new JsStore.Connection();
@@ -710,7 +733,7 @@ function _readdata() {
 
                     case 2:
                         dat = _context.sent;
-                        console.log(dat);
+                    //console.log(dat);
 
                     case 4:
                     case "end":
@@ -740,9 +763,9 @@ function _initDb() {
                         isDbCreated = _context2.sent;
 
                         if (isDbCreated) {
-                            console.log('db created');
+                            //console.log('db created');
                         } else {
-                            console.log('db opened');
+                            //console.log('db opened');
                         }
 
                     case 4:
@@ -781,7 +804,7 @@ function _addNetworData() {
                         noOfDataInserted = _context3.sent;
 
                         if (noOfDataInserted === 1) {
-                            alert('successfully added');
+                            showMessage(alertType.Success, "successfully added");
                         }
 
                         _context3.next = 14;
@@ -805,7 +828,7 @@ function _addNetworData() {
                         noOfDataInserted = _context3.sent;
 
                         if (noOfDataInserted === 1) {
-                            alert('successfully updated');
+                            showMessage(alertType.Success, "successfully updated");
                         }
 
                     case 14:
@@ -846,7 +869,7 @@ function _deletedata() {
                     case 6:
                         _context4.prev = 6;
                         _context4.t0 = _context4["catch"](0);
-                        alert(_context4.t0.message);
+                        showMessage(alertType.Info, _context4.t0.message);
 
                     case 9:
                     case "end":
@@ -953,16 +976,24 @@ function draw(isImport) {
         try {
             tempData = JSON.parse(dat[0].name);
             if (tempData.nodes.length > 0) {
-                var conf = confirm('do you want to load network data from local storage ?');
-                if (conf) {
-                    //nodes = new vis.DataSet(tempData.nodes);
-                    //edges = new vis.DataSet(tempData.edges);
-
-
-                    nodes = getNodeData(tempData.nodes);
-                    edges = getEdgeData(tempData.edges);
-                    isLocalStorage = true;
-                }
+                Swal.fire({
+                    icon: 'warning',
+                    title: '',
+                    text: 'do you want to load network data from local storage ?',
+                    showCancelButton: true,
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true,
+                    confirmButtonColor: '#49508a',
+                    width: 375,
+                    height: 200,
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.value) {
+                        nodes = getNodeData(tempData.nodes);
+                        edges = getEdgeData(tempData.edges);
+                        isLocalStorage = true;
+                    }
+                });
             }
         }
         catch (e) {
@@ -1039,7 +1070,7 @@ function draw(isImport) {
                 addEdgeData.from = clickedNode.options.id
             else if (addEdgeData.to == '') {
                 if (addEdgeData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addEdgeData.to = clickedNode.options.id
@@ -1066,7 +1097,7 @@ function draw(isImport) {
                 addServiceData.from = clickedNode.options.id
             else if (addServiceData.to == '') {
                 if (addServiceData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addServiceData.to = clickedNode.options.id
@@ -1093,7 +1124,7 @@ function draw(isImport) {
                 addPatchData.from = clickedNode.options.id
             else if (addPatchData.to == '') {
                 if (addPatchData.from == clickedNode.options.id) {
-                    alert('pls click destination ' + roadmJSON.component_type);
+                    showMessage(alertType.Warning, 'pls click destination ' + roadmJSON.component_type);
                     return;
                 }
                 addPatchData.to = clickedNode.options.id
@@ -1883,12 +1914,15 @@ function exportNetwork(isSaveNetwork) {
     var network_id = configData.project.network_id;
 
     if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
-        alert("keyError:'elements', try again");
+        showMessage(alertType.Error, "keyError:'elements', try again");
         return;
     }
     var elabel = "";
+    var ox;
+    var oy;
     $.each(network.body.data.nodes.get(), function (index, item) {
-
+        ox = network.body.nodes[item.id].x;
+        oy = network.body.nodes[item.id].y;
 
         if (item.node_type == transceiverJSON.node_type) {
             var node = {
@@ -1898,10 +1932,10 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
-                        region: null
+                        region: ""
                     }
                 }
             }
@@ -1915,10 +1949,10 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
-                        region: null
+                        region: ""
                     }
                 }
             }
@@ -1931,10 +1965,10 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
-                        region: null
+                        region: ""
                     }
                 }
             }
@@ -1944,12 +1978,15 @@ function exportNetwork(isSaveNetwork) {
             var node = {
                 'node-id': item.label,
                 'tip-photonic-topology:amplifier': {
-                    "model": item.amp_type,
+                    "model": item.amp_type ? item.amp_type : "",
+                    "gain-target": item.gain_target ? item.gain_target : "0.0",
+                    "tilt-target": item.tilt_target ? item.tilt_target : "0.0",
+                    "out-voa-target": item.out_voa_target ? item.out_voa_target : "0.0"
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1966,8 +2003,8 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1996,12 +2033,12 @@ function exportNetwork(isSaveNetwork) {
                 },
                 "tip-photonic-topology:fiber": {
                     "type": item.fiber_type,
-                    "length": item.span_length,
+                    "length": item.span_length.toString(),
                     "attenuation-in": "0.0",
                     "conn-att-in": item.connector_in,
                     "conn-att-out": item.connector_out,
-                    "loss_coef": item.loss_coefficient,
-                    "span-loss": item.span_loss
+                    //"loss_coef": item.loss_coefficient,
+                    //"span-loss": item.span_loss
                 }
             }
             edgeList.push(edge);
@@ -2064,7 +2101,7 @@ function exportNetwork(isSaveNetwork) {
     var simPara = {
         grid: simGrid,
         autodesign: simAD,
-        'system-margin':simSM
+        'system-margin': simSM
     }
 
     topologyArray.push(topology);
@@ -2106,7 +2143,7 @@ function load_EqptConfig(isFileUpload) {
     try {
 
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
-            alert("keyError:'equipment elements', try again");
+            showMessage(alertType.Error, "keyError:'equipment elements', try again");
             return;
         }
         else {
@@ -2115,7 +2152,7 @@ function load_EqptConfig(isFileUpload) {
                 importNetwork();
                 $("#importEqpt").val('');
                 $('#divSelection').hide();
-                alert("json file loaded successfully ");
+                showMessage(alertType.Success, "json file loaded successfully");
             }
         }
         $("#txtFrgMin").val('');
@@ -2164,8 +2201,7 @@ function load_EqptConfig(isFileUpload) {
         appendSinglePreAmpandBoosterType();
     }
     catch {
-        //console.log("keyError:'elements', try again");
-        alert("keyError:'elements', try again");
+        showMessage(alertType.Error, "keyError:'elements', try again");
     }
 }
 
@@ -2197,9 +2233,12 @@ function importNode(index) {
     var booster_type = "";
     var category = "";
     var roadm_type = "";
+    //amplifier properties
+    var gain_target = "0.0"
+    var tilt_target = "0.0";
+    var out_voa_target = "0.0"
     var x = getRandomNumberBetween(-230, 648);
     var y = getRandomNumberBetween(-230, 648);
-
 
     try {
         if (_import_json["network"][0].node[index]["metadata"]["location"].latitude)
@@ -2260,6 +2299,9 @@ function importNode(index) {
         amp_type = amplifierData.model;
         amp_category = nodeDetails.default.amp_category;
         nodeSize = amplifierJSON.size;
+        gain_target = amplifierData['gain-target'];
+        tilt_target = amplifierData['tilt-target'];
+        out_voa_target = amplifierData['out-voa-target'];
         //nodeDetails = configData.node[ILAJSON.amp_category];
         //shape = ILAJSON.shape;
         //color = ILAJSON.color;
@@ -2320,6 +2362,9 @@ function importNode(index) {
         roadm_type_pro: [],
         transceiver_type: transceiver_type,//transceiver
         amp_type: amp_type,//amplifier
+        gain_target: gain_target,
+        tilt_target: tilt_target,
+        out_voa_target: out_voa_target,//end amplifier
         roadm_type: roadm_type, category: category,
         pre_amp_type: pre_amp_type, booster_type: booster_type, amp_category: amp_category//ILA
     });
@@ -2343,6 +2388,9 @@ function importNode(index) {
         amp_category: amp_category,
         roadm_type: roadm_type,
         category: category,
+        gain_target: gain_target,
+        tilt_target: tilt_target,
+        out_voa_target: out_voa_target,
         roadm_type_pro: [],
         component_type: component_type,
         node_degree: nodeDetails.default.node_degree,
@@ -2393,6 +2441,7 @@ function getRandomNumberBetween(min, max) {
 }
 var isImportJSON = false;
 function importNetwork() {
+
     try {
 
         network.body.data.edges.clear();
@@ -2623,7 +2672,7 @@ function addFiber() {
         }
 
         if (!isSrcOk || !isDestOk) {
-            alert("cannot add " + dualFiberJSON.fiber_category + " from " + msg);
+            showMessage(alertType.Warning, "cannot add " + dualFiberJSON.fiber_category + " from " + msg);
             addEdgeData = {
                 from: '',
                 to: ''
@@ -2732,17 +2781,17 @@ function addService() {
                 if (network.getConnectedEdges(addServiceData.from).length > 0 && network.getConnectedEdges(addServiceData.to).length > 0)
                     addServiceComponent(1, addServiceData.from, addServiceData.to, labelvalue, false);
                 else
-                    alert("source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + dualPatchJSON.component_type + " connection");
+                    showMessage(alertType.Warning, "source " + roadmJSON.component_type + " : " + fromDetails.label + " ,destination " + roadmJSON.component_type + " : " + toDetails.label + " should have " + dualFiberJSON.component_type + "/" + dualPatchJSON.component_type + " connection");
             }
             else
-                alert(serviceJSON.component_type + " can be created only between " + transNode + " of same type");
+                showMessage(alertType.Warning, serviceJSON.component_type + " can be created only between " + transNode + " of same type");
         }
         else
-            alert(serviceJSON.component_type + " can be created only when " + transNode + "s are forced");
+            showMessage(alertType.Warning, serviceJSON.component_type + " can be created only when " + transNode + "s are forced");
 
     }
     else {
-        alert("The " + serviceJSON.component_type + " should be between 2 " + transNode + " sites");
+        showMessage(alertType.Warning, "The " + serviceJSON.component_type + " should be between 2 " + transNode + " sites");
     }
     addServiceData = {
         from: '',
@@ -2774,7 +2823,7 @@ function addDualPatch() {
         addPatchComponent(1, addPatchData.from, addPatchData.to, labelvalue, labelvalue, false);
     }
     else {
-        alert("The " + dualPatchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
+        showMessage(alertType.Warning, "The " + dualPatchJSON.component_type + " should be between " + transceiverJSON.node_type + " and " + roadmJSON.node_type + " sites");
     }
     addPatchData = {
         from: '',
@@ -3291,7 +3340,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 }
 
                 if (isLimit) {
-                    alert(msg);
+                    showMessage(alertType.Info, msg);
                     return;
                 }
             }
@@ -3330,7 +3379,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         }
         if (isSingleFiberMode == 1) {
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
-            if(!isImport)
+            if (!isImport)
                 clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
             elabel = clabel;
             if (!isShow)
@@ -3520,7 +3569,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
             bandwidth = tBandwidth;
         else
             clabel = countFiberService(false, false, true, false, cfrom, cto) + '-' + clabel;
-        
+
         elabel = clabel;
         if (!isShow)
             elabel = "";
@@ -3581,7 +3630,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             });
 
             if (isPatchAdded && !isImport) {
-                alert('we cannot add more than 1 ' + dualPatchJSON.patch_category);
+                showMessage(alertType.Warning, 'we cannot add more than 1 ' + dualPatchJSON.patch_category);
                 return;
             }
             //end
@@ -4504,7 +4553,7 @@ function updateTransceiver(nodeID) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     var transceiverType = $("#ddlTransceiverType").val();
     if (transceiverType == null || transceiverType == "") {
-        alert('Please select transceiver type');
+        showMessage(alertType.Warning, 'Please select transceiver type');
         return;
     }
 
@@ -4532,7 +4581,7 @@ function updateTransceiver(nodeID) {
 
                 if (toTransType != fromTransType) {
                     isOk = false;
-                    alert(serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                    showMessage(alertType.Warning, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
                     return;
                 }
             }
@@ -4564,24 +4613,38 @@ function deleteNode(nodeID) {
     var node_type = nodeDetails.node_type;
     if (nodeDetails.node_type == ILAJSON.node_type)
         node_type = nodeDetails.amp_category;
-    var isDelete = confirm('do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?');
-    if (!isDelete)
-        return;
-    document.getElementById("roadmMenu").style.display = "none";
-    document.getElementById("attenuatorMenu").style.display = "none";
-    document.getElementById("ILAMenu").style.display = "none";
-    document.getElementById("amplifierMenu").style.display = "none";
-    document.getElementById("transceiverMenu").style.display = "none";
 
-    if (network.getConnectedEdges(nodeID).length > 0) {
-        alert("Unpair " + roadmJSON.component_type + " then delete");
+    Swal.fire({
+        icon: 'warning',
+        title: '',
+        text: 'do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        closeOnConfirm: true,
+        confirmButtonColor: '#49508a',
+        width: 375,
+        height: 200,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.value) {
+            document.getElementById("roadmMenu").style.display = "none";
+            document.getElementById("attenuatorMenu").style.display = "none";
+            document.getElementById("ILAMenu").style.display = "none";
+            document.getElementById("amplifierMenu").style.display = "none";
+            document.getElementById("transceiverMenu").style.display = "none";
 
-    } else {
-        //nodes.remove(nodeID);
-        network.body.data.nodes.remove(nodeID);
-        $("#stepCreateTopology").click();
-    }
-    network.unselectAll();
+            if (network.getConnectedEdges(nodeID).length > 0) {
+                showMessage(alertType.Warning, "Unpair " + roadmJSON.component_type + " then delete");
+
+            } else {
+                //nodes.remove(nodeID);
+                network.body.data.nodes.remove(nodeID);
+                $("#stepCreateTopology").click();
+            }
+            network.unselectAll();
+        }
+    });
+
 }
 
 function dualFiberEdit(fiberID, callback) {
@@ -4642,7 +4705,7 @@ function updateDualFiber(fiberID) {
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type + ' A : please enter valid span length.');
+        showMessage(alertType.Warning, dualFiberJSON.component_type + ' A : please enter valid span length.');
         return;
     }
 
@@ -4650,7 +4713,7 @@ function updateDualFiber(fiberID) {
 
     spanlen = Number(Bspan_length);
     if (spanlen <= 0) {
-        alert(dualFiberJSON.component_type + ' B : please enter valid span length.');
+        showMessage(alertType.Warning, dualFiberJSON.component_type + ' B : please enter valid span length.');
         return;
     }
 
@@ -4750,7 +4813,7 @@ function updateSingleFiber(fiberID) {
 
     var spanlen = Number(span_length);
     if (spanlen <= 0) {
-        alert('pleae enter valid span length.');
+        showMessage(alertType.Warning, 'pleae enter valid span length.');
         return;
     }
 
@@ -4804,47 +4867,64 @@ function deleteFiber(fiberID) {
     //    return;
     //}
 
-    var isDelete = confirm('do you want to delete ' + fiber.fiber_category + ' : ' + fiber.label + ' ?');
-    if (!isDelete)
-        return;
+    var fiberLabel = fiber.label;
+    if (fiber.label.trim() == "")
+        fiberLabel = fiber.text
 
-    var nodeDetails = network.body.data.nodes.get(fiber.from);
-    var toNodeDetails = network.body.data.nodes.get(fiber.to);
+    Swal.fire({
+        icon: 'warning',
+        title: '',
+        text: 'do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        closeOnConfirm: true,
+        confirmButtonColor: '#49508a',
+        width: 375,
+        height: 200,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.value) {
+            var nodeDetails = network.body.data.nodes.get(fiber.from);
+            var toNodeDetails = network.body.data.nodes.get(fiber.to);
 
-    if (checkFiberPatchServiceCon(fiber.from, fiber.to, fiber.component_type))
-        return;
+            if (checkFiberPatchServiceCon(fiber.from, fiber.to, fiber.component_type))
+                return;
 
 
-    document.getElementById("dualFiberMenu").style.display = "none";
-    document.getElementById("singleFiberMenu").style.display = "none";
-    //remove roadm list from from roadm node
+            document.getElementById("dualFiberMenu").style.display = "none";
+            document.getElementById("singleFiberMenu").style.display = "none";
+            //remove roadm list from from roadm node
 
-    arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
-    _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
+            arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
+            _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
-    _roadmListDB({
-        roadm_fiber_id: fiberID
-    }).remove();
-    arrRoadmTypePro = _roadmListDB().get();
-    network.body.data.nodes.update({
-        id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
+            _roadmListDB({
+                roadm_fiber_id: fiberID
+            }).remove();
+            arrRoadmTypePro = _roadmListDB().get();
+            network.body.data.nodes.update({
+                id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
+            });
+            //remove roadm list from to roadm node
+
+            arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
+            _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
+
+            _roadmListDB({
+                roadm_fiber_id: fiberID
+            }).remove();
+            arrRoadmTypePro = _roadmListDB().get();
+            network.body.data.nodes.update({
+                id: toNodeDetails.id, roadm_type_pro: arrRoadmTypePro
+            });
+
+            network.body.data.edges.remove(fiberID);
+            multipleFiberService(fiber.from, fiber.to);
+            network.unselectAll();
+
+        }
     });
-    //remove roadm list from to roadm node
 
-    arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
-    _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
-
-    _roadmListDB({
-        roadm_fiber_id: fiberID
-    }).remove();
-    arrRoadmTypePro = _roadmListDB().get();
-    network.body.data.nodes.update({
-        id: toNodeDetails.id, roadm_type_pro: arrRoadmTypePro
-    });
-
-    network.body.data.edges.remove(fiberID);
-    multipleFiberService(fiber.from, fiber.to);
-    network.unselectAll();
 
 
 }
@@ -4871,7 +4951,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (fromCount == 1) {
-                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
+                showMessage(alertType.Warning, 'cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + nodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
                 return true;
             }
         }
@@ -4892,7 +4972,7 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
         if (isServiceCon) {
             if (toCount == 1) {
-                alert('cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + toNodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection');
+                showMessage(alertType.Warning, 'cannot remove ' + edgeType + ', ' + transceiverJSON.node_type + ' ' + transceiverJSON.component_type + ' - ' + toNodeDetails.label + ' should have one ' + dualFiberJSON.component_type + '/' + dualPatchJSON.component_type + ' connection')
                 return true;
             }
         }
@@ -4945,17 +5025,37 @@ function updateSinglePatch(patchID) {
 
 }
 function deletePatch(patchID) {
-    var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(patchID).patch_category + ' : ' + network.body.data.edges.get(patchID).label + ' ?');
+
     var patchDetails = network.body.data.edges.get(patchID);
-    if (!isDelete)
-        return;
-    if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
-        return;
-    document.getElementById("singlePatchMenu").style.display = "none";
-    document.getElementById("dualPatchMenu").style.display = "none";
-    network.body.data.edges.remove(patchID);
-    multipleFiberService(patchDetails.from, patchDetails.to);
-    network.unselectAll();
+
+    var patchLabel = patchDetails.label;
+    if (patchDetails.label.trim() == "")
+        patchLabel = patchDetails.text
+
+    Swal.fire({
+        icon: 'warning',
+        title: '',
+        text: 'do you want to delete ' + patchDetails.patch_category + ' : ' + patchLabel + ' ?',
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        closeOnConfirm: true,
+        confirmButtonColor: '#49508a',
+        width: 375,
+        height: 200,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.value) {
+            if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
+                return;
+            document.getElementById("singlePatchMenu").style.display = "none";
+            document.getElementById("dualPatchMenu").style.display = "none";
+            network.body.data.edges.remove(patchID);
+            multipleFiberService(patchDetails.from, patchDetails.to);
+            network.unselectAll();
+        }
+    });
+
+
 }
 function clearSinglePatch() {
 
@@ -5063,14 +5163,33 @@ function updateService(serviceID) {
 
 }
 function deleteService(serviceID) {
-    var isDelete = confirm('do you want to delete ' + network.body.data.edges.get(serviceID).component_type + ' : ' + network.body.data.edges.get(serviceID).label + ' ?');
-    if (!isDelete)
-        return;
-    document.getElementById("serviceMenu").style.display = "none";
+
     var serviceDetails = network.body.data.edges.get(serviceID);
-    network.body.data.edges.remove(serviceID);
-    multipleFiberService(serviceDetails.from, serviceDetails.to);
-    network.unselectAll();
+    var serviceLabel = serviceDetails.label;
+    if (serviceDetails.label.trim() == "")
+        serviceLabel = serviceDetails.text
+
+    Swal.fire({
+        icon: 'warning',
+        title: '',
+        text: 'do you want to delete ' + serviceDetails.component_type + ' : ' + serviceLabel + ' ?',
+        showCancelButton: true,
+        confirmButtonText: "OK",
+        closeOnConfirm: true,
+        confirmButtonColor: '#49508a',
+        width: 375,
+        height: 200,
+        allowOutsideClick: false
+    }).then((result) => {
+        if (result.value) {
+            document.getElementById("serviceMenu").style.display = "none";
+            network.body.data.edges.remove(serviceID);
+            multipleFiberService(serviceDetails.from, serviceDetails.to);
+            network.unselectAll();
+        }
+    });
+
+
 }
 function clearService() {
 
@@ -5214,7 +5333,7 @@ function networkValidation() {
     if (network.body.data.nodes.get().length > 0 || network.body.data.edges.get().length > 0)
         flag = true;
     else {
-        alert('Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/' + serviceJSON.component_type + '.');
+        showMessage(alertType.Info, 'Please create ' + roadmJSON.component_type + '/' + dualFiberJSON.component_type + '/' + serviceJSON.component_type + '.');
     }
 
     return flag;
@@ -5440,6 +5559,53 @@ function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
         "system-margin": margin
     }
     sessionStorage.setItem("simulationParameters", JSON.stringify(simulationPara));
+}
+
+function showMessage(messageType, textmsg) {
+    switch (messageType) {
+        case alertType.Success:
+
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Success));
+            var successrc1 = "./Assets/img/success-toaster.png";
+            $("#img_src").attr("src", successrc1);
+            $('#toast').addClass("success-toast");
+            $(".success-toast").toast('show');
+            break;
+        case alertType.Info:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Info));
+            var infosrc = "./Assets/img/info-toaster.png";
+            $("#img_src").attr("src", infosrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').addClass("info-toast");
+            $(".info-toast").toast('show');
+            break;
+        case alertType.Error:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
+            var dangersrc = "./Assets/img/error-toaster.png";
+            $("#img_src").attr("src", dangersrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').removeClass("info-toast");
+            $('#toast').addClass("danger-toast");
+            $(".danger-toast").toast('show');
+
+            break;
+        case alertType.Warning:
+            $('#msg_content').text(textmsg);
+            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Warning));
+            var warningsrc = "./Assets/img/warning-toaster.png";
+            $("#img_src").attr("src", warningsrc);
+            $('#toast').removeClass("success-toast");
+            $('#toast').removeClass("info-toast");
+            $('#toast').removeClass("danger-toast");
+            $('#toast').addClass("warning-toast");
+            $(".warning-toast").toast('show');
+            break;
+    }
+
+
 }
 
 

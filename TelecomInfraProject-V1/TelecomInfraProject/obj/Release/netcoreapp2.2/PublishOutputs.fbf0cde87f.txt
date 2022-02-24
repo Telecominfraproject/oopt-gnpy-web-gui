@@ -31,6 +31,7 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\delete.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\dualfiber.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\edit.svg
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\error-toaster.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Export File icon.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export-f.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export.png
@@ -56,6 +57,7 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import2.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import3.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\import4.png
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\info-toaster.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\inner-img.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Innerpage_bg.jpg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\landingpage_bg.jpg
@@ -101,9 +103,11 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlefiber.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlenode-img.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\singlenode.svg
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\success-toaster.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\telecom-favicon.ico
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\transceiver.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\undo.png
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\warning-toaster.png
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-icon.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-out-icon.svg
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\css\Style.css
@@ -135,6 +139,7 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\NetworkGraph.min.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\NetworkTool.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\Network Graph\stylenetwork.js
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\sweetalert2@9.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\validation.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\vis-network.min.js
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\js\visunminify.js

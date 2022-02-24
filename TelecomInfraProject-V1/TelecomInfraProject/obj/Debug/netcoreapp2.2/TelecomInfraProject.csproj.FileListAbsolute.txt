@@ -66,7 +66,6 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp2.2\TelecomInfraProject.pdb
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp2.2\TelecomInfraProject.Views.dll
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp2.2\TelecomInfraProject.Views.pdb
-D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.GeneratedMSBuildEditorConfig.editorconfig
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.AssemblyInfoInputs.cache
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.AssemblyInfo.cs

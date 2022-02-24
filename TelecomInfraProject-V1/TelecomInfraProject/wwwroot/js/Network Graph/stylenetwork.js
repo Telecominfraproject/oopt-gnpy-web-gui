@@ -125,6 +125,13 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
+            $("#txtFileName").val('');
+            $("#staticBackdrop1").modal('show');
+        }
+    });
+
+    $("#exportNetwork").click(function () {
+        if (networkValidation()) {
             $("#staticBackdrop1").modal('show');
         }
     });
@@ -308,7 +315,7 @@ $(document).ready(function () {
     });
 
     $("#importEqptLink").click(function () {
-        
+
         //Swal.fire({
         //    icon: 'warning',
         //    title: '',
@@ -322,7 +329,7 @@ $(document).ready(function () {
         //    allowOutsideClick: false
         //}).then((result) => {
         //    if (result.value) {
-                $("#importEqpt").click();
+        $("#importEqpt").click();
         //    }
         //});
 
@@ -726,7 +733,7 @@ function _readdata() {
 
                     case 2:
                         dat = _context.sent;
-                        console.log(dat);
+                    //console.log(dat);
 
                     case 4:
                     case "end":
@@ -756,9 +763,9 @@ function _initDb() {
                         isDbCreated = _context2.sent;
 
                         if (isDbCreated) {
-                            console.log('db created');
+                            //console.log('db created');
                         } else {
-                            console.log('db opened');
+                            //console.log('db opened');
                         }
 
                     case 4:
@@ -1911,8 +1918,11 @@ function exportNetwork(isSaveNetwork) {
         return;
     }
     var elabel = "";
+    var ox;
+    var oy;
     $.each(network.body.data.nodes.get(), function (index, item) {
-
+        ox = network.body.nodes[item.id].x;
+        oy = network.body.nodes[item.id].y;
 
         if (item.node_type == transceiverJSON.node_type) {
             var node = {
@@ -1922,8 +1932,8 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1939,8 +1949,8 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1955,8 +1965,8 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1968,15 +1978,15 @@ function exportNetwork(isSaveNetwork) {
             var node = {
                 'node-id': item.label,
                 'tip-photonic-topology:amplifier': {
-                    "model": item.amp_type,
+                    "model": item.amp_type ? item.amp_type : "",
                     "gain-target": item.gain_target ? item.gain_target : "0.0",
                     "tilt-target": item.tilt_target ? item.tilt_target : "0.0",
                     "out-voa-target": item.out_voa_target ? item.out_voa_target : "0.0"
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -1993,8 +2003,8 @@ function exportNetwork(isSaveNetwork) {
                 },
                 metadata: {
                     location: {
-                        latitude: item.x,
-                        longitude: item.y,
+                        latitude: ox,
+                        longitude: oy,
                         city: item.label,
                         region: ""
                     }
@@ -5153,7 +5163,7 @@ function updateService(serviceID) {
 
 }
 function deleteService(serviceID) {
-    
+
     var serviceDetails = network.body.data.edges.get(serviceID);
     var serviceLabel = serviceDetails.label;
     if (serviceDetails.label.trim() == "")
@@ -5179,7 +5189,7 @@ function deleteService(serviceID) {
         }
     });
 
-    
+
 }
 function clearService() {
 
