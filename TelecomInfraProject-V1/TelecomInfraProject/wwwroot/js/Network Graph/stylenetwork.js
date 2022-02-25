@@ -329,7 +329,7 @@ $(document).ready(function () {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-        $("#importEqpt").click();
+                $("#importEqpt").click();
             }
         });
 
@@ -1931,9 +1931,9 @@ function exportNetwork(isSaveNetwork) {
                     "model": item.transceiver_type
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1948,9 +1948,9 @@ function exportNetwork(isSaveNetwork) {
                     "model": item.roadm_type
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1964,9 +1964,9 @@ function exportNetwork(isSaveNetwork) {
                 'tip-photonic-topology:attenuator': {
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1984,9 +1984,9 @@ function exportNetwork(isSaveNetwork) {
                     "out-voa-target": item.out_voa_target ? item.out_voa_target : "0.0"
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -2002,9 +2002,9 @@ function exportNetwork(isSaveNetwork) {
                     'category': item.category
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -2241,13 +2241,13 @@ function importNode(index) {
     var y = getRandomNumberBetween(-230, 648);
 
     try {
-        if (_import_json["network"][0].node[index]["metadata"]["location"].latitude)
-            x = _import_json["network"][0].node[index]["metadata"]["location"].latitude;
+        if (_import_json["network"][0].node[index]["metadata"]["Positions"]["X-co-ordinate"])
+            x = _import_json["network"][0].node[index]["metadata"]["Positions"]["X-co-ordinate"];
         else
             x = getRandomNumberBetween(-230, 648);
 
-        if (_import_json["network"][0].node[index]["metadata"]["location"].longitude)
-            y = _import_json["network"][0].node[index]["metadata"]["location"].longitude;
+        if (_import_json["network"][0].node[index]["metadata"]["Positions"]["Y-co-ordinate"])
+            y = _import_json["network"][0].node[index]["metadata"]["Positions"]["Y-co-ordinate"];
         else
             y = getRandomNumberBetween(-230, 648);
     }
