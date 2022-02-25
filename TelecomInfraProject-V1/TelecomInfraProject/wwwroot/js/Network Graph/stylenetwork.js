@@ -5570,10 +5570,7 @@ function showMessage(messageType, textmsg) {
             var successrc1 = "./Assets/img/success-toaster.png";
             $("#img_src").attr("src", successrc1);
             $('#toast').addClass("success-toast");
-            $(".success-toast").toast('show');
-            setTimeout(function () {
-                $(".success-toast").toast('hide');
-            }, 3000);
+            clearAndSetTimeout(".success-toast");
             break;
         case alertType.Info:
             $('#msg_content').text(textmsg);
@@ -5582,10 +5579,7 @@ function showMessage(messageType, textmsg) {
             $("#img_src").attr("src", infosrc);
             $('#toast').removeClass("success-toast");
             $('#toast').addClass("info-toast");
-            $(".info-toast").toast('show');
-            setTimeout(function () {
-                $(".info-toast").toast('hide');
-            }, 3000);
+            clearAndSetTimeout(".info-toast");
             break;
         case alertType.Error:
             $('#msg_content').text(textmsg);
@@ -5595,10 +5589,7 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");
             $('#toast').addClass("danger-toast");
-            $(".danger-toast").toast('show');
-            setTimeout(function () {
-                $(".danger-toast").toast('hide');
-            },3000);
+            clearAndSetTimeout(".danger-toast");
             break;
         case alertType.Warning:
             $('#msg_content').text(textmsg);
@@ -5609,16 +5600,23 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("info-toast");
             $('#toast').removeClass("danger-toast");
             $('#toast').addClass("warning-toast");
-            $(".warning-toast").toast('show');
-            setTimeout(function () {
-                $(".warning-toast").toast('hide');
-            }, 3000);
+            clearAndSetTimeout(".warning-toast");
             break;
     }
 
 
 }
 
-
+function clearAndSetTimeout(targetEle) {
+    const highestId = window.setTimeout(() => {
+        for (let i = highestId; i >= 0; i--) {
+            window.clearInterval(i);
+        }
+    }, 0);
+    $(targetEle).toast('show');
+    setTimeout(function () {
+        $(targetEle).toast('hide');
+    }, 3000);
+}
 
 
