@@ -5571,6 +5571,9 @@ function showMessage(messageType, textmsg) {
             $("#img_src").attr("src", successrc1);
             $('#toast').addClass("success-toast");
             $(".success-toast").toast('show');
+            setTimeout(function () {
+                $(".success-toast").toast('hide');
+            }, 3000);
             break;
         case alertType.Info:
             $('#msg_content').text(textmsg);
@@ -5580,6 +5583,9 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("success-toast");
             $('#toast').addClass("info-toast");
             $(".info-toast").toast('show');
+            setTimeout(function () {
+                $(".info-toast").toast('hide');
+            }, 3000);
             break;
         case alertType.Error:
             $('#msg_content').text(textmsg);
@@ -5590,7 +5596,9 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("info-toast");
             $('#toast').addClass("danger-toast");
             $(".danger-toast").toast('show');
-
+            setTimeout(function () {
+                $(".danger-toast").toast('hide');
+            },3000);
             break;
         case alertType.Warning:
             $('#msg_content').text(textmsg);
@@ -5602,6 +5610,9 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("danger-toast");
             $('#toast').addClass("warning-toast");
             $(".warning-toast").toast('show');
+            setTimeout(function () {
+                $(".warning-toast").toast('hide');
+            }, 3000);
             break;
     }
 
