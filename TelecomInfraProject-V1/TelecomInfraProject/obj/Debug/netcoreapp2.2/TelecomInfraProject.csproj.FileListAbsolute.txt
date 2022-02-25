@@ -85,3 +85,4 @@ D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.pdb
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.genruntimeconfig.cache
 D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.csproj.CopyComplete
+D:\Git Repository\GNPy_Pull\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache

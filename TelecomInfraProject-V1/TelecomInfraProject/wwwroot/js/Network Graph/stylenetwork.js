@@ -316,22 +316,22 @@ $(document).ready(function () {
 
     $("#importEqptLink").click(function () {
 
-        //Swal.fire({
-        //    icon: 'warning',
-        //    title: '',
-        //    text: 'Do you want to override existing data and replace with new data ?',
-        //    showCancelButton: true,
-        //    confirmButtonText: "OK",
-        //    closeOnConfirm: true,
-        //    confirmButtonColor: '#49508a',
-        //    width: 375,
-        //    height: 200,
-        //    allowOutsideClick: false
-        //}).then((result) => {
-        //    if (result.value) {
+        Swal.fire({
+            icon: 'warning',
+            title: '',
+            text: 'Do you want to override existing data and replace with new data ?',
+            showCancelButton: true,
+            confirmButtonText: "OK",
+            closeOnConfirm: true,
+            confirmButtonColor: '#49508a',
+            width: 375,
+            height: 200,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
         $("#importEqpt").click();
-        //    }
-        //});
+            }
+        });
 
 
     });
@@ -682,8 +682,8 @@ function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
     var spanLength = "#" + eleSL;
     var lossCoefficient = "#" + eleLC;
     var spanLoss = "#" + eleSpanLoss;
-    var span_length = Number($(spanLength).val());
-    var loss_coefficient = Number($(lossCoefficient).val());
+    var span_length = parseFloat($(spanLength).val());
+    var loss_coefficient = parseFloat($(lossCoefficient).val());
     $(spanLoss).val(span_length * loss_coefficient);
 }
 
@@ -3392,9 +3392,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var connector_OUT = fiber_config.Connector_out;
 
             if (isImport) {
-                span_Length = Number(tSpanLength);
-                loss_Coefficient = Number(loss_Coefficient);
-                span_Loss = span_Length * loss_Coefficient;
+                span_Length = tSpanLength;
+                loss_Coefficient = loss_Coefficient;
+                span_Loss = parseFloat(span_Length * loss_Coefficient);
                 fiber_Type = tType;
                 connector_IN = tConnector_in;
                 connector_OUT = tConnector_out;
@@ -4703,15 +4703,15 @@ function updateDualFiber(fiberID) {
     var connector_outB = $("#txtFiberBCOUT").val();
     var span_lossB = $("#txtFiberBSpanLoss").val();
 
-    var spanlen = Number(span_length);
+    var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, dualFiberJSON.component_type + ' A : please enter valid span length.');
         return;
     }
 
-    var Bspan_length = Number($("#txtFiberBSL").val());
+    var Bspan_length = parseFloat($("#txtFiberBSL").val());
 
-    spanlen = Number(Bspan_length);
+    spanlen = parseFloat(Bspan_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, dualFiberJSON.component_type + ' B : please enter valid span length.');
         return;
@@ -4811,7 +4811,7 @@ function updateSingleFiber(fiberID) {
     var connector_out = $("#txtConnector_OUT").val();
     var span_loss = $("#txtSpan_Loss").val();
 
-    var spanlen = Number(span_length);
+    var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, 'pleae enter valid span length.');
         return;

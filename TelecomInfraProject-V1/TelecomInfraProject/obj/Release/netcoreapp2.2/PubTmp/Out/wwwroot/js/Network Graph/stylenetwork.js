@@ -316,22 +316,22 @@ $(document).ready(function () {
 
     $("#importEqptLink").click(function () {
 
-        //Swal.fire({
-        //    icon: 'warning',
-        //    title: '',
-        //    text: 'Do you want to override existing data and replace with new data ?',
-        //    showCancelButton: true,
-        //    confirmButtonText: "OK",
-        //    closeOnConfirm: true,
-        //    confirmButtonColor: '#49508a',
-        //    width: 375,
-        //    height: 200,
-        //    allowOutsideClick: false
-        //}).then((result) => {
-        //    if (result.value) {
+        Swal.fire({
+            icon: 'warning',
+            title: '',
+            text: 'Do you want to override existing data and replace with new data ?',
+            showCancelButton: true,
+            confirmButtonText: "OK",
+            closeOnConfirm: true,
+            confirmButtonColor: '#49508a',
+            width: 375,
+            height: 200,
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.value) {
         $("#importEqpt").click();
-        //    }
-        //});
+            }
+        });
 
 
     });

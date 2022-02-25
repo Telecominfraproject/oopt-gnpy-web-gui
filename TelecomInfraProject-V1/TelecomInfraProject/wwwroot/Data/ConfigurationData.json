@@ -110,13 +110,13 @@
       "fiber_type": "SSMF",
       "CD_coefficient": 16.7,
       "PMD_coefficient": 0.0400028124,
-      "Span_length": 1.0,
-      "Loss_coefficient": 0.25,
-      "Connector_in": 0.0,
-      "Connector_out": 0.0,
-      "Ageing_loss": 0.0,
+      "Span_length": "1.0",
+      "Loss_coefficient": "0.25",
+      "Connector_in": "0.5",
+      "Connector_out": "0.5",
+      "Ageing_loss": "0.0",
       "Length_based_loss": false,
-      "Span_loss": 0.0
+      "Span_loss": "0.0"
     }
   },
   "SingleFiber": {
@@ -140,13 +140,13 @@
       "fiber_type": "SSMF",
       "CD_coefficient": 16.7,
       "PMD_coefficient": 0.0400028124,
-      "Span_length": 1.0,
-      "Loss_coefficient": 0.25,
-      "Connector_in": 0.0,
-      "Connector_out": 0.0,
-      "Ageing_Loss": 0.0,
+      "Span_length": "1.0",
+      "Loss_coefficient": "0.25",
+      "Connector_in": "0.5",
+      "Connector_out": "0.5",
+      "Ageing_loss": "0.0",
       "Length_based_loss": false,
-      "Span_loss": 0.0
+      "Span_loss": "0.0"
     }
   },
 
