@@ -481,6 +481,7 @@ function modeHighLight(node) {
             $(btnAddSinglePatch).removeClass('highlight');
             $(btnAddDualPatch).removeClass('highlight');
             $(btnAddRamAmp).removeClass('highlight');
+            network.disableEditMode();
 
     }
 }

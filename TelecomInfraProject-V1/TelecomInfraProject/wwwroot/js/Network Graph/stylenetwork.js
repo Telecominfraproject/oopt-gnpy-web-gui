@@ -194,6 +194,7 @@ $(document).ready(function () {
             isDualFiberMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('dualfiber');
             dualFiberMode();
         }
@@ -208,6 +209,7 @@ $(document).ready(function () {
             isSingleFiberMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('singlefiber');
             singleFiberMode();
         }
@@ -223,6 +225,7 @@ $(document).ready(function () {
                 isAddService = 0;
             }
             else {
+                network.addEdgeMode();
                 modeHighLight('service');
                 addServiceMode();
             }
@@ -238,6 +241,7 @@ $(document).ready(function () {
             isDualPatchMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('dualpatch');
             dualPatchMode();
         }
@@ -252,6 +256,7 @@ $(document).ready(function () {
             isSinglePatchMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('singlepatch');
             singlePatchMode();
         }
@@ -1030,6 +1035,36 @@ function draw(isImport) {
                     addNodes(data, callback);
                 }
             },
+            addEdge: function (data, callback) {
+                if (data.from == data.to)
+                    return;
+
+                if (isSingleFiberMode == 1 || isSingleFiberMode == 1) {
+                    addEdgeData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    addFiber();
+                }
+                else if (isSinglePatchMode == 1 || isDualPatchMode == 1) {
+                    addPatchData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    if (isSinglePatchMode == 1)
+                        addSinglePatch();
+                    else if (isDualPatchMode == 1)
+                        addDualPatch();
+
+                }
+                else if (isAddService == 1) {
+                    addServiceData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    addService();
+                }
+            },
         },
     };
     network = new vis.Network(container, data, options);
@@ -1500,38 +1535,38 @@ function draw(isImport) {
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
 
- 
 
-        //var tempData = JSON.parse(localStorage.getItem("networkData"));
-        var tempData = "";
-        try {
-            tempData = JSON.parse(dat[0].name);
-            if (tempData['ietf-network:networks'].network[0].node.length > 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '',
-                    text: 'do you want to load network topology from local storage ?',
-                    showCancelButton: true,
-                    confirmButtonText: "OK",
-                    closeOnConfirm: true,
-                    confirmButtonColor: '#49508a',
-                    width: 375,
-                    height: 200,
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.value) {
-                        eqptData = tempData;
-                        isEqptFile = true;
-                        eqpt_config = eqptData;
-                        load_EqptConfig(true);
-                    }
-                });
-            }
-        }
-        catch (e) {
-        }
 
-  
+    //var tempData = JSON.parse(localStorage.getItem("networkData"));
+    var tempData = "";
+    try {
+        tempData = JSON.parse(dat[0].name);
+        if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: '',
+                text: 'do you want to load network topology from local storage ?',
+                showCancelButton: true,
+                confirmButtonText: "OK",
+                closeOnConfirm: true,
+                confirmButtonColor: '#49508a',
+                width: 375,
+                height: 200,
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.value) {
+                    eqptData = tempData;
+                    isEqptFile = true;
+                    eqpt_config = eqptData;
+                    load_EqptConfig(true);
+                }
+            });
+        }
+    }
+    catch (e) {
+    }
+
+
 
 }
 
@@ -2758,6 +2793,7 @@ function addFiber() {
         to: ''
     };
     UnSelectAll();
+    network.addEdgeMode();
 }
 function dualFiberMode() {
     UnSelectAll();
@@ -2863,6 +2899,7 @@ function addDualPatch() {
         to: ''
     };
     UnSelectAll();
+    network.addEdgeMode();
 
 }
 function addSinglePatch() {
@@ -2876,7 +2913,7 @@ function addSinglePatch() {
         to: ''
     };
     UnSelectAll();
-
+    network.addEdgeMode();
 }
 
 function dualPatchMode() {
@@ -3029,6 +3066,7 @@ function networkPage() {
 }
 
 function disableFiberService() {
+
     nodeMode = "";
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
@@ -3622,6 +3660,8 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
         data.edges.on("*", change_history_back);
 
     }
+    network.unselectAll();
+    network.addEdgeMode();
 }
 
 //Add service//cmode 1-add
