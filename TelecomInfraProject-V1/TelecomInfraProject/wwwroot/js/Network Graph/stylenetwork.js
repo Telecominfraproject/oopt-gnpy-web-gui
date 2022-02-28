@@ -965,41 +965,42 @@ function draw(isImport) {
 
     ]);
 
-    data = {
-        nodes: nodes,
-        edges: edges
-    }
-    if (!isImport) {
+    //data = {
+    //    nodes: nodes,
+    //    edges: edges
+    //}
+    //if (!isImport) {
 
-        //var tempData = JSON.parse(localStorage.getItem("networkData"));
-        var tempData = "";
-        try {
-            tempData = JSON.parse(dat[0].name);
-            if (tempData.nodes.length > 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '',
-                    text: 'do you want to load network data from local storage ?',
-                    showCancelButton: true,
-                    confirmButtonText: "OK",
-                    closeOnConfirm: true,
-                    confirmButtonColor: '#49508a',
-                    width: 375,
-                    height: 200,
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.value) {
-                        nodes = getNodeData(tempData.nodes);
-                        edges = getEdgeData(tempData.edges);
-                        isLocalStorage = true;
-                    }
-                });
-            }
-        }
-        catch (e) {
-        }
+    //    //var tempData = JSON.parse(localStorage.getItem("networkData"));
+    //    var tempData = "";
+    //    try {
+    //        tempData = JSON.parse(dat[0].name);
+    //        debugger;
+    //        if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+    //            Swal.fire({
+    //                icon: 'warning',
+    //                title: '',
+    //                text: 'do you want to load network topology from local storage ?',
+    //                showCancelButton: true,
+    //                confirmButtonText: "OK",
+    //                closeOnConfirm: true,
+    //                confirmButtonColor: '#49508a',
+    //                width: 375,
+    //                height: 200,
+    //                allowOutsideClick: false
+    //            }).then((result) => {
+    //                if (result.value) {
+    //                    nodes = getNodeData(tempData.nodes);
+    //                    edges = getEdgeData(tempData.edges);
+    //                    isLocalStorage = true;
+    //                }
+    //            });
+    //        }
+    //    }
+    //    catch (e) {
+    //    }
 
-    }
+    //}
 
     data = {
         nodes: nodes,
@@ -1498,6 +1499,39 @@ function draw(isImport) {
     // event on
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+
+ 
+
+        //var tempData = JSON.parse(localStorage.getItem("networkData"));
+        var tempData = "";
+        try {
+            tempData = JSON.parse(dat[0].name);
+            if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '',
+                    text: 'do you want to load network topology from local storage ?',
+                    showCancelButton: true,
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true,
+                    confirmButtonColor: '#49508a',
+                    width: 375,
+                    height: 200,
+                    allowOutsideClick: false
+                }).then((result) => {
+                    if (result.value) {
+                        eqptData = tempData;
+                        isEqptFile = true;
+                        eqpt_config = eqptData;
+                        load_EqptConfig(true);
+                    }
+                });
+            }
+        }
+        catch (e) {
+        }
+
+  
 
 }
 
@@ -2141,7 +2175,6 @@ var isEqptFile = false;
 
 function load_EqptConfig(isFileUpload) {
     try {
-
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
             showMessage(alertType.Error, "keyError:'equipment elements', try again");
             return;
