@@ -352,8 +352,10 @@ $(document).ready(function () {
         rawFile.send(null);
     }
     $("#importEqpt").on('change', function (e) {
+
         var file = e.target.files[0];
         if (file) {
+            //document.getElementById("jsonImport").innerText = '... loading ...';
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
 
@@ -425,6 +427,7 @@ $(document).ready(function () {
             $(btnAddAmplifier).removeClass('highlight');
             $(btnAddTransceiver).removeClass('highlight')
             nodeMode = 0;
+            enableEdgeIndicator();
         }
     });
 
@@ -469,6 +472,7 @@ $(document).ready(function () {
             history_list_forward.shift();
             // apply css
             css_for_undo_redo_chnage();
+            enableEdgeIndicator();
         }
     });
     //end undo and redo
@@ -680,6 +684,7 @@ function showHideLabel() {
 
     });
 
+    enableEdgeIndicator();
 }
 
 
@@ -1543,7 +1548,7 @@ function draw(isImport) {
         tempData = JSON.parse(dat[0].name);
         if (tempData['ietf-network:networks'].network[0].node.length > 0) {
             Swal.fire({
-                icon: 'warning',
+                icon: 'info',
                 title: '',
                 text: 'do you want to load network topology from local storage ?',
                 showCancelButton: true,
@@ -2511,7 +2516,6 @@ var isImportJSON = false;
 function importNetwork() {
 
     try {
-
         network.body.data.edges.clear();
         network.body.data.nodes.clear();
         importNodes = [];
@@ -2529,7 +2533,6 @@ function importNetwork() {
         });
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
-
     }
     catch
     {
@@ -4104,6 +4107,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     document.getElementById("dualFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+    enableEdgeIndicator();
 }
 
 function singleFiberInsertNode(fiberID, node_type, callback) {
@@ -4319,6 +4323,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     document.getElementById("singleFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+    enableEdgeIndicator();
 }
 
 //start -- component edit, update, remove, clear
@@ -4839,6 +4844,7 @@ function clearDualFiber() {
 
     closeDrawer('dualfiber');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 function clearCbxandAccordian() {
     if ($("#aFiberA").text() == "-")
@@ -4929,6 +4935,7 @@ function clearSingleFiber() {
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 function deleteFiber(fiberID) {
@@ -4994,7 +5001,7 @@ function deleteFiber(fiberID) {
             network.body.data.edges.remove(fiberID);
             multipleFiberService(fiber.from, fiber.to);
             network.unselectAll();
-
+            enableEdgeIndicator();
         }
     });
 
@@ -5125,6 +5132,7 @@ function deletePatch(patchID) {
             network.body.data.edges.remove(patchID);
             multipleFiberService(patchDetails.from, patchDetails.to);
             network.unselectAll();
+            enableEdgeIndicator();
         }
     });
 
@@ -5135,6 +5143,7 @@ function clearSinglePatch() {
     $("#txtSinglePatchName").val('');
     closeDrawer('singlepatch');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 
@@ -5186,6 +5195,7 @@ function clearDualPatch() {
     $("#txtDualPatchName").val('');
     closeDrawer('dualpatch');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 function serviceEdit(serviceID, callback) {
@@ -5259,6 +5269,7 @@ function deleteService(serviceID) {
             network.body.data.edges.remove(serviceID);
             multipleFiberService(serviceDetails.from, serviceDetails.to);
             network.unselectAll();
+            enableEdgeIndicator();
         }
     });
 
@@ -5273,6 +5284,7 @@ function clearService() {
     $("#ddlCentralFrq").val('');
     closeDrawer('service');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 //end -- component edit, update, remove, clear
@@ -5690,6 +5702,11 @@ function clearAndSetTimeout(targetEle) {
     setTimeout(function () {
         $(targetEle).toast('hide');
     }, 3000);
+}
+
+function enableEdgeIndicator() {
+    if (isDualFiberMode == 1 || isSingleFiberMode == 1 || isSinglePatchMode == 1 || isDualPatchMode == 1 || isAddService == 1)
+        network.addEdgeMode();
 }
 
 

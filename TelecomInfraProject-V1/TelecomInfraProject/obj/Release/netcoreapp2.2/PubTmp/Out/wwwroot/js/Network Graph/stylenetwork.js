@@ -194,6 +194,7 @@ $(document).ready(function () {
             isDualFiberMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('dualfiber');
             dualFiberMode();
         }
@@ -208,6 +209,7 @@ $(document).ready(function () {
             isSingleFiberMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('singlefiber');
             singleFiberMode();
         }
@@ -223,6 +225,7 @@ $(document).ready(function () {
                 isAddService = 0;
             }
             else {
+                network.addEdgeMode();
                 modeHighLight('service');
                 addServiceMode();
             }
@@ -238,6 +241,7 @@ $(document).ready(function () {
             isDualPatchMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('dualpatch');
             dualPatchMode();
         }
@@ -252,6 +256,7 @@ $(document).ready(function () {
             isSinglePatchMode = 0;
         }
         else {
+            network.addEdgeMode();
             modeHighLight('singlepatch');
             singlePatchMode();
         }
@@ -329,7 +334,7 @@ $(document).ready(function () {
             allowOutsideClick: false
         }).then((result) => {
             if (result.value) {
-        $("#importEqpt").click();
+                $("#importEqpt").click();
             }
         });
 
@@ -347,8 +352,10 @@ $(document).ready(function () {
         rawFile.send(null);
     }
     $("#importEqpt").on('change', function (e) {
+
         var file = e.target.files[0];
         if (file) {
+            //document.getElementById("jsonImport").innerText = '... loading ...';
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
 
@@ -420,6 +427,7 @@ $(document).ready(function () {
             $(btnAddAmplifier).removeClass('highlight');
             $(btnAddTransceiver).removeClass('highlight')
             nodeMode = 0;
+            enableEdgeIndicator();
         }
     });
 
@@ -464,6 +472,7 @@ $(document).ready(function () {
             history_list_forward.shift();
             // apply css
             css_for_undo_redo_chnage();
+            enableEdgeIndicator();
         }
     });
     //end undo and redo
@@ -675,6 +684,7 @@ function showHideLabel() {
 
     });
 
+    enableEdgeIndicator();
 }
 
 
@@ -682,8 +692,8 @@ function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
     var spanLength = "#" + eleSL;
     var lossCoefficient = "#" + eleLC;
     var spanLoss = "#" + eleSpanLoss;
-    var span_length = Number($(spanLength).val());
-    var loss_coefficient = Number($(lossCoefficient).val());
+    var span_length = parseFloat($(spanLength).val());
+    var loss_coefficient = parseFloat($(lossCoefficient).val());
     $(spanLoss).val(span_length * loss_coefficient);
 }
 
@@ -965,41 +975,42 @@ function draw(isImport) {
 
     ]);
 
-    data = {
-        nodes: nodes,
-        edges: edges
-    }
-    if (!isImport) {
+    //data = {
+    //    nodes: nodes,
+    //    edges: edges
+    //}
+    //if (!isImport) {
 
-        //var tempData = JSON.parse(localStorage.getItem("networkData"));
-        var tempData = "";
-        try {
-            tempData = JSON.parse(dat[0].name);
-            if (tempData.nodes.length > 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: '',
-                    text: 'do you want to load network data from local storage ?',
-                    showCancelButton: true,
-                    confirmButtonText: "OK",
-                    closeOnConfirm: true,
-                    confirmButtonColor: '#49508a',
-                    width: 375,
-                    height: 200,
-                    allowOutsideClick: false
-                }).then((result) => {
-                    if (result.value) {
-                        nodes = getNodeData(tempData.nodes);
-                        edges = getEdgeData(tempData.edges);
-                        isLocalStorage = true;
-                    }
-                });
-            }
-        }
-        catch (e) {
-        }
+    //    //var tempData = JSON.parse(localStorage.getItem("networkData"));
+    //    var tempData = "";
+    //    try {
+    //        tempData = JSON.parse(dat[0].name);
+    //        debugger;
+    //        if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+    //            Swal.fire({
+    //                icon: 'warning',
+    //                title: '',
+    //                text: 'do you want to load network topology from local storage ?',
+    //                showCancelButton: true,
+    //                confirmButtonText: "OK",
+    //                closeOnConfirm: true,
+    //                confirmButtonColor: '#49508a',
+    //                width: 375,
+    //                height: 200,
+    //                allowOutsideClick: false
+    //            }).then((result) => {
+    //                if (result.value) {
+    //                    nodes = getNodeData(tempData.nodes);
+    //                    edges = getEdgeData(tempData.edges);
+    //                    isLocalStorage = true;
+    //                }
+    //            });
+    //        }
+    //    }
+    //    catch (e) {
+    //    }
 
-    }
+    //}
 
     data = {
         nodes: nodes,
@@ -1027,6 +1038,36 @@ function draw(isImport) {
                 //}
                 if (nodeMode > 0 && nodeMode < 7) {
                     addNodes(data, callback);
+                }
+            },
+            addEdge: function (data, callback) {
+                if (data.from == data.to)
+                    return;
+
+                if (isSingleFiberMode == 1 || isSingleFiberMode == 1) {
+                    addEdgeData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    addFiber();
+                }
+                else if (isSinglePatchMode == 1 || isDualPatchMode == 1) {
+                    addPatchData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    if (isSinglePatchMode == 1)
+                        addSinglePatch();
+                    else if (isDualPatchMode == 1)
+                        addDualPatch();
+
+                }
+                else if (isAddService == 1) {
+                    addServiceData = {
+                        from: data.from,
+                        to: data.to
+                    };
+                    addService();
                 }
             },
         },
@@ -1499,6 +1540,39 @@ function draw(isImport) {
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
 
+
+
+    //var tempData = JSON.parse(localStorage.getItem("networkData"));
+    var tempData = "";
+    try {
+        tempData = JSON.parse(dat[0].name);
+        if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+            Swal.fire({
+                icon: 'info',
+                title: '',
+                text: 'do you want to load network topology from local storage ?',
+                showCancelButton: true,
+                confirmButtonText: "OK",
+                closeOnConfirm: true,
+                confirmButtonColor: '#49508a',
+                width: 375,
+                height: 200,
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.value) {
+                    eqptData = tempData;
+                    isEqptFile = true;
+                    eqpt_config = eqptData;
+                    load_EqptConfig(true);
+                }
+            });
+        }
+    }
+    catch (e) {
+    }
+
+
+
 }
 
 function displayNodesHover(params) {
@@ -1931,9 +2005,9 @@ function exportNetwork(isSaveNetwork) {
                     "model": item.transceiver_type
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1948,9 +2022,9 @@ function exportNetwork(isSaveNetwork) {
                     "model": item.roadm_type
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1964,9 +2038,9 @@ function exportNetwork(isSaveNetwork) {
                 'tip-photonic-topology:attenuator': {
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -1984,9 +2058,9 @@ function exportNetwork(isSaveNetwork) {
                     "out-voa-target": item.out_voa_target ? item.out_voa_target : "0.0"
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -2002,9 +2076,9 @@ function exportNetwork(isSaveNetwork) {
                     'category': item.category
                 },
                 metadata: {
-                    location: {
-                        latitude: ox,
-                        longitude: oy,
+                    Positions: {
+                        'X-co-ordinate': ox,
+                        'Y-co-ordinate': oy,
                         city: item.label,
                         region: ""
                     }
@@ -2141,7 +2215,6 @@ var isEqptFile = false;
 
 function load_EqptConfig(isFileUpload) {
     try {
-
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
             showMessage(alertType.Error, "keyError:'equipment elements', try again");
             return;
@@ -2241,13 +2314,13 @@ function importNode(index) {
     var y = getRandomNumberBetween(-230, 648);
 
     try {
-        if (_import_json["network"][0].node[index]["metadata"]["location"].latitude)
-            x = _import_json["network"][0].node[index]["metadata"]["location"].latitude;
+        if (_import_json["network"][0].node[index]["metadata"]["Positions"]["X-co-ordinate"])
+            x = _import_json["network"][0].node[index]["metadata"]["Positions"]["X-co-ordinate"];
         else
             x = getRandomNumberBetween(-230, 648);
 
-        if (_import_json["network"][0].node[index]["metadata"]["location"].longitude)
-            y = _import_json["network"][0].node[index]["metadata"]["location"].longitude;
+        if (_import_json["network"][0].node[index]["metadata"]["Positions"]["Y-co-ordinate"])
+            y = _import_json["network"][0].node[index]["metadata"]["Positions"]["Y-co-ordinate"];
         else
             y = getRandomNumberBetween(-230, 648);
     }
@@ -2443,7 +2516,6 @@ var isImportJSON = false;
 function importNetwork() {
 
     try {
-
         network.body.data.edges.clear();
         network.body.data.nodes.clear();
         importNodes = [];
@@ -2461,7 +2533,6 @@ function importNetwork() {
         });
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
-
     }
     catch
     {
@@ -2725,6 +2796,7 @@ function addFiber() {
         to: ''
     };
     UnSelectAll();
+    network.addEdgeMode();
 }
 function dualFiberMode() {
     UnSelectAll();
@@ -2830,6 +2902,7 @@ function addDualPatch() {
         to: ''
     };
     UnSelectAll();
+    network.addEdgeMode();
 
 }
 function addSinglePatch() {
@@ -2843,7 +2916,7 @@ function addSinglePatch() {
         to: ''
     };
     UnSelectAll();
-
+    network.addEdgeMode();
 }
 
 function dualPatchMode() {
@@ -2996,6 +3069,7 @@ function networkPage() {
 }
 
 function disableFiberService() {
+
     nodeMode = "";
     isDualFiberMode = 0;
     isSingleFiberMode = 0;
@@ -3392,9 +3466,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var connector_OUT = fiber_config.Connector_out;
 
             if (isImport) {
-                span_Length = Number(tSpanLength);
-                loss_Coefficient = Number(loss_Coefficient);
-                span_Loss = span_Length * loss_Coefficient;
+                span_Length = tSpanLength;
+                loss_Coefficient = loss_Coefficient;
+                span_Loss = parseFloat(span_Length * loss_Coefficient);
                 fiber_Type = tType;
                 connector_IN = tConnector_in;
                 connector_OUT = tConnector_out;
@@ -3589,6 +3663,8 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
         data.edges.on("*", change_history_back);
 
     }
+    network.unselectAll();
+    network.addEdgeMode();
 }
 
 //Add service//cmode 1-add
@@ -4031,6 +4107,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     document.getElementById("dualFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+    enableEdgeIndicator();
 }
 
 function singleFiberInsertNode(fiberID, node_type, callback) {
@@ -4246,6 +4323,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     document.getElementById("singleFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+    enableEdgeIndicator();
 }
 
 //start -- component edit, update, remove, clear
@@ -4703,15 +4781,15 @@ function updateDualFiber(fiberID) {
     var connector_outB = $("#txtFiberBCOUT").val();
     var span_lossB = $("#txtFiberBSpanLoss").val();
 
-    var spanlen = Number(span_length);
+    var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, dualFiberJSON.component_type + ' A : please enter valid span length.');
         return;
     }
 
-    var Bspan_length = Number($("#txtFiberBSL").val());
+    var Bspan_length = parseFloat($("#txtFiberBSL").val());
 
-    spanlen = Number(Bspan_length);
+    spanlen = parseFloat(Bspan_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, dualFiberJSON.component_type + ' B : please enter valid span length.');
         return;
@@ -4766,6 +4844,7 @@ function clearDualFiber() {
 
     closeDrawer('dualfiber');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 function clearCbxandAccordian() {
     if ($("#aFiberA").text() == "-")
@@ -4811,7 +4890,7 @@ function updateSingleFiber(fiberID) {
     var connector_out = $("#txtConnector_OUT").val();
     var span_loss = $("#txtSpan_Loss").val();
 
-    var spanlen = Number(span_length);
+    var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Warning, 'pleae enter valid span length.');
         return;
@@ -4856,6 +4935,7 @@ function clearSingleFiber() {
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 function deleteFiber(fiberID) {
@@ -4921,7 +5001,7 @@ function deleteFiber(fiberID) {
             network.body.data.edges.remove(fiberID);
             multipleFiberService(fiber.from, fiber.to);
             network.unselectAll();
-
+            enableEdgeIndicator();
         }
     });
 
@@ -5052,6 +5132,7 @@ function deletePatch(patchID) {
             network.body.data.edges.remove(patchID);
             multipleFiberService(patchDetails.from, patchDetails.to);
             network.unselectAll();
+            enableEdgeIndicator();
         }
     });
 
@@ -5062,6 +5143,7 @@ function clearSinglePatch() {
     $("#txtSinglePatchName").val('');
     closeDrawer('singlepatch');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 
@@ -5113,6 +5195,7 @@ function clearDualPatch() {
     $("#txtDualPatchName").val('');
     closeDrawer('dualpatch');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 function serviceEdit(serviceID, callback) {
@@ -5186,6 +5269,7 @@ function deleteService(serviceID) {
             network.body.data.edges.remove(serviceID);
             multipleFiberService(serviceDetails.from, serviceDetails.to);
             network.unselectAll();
+            enableEdgeIndicator();
         }
     });
 
@@ -5200,6 +5284,7 @@ function clearService() {
     $("#ddlCentralFrq").val('');
     closeDrawer('service');
     network.unselectAll();
+    enableEdgeIndicator();
 }
 
 //end -- component edit, update, remove, clear
@@ -5570,7 +5655,7 @@ function showMessage(messageType, textmsg) {
             var successrc1 = "./Assets/img/success-toaster.png";
             $("#img_src").attr("src", successrc1);
             $('#toast').addClass("success-toast");
-            $(".success-toast").toast('show');
+            clearAndSetTimeout(".success-toast");
             break;
         case alertType.Info:
             $('#msg_content').text(textmsg);
@@ -5579,7 +5664,7 @@ function showMessage(messageType, textmsg) {
             $("#img_src").attr("src", infosrc);
             $('#toast').removeClass("success-toast");
             $('#toast').addClass("info-toast");
-            $(".info-toast").toast('show');
+            clearAndSetTimeout(".info-toast");
             break;
         case alertType.Error:
             $('#msg_content').text(textmsg);
@@ -5589,8 +5674,7 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");
             $('#toast').addClass("danger-toast");
-            $(".danger-toast").toast('show');
-
+            clearAndSetTimeout(".danger-toast");
             break;
         case alertType.Warning:
             $('#msg_content').text(textmsg);
@@ -5601,13 +5685,28 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("info-toast");
             $('#toast').removeClass("danger-toast");
             $('#toast').addClass("warning-toast");
-            $(".warning-toast").toast('show');
+            clearAndSetTimeout(".warning-toast");
             break;
     }
 
 
 }
 
+function clearAndSetTimeout(targetEle) {
+    const highestId = window.setTimeout(() => {
+        for (let i = highestId; i >= 0; i--) {
+            window.clearInterval(i);
+        }
+    }, 0);
+    $(targetEle).toast('show');
+    setTimeout(function () {
+        $(targetEle).toast('hide');
+    }, 3000);
+}
 
+function enableEdgeIndicator() {
+    if (isDualFiberMode == 1 || isSingleFiberMode == 1 || isSinglePatchMode == 1 || isDualPatchMode == 1 || isAddService == 1)
+        network.addEdgeMode();
+}
 
 

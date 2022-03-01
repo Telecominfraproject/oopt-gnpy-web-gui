@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\TelecomInfraProject-V1",
+    "\\TelecomInfraProject-V1\\TelecomInfraProject",
+    "\\TelecomInfraProject-V1\\TelecomInfraProject\\wwwroot",
+    "\\TelecomInfraProject-V1\\TelecomInfraProject\\wwwroot\\js",
+    "\\TelecomInfraProject-V1\\TelecomInfraProject\\wwwroot\\js\\Network Graph"
   ],
-  "SelectedNode": "\\TelecomInfraProject.sln",
   "PreviewInSolutionExplorer": false
 }
