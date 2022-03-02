@@ -125,6 +125,16 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
+            var response = checkLink();
+            if (response.flag) {
+                showMessage(alertType.Warning, response.message);
+                return;
+            }
+            response = checkMisLink();
+            if (response.flag) {
+                showMessage(alertType.Warning, response.message);
+                return;
+            }
             $("#txtFileName").val('');
             $("#staticBackdrop1").modal('show');
         }
@@ -2528,12 +2538,12 @@ function importNetwork() {
         $.each(networkData, function (index, item) {
             importNode(index);
         });
-        
+
         var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
         $.each(edgeData, function (index, item) {
             importEdge(index);
         });
-        
+
         nodes = new vis.DataSet(importNodes);
         edges = new vis.DataSet(importEdges);
     }
@@ -3292,7 +3302,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         var fiberID = token();
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
-        
+
         //amplifier and attenuator fiber connection conditions - max limit 2
         if (isDualFiberMode == 1)//removed restriction for single fiber mode, so check fiber mode
         {
@@ -3454,6 +3464,14 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             });
         }
         if (isSingleFiberMode == 1) {
+
+            var response = nodeRule(cfrom, cto);
+
+            if (response.flag) {
+                showMessage(alertType.Warning, response.message);
+                return;
+            }
+
             var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
             if (!isImport)
                 clabel = countFiberService(false, true, false, false, cfrom, cto) + '-' + clabel;
@@ -3683,6 +3701,14 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             elabel = "";
 
         if (isSinglePatchMode == 1) {
+
+            var response = nodeRule(cfrom, cto);
+
+            if (response.flag) {
+                showMessage(alertType.Warning, response.message);
+                return;
+            }
+
             network.body.data.edges.add({
                 id: token(), from: cfrom, to: cto, label: elabel, text: clabel,
                 dashes: singlePatchJSON.dashes, width: singlePatchJSON.width,
@@ -5711,4 +5737,126 @@ function enableEdgeIndicator() {
         network.addEdgeMode();
 }
 
+function nodeRule(from, to) {
+    var fromConnections = network.getConnectedEdges(from);
+    var toConnections = network.getConnectedEdges(to);
 
+    var connections = [];
+    connections.push(fromConnections);
+
+    $.each(toConnections, function (index, item) {
+        connections.push(item);
+    });
+
+    var fromDetails = network.body.data.nodes.get(from);
+    var toDetails = network.body.data.nodes.get(to);
+
+    var message = "";
+    var flag = false;
+    var connectedNodes;
+    //to check connection b/w roadm and amplifier
+    if ((fromDetails.node_type == roadmJSON.node_type && toDetails.amp_category == amplifierJSON.amp_category) || (toDetails.node_type == roadmJSON.node_type && fromDetails.amp_category == amplifierJSON.amp_category)) {
+        $.each(connections, function (index, item) {
+            connectedNodes = network.getConnectedNodes(item);
+            if (connectedNodes) {
+                if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
+                    message = "we cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.node_type + ' - ' + fromDetails.label + " and " + toDetails.node_type + ' - ' + toDetails.label;
+                    flag = true;
+                }
+            }
+        });
+    }
+
+    //to check connection b/w roadm and transceiver
+    //if ((fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == transceiverJSON.node_type) || (toDetails.node_type == roadmJSON.node_type && fromDetails.node_type == transceiverJSON.node_type)) {
+
+    //}
+
+    // to check connection b/w amplifier and amplifier
+    if (fromDetails.amp_category == amplifierJSON.amp_category && toDetails.amp_category == amplifierJSON.amp_category) {
+        $.each(connections, function (index, item) {
+            connectedNodes = network.getConnectedNodes(item);
+            if (connectedNodes) {
+                if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
+                    message = "we cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.node_type + ' - ' + fromDetails.label + " and " + toDetails.node_type + ' - ' + toDetails.label;
+                    flag = true;
+                }
+            }
+        });
+    }
+
+    if (!flag) {
+        if (fromDetails.amp_category == amplifierJSON.amp_category) {
+            if (fromConnections.length > 1) {
+                message = fromDetails.amp_category + ' - ' + fromDetails.label + ' should have one outgoing/incomming connections, ';
+                flag = true;
+            }
+        }
+        if (toDetails.amp_category == amplifierJSON.amp_category) {
+            if (toConnections.length > 1) {
+                message += toDetails.amp_category + ' - ' + toDetails.label + ' should have one outgoing/incomming connections';
+                flag = true;
+            }
+        }
+    }
+
+    return { message: message, flag: flag };
+}
+
+function checkLink() {
+
+    var roadmList = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.node_type == roadmJSON.node_type);
+        }
+    });
+
+    var connectedEdges;
+    var fromCount = 0;
+    var toCount = 0;
+    var edgeDetails;
+    var message;
+    var flag = false;
+    $.each(roadmList, function (index, item) {
+        connectedEdges = network.getConnectedEdges(item.id);
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < connectedEdges.length; i++) {
+            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+            if (edgeDetails.from == item.id)
+                fromCount++;
+            else if (edgeDetails.to == item.id)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+            message = roadmJSON.node_type.toUpperCase() + " should have even links and both are different direction";
+            flag = true;
+        }
+    });
+
+    return { message: message, flag: flag };
+}
+
+function checkMisLink() {
+
+    var roadmList = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.node_type == amplifierJSON.amp_category);
+        }
+    });
+
+    var connectedEdges;
+    var message;
+    var flag = false;
+    $.each(roadmList, function (index, item) {
+        connectedEdges = network.getConnectedEdges(item.id);
+        if (connectedEdges.length <=1) {
+            message = "Link is missing, please check again";
+            flag = true;
+            return false;
+        }
+        
+    });
+    return { message: message, flag: flag };
+}

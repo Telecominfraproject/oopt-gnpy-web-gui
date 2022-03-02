@@ -5784,18 +5784,36 @@ function nodeRule(from, to) {
             }
         });
     }
-
+    var edgeDetails;
     if (!flag) {
         if (fromDetails.amp_category == amplifierJSON.amp_category) {
             if (fromConnections.length > 1) {
                 message = fromDetails.amp_category + ' - ' + fromDetails.label + ' should have one outgoing/incomming connections, ';
                 flag = true;
             }
+            else {
+                $.each(fromConnections, function (index, item) {
+                    edgeDetails = network.body.data.edges.get(item);
+                    if (edgeDetails.from == from) {
+                        message = 'links wrongly connected';
+                        flag = true;
+                    }
+                });
+            }
         }
         if (toDetails.amp_category == amplifierJSON.amp_category) {
             if (toConnections.length > 1) {
                 message += toDetails.amp_category + ' - ' + toDetails.label + ' should have one outgoing/incomming connections';
                 flag = true;
+            }
+            else {
+                $.each(toConnections, function (index, item) {
+                    edgeDetails = network.body.data.edges.get(item);
+                    if (edgeDetails.to == to) {
+                        message = 'links wrongly connected';
+                        flag = true;
+                    }
+                });
             }
         }
     }
@@ -5851,12 +5869,12 @@ function checkMisLink() {
     var flag = false;
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
-        if (connectedEdges.length <=1) {
+        if (connectedEdges.length <= 1) {
             message = "Link is missing, please check again";
             flag = true;
             return false;
         }
-        
+
     });
     return { message: message, flag: flag };
 }
