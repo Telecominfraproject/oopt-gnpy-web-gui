@@ -1543,33 +1543,35 @@ function draw(isImport) {
 
 
     //var tempData = JSON.parse(localStorage.getItem("networkData"));
-    var tempData = "";
-    try {
-        tempData = JSON.parse(dat[0].name);
-        if (tempData['ietf-network:networks'].network[0].node.length > 0) {
-            Swal.fire({
-                icon: 'info',
-                title: '',
-                text: 'do you want to load network topology from local storage ?',
-                showCancelButton: true,
-                confirmButtonText: "OK",
-                closeOnConfirm: true,
-                confirmButtonColor: '#49508a',
-                width: 375,
-                height: 200,
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.value) {
-                    eqptData = tempData;
-                    isEqptFile = true;
-                    eqpt_config = eqptData;
-                    load_EqptConfig(true);
-                }
-            });
-        }
-    }
-    catch (e) {
-    }
+
+    //load topology from local storage
+    //var tempData = "";
+    //try {
+    //    tempData = JSON.parse(dat[0].name);
+    //    if (tempData['ietf-network:networks'].network[0].node.length > 0) {
+    //        Swal.fire({
+    //            icon: 'info',
+    //            title: '',
+    //            text: 'do you want to load network topology from local storage ?',
+    //            showCancelButton: true,
+    //            confirmButtonText: "OK",
+    //            closeOnConfirm: true,
+    //            confirmButtonColor: '#49508a',
+    //            width: 375,
+    //            height: 200,
+    //            allowOutsideClick: false
+    //        }).then((result) => {
+    //            if (result.value) {
+    //                eqptData = tempData;
+    //                isEqptFile = true;
+    //                eqpt_config = eqptData;
+    //                load_EqptConfig(true);
+    //            }
+    //        });
+    //    }
+    //}
+    //catch (e) {
+    //}
 
 
 
