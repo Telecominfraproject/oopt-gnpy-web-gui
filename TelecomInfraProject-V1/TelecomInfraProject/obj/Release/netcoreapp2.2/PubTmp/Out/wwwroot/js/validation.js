@@ -13,7 +13,7 @@ function nameLengthValidation(element) {
         flag = false;
     }
     else if (Number($(elementID).val().trim().length) > maxLength) {
-        msg = "name length should be below than 20";
+        msg = "Name length should be below than 20";
         flag = false;
     }
     //else if ($("#txtNodeDegree").val().trim() == '') {
@@ -37,7 +37,7 @@ function addMulNodeVal() {
     if ($("#txtNofNode").val().trim() != '' && isValid && Number($("#txtNofNode").val().trim() < maxNode))
         flag = true;
     else
-        showMessage(alertType.Warning, 'please enter valid number');
+        showMessage(alertType.Warning, 'Please enter valid number');
     return flag;
 }
 function exportFileValidation() {
@@ -45,7 +45,7 @@ function exportFileValidation() {
     if ($("#txtFileName").val().trim() != '')
         flag = true;
     else
-        showMessage(alertType.Warning, 'please enter file name');
+        showMessage(alertType.Warning, 'Please enter file name');
     return flag;
 }
 function roadmProVal() {
@@ -53,6 +53,6 @@ function roadmProVal() {
     if ($("#ddlRoadmList").val().trim() != 0 && $("#ddlROADMType").val().trim() != 0 && $("#ddlRPreAmpType").val().trim() != 0 && $("#ddlRBoosterType").val().trim() != 0)
         flag = true;
     else
-        showMessage(alertType.Warning, 'please enter the value');
+        showMessage(alertType.Warning, 'Please enter the value');
     return flag;
 }

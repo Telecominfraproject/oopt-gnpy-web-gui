@@ -125,21 +125,25 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
+            var flag = false;
+            var message = [];
             var response = checkLink();
             if (response.flag) {
-                showMessage(alertType.Warning, response.message);
-                return;
+                flag = true
+                message.push(response.message);
             }
-            response = checkMisLink(amplifierJSON.node_type);
+
+            response = checkMisLink();
             if (response.flag) {
-                showMessage(alertType.Warning, response.message);
+                flag = true;
+                message.push(response.message);
+            }
+
+            if (flag) {
+                showMessage(alertType.Warning, message.join(' and '));
                 return;
             }
-            response = checkMisLink(fusedJSON.node_type);
-            if (response.flag) {
-                showMessage(alertType.Warning, response.message);
-                return;
-            }
+
             $("#txtFileName").val('');
             $("#staticBackdrop1").modal('show');
         }
@@ -5746,7 +5750,7 @@ function clearAndSetTimeout(targetEle) {
     $(targetEle).toast('show');
     setTimeout(function () {
         $(targetEle).toast('hide');
-    }, 3000);
+    }, 6000);
 }
 
 function enableEdgeIndicator() {
@@ -5797,7 +5801,7 @@ function nodeRule(from, to, nodeType) {
             connectedNodes = network.getConnectedNodes(item);
             if (connectedNodes) {
                 if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
-                    message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and "+ toDetails.label;
+                    message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and " + toDetails.label;
                     flag = true;
                 }
             }
@@ -5855,6 +5859,7 @@ function checkLink() {
     var edgeDetails;
     var message;
     var flag = false;
+    var msg = [];
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
         fromCount = 0;
@@ -5868,33 +5873,41 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            message =item.label  + " must have an even number of links with an equal number of incoming and outgoing links";
+            msg.push(item.label);
             flag = true;
         }
     });
 
+    
+    message = msg.join(', ') + " must have an even number of links with an equal number of incoming and outgoing links";
+
     return { message: message, flag: flag };
 }
 
-function checkMisLink(nodeType) {
+function checkMisLink() {
 
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == nodeType);
+            return (item.node_type == amplifierJSON.node_type || item.node_type==fusedJSON.node_type);
         }
     });
 
     var connectedEdges;
     var message;
     var flag = false;
+    var msg = [];
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
         if (connectedEdges.length <= 1) {
-            message = "One or more links to "+item.label+" is missing";
+            msg.push(item.label);
             flag = true;
-            return false;
         }
 
     });
+
+    var sorp = ' is';
+    if (msg.length > 1)
+        sorp = ' are'
+    message = "One or more links to " + msg.join(', ') + sorp + " missing";
     return { message: message, flag: flag };
 }
