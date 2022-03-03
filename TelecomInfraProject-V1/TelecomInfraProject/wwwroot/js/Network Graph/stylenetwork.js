@@ -70,6 +70,7 @@ var tConnector_in = "";
 var tConnector_out = "";
 var tBandwidth = "";
 var eqptData = "";
+var bullet = "&#9632; ";
 
 $(document).ready(function () {
 
@@ -130,17 +131,17 @@ $(document).ready(function () {
             var response = checkLink();
             if (response.flag) {
                 flag = true
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             response = checkMisLink();
             if (response.flag) {
                 flag = true;
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             if (flag) {
-                showMessage(alertType.Error, message.join(', '));
+                showMessage(alertType.Error, message.join('. <br /><br /> '));
                 return;
             }
 
@@ -3492,17 +3493,17 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var response = nodeRule(cfrom, cto, amplifierJSON.node_type);
             if (response.flag) {
                 flag = true
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             response = nodeRule(cfrom, cto, fusedJSON.node_type);
             if (response.flag) {
                 flag = true;
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             if (flag) {
-                showMessage(alertType.Error, message.join(', '));
+                showMessage(alertType.Error, message.join('. <br /><br /> '));
                 return;
             }
 
@@ -3754,17 +3755,17 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var response = nodeRule(cfrom, cto, amplifierJSON.node_type);
             if (response.flag) {
                 flag = true
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             response = nodeRule(cfrom, cto, fusedJSON.node_type);
             if (response.flag) {
                 flag = true;
-                message.push(response.message);
+                message.push(bullet + response.message);
             }
 
             if (flag) {
-                showMessage(alertType.Error, message.join(', '));
+                showMessage(alertType.Error, message.join('. <br /><br /> '));
                 return;
             }
 
@@ -5737,7 +5738,7 @@ function showMessage(messageType, textmsg) {
     switch (messageType) {
         case alertType.Success:
 
-            $('#msg_content').text(textmsg);
+            $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Success));
             var successrc1 = "./Assets/img/success-toaster.png";
             $("#img_src").attr("src", successrc1);
@@ -5745,7 +5746,7 @@ function showMessage(messageType, textmsg) {
             clearAndSetTimeout(".success-toast");
             break;
         case alertType.Info:
-            $('#msg_content').text(textmsg);
+            $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Info));
             var infosrc = "./Assets/img/info-toaster.png";
             $("#img_src").attr("src", infosrc);
@@ -5754,7 +5755,7 @@ function showMessage(messageType, textmsg) {
             clearAndSetTimeout(".info-toast");
             break;
         case alertType.Error:
-            $('#msg_content').text(textmsg);
+            $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
             var dangersrc = "./Assets/img/error-toaster.png";
             $("#img_src").attr("src", dangersrc);
@@ -5764,7 +5765,7 @@ function showMessage(messageType, textmsg) {
             clearAndSetTimeout(".danger-toast");
             break;
         case alertType.Warning:
-            $('#msg_content').text(textmsg);
+            $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Warning));
             var warningsrc = "./Assets/img/warning-toaster.png";
             $("#img_src").attr("src", warningsrc);
@@ -5848,6 +5849,7 @@ function nodeRule(from, to, nodeType) {
     var edgeDetails;
     var nodetype;
     if (!flag) {
+        message = "";
         if (fromDetails.node_type == nodeType) {
             if (fromConnections.length > 1) {
                 message = fromDetails.label + ' cannot have more than one incoming and one outgoing connection. ';
@@ -5865,7 +5867,11 @@ function nodeRule(from, to, nodeType) {
         }
         if (toDetails.node_type == nodeType) {
             if (toConnections.length > 1) {
-                message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+
+                if (message != "")
+                    message +="<br /> <br />"+ bullet + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                else
+                    message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 flag = true;
             }
             else {
@@ -5916,7 +5922,7 @@ function checkLink() {
         }
     });
 
-    
+
     message = msg.join(', ') + " must have an even number of links with an equal number of incoming and outgoing links";
 
     return { message: message, flag: flag };
@@ -5926,7 +5932,7 @@ function checkMisLink() {
 
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == amplifierJSON.node_type || item.node_type==fusedJSON.node_type);
+            return (item.node_type == amplifierJSON.node_type || item.node_type == fusedJSON.node_type);
         }
     });
 
