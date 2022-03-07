@@ -2449,7 +2449,23 @@ function importNode(index) {
 
 
 
-    network.body.data.nodes.add({
+    //network.body.data.nodes.add({
+    //    id: nodeID, label: label, x: x, y: y, image: image, number: number,
+    //    view: topologyView.Functional_View, hidden: false,
+    //    shape: shape, color: color, size: nodeSize,
+    //    node_type: node_type, node_degree: node_degree, component_type: component_type,
+    //    roadm_type_pro: [],
+    //    transceiver_type: transceiver_type,//transceiver
+    //    amp_type: amp_type,//amplifier
+    //    gain_target: gain_target,
+    //    tilt_target: tilt_target,
+    //    out_voa_target: out_voa_target,//end amplifier
+    //    roadm_type: roadm_type, category: category,
+    //    pre_amp_type: pre_amp_type, booster_type: booster_type, amp_category: amp_category//ILA
+    //});
+
+
+    importNodes.push({
         id: nodeID, label: label, x: x, y: y, image: image, number: number,
         view: topologyView.Functional_View, hidden: false,
         shape: shape, color: color, size: nodeSize,
@@ -2462,34 +2478,6 @@ function importNode(index) {
         out_voa_target: out_voa_target,//end amplifier
         roadm_type: roadm_type, category: category,
         pre_amp_type: pre_amp_type, booster_type: booster_type, amp_category: amp_category//ILA
-    });
-
-
-    importNodes.push({
-        id: nodeID,
-        label: label,
-        shape: shape,
-        image: image,
-        color: color,
-        size: nodeSize,
-        //edges: elem.edges[0],
-        x: x,
-        y: y,
-        number: number,
-        transceiver_type: transceiver_type,
-        pre_amp_type: pre_amp_type,
-        booster_type: booster_type,
-        amp_type: amp_type,
-        amp_category: amp_category,
-        roadm_type: roadm_type,
-        category: category,
-        gain_target: gain_target,
-        tilt_target: tilt_target,
-        out_voa_target: out_voa_target,
-        roadm_type_pro: [],
-        component_type: component_type,
-        node_degree: nodeDetails.default.node_degree,
-        node_type: nodeDetails.default.node_type
 
     });
 
@@ -2541,6 +2529,7 @@ function importNetwork() {
         network.body.data.edges.clear();
         network.body.data.nodes.clear();
         importNodes = [];
+        importEdges = [];
         nodes = [];
         edges = [];
 
@@ -2549,13 +2538,71 @@ function importNetwork() {
             importNode(index);
         });
 
+        network.body.data.nodes.add(importNodes);
+        fiberSmooth = fiberJSON.options.smooth;
+        var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
         var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
+
         $.each(edgeData, function (index, item) {
-            importEdge(index);
+            if (item["tip-photonic-topology:fiber"]) {
+                var labelvalue = item["link-id"];
+                fiber_Type = item["tip-photonic-topology:fiber"].type;
+                span_Length = item["tip-photonic-topology:fiber"].length;
+                connector_IN = item["tip-photonic-topology:fiber"]["conn-att-in"];
+                connector_OUT = item["tip-photonic-topology:fiber"]["conn-att-out"];
+
+                var loss_Coefficient = fiber_config.Loss_coefficient;;
+                span_Loss = parseFloat(span_Length * loss_Coefficient);
+                importEdges.push({
+                    id: token(), from: item['source']['source-node'], to: item['destination']['dest-node'], label: '', text: labelvalue,
+                    view: topologyView.Functional_View, hidden: false,
+                    dashes: singleFiberJSON.dashes,
+                    fiber_category: singleFiberJSON.fiber_category,
+                    component_type: singleFiberJSON.component_type,
+                    color: singleFiberJSON.options.color,
+                    width: singleFiberJSON.width,
+                    arrows: singleFiberJSON.options.arrows,
+                    font: singleFiberJSON.options.font,
+                    smooth: fiberSmooth,
+                    fiber_type: fiber_Type, span_length: span_Length,
+                    loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
+                    span_loss: span_Loss,
+                });
+
+            }
+            else if (item["tip-photonic-topology:patch"]) {
+                var labelvalue = item["link-id"];
+                importEdges.push({
+                    id: token(), from: item['source']['source-node'], to: item['destination']['dest-node'], label: '', text: labelvalue,
+                    dashes: singlePatchJSON.dashes, width: singlePatchJSON.width,
+                    component_type: singlePatchJSON.component_type, patch_category: singlePatchJSON.patch_category,
+                    color: singlePatchJSON.options.color, background: singlePatchJSON.options.background,
+                    arrows: singlePatchJSON.options.arrows, font: singlePatchJSON.options.font, smooth: singlePatchJSON.options.smooth,
+                    view: topologyView.Functional_View, hidden: false,
+                });
+            }
+            else if (item["tip-photonic-topology:service"]) {
+                var labelvalue = item["link-id"];
+                bandwidth = item["tip-photonic-topology:service"]["band-width"];
+                importEdges.push({
+                    id: token(), from: item['source']['source-node'], to: item['destination']['dest-node'], label: '', text: labelvalue,
+                    dashes: serviceJSON.dashes, width: serviceJSON.width,
+                    component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background,
+                    arrows: serviceJSON.options.arrows, font: serviceJSON.options.font, smooth: fiberSmooth,
+                    band_width: bandwidth
+                });
+
+            }
         });
 
-        nodes = new vis.DataSet(importNodes);
-        edges = new vis.DataSet(importEdges);
+
+        if (importEdges.length > 500) {
+            setTimeout(next500, 100);
+            network.body.data.edges.add(importEdges.slice(0, 500));
+        }
+        else
+            network.body.data.edges.add(importEdges);
+
     }
     catch
     {
@@ -2572,6 +2619,10 @@ function importNetwork() {
 
 }
 
+
+function next500() {
+    network.body.data.edges.add(importEdges.slice(500, importEdges.length))
+}
 function getNodeData(data) {
     data.forEach(function (elem, index, array) {
         importNodes.push({
@@ -5869,7 +5920,7 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message +="<br /> <br />"+ bullet + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += "<br /> <br />" + bullet + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 else
                     message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 flag = true;
