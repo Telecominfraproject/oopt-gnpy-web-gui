@@ -54,6 +54,14 @@
 </head>
 
 <body class="body-index" onload="init();">
+    <div  class="loader-change" id="loader" style="display:none;">
+        <div class="progress" >
+            <div class="progress-bar progress-bar-striped active" role="progressbar" id="pg" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Loding...
+            </div>
+        </div>
+
+    </div>
     <div class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" id="toast"
          data-autohide="false" data-delay="10000" style="position: absolute; top: 40px; right: 20px; z-index:9999;">
         <div class="toast-header">
@@ -182,7 +190,7 @@
                 <div class="col-lg-3 text-btn-left">
                     <div class="bg-card-change select-box" id="importEqptLink">
                         <img src="./Assets/img/import-icon-1.png" class="select-in-img1 p-3">
-                        <button class="select-role-btn w-100 font-weight-bold" id="jsonImport">Import Network using JSON</button>
+                        <button class="select-role-btn w-100 font-weight-bold">Import Network using JSON</button>
                     </div>
                 </div>
                 <div class="col-lg-3"></div>
@@ -1255,6 +1263,7 @@
     </div>
     <div class="dropdown-menu" id="hoverDiv" style="z-index:1001;padding:0px;;" aria-labelledby="dropdownMenuButton">
     </div>
+
     <!-- Script language -->
     <script src="~/js/main.js"></script>
 

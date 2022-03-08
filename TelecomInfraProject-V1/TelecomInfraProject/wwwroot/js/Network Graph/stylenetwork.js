@@ -375,7 +375,7 @@ $(document).ready(function () {
 
         var file = e.target.files[0];
         if (file) {
-            //document.getElementById("jsonImport").innerText = '... loading ...';
+            $('#loader').show();
             var path = (window.URL || window.webkitURL).createObjectURL(file);
             readTextFile(path, function (text) {
 
@@ -389,6 +389,7 @@ $(document).ready(function () {
                     }
                     catch (e) {
                         showMessage(alertType.Error, "KeyError:'elements', try again");
+                        hideLoader();
                     }
                 }
             });
@@ -1339,7 +1340,7 @@ function draw(isImport) {
                                 );
                             }
                             else if (amp_category == amplifierJSON.amp_category) {
-                                
+
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
                                 document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
                                     this,
@@ -2235,11 +2236,16 @@ var importEdges = [];
 var _eqpt_json;
 var isEqptFile = false;
 
+function hideLoader() {
+    $('#loader').hide();
+    $("#importEqpt").val('');
+}
 
 function load_EqptConfig(isFileUpload) {
     try {
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
             showMessage(alertType.Error, "KeyError:'equipment elements', try again");
+            hideLoader()
             return;
         }
         else {
@@ -2248,6 +2254,7 @@ function load_EqptConfig(isFileUpload) {
                 importNetwork();
                 $("#importEqpt").val('');
                 $('#divSelection').hide();
+                hideLoader();
                 showMessage(alertType.Success, "JSON file loaded successfully");
             }
         }
@@ -2298,6 +2305,7 @@ function load_EqptConfig(isFileUpload) {
     }
     catch {
         showMessage(alertType.Error, "KeyError:'elements', try again");
+        hideLoader();
     }
 }
 
@@ -2535,6 +2543,7 @@ function importNetwork() {
         edges = [];
 
         var networkData = _import_json["network"][0].node;
+
         $.each(networkData, function (index, item) {
             importNode(index);
         });
@@ -2622,7 +2631,8 @@ function importNetwork() {
 
 
 function next500() {
-    network.body.data.edges.add(importEdges.slice(500, importEdges.length))
+    network.body.data.edges.add(importEdges.slice(500, importEdges.length));
+
 }
 function getNodeData(data) {
     data.forEach(function (elem, index, array) {
@@ -3130,6 +3140,7 @@ function wholePage() {
 }
 
 function networkPage() {
+    network.fit();
     html2canvas(document.querySelector("#mynetwork"), {
         onrendered: function (canvas) {
             var img = canvas.toDataURL();
