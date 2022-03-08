@@ -1338,7 +1338,8 @@ function draw(isImport) {
 
                                 );
                             }
-                            else if (amp_category == nodeType) {
+                            else if (amp_category == amplifierJSON.amp_category) {
+                                
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
                                 document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
                                     this,
