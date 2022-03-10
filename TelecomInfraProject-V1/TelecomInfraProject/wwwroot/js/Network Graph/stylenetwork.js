@@ -579,7 +579,10 @@ function networkView(view) {
         //$("#edit-topology").hide();
         //$("#add-service").hide();
         //isExpandedView = true;
-        expandAndCollapseView(topologyView.Functional_View);
+
+        //disabled temp - increase performance in import json
+        //expandAndCollapseView(topologyView.Functional_View);
+
         //}
         //else {
         //    isExpandedView = false;
@@ -2545,7 +2548,17 @@ function importNetwork() {
         var networkData = _import_json["network"][0].node;
 
         $.each(networkData, function (index, item) {
+
             importNode(index);
+
+            //var asyncFunct = new Promise(function (resolve, reject) {
+            //    importNode(index);
+            //    resolve();
+            //});
+            //asyncFunct.then((result) => {
+            //    $('#pg').text(index);
+            //});
+
         });
 
         network.body.data.nodes.add(importNodes);
@@ -2605,10 +2618,31 @@ function importNetwork() {
             }
         });
 
+        var partition = 200;
+        if (importEdges.length >= partition) {
+            var tot = parseInt(importEdges.length / partition);
+            var count = 0;;
+            for (var i = 1; i <= tot; i++) {
+                count = partition * i;
+                if (i == 1) {
+                    setTimeout(
+                        network.body.data.edges.add(importEdges.slice(0, count))
+                        , 100);
 
-        if (importEdges.length > 500) {
-            setTimeout(next500, 100);
-            network.body.data.edges.add(importEdges.slice(0, 500));
+                    if (i == tot) {
+                        network.body.data.edges.add(importEdges.slice(count, importEdges.length));
+                    }
+                }
+                else {
+                    setTimeout(
+                        network.body.data.edges.add(importEdges.slice(count - partition, count))
+                        , 100);
+
+                    if (i == tot) {
+                        network.body.data.edges.add(importEdges.slice(count, importEdges.length));
+                    }
+                }
+            }
         }
         else
             network.body.data.edges.add(importEdges);
@@ -2618,7 +2652,6 @@ function importNetwork() {
     {
 
     }
-
     isImportJSON = true;
     $("#ddlNetworkView").val(topologyView.Functional_View);
     //if (isExpandedView) {
