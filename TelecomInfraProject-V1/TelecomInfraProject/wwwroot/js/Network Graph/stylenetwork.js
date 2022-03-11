@@ -499,6 +499,7 @@ $(document).ready(function () {
     //end undo and redo
 
     //show hide label 
+    //var testingCount = 5000;
     $("#showHideEle").on("click", function () {
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
