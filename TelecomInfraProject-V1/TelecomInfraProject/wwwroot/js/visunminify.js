@@ -54823,6 +54823,7 @@
                     }, {
                         key: '_fit',
                         value: function _fit() {
+                        
                             if (new Date().valueOf() - this.touchTime > 700) {
                                 // TODO: fix ugly hack to avoid hammer's double fireing of event (because we use release?)
                                 this.body.emitter.emit("fit", { duration: 700 });
