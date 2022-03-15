@@ -54823,11 +54823,24 @@
                     }, {
                         key: '_fit',
                         value: function _fit() {
-                        
                             if (new Date().valueOf() - this.touchTime > 700) {
                                 // TODO: fix ugly hack to avoid hammer's double fireing of event (because we use release?)
                                 this.body.emitter.emit("fit", { duration: 700 });
                                 this.touchTime = new Date().valueOf();
+                                if (network.getScale() > 0.6) {
+                                    zoomOut = true;
+                                    if (zoomIn) {
+                                        data.nodes.off("*", change_history_back);
+                                        data.edges.off("*", change_history_back);
+
+                                        network.setOptions(hiddenNodeTextDisplayOptions);
+                                        zoomIn = false;
+                                    }
+                                }
+                                enableEdgeIndicator();
+
+                                if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
+                                    network.addNodeMode();
                             }
                         }
 
