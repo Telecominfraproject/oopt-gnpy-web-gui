@@ -16,6 +16,36 @@
       "hover": true
     },
     "edges": {
+      "color": {
+        "color": "blue",
+        "highlight": "blue",
+        "hover": "blue",
+        "inherit": false,
+        "opacity": 1
+      },
+      "background": {
+        "color": "blue",
+        "dashes": false,
+        "enabled": false,
+        "size": 10
+      },
+      "arrows": {
+        "from": {
+          "enabled": false,
+          "type": "arrow"
+        },
+        "to": {
+          "enabled": true,
+          "type": "arrow",
+          "scaleFactor": ".5"
+        }
+      },
+      "font": {
+        "color": "gray",
+        "size": 11,
+        "face": "verdana",
+        "align": "top"
+      },
       "smooth": {
         "enabled": false,
         "type": "continuous"

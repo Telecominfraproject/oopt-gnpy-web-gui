@@ -531,6 +531,20 @@ $(document).ready(function () {
     //var testingCount = 5000;
     $("#showHideEle").on("click", function () {
         hideEdgeLabels();
+        if (network.getScale() <= 0.6) {
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            network.setOptions(hiddenNodeTextOptions);
+        }
+        else if (network.getScale() > 0.6) {
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            network.setOptions(hiddenNodeTextDisplayOptions);
+        }
+        enableEdgeIndicator();
+
+        if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
+            network.addNodeMode();
     });
 
     $("#hoverDiv").mouseover(function () {
