@@ -6,7 +6,7 @@
     "font_variant": "normal"
   },
   "options": {
-    "physis": false,
+    "physics": false,
 
     "interaction": {
       "navigationButtons": true,

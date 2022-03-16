@@ -744,6 +744,7 @@ function hideEdgeLabels() {
         displayEdgeLabels = true;
     } else {
         // Apply standard options
+        options.physics = optionsJSON.physics;
         network.setOptions(options);
         displayEdgeLabels = false;
     }
@@ -1044,9 +1045,9 @@ function destroy() {
 }
 var options;
 function draw(isImport) {
-    destroy();
-    nodes = [];
-    edges = [];
+    //destroy();
+    //nodes = [];
+    //edges = [];
 
     // create a network
     var container = document.getElementById("mynetwork");
@@ -1097,15 +1098,31 @@ function draw(isImport) {
 
     //}
 
-    data = {
-        nodes: nodes,
-        edges: edges
+
+    if (isImport) {
+        data = {
+            nodes: new vis.DataSet(importNodes),
+            edges: new vis.DataSet(importEdges)
+        }
+    }
+    else {
+        data = {
+            nodes: nodes,
+            edges: edges
+        }
     }
 
+    var iteration = data.nodes.length + data.edges.length;
     options = {
 
         interaction: optionsJSON.interaction,
-        physics: optionsJSON.physis,
+        physics: {
+            stabilization: {
+                enabled: true,
+                iterations: 0,
+                updateInterval: 0,
+            },
+        },
         edges: {
             font: optionsJSON.edges.font,
             smooth: optionsJSON.edges.smooth
@@ -1162,7 +1179,7 @@ function draw(isImport) {
         },
     };
     network = new vis.Network(container, data, options);
-    hideEdgeLabels();
+    //hideEdgeLabels();
 
     network.on("click", function (params) {
         //$("#txtX").val(params.pointer.canvas.x);
@@ -1637,7 +1654,7 @@ function draw(isImport) {
             if (zoomIn) {
                 data.nodes.off("*", change_history_back);
                 data.edges.off("*", change_history_back);
-                
+
                 network.setOptions(hiddenNodeTextDisplayOptions);
                 zoomIn = false;
             }
@@ -1648,7 +1665,42 @@ function draw(isImport) {
             network.addNodeMode();
     });
 
-    // initial data
+    network.on("stabilizationProgress", function (params) {
+        var widthFactor = params.iterations / params.total;
+        if (widthFactor > 0) {
+            document.getElementById("per").innerText =
+                Math.round(widthFactor * 100) + "%";
+        }
+    });
+    network.once("stabilizationIterationsDone", function () {
+
+        var temPhysics = {
+            physics: optionsJSON.physics
+        }
+        network.setOptions(temPhysics);
+        document.getElementById("per").innerText = "100%";
+        document.getElementById("loader").style.display = "none";
+        if (isImport) {
+            isImportJSON = true;
+            $("#ddlNetworkView").val(topologyView.Functional_View);
+            networkView(2);
+            $("#importEqpt").val('');
+            $('#divSelection').hide();
+            displayEdgeLabels = false;
+            hideEdgeLabels();
+            showMessage(alertType.Success, "JSON file loaded successfully");
+        }
+
+    });
+
+    if (!isImport) {
+        var temPhysics = {
+            physics: optionsJSON.physics
+        }
+
+        network.setOptions(temPhysics);
+    }
+
     history_list_back.push({
         nodes_his: data.nodes.get(data.nodes.getIds()),
         edges_his: data.edges.get(data.edges.getIds())
@@ -2346,10 +2398,7 @@ function load_EqptConfig(isFileUpload) {
             if (isFileUpload) {
                 _import_json = eqptData['ietf-network:networks'];
                 importNetwork();
-                $("#importEqpt").val('');
-                $('#divSelection').hide();
-                hideLoader();
-                showMessage(alertType.Success, "JSON file loaded successfully");
+
             }
         }
         $("#txtFrgMin").val('');
@@ -2397,7 +2446,8 @@ function load_EqptConfig(isFileUpload) {
 
         appendSinglePreAmpandBoosterType();
     }
-    catch {
+    catch (e) {
+        console.log(e);
         showMessage(alertType.Error, "KeyError:'elements', try again");
         hideLoader();
     }
@@ -2631,12 +2681,13 @@ var isImportJSON = false;
 function importNetwork() {
 
     try {
-        network.body.data.edges.clear();
-        network.body.data.nodes.clear();
+        //network.setOptions(tempPhysics);
+        //network.body.data.edges.clear();
+        //network.body.data.nodes.clear();
         importNodes = [];
         importEdges = [];
-        nodes = [];
-        edges = [];
+        //nodes = [];
+        //edges = [];
 
         var networkData = _import_json["network"][0].node;
 
@@ -2654,7 +2705,7 @@ function importNetwork() {
 
         });
 
-        network.body.data.nodes.add(importNodes);
+        //network.body.data.nodes.add(importNodes);
         fiberSmooth = fiberJSON.options.smooth;
         var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
         var edgeData = _import_json["network"][0]['ietf-network-topology:link'];
@@ -2715,49 +2766,43 @@ function importNetwork() {
             }
         });
 
-        var partition = 200;
-        if (importEdges.length >= partition) {
-            var tot = parseInt(importEdges.length / partition);
-            var count = 0;;
-            for (var i = 1; i <= tot; i++) {
-                count = partition * i;
-                if (i == 1) {
-                    setTimeout(
-                        network.body.data.edges.add(importEdges.slice(0, count))
-                        , 100);
+        //var partition = 200;
+        //if (importEdges.length >= partition) {
+        //    var tot = parseInt(importEdges.length / partition);
+        //    var count = 0;;
+        //    for (var i = 1; i <= tot; i++) {
+        //        count = partition * i;
+        //        if (i == 1) {
+        //            setTimeout(
+        //                network.body.data.edges.add(importEdges.slice(0, count))
+        //                , 100);
 
-                    if (i == tot) {
-                        network.body.data.edges.add(importEdges.slice(count, importEdges.length));
-                    }
-                }
-                else {
-                    setTimeout(
-                        network.body.data.edges.add(importEdges.slice(count - partition, count))
-                        , 100);
+        //            if (i == tot) {
+        //                network.body.data.edges.add(importEdges.slice(count, importEdges.length));
+        //            }
+        //        }
+        //        else {
+        //            setTimeout(
+        //                network.body.data.edges.add(importEdges.slice(count - partition, count))
+        //                , 100);
 
-                    if (i == tot) {
-                        network.body.data.edges.add(importEdges.slice(count, importEdges.length));
-                    }
-                }
-            }
-        }
-        else
-            network.body.data.edges.add(importEdges);
+        //            if (i == tot) {
+        //                network.body.data.edges.add(importEdges.slice(count, importEdges.length));
+        //            }
+        //        }
+        //    }
+        //}
+        //else
+        //    network.body.data.edges.add(importEdges);
 
     }
     catch
     {
 
     }
-    isImportJSON = true;
-    $("#ddlNetworkView").val(topologyView.Functional_View);
-    //if (isExpandedView) {
-    //    return;
-    //}
-    networkView(2);//expanded view
-    displayEdgeLabels = false;
-    hideEdgeLabels();
-    //network.fit();
+
+    draw(true);
+
 
 }
 
