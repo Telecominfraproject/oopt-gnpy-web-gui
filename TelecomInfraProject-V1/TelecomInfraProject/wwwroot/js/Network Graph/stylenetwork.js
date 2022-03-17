@@ -1671,11 +1671,10 @@ function draw(isImport) {
         }
     });
     network.once("stabilizationIterationsDone", function () {
-       
-        options.physics = false;
-        network.setOptions(options);
         document.getElementById("per").innerText = "100%";
         document.getElementById("loader").style.display = "none";
+        options.physics = false;
+        network.setOptions(options);
         if (isImport) {
             isImportJSON = true;
             $("#ddlNetworkView").val(topologyView.Functional_View);
@@ -1685,6 +1684,12 @@ function draw(isImport) {
             displayEdgeLabels = false;
             hideEdgeLabels();
             showMessage(alertType.Success, "JSON file loaded successfully");
+            if (network.getScale() <= 0.6) {
+                
+                data.nodes.off("*", change_history_back);
+                data.edges.off("*", change_history_back);
+                network.setOptions(hiddenNodeTextOptions);
+            }
         }
 
     });
