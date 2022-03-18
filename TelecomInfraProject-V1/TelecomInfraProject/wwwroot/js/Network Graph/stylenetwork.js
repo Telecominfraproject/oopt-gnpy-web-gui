@@ -79,7 +79,14 @@ var hiddenEdgeTextOptions = {
             color: 'transparent',
             strokeColor: 'transparent'
         }
-    }
+    },
+    nodes: {
+        font: {
+            // Set the colors to transparent
+            color: 'transparent',
+            strokeColor: 'transparent'
+        }
+    },
 };
 var displayEdgeLabels = false;
 
@@ -531,16 +538,16 @@ $(document).ready(function () {
     //var testingCount = 5000;
     $("#showHideEle").on("click", function () {
         hideEdgeLabels();
-        if (network.getScale() <= 0.6) {
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            network.setOptions(hiddenNodeTextOptions);
-        }
-        else if (network.getScale() > 0.6) {
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            network.setOptions(hiddenNodeTextDisplayOptions);
-        }
+        //if (network.getScale() <= 0.6) {
+        //    data.nodes.off("*", change_history_back);
+        //    data.edges.off("*", change_history_back);
+        //    network.setOptions(hiddenNodeTextOptions);
+        //}
+        //else if (network.getScale() > 0.6) {
+        //    data.nodes.off("*", change_history_back);
+        //    data.edges.off("*", change_history_back);
+        //    network.setOptions(hiddenNodeTextDisplayOptions);
+        //}
         enableEdgeIndicator();
 
         if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
@@ -741,6 +748,7 @@ function hideEdgeLabels() {
         // This will override the existing options for text color
         // This does not clear other options (e.g. node.color)
         network.setOptions(hiddenEdgeTextOptions);
+        //network.setOptions(hiddenNodeTextOptions);
         displayEdgeLabels = true;
     } else {
         // Apply standard options
@@ -1288,14 +1296,14 @@ function draw(isImport) {
         }
     });
     network.on("doubleClick", function (data) {
-        var type = _nodesDB().first();
-        if (type.type == "node") {
-            network.editNodeMode();
-        }
-        else {
-            network.editEdgeMode();
-        }
-        _nodesDB().remove();
+        //var type = _nodesDB().first();
+        //if (type.type == "node") {
+        //    network.editNodeMode();
+        //}
+        //else {
+        //    network.editEdgeMode();
+        //}
+        //_nodesDB().remove();
     });
     network.on("oncontext", function (data, callback) {
         //if (isExpandedView || isImportJSON) {
@@ -1620,12 +1628,12 @@ function draw(isImport) {
 
     network.on("hoverNode", function (params) {
         try {
-            //displayNodesHover(params);
+            displayNodesHover(params);
         }
         catch (e) { }
     });
     network.on("blurNode", function (params) {
-        //$('#hoverDiv').hide();
+        $('#hoverDiv').hide();
     });
     network.on("hoverEdge", function (params) {
         try {
@@ -1638,29 +1646,29 @@ function draw(isImport) {
     });
 
     network.on("zoom", function (params) {
-        if (params.direction == "-" && params.scale <= 0.6) {
-            zoomIn = true;
-            if (zoomOut) {
-                data.nodes.off("*", change_history_back);
-                data.edges.off("*", change_history_back);
-                network.setOptions(hiddenNodeTextOptions);
-                zoomOut = false;
-            }
-        }
-        else if (params.direction == "+" && params.scale > 0.6) {
-            zoomOut = true;
-            if (zoomIn) {
-                data.nodes.off("*", change_history_back);
-                data.edges.off("*", change_history_back);
+        //if (params.direction == "-" && params.scale <= 0.6) {
+        //    zoomIn = true;
+        //    if (zoomOut) {
+        //        data.nodes.off("*", change_history_back);
+        //        data.edges.off("*", change_history_back);
+        //        network.setOptions(hiddenNodeTextOptions);
+        //        zoomOut = false;
+        //    }
+        //}
+        //else if (params.direction == "+" && params.scale > 0.6) {
+        //    zoomOut = true;
+        //    if (zoomIn) {
+        //        data.nodes.off("*", change_history_back);
+        //        data.edges.off("*", change_history_back);
 
-                network.setOptions(hiddenNodeTextDisplayOptions);
-                zoomIn = false;
-            }
-        }
-        enableEdgeIndicator();
+        //        network.setOptions(hiddenNodeTextDisplayOptions);
+        //        zoomIn = false;
+        //    }
+        //}
+        //enableEdgeIndicator();
 
-        if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
-            network.addNodeMode();
+        //if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
+        //    network.addNodeMode();
     });
 
     network.on("stabilizationProgress", function (params) {
@@ -1685,7 +1693,7 @@ function draw(isImport) {
             hideEdgeLabels();
             showMessage(alertType.Success, "JSON file loaded successfully");
             if (network.getScale() <= 0.6) {
-                
+
                 data.nodes.off("*", change_history_back);
                 data.edges.off("*", change_history_back);
                 network.setOptions(hiddenNodeTextOptions);
@@ -1744,24 +1752,25 @@ function draw(isImport) {
 }
 var zoomIn = true;
 var zoomOut = true;
+var hoverNodeData;
 function displayNodesHover(params) {
     var nodeDetails = network.body.data.nodes.get(params.node);
     if (nodeDetails.component_type == roadmJSON.component_type) {
 
-        if (nodeDetails.node_type == roadmJSON.node_type)
-            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
-        else if (nodeDetails.node_type == fusedJSON.node_type)
-            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
-        else if (nodeDetails.node_type == transceiverJSON.node_type)
-            var hoverData = nodeDetails.node_type + " - name : " + nodeDetails.label + "\n";
-        else if (nodeDetails.node_type == ILAJSON.node_type)
-            var hoverData = nodeDetails.amp_category + " - name : " + nodeDetails.label + "\n";
-        else if (nodeDetails.node_type == amplifierJSON.node_type)
-            var hoverData = nodeDetails.amp_category + " - name : " + nodeDetails.label + "\n";
-        //hoverData += "Source : " + network.body.data.nodes.get(fiberDetails.from).label + "\n";
+        if (nodeDetails.node_type == roadmJSON.node_type) {
+            hoverNodeData = "Node type : " + nodeDetails.node_type.toUpperCase() + "\nNode name : " + nodeDetails.label + "\n";
+        }
+        else if (nodeDetails.node_type == fusedJSON.node_type) {
+            hoverNodeData = "Node type : Attenuator \nNode name : " + nodeDetails.label + "\n";
+        }
+        else if (nodeDetails.node_type == amplifierJSON.node_type) {
+            hoverNodeData = "Node type : " + nodeDetails.amp_category + "\nNode name : " + nodeDetails.label + "\n";
+        }
+        else
+            hoverNodeData = "Node type : " + nodeDetails.node_type + "\nNode name : " + nodeDetails.label + "\n";
     }
 
-    $('#hoverDiv').html(htmlTitle(hoverData));
+    $('#hoverDiv').html(htmlTitle(hoverNodeData));
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 function displayFiberHover(params) {
