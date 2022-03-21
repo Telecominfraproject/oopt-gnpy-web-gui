@@ -1888,3 +1888,9 @@ select {
     .dot:nth-child(3) {
         animation: dots 1.5s infinite alternate linear;
     }
+
+    .focusNode{
+        color:blue;
+        cursor:pointer;
+        text-decoration:underline;
+    }
