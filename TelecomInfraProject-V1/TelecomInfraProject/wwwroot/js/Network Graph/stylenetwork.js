@@ -162,7 +162,16 @@ $(document).ready(function () {
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
 
-            if (!topologyValidation()) {
+            topologyValidation(false);
+            $("#txtFileName").val('');
+            $("#staticBackdrop1").modal('show');
+        }
+    });
+
+    $("#btnValidation").click(function () {
+        if (networkValidation()) {
+
+            if (!topologyValidation(true)) {
                 $("#toast").toast('hide');
                 $("#txtFileName").val('');
                 $("#staticBackdrop1").modal('show');
@@ -6214,7 +6223,7 @@ function checkMisLink() {
     return { message: message, flag: flag };
 }
 
-function topologyValidation() {
+function topologyValidation(isTime) {
     removeHighlight();
     var flag = false;
     var message = [];
@@ -6231,7 +6240,7 @@ function topologyValidation() {
     }
 
     if (flag) {
-        showMessage(alertType.Error, message.join('. <br /><br /> '), true);
+        showMessage(alertType.Error, message.join('. <br /><br /> '), isTime);
         //return;
     }
     return flag;

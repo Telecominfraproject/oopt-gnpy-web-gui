@@ -1784,6 +1784,7 @@ select {
     font-size: 15px;
     font-weight: 500;
     cursor:pointer;
+    width:100px;
 }
 .custom-switch .custom-control-label::before {
     left: -2.4rem !important;
