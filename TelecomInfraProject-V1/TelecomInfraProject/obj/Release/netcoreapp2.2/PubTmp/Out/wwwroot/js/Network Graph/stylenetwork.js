@@ -161,27 +161,21 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
-            var flag = false;
-            var message = [];
-            var response = checkLink();
-            if (response.flag) {
-                flag = true
-                message.push(bullet + response.message);
-            }
 
-            response = checkMisLink();
-            if (response.flag) {
-                flag = true;
-                message.push(bullet + response.message);
-            }
-
-            if (flag) {
-                showMessage(alertType.Error, message.join('. <br /><br /> '));
-                return;
-            }
-
+            topologyValidation(false);
             $("#txtFileName").val('');
             $("#staticBackdrop1").modal('show');
+        }
+    });
+
+    $("#btnValidation").click(function () {
+        if (networkValidation()) {
+
+            if (!topologyValidation(true)) {
+                $("#toast").toast('hide');
+                $("#txtFileName").val('');
+                $("#staticBackdrop1").modal('show');
+            }
         }
     });
 
@@ -3802,6 +3796,8 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
                 span_loss: span_Loss,
             });
+
+            nodeValidationInEdge(cfrom, cto);
         }
 
         data.nodes.off("*", change_history_back);
@@ -4037,6 +4033,8 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 smooth: singlePatchJSON.options.smooth,
                 view: topologyView.Functional_View, hidden: false,
             });
+
+            nodeValidationInEdge(cfrom, cto);
         }
         if (isDualPatchMode == 1) {
             //we cannot add more than 1 patch
@@ -6001,7 +5999,7 @@ function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
     sessionStorage.setItem("simulationParameters", JSON.stringify(simulationPara));
 }
 
-function showMessage(messageType, textmsg) {
+function showMessage(messageType, textmsg, removeTimeout) {
     switch (messageType) {
         case alertType.Success:
 
@@ -6029,7 +6027,7 @@ function showMessage(messageType, textmsg) {
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");
             $('#toast').addClass("danger-toast");
-            clearAndSetTimeout(".danger-toast");
+            clearAndSetTimeout(".danger-toast", removeTimeout);
             break;
         case alertType.Warning:
             $('#msg_content').html(textmsg);
@@ -6047,16 +6045,18 @@ function showMessage(messageType, textmsg) {
 
 }
 
-function clearAndSetTimeout(targetEle) {
+function clearAndSetTimeout(targetEle, removeTimeout) {
     const highestId = window.setTimeout(() => {
         for (let i = highestId; i >= 0; i--) {
             window.clearInterval(i);
         }
     }, 0);
     $(targetEle).toast('show');
-    setTimeout(function () {
-        $(targetEle).toast('hide');
-    }, 6000);
+    if (!removeTimeout) {
+        setTimeout(function () {
+            $(targetEle).toast('hide');
+        }, 6000);
+    }
 }
 
 function enableEdgeIndicator() {
@@ -6184,13 +6184,13 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push(item.label);
+            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
             flag = true;
         }
     });
 
 
-    message = msg.join(', ') + " must have an even number of links with an equal number of incoming and outgoing links";
+    message = msg.join(' ') + " must have an even number of links with an equal number of incoming and outgoing links";
 
     return { message: message, flag: flag };
 }
@@ -6210,7 +6210,7 @@ function checkMisLink() {
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
         if (connectedEdges.length <= 1) {
-            msg.push(item.label);
+            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
             flag = true;
         }
 
@@ -6219,6 +6219,171 @@ function checkMisLink() {
     var sorp = ' is';
     if (msg.length > 1)
         sorp = ' are'
-    message = "One or more links to " + msg.join(', ') + sorp + " missing";
+    message = "One or more links to " + msg.join(' ') + sorp + " missing";
     return { message: message, flag: flag };
+}
+
+function topologyValidation(isTime) {
+    removeHighlight();
+    var flag = false;
+    var message = [];
+    var response = checkLink();
+    if (response.flag) {
+        flag = true
+        message.push("<span id=spanEven>" + bullet + response.message + "</span>");
+    }
+
+    response = checkMisLink();
+    if (response.flag) {
+        flag = true;
+        message.push("<span id=spanMisLink>" + bullet + response.message + "</span>");
+    }
+
+    if (flag) {
+        showMessage(alertType.Error, message.join('. <br /><br /> '), isTime);
+        //return;
+    }
+    return flag;
+}
+
+function focusNode(nodeID) {
+
+    removeHighlight();
+
+    var image;
+    var scaleOption = { scale: 1.0 };
+    network.moveTo(scaleOption);
+    network.focus(nodeID);
+    image = "";
+    var nodeDetails = network.body.data.nodes.get(nodeID);
+    if (nodeDetails.node_type == roadmJSON.node_type)
+        image = roadmJSON.err_image;
+    else if (nodeDetails.node_type == fusedJSON.node_type)
+        image = fusedJSON.err_image;
+    else if (nodeDetails.node_type == transceiverJSON.node_type)
+        image = transceiverJSON.err_image;
+    else if (nodeDetails.amp_category == amplifierJSON.amp_category)
+        image = amplifierJSON.err_image;
+    else if (nodeDetails.amp_category == ramanampJSON.amp_category)
+        image = ramanampJSON.err_image;
+
+    network.body.data.nodes.update([{ id: nodeID, image: DIR + image, is_error: true }]);
+
+}
+
+function removeHighlight() {
+    var image;
+    var errNodes = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.is_error == true);
+        }
+    });
+
+    for (var i = 0; i < errNodes.length; i++) {
+        var nodeDetails = errNodes[i];
+        if (nodeDetails.node_type == roadmJSON.node_type)
+            image = roadmJSON.image;
+        else if (nodeDetails.node_type == fusedJSON.node_type)
+            image = fusedJSON.image;
+        else if (nodeDetails.node_type == transceiverJSON.node_type)
+            image = transceiverJSON.image;
+        else if (nodeDetails.amp_category == amplifierJSON.amp_category)
+            image = amplifierJSON.image;
+        else if (nodeDetails.amp_category == ramanampJSON.amp_category)
+            image = ramanampJSON.image;
+
+        network.body.data.nodes.update({
+            id: nodeDetails.id, image: DIR + image, is_error: false
+        });
+    }
+}
+
+function nodeValidationInEdge(cfrom, cto) {
+    // start remove highlight once roadm have equal in/out conn
+    var roadmList = [];
+
+    if (network.body.data.nodes.get(cfrom).node_type == roadmJSON.node_type)
+        roadmList.push(cfrom);
+
+    if (network.body.data.nodes.get(cto).node_type == roadmJSON.node_type)
+        roadmList.push(cto);
+
+    var connectedEdges;
+    var fromCount = 0;
+    var toCount = 0;
+    var edgeDetails;
+    $.each(roadmList, function (index, item) {
+        connectedEdges = network.getConnectedEdges(item);
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < connectedEdges.length; i++) {
+            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+            if (edgeDetails.from == item)
+                fromCount++;
+            else if (edgeDetails.to == item)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+            //topologyValidation();
+            //alert(item + ' ok');
+        }
+        else {
+            removeSpanInError(item);
+        }
+    });
+    // end
+
+    //start mislink
+    roadmList = [];
+    if (network.body.data.nodes.get(cfrom).node_type == fusedJSON.node_type || network.body.data.nodes.get(cfrom).node_type == amplifierJSON.node_type)
+        roadmList.push(cfrom);
+
+    if (network.body.data.nodes.get(cto).node_type == fusedJSON.node_type || network.body.data.nodes.get(cto).node_type == amplifierJSON.node_type)
+        roadmList.push(cto);
+
+    var connectedEdges;
+    $.each(roadmList, function (index, item) {
+        connectedEdges = network.getConnectedEdges(item);
+        if (connectedEdges.length <= 1) {
+        } else {
+            removeSpanInError(item);
+        }
+
+    });
+
+    var roadmRule = $("#spanEven").find('span').length;
+    var linkRule = $("#spanMisLink").find('span').length;
+
+    if (roadmRule == 0)
+        $("#spanEven").empty();
+
+    if (linkRule == 0)
+        $("#spanMisLink").empty();
+
+    if (roadmRule == 0 && linkRule == 0)
+        $("#toast").toast('hide');
+
+    //end
+}
+
+function removeSpanInError(item) {
+    var image;
+    var nodeDetails = network.body.data.nodes.get(item);
+    if (nodeDetails.node_type == roadmJSON.node_type)
+        image = roadmJSON.image;
+    else if (nodeDetails.node_type == fusedJSON.node_type)
+        image = fusedJSON.image;
+    else if (nodeDetails.node_type == transceiverJSON.node_type)
+        image = transceiverJSON.image;
+    else if (nodeDetails.amp_category == amplifierJSON.amp_category)
+        image = amplifierJSON.image;
+    else if (nodeDetails.amp_category == ramanampJSON.amp_category)
+        image = ramanampJSON.image;
+
+    network.body.data.nodes.update({
+        id: nodeDetails.id, image: DIR + image, is_error: false
+    });
+    var removeID = "#span" + item;
+    $(removeID).remove();
 }

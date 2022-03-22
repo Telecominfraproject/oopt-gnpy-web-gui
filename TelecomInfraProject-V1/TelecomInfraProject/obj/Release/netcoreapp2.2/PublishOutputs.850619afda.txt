@@ -31,7 +31,12 @@ D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Relea
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\delete.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\dualfiber.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\edit.svg
+D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\erramp.svg
+D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errattenuator.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\error-toaster.png
+D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errramanamp.svg
+D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errroadm.svg
+D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errtransceiver.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Export File icon.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export-f.svg
 D:\Git Repository\TIP_V_1.0\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export.png

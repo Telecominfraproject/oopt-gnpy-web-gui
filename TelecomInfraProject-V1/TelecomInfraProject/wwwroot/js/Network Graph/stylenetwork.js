@@ -173,8 +173,7 @@ $(document).ready(function () {
 
             if (!topologyValidation(true)) {
                 $("#toast").toast('hide');
-                $("#txtFileName").val('');
-                $("#staticBackdrop1").modal('show');
+                showMessage(alertType.Success, 'Successfully validated');
             }
         }
     });
@@ -2476,6 +2475,7 @@ function importNode(index) {
     var color = "";
     var image = "";
     var nodeSize = 0;
+    var font = "";
     var transceiver_type = "";
     var amp_type = "";
     var amp_category = "";
@@ -2522,6 +2522,7 @@ function importNode(index) {
         color = roadmJSON.color;
         nodeSize = roadmJSON.size;
         roadm_type = roadmData.model;
+        font = roadmJSON.font;
 
     }
     else if (transceiverData) {
@@ -2626,6 +2627,7 @@ function importNode(index) {
         x: x, y: y, image: image, number: number,
         view: topologyView.Functional_View, hidden: false,
         shape: shape, color: color, size: nodeSize,
+        font:font,
         node_type: node_type, node_degree: node_degree, component_type: component_type,
         roadm_type_pro: [],
         transceiver_type: transceiver_type,//transceiver
@@ -3239,7 +3241,7 @@ function pasteNode(nodeId) {
             network.body.data.nodes.add({
                 id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodeData.number,
                 shape: roadmJSON.shape, color: roadmJSON.color,
-                //font: roadmJSON.font,
+                font: roadmJSON.font,
                 size: roadmJSON.size,
                 view: $("#ddlNetworkView").val(), hidden: false,
                 roadm_type: nodeDetails.default.roadm_type,
@@ -4121,6 +4123,7 @@ function addNodes(data, callback) {
         data.image = DIR + roadmJSON.image;
         nodeFont = roadmJSON.font;
         nodeSize = roadmJSON.size;
+        data.font = nodeFont;
 
         if ($("#ddlNetworkView").val() == topologyView.Functional_View)
             data.roadm_type = nodeDetails.default.roadm_type;
@@ -4259,7 +4262,7 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
             shape: roadmJSON.shape, color: roadmJSON.color,
-            //font: roadmJSON.font,
+            font: roadmJSON.font,
             size: roadmJSON.size,
             view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
@@ -4496,7 +4499,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
         network.body.data.nodes.add({
             id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
             shape: roadmJSON.shape, color: roadmJSON.color,
-            //font: roadmJSON.font,
+            font: roadmJSON.font,
             size: roadmJSON.size,
             view: $("#ddlNetworkView").val(), hidden: false,
             node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
@@ -6184,7 +6187,7 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
+            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
             flag = true;
         }
     });
@@ -6210,7 +6213,7 @@ function checkMisLink() {
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
         if (connectedEdges.length <= 1) {
-            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
+            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + item.label + '</span>');
             flag = true;
         }
 
@@ -6384,6 +6387,6 @@ function removeSpanInError(item) {
     network.body.data.nodes.update({
         id: nodeDetails.id, image: DIR + image, is_error: false
     });
-    var removeID = "#span" + item;
+    var removeID = "#span" + item.replace(/\s/g, '');
     $(removeID).remove();
 }
