@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Git Repository\\TIP_V_1.0\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj": {}
+    "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj": {}
   },
   "projects": {
-    "D:\\Git Repository\\TIP_V_1.0\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj": {
+    "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Git Repository\\TIP_V_1.0\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
+        "projectUniqueName": "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
         "projectName": "TelecomInfraProject",
-        "projectPath": "D:\\Git Repository\\TIP_V_1.0\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
+        "projectPath": "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
         "packagesPath": "C:\\Users\\ramesh.g\\.nuget\\packages\\",
-        "outputPath": "D:\\Git Repository\\TIP_V_1.0\\TelecomInfraProject-V1\\TelecomInfraProject\\obj\\",
+        "outputPath": "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

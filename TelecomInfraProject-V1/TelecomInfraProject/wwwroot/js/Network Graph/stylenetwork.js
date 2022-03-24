@@ -394,24 +394,34 @@ $(document).ready(function () {
             if (rawFile.readyState === 4 && rawFile.status == "200") {
                 callback(rawFile.responseText);
             }
+            vper = vper + 10;
+            console.log(vper + '%');
+            document.getElementById("per").innerText = vper + '%';
         }
         rawFile.send(null);
     }
+    var vper = 30;
     $("#importEqpt").on('change', function (e) {
 
         var file = e.target.files[0];
         if (file) {
+
             $('#loader').show();
             var path = (window.URL || window.webkitURL).createObjectURL(file);
+            document.getElementById("per").innerText = 20 + '%';
             readTextFile(path, function (text) {
 
                 if (text) {
                     try {
+
+                        document.getElementById("per").innerText = "80%";
                         eqptData = JSON.parse(text);
                         isEqptFile = true;
                         eqpt_config = eqptData;
                         load_EqptConfig(true);
-
+                        document.getElementById("per").innerText = "90%";
+                        nodeRuleOnImportJSON();
+                        //edgeStyleOnImportJSON();
                     }
                     catch (e) {
                         showMessage(alertType.Error, "KeyError:'elements', try again");
@@ -1673,6 +1683,8 @@ function draw(isImport) {
             document.getElementById("per").innerText =
                 Math.round(widthFactor * 100) + "%";
         }
+        else
+            document.getElementById("per").innerText = "90%";
     });
     network.once("stabilizationIterationsDone", function () {
         document.getElementById("per").innerText = "100%";
@@ -1688,12 +1700,12 @@ function draw(isImport) {
             displayEdgeLabels = false;
             hideEdgeLabels();
             showMessage(alertType.Success, "JSON file loaded successfully");
-            if (network.getScale() <= 0.6) {
+            //if (network.getScale() <= 0.6) {
 
-                data.nodes.off("*", change_history_back);
-                data.edges.off("*", change_history_back);
-                network.setOptions(hiddenNodeTextOptions);
-            }
+            //    data.nodes.off("*", change_history_back);
+            //    data.edges.off("*", change_history_back);
+            //    network.setOptions(hiddenNodeTextOptions);
+            //}
         }
 
     });
@@ -2808,8 +2820,7 @@ function importNetwork() {
     }
 
     draw(true);
-    ruleImportJSON();
-
+    //nodeRuleOnImportJSON();
 }
 
 
@@ -6420,7 +6431,7 @@ function addNodeHighlight(nodeID) {
 
 }
 
-function ruleImportJSON() {
+function nodeRuleOnImportJSON() {
     //checkLink
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
@@ -6465,4 +6476,21 @@ function ruleImportJSON() {
         }
 
     });
+}
+
+function edgeStyleOnImportJSON() {
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+    var edgeList = network.body.data.edges.get();
+
+    for (var i = 0; i < edgeList.length; i++) {
+        //var connectedFiber = network.getConnectedEdges(edgeList[i].from);
+        //connectedFiber.push(network.getConnectedEdges(edgeList[i].to));
+
+        multipleFiberService(edgeList[i].from, edgeList[i].to);
+
+    }
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
+
 }
