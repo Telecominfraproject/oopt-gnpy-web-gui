@@ -170,7 +170,6 @@ $(document).ready(function () {
     $("#btnValidation").click(function () {
         if (networkValidation()) {
             if (!topologyValidation(true)) {
-                //$("#toast").toast('hide');
                 showMessage(alertType.Success, 'Successfully validated');
             }
         }
@@ -394,24 +393,34 @@ $(document).ready(function () {
             if (rawFile.readyState === 4 && rawFile.status == "200") {
                 callback(rawFile.responseText);
             }
+            vper = vper + 10;
+            //console.log(vper + '%');
+            document.getElementById("per").innerText = vper + '%';
         }
         rawFile.send(null);
     }
+    var vper = 30;
     $("#importEqpt").on('change', function (e) {
 
         var file = e.target.files[0];
         if (file) {
+
             $('#loader').show();
             var path = (window.URL || window.webkitURL).createObjectURL(file);
+            document.getElementById("per").innerText = 20 + '%';
             readTextFile(path, function (text) {
 
                 if (text) {
                     try {
+
+                        document.getElementById("per").innerText = "80%";
                         eqptData = JSON.parse(text);
                         isEqptFile = true;
                         eqpt_config = eqptData;
                         load_EqptConfig(true);
-
+                        nodeRuleOnImportJSON();
+                        document.getElementById("per").innerText = "90%";
+                        edgeStyleOnImportJSON();
                     }
                     catch (e) {
                         showMessage(alertType.Error, "KeyError:'elements', try again");
@@ -1673,6 +1682,8 @@ function draw(isImport) {
             document.getElementById("per").innerText =
                 Math.round(widthFactor * 100) + "%";
         }
+        else
+            document.getElementById("per").innerText = "90%";
     });
     network.once("stabilizationIterationsDone", function () {
         document.getElementById("per").innerText = "100%";
@@ -1688,12 +1699,12 @@ function draw(isImport) {
             displayEdgeLabels = false;
             hideEdgeLabels();
             showMessage(alertType.Success, "JSON file loaded successfully");
-            if (network.getScale() <= 0.6) {
+            //if (network.getScale() <= 0.6) {
 
-                data.nodes.off("*", change_history_back);
-                data.edges.off("*", change_history_back);
-                network.setOptions(hiddenNodeTextOptions);
-            }
+            //    data.nodes.off("*", change_history_back);
+            //    data.edges.off("*", change_history_back);
+            //    network.setOptions(hiddenNodeTextOptions);
+            //}
         }
 
     });
@@ -2808,8 +2819,7 @@ function importNetwork() {
     }
 
     draw(true);
-    ruleImportJSON();
-
+    //nodeRuleOnImportJSON();
 }
 
 
@@ -6420,7 +6430,7 @@ function addNodeHighlight(nodeID) {
 
 }
 
-function ruleImportJSON() {
+function nodeRuleOnImportJSON() {
     //checkLink
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
@@ -6465,4 +6475,86 @@ function ruleImportJSON() {
         }
 
     });
+}
+
+function edgeStyleOnImportJSON() {
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+    var edgeList = network.body.data.edges.get();
+    var cfrom;
+    var cto;
+    var fiberData = [];
+    for (var i = 0; i < edgeList.length; i++) {
+
+        cfrom = edgeList[i].from;
+        cto = edgeList[i].to;
+
+        var connectedFiber = network.getConnectedEdges(cfrom);
+        connectedFiber.push(network.getConnectedEdges(cto));
+        var fromFiberCount = 0;
+        var toFiberCount = 0;
+        var fiberCount = 0;
+
+        $.each(connectedFiber, function (index, item) {
+            var fiberDetails = network.body.data.edges.get(item);
+            if (fiberDetails.fiber_category == dualFiberJSON.fiber_category || fiberDetails.fiber_category == singleFiberJSON.fiber_category || fiberDetails.component_type == serviceJSON.component_type || fiberDetails.component_type == dualPatchJSON.component_type) {
+                var fiberSmooth = singleFiberJSON.options.smooth;
+                if (fiberDetails.from == cfrom && fiberDetails.to == cto) {
+                    fiberCount++;
+
+                    if (fiberCount == 1) {
+                        fiberSmooth = fiberJSON.options.smooth;
+                    }
+                    else {
+                        fromFiberCount++;
+                        fiberSmooth.roundness = "0." + fromFiberCount;
+                    }
+                    //network.body.data.edges.update({
+                    //    id: fiberDetails.id, smooth: fiberSmooth
+
+                    //});
+                    fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
+                }
+                if (fiberDetails.from == cto && fiberDetails.to == cfrom) {
+                    fiberCount++;
+                    fiberSmooth.roundness = "0." + toFiberCount;
+                    if (fiberCount == 1) {
+                        fiberSmooth = fiberJSON.options.smooth;
+                    }
+                    else {
+                        toFiberCount++;
+                        fiberSmooth.roundness = "0." + toFiberCount;
+                    }
+                    //network.body.data.edges.update({
+                    //    id: fiberDetails.id, smooth: fiberSmooth
+
+                    //});
+                    fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
+                }
+            }
+        });
+
+    }
+
+    var uniqueEdges = Array.from(new Set(fiberData.map(a => a.id)))
+        .map(id => {
+            return fiberData.find(a => a.id === id)
+        })
+
+
+    uniqueEdges = uniqueEdges.filter(v => v.smooth.roundness != 0.5);
+
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
+    $.each(uniqueEdges, function (index, item) {
+        network.body.data.edges.update({
+            id: item.id, smooth: item.smooth
+
+        });
+    });
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
+
 }
