@@ -155,13 +155,15 @@ $(document).ready(function () {
     });
 
     $("#btnSaveNetwork, #btnSaveNetworkTop").click(function () {
-        if (networkValidation())
-            SaveNetwork();
+        //if (networkValidation())
+        //    SaveNetwork();
+        if (networkValidation()) {
+            exportNetwork(true);
+        }
     });
 
     $("#btnExportPopup").click(function () {
-        if (networkValidation()) {
-            topologyValidation(false);
+        if (networkValidation() && !topologyValidation(true)) {
             $("#txtFileName").val('');
             $("#staticBackdrop1").modal('show');
         }
@@ -2377,12 +2379,16 @@ function exportNetwork(isSaveNetwork) {
     //end test
     var exportValue = JSON.stringify(model, undefined, 2);
 
-    if (isSaveNetwork) {
-        addNetworData(exportValue);
-        return;
-    }
+    //if (isSaveNetwork) {
+    //    addNetworData(exportValue);
+    //    return;
+    //}
 
-    var filename = $("#txtFileName").val() + ".json";
+    var filename='network.json';
+
+    if (!isSaveNetwork)
+        filename = $("#txtFileName").val() + ".json";
+   
 
     var blob = new Blob([exportValue], {
         type: "text/plain;charset=utf-8"
