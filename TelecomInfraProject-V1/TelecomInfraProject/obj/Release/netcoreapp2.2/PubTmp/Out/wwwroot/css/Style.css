@@ -1770,22 +1770,25 @@ select {
     display: flex !important;
     justify-content: space-between;
 }
-.top-right-section select
-{
+
+.top-right-section select {
     width: auto !important;
 }
+
 .custom-control-input:checked ~ .custom-control-label::before {
     color: #fff;
     border-color: #1eabbc !important;
     background-color: #1eabbc !important;
 }
+
 .custom-control-label {
     color: #2b7c80 !important;
     font-size: 15px;
     font-weight: 500;
-    cursor:pointer;
-    width:100px;
+    cursor: pointer;
+    width: 100px;
 }
+
 .custom-switch .custom-control-label::before {
     left: -2.4rem !important;
     top: 0.0rem !important;
@@ -1795,12 +1798,14 @@ select {
     border-radius: 0.5rem;
     border: 2px solid #2b7c80 !important;
 }
+
 .custom-switch .custom-control-label::after {
     top: calc(0.25rem + 0px) !important;
     left: calc(-2.5rem + 8px) !important;
     width: calc(1rem - 2px) !important;
     height: calc(1rem - 2px) !important;
 }
+
 .custom-control-input:focus ~ .custom-control-label::before {
     box-shadow: none !important;
 }
@@ -1816,8 +1821,8 @@ select {
     width: 100vw;
     height: 100vh;
     display: grid;*/
-    /* justify-content: center; */
-    /*align-items: center;
+/* justify-content: center; */
+/*align-items: center;
 }*/
 
 
@@ -1890,8 +1895,14 @@ select {
         animation: dots 1.5s infinite alternate linear;
     }
 
-    .focusNode{
-        color:blue;
-        cursor:pointer;
-        text-decoration:underline;
-    }
+.focusNode {
+    color: blue;
+    cursor: pointer;
+    /*text-decoration:underline;*/
+}
+
+.errorSummary {
+    margin-top: 0.5rem;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}

@@ -37,6 +37,11 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errramanamp.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errroadm.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errtransceiver.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\err_amplifier.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\err_attenuator.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\err_raman.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\err_roadm.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\err_transceiver.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Export File icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export-f.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\export.png
@@ -112,7 +117,11 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\telecom-favicon.ico
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\transceiver.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\undo.png
-D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\warning-toaster.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\w_amplifier.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\w_attenuator.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\w_raman.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\w_roadm.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\w_transceiver.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Zoom-out-icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\css\Style.css
