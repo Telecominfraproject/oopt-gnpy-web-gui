@@ -3072,45 +3072,45 @@ function addFiber() {
         //    return;
         //}
 
-        if (srcNode.node_type == transceiverJSON.node_type) {
-            if (DestNode.node_type != transceiverJSON.node_type && DestNode.node_type != roadmJSON.node_type) {
-                var nodetype = DestNode.node_type;
-                if (DestNode.node_type == fusedJSON.node_type)
-                    nodetype = 'Attenuator';
-                else if (DestNode.node_type == amplifierJSON.node_type)
-                    nodetype = DestNode.amp_category;
+        //if (srcNode.node_type == transceiverJSON.node_type) {
+        //    if (DestNode.node_type != transceiverJSON.node_type && DestNode.node_type != roadmJSON.node_type) {
+        //        var nodetype = DestNode.node_type;
+        //        if (DestNode.node_type == fusedJSON.node_type)
+        //            nodetype = 'Attenuator';
+        //        else if (DestNode.node_type == amplifierJSON.node_type)
+        //            nodetype = DestNode.amp_category;
 
-                msg = "We cannot add " + singleFiberJSON.component_type + " from : " + srcNode.node_type + ' - ' + srcNode.label + ", to : " + nodetype + ' - ' + DestNode.label;
-                showMessage(alertType.Error, msg);
-                addEdgeData = {
-                    from: '',
-                    to: ''
-                };
-                UnSelectAll();
-                network.addEdgeMode();
-                return;
-            }
-        }
-        else if (DestNode.node_type == transceiverJSON.node_type) {
-            if (srcNode.node_type != transceiverJSON.node_type && srcNode.node_type != roadmJSON.node_type) {
-                var nodetype = srcNode.node_type;
-                if (srcNode.node_type == fusedJSON.node_type)
-                    nodetype = 'Attenuator';
-                else if (srcNode.node_type == amplifierJSON.node_type)
-                    nodetype = srcNode.amp_category;
+        //        msg = "We cannot add " + singleFiberJSON.component_type + " from : " + srcNode.node_type + ' - ' + srcNode.label + ", to : " + nodetype + ' - ' + DestNode.label;
+        //        showMessage(alertType.Error, msg);
+        //        addEdgeData = {
+        //            from: '',
+        //            to: ''
+        //        };
+        //        UnSelectAll();
+        //        network.addEdgeMode();
+        //        return;
+        //    }
+        //}
+        //else if (DestNode.node_type == transceiverJSON.node_type) {
+        //    if (srcNode.node_type != transceiverJSON.node_type && srcNode.node_type != roadmJSON.node_type) {
+        //        var nodetype = srcNode.node_type;
+        //        if (srcNode.node_type == fusedJSON.node_type)
+        //            nodetype = 'Attenuator';
+        //        else if (srcNode.node_type == amplifierJSON.node_type)
+        //            nodetype = srcNode.amp_category;
 
-                msg = "We cannot add " + singleFiberJSON.component_type + " from : " + nodetype + ' - ' + srcNode.label + ", to : " + DestNode.node_type + ' - ' + DestNode.label;
+        //        msg = "We cannot add " + singleFiberJSON.component_type + " from : " + nodetype + ' - ' + srcNode.label + ", to : " + DestNode.node_type + ' - ' + DestNode.label;
 
-                showMessage(alertType.Error, msg);
-                addEdgeData = {
-                    from: '',
-                    to: ''
-                };
-                UnSelectAll();
-                network.addEdgeMode();
-                return;
-            }
-        }
+        //        showMessage(alertType.Error, msg);
+        //        addEdgeData = {
+        //            from: '',
+        //            to: ''
+        //        };
+        //        UnSelectAll();
+        //        network.addEdgeMode();
+        //        return;
+        //    }
+        //}
 
     }
 
@@ -3237,45 +3237,45 @@ function addSinglePatch() {
     var srcNode = network.body.data.nodes.get(addPatchData.from);
     var DestNode = network.body.data.nodes.get(addPatchData.to);
 
-    if (srcNode.node_type == transceiverJSON.node_type) {
-        if (DestNode.node_type != transceiverJSON.node_type && DestNode.node_type != roadmJSON.node_type) {
-            var nodetype = DestNode.node_type;
-            if (DestNode.node_type == fusedJSON.node_type)
-                nodetype = 'Attenuator';
-            else if (DestNode.node_type == amplifierJSON.node_type)
-                nodetype = DestNode.amp_category;
+    //if (srcNode.node_type == transceiverJSON.node_type) {
+    //    if (DestNode.node_type != transceiverJSON.node_type && DestNode.node_type != roadmJSON.node_type) {
+    //        var nodetype = DestNode.node_type;
+    //        if (DestNode.node_type == fusedJSON.node_type)
+    //            nodetype = 'Attenuator';
+    //        else if (DestNode.node_type == amplifierJSON.node_type)
+    //            nodetype = DestNode.amp_category;
 
-            msg = "We cannot add " + singlePatchJSON.component_type + " from : " + srcNode.node_type + ' - ' + srcNode.label + ", to : " + nodetype + ' - ' + DestNode.label;
-            showMessage(alertType.Error, msg);
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-            UnSelectAll();
-            network.addEdgeMode();
-            return;
-        }
-    }
-    else if (DestNode.node_type == transceiverJSON.node_type) {
-        if (srcNode.node_type != transceiverJSON.node_type && srcNode.node_type != roadmJSON.node_type) {
-            var nodetype = srcNode.node_type;
-            if (srcNode.node_type == fusedJSON.node_type)
-                nodetype = 'Attenuator';
-            else if (srcNode.node_type == amplifierJSON.node_type)
-                nodetype = srcNode.amp_category;
+    //        msg = "We cannot add " + singlePatchJSON.component_type + " from : " + srcNode.node_type + ' - ' + srcNode.label + ", to : " + nodetype + ' - ' + DestNode.label;
+    //        showMessage(alertType.Error, msg);
+    //        addEdgeData = {
+    //            from: '',
+    //            to: ''
+    //        };
+    //        UnSelectAll();
+    //        network.addEdgeMode();
+    //        return;
+    //    }
+    //}
+    //else if (DestNode.node_type == transceiverJSON.node_type) {
+    //    if (srcNode.node_type != transceiverJSON.node_type && srcNode.node_type != roadmJSON.node_type) {
+    //        var nodetype = srcNode.node_type;
+    //        if (srcNode.node_type == fusedJSON.node_type)
+    //            nodetype = 'Attenuator';
+    //        else if (srcNode.node_type == amplifierJSON.node_type)
+    //            nodetype = srcNode.amp_category;
 
-            msg = "We cannot add " + singlePatchJSON.component_type + " from : " + nodetype + ' - ' + srcNode.label + ", to : " + DestNode.node_type + ' - ' + DestNode.label;
+    //        msg = "We cannot add " + singlePatchJSON.component_type + " from : " + nodetype + ' - ' + srcNode.label + ", to : " + DestNode.node_type + ' - ' + DestNode.label;
 
-            showMessage(alertType.Error, msg);
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-            UnSelectAll();
-            network.addEdgeMode();
-            return;
-        }
-    }
+    //        showMessage(alertType.Error, msg);
+    //        addEdgeData = {
+    //            from: '',
+    //            to: ''
+    //        };
+    //        UnSelectAll();
+    //        network.addEdgeMode();
+    //        return;
+    //    }
+    //}
 
 
     var labelvalue = getLabel(addPatchData.from, addPatchData.to, singlePatchJSON.component_type);
@@ -3856,18 +3856,17 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 flag = true
                 message.push(bullet + response.message);
             }
-
             response = nodeRule(cfrom, cto, fusedJSON.node_type);
             if (response.flag) {
                 flag = true;
                 message.push(bullet + response.message);
             }
 
-            response = nodeRule(cfrom, cto, transceiverJSON.node_type);
-            if (response.flag) {
-                flag = true;
-                message.push(bullet + response.message);
-            }
+            //response = nodeRule(cfrom, cto, transceiverJSON.node_type);
+            //if (response.flag) {
+            //    flag = true;
+            //    message.push(bullet + response.message);
+            //}
 
             if (flag) {
                 showMessage(alertType.Error, message.join('. <br /><br /> '));
@@ -4132,11 +4131,11 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 message.push(bullet + response.message);
             }
 
-            response = nodeRule(cfrom, cto, transceiverJSON.node_type);
-            if (response.flag) {
-                flag = true;
-                message.push(bullet + response.message);
-            }
+            //response = nodeRule(cfrom, cto, transceiverJSON.node_type);
+            //if (response.flag) {
+            //    flag = true;
+            //    message.push(bullet + response.message);
+            //}
 
             if (flag) {
                 showMessage(alertType.Error, message.join('. <br /><br /> '));
@@ -5164,19 +5163,39 @@ function updateTransceiver(nodeID) {
                 var connectedEges = network.getConnectedEdges(id);
                 var tempEdge = [];
                 $.each(connectedEges, function (index, item) {
-                    if (network.body.data.edges.get(item).component_type == singleFiberJSON.component_type || network.body.data.edges.get(item).component_type == singlePatchJSON.component_type) {
+                    if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
                         tempEdge.push(item);
                     }
                 });
 
-                if (tempEdge.length > 1) {
-                    removeSpanInError(id, true);
+                var fromCount = 0;
+                var toCount = 0;
+                for (i = 0; i < tempEdge.length; i++) {
+                    edgeDetails = network.body.data.edges.get(tempEdge[i]);
+                    if (edgeDetails.from == id)
+                        fromCount++;
+                    else if (edgeDetails.to == id)
+                        toCount++;
                 }
-                else {
 
+                if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+                    //addNodeHighlight(item);
                     removeID = "#spanTF" + id.replace(/\s/g, '');
                     $(removeID).remove();
                 }
+                else {
+                    removeSpanInError(id, true);
+                }
+
+
+                //if (tempEdge.length > 1) {
+                //    removeSpanInError(id, true);
+                //}
+                //else {
+
+                //    removeID = "#spanTF" + id.replace(/\s/g, '');
+                //    $(removeID).remove();
+                //}
 
                 clearTransceiver();
             }
@@ -6217,21 +6236,21 @@ function nodeRule(from, to, nodeType) {
     var fromConnections = network.getConnectedEdges(from);
     var toConnections = network.getConnectedEdges(to);
 
-    var tempFrom = [];
-    var tempTo = [];
-    if (nodeType == transceiverJSON.node_type) {
-        $.each(fromConnections, function (index, item) {
-            if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
-                tempFrom.push(item);
-        });
+    //var tempFrom = [];
+    //var tempTo = [];
+    //if (nodeType == transceiverJSON.node_type) {
+    //    $.each(fromConnections, function (index, item) {
+    //        if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
+    //            tempFrom.push(item);
+    //    });
 
-        $.each(toConnections, function (index, item) {
-            if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
-                tempTo.push(item);
-        });
-        fromConnections = tempFrom;
-        toConnections = tempTo;
-    }
+    //    $.each(toConnections, function (index, item) {
+    //        if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
+    //            tempTo.push(item);
+    //    });
+    //    fromConnections = tempFrom;
+    //    toConnections = tempTo;
+    //}
 
     var connections = [];
     connections.push(fromConnections);
@@ -6250,19 +6269,19 @@ function nodeRule(from, to, nodeType) {
     var toType;
     //to check connection b/w roadm and amplifier
 
-    if (nodeType != transceiverJSON.node_type) {
-        if ((fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == nodeType) || (toDetails.node_type == roadmJSON.node_type && fromDetails.node_type == nodeType)) {
-            $.each(connections, function (index, item) {
-                connectedNodes = network.getConnectedNodes(item);
-                if (connectedNodes) {
-                    if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
-                        message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and " + toDetails.label;
-                        flag = true;
-                    }
+
+    if ((fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == nodeType) || (toDetails.node_type == roadmJSON.node_type && fromDetails.node_type == nodeType) || (fromDetails.node_type == transceiverJSON.node_type && toDetails.node_type == nodeType) || (toDetails.node_type == transceiverJSON.node_type && fromDetails.node_type == nodeType)) {
+        $.each(connections, function (index, item) {
+            connectedNodes = network.getConnectedNodes(item);
+            if (connectedNodes) {
+                if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
+                    message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and " + toDetails.label;
+                    flag = true;
                 }
-            });
-        }
+            }
+        });
     }
+
 
     //to check connection b/w roadm and transceiver
     //if ((fromDetails.node_type == roadmJSON.node_type && toDetails.node_type == transceiverJSON.node_type) || (toDetails.node_type == roadmJSON.node_type && fromDetails.node_type == transceiverJSON.node_type)) {
@@ -6270,19 +6289,19 @@ function nodeRule(from, to, nodeType) {
     //}
 
     // to check connection b/w amplifier and amplifier
-    if (nodeType != transceiverJSON.node_type) {
-        if (fromDetails.node_type == nodeType && toDetails.node_type == nodeType) {
-            $.each(connections, function (index, item) {
-                connectedNodes = network.getConnectedNodes(item);
-                if (connectedNodes) {
-                    if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
-                        message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and " + toDetails.label;
-                        flag = true;
-                    }
+
+    if (fromDetails.node_type == nodeType && toDetails.node_type == nodeType) {
+        $.each(connections, function (index, item) {
+            connectedNodes = network.getConnectedNodes(item);
+            if (connectedNodes) {
+                if ((connectedNodes[0] == fromDetails.id && connectedNodes[1] == toDetails.id) || connectedNodes[1] == fromDetails.id && connectedNodes[0] == toDetails.id) {
+                    message = "We cannot add more than one " + singleFiberJSON.component_type + "/" + singlePatchJSON.component_type + " connection between " + fromDetails.label + " and " + toDetails.label;
+                    flag = true;
                 }
-            });
-        }
+            }
+        });
     }
+
     var edgeDetails;
     var nodetype;
     if (!flag) {
@@ -6330,7 +6349,7 @@ function checkLink() {
 
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == roadmJSON.node_type);
+            return (item.node_type == roadmJSON.node_type || item.node_type == transceiverJSON.node_type);
         }
     });
 
@@ -6341,12 +6360,20 @@ function checkLink() {
     var message;
     var flag = false;
     var msg = [];
+    var tempEdge = [];
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
+
+        tempEdge = [];
+        $.each(connectedEdges, function (index, item1) {
+            if (network.body.data.edges.get(item1).component_type != serviceJSON.component_type)
+                tempEdge.push(item1);
+        });
+
         fromCount = 0;
         toCount = 0;
-        for (i = 0; i < connectedEdges.length; i++) {
-            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+        for (i = 0; i < tempEdge.length; i++) {
+            edgeDetails = network.body.data.edges.get(tempEdge[i]);
             if (edgeDetails.from == item.id)
                 fromCount++;
             else if (edgeDetails.to == item.id)
@@ -6369,7 +6396,7 @@ function checkMisLink() {
 
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == amplifierJSON.node_type || item.node_type == fusedJSON.node_type || item.node_type == transceiverJSON.node_type);
+            return (item.node_type == amplifierJSON.node_type || item.node_type == fusedJSON.node_type);
         }
     });
 
@@ -6381,24 +6408,11 @@ function checkMisLink() {
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
         tempEdge = [];
-        if (item.node_type != transceiverJSON.node_type) {
-            //hai
-            if (connectedEdges.length <= 1) {
-                msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' One or more links to ' + item.label + ' is missing.</span>');
-                flag = true;
-            }
+        if (connectedEdges.length <= 1) {
+            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' One or more links to ' + item.label + ' is missing.</span>');
+            flag = true;
         }
-        else {
-            $.each(connectedEdges, function (index, item) {
-                if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
-                    tempEdge.push(item);
-            });
-            if (tempEdge.length <= 1) {
-                msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' One or more links to ' + item.label + ' is missing.</span>');
-                flag = true;
-            }
 
-        }
 
     });
 
@@ -6557,77 +6571,69 @@ function nodeValidationInEdge(cfrom, cto) {
 
     //start mislink
     roadmList = [];
-    if (network.body.data.nodes.get(cfrom).node_type == fusedJSON.node_type || network.body.data.nodes.get(cfrom).node_type == amplifierJSON.node_type || network.body.data.nodes.get(cfrom).node_type == transceiverJSON.node_type)
+    if (network.body.data.nodes.get(cfrom).node_type == fusedJSON.node_type || network.body.data.nodes.get(cfrom).node_type == amplifierJSON.node_type)
         roadmList.push(cfrom);
 
-    if (network.body.data.nodes.get(cto).node_type == fusedJSON.node_type || network.body.data.nodes.get(cto).node_type == amplifierJSON.node_type || network.body.data.nodes.get(cto).node_type == transceiverJSON.node_type)
+    if (network.body.data.nodes.get(cto).node_type == fusedJSON.node_type || network.body.data.nodes.get(cto).node_type == amplifierJSON.node_type)
         roadmList.push(cto);
 
 
-
-    var connectedEdges;
-    var tempEdge = [];
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item);
-        //hai
-       
-
-        tempEdge = [];
-        if (network.body.data.nodes.get(item).node_type != transceiverJSON.node_type) {
-            if (connectedEdges.length <= 1) {
-                addNodeHighlight(item);
-            }
-            else {
-                    removeSpanInError(item);
-                }
-            //else {
-            //    if (network.body.data.nodes.get(item).node_type == transceiverJSON.node_type) {
-            //        if (network.body.data.nodes.get(item).transceiver_type != "") {
-            //            removeSpanInError(item, true);
-            //            removeSpanInError(item);
-            //        }
-            //        else {
-            //            //removeSpanInError(item);
-            //            var removeID = "#span" + item.replace(/\s/g, '');
-            //            $(removeID).remove();
-            //        }
-            //    }
-            //    else {
-            //        removeSpanInError(item);
-            //    }
-
-            //}
+        if (connectedEdges.length <= 1) {
+            addNodeHighlight(item);
         }
         else {
-            $.each(connectedEdges, function (index, item) {
-                if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
-                    tempEdge.push(item);
-            });
-          
-            if (tempEdge.length <= 1) {
-                addNodeHighlight(item);
+            removeSpanInError(item);
+        }
+    });
+
+    //
+
+    // start remove highlight once transceiver have equal in/out conn
+
+    var tempEdge = [];
+    roadmList = [];
+    if (network.body.data.nodes.get(cfrom).node_type == transceiverJSON.node_type)
+        roadmList.push(cfrom);
+
+    if (network.body.data.nodes.get(cto).node_type == transceiverJSON.node_type)
+        roadmList.push(cto);
+
+    $.each(roadmList, function (index, item) {
+        connectedEdges = network.getConnectedEdges(item);
+        tempEdge = [];
+        $.each(connectedEdges, function (index, item1) {
+            if (network.body.data.edges.get(item1).component_type != serviceJSON.component_type)
+                tempEdge.push(item1);
+        });
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < tempEdge.length; i++) {
+            edgeDetails = network.body.data.edges.get(tempEdge[i]);
+            if (edgeDetails.from == item)
+                fromCount++;
+            else if (edgeDetails.to == item)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+            addNodeHighlight(item);
+        }
+        else {
+            //removeSpanInError(item);
+            if (network.body.data.nodes.get(item).transceiver_type != "") {
+                removeSpanInError(item, true);
+                removeSpanInError(item);
             }
             else {
-                //if (network.body.data.nodes.get(item).node_type == transceiverJSON.node_type) {
-                    if (network.body.data.nodes.get(item).transceiver_type != "") {
-                        removeSpanInError(item, true);
-                        removeSpanInError(item);
-                    }
-                    else {
-                        //removeSpanInError(item);
-                        var removeID = "#span" + item.replace(/\s/g, '');
-                        $(removeID).remove();
-                    }
-                //}
-                //else {
-                //    removeSpanInError(item);
-                //}
-
+                var removeID = "#span" + item.replace(/\s/g, '');
+                $(removeID).remove();
             }
 
         }
-
     });
+    // end
 
     checkErrorFree();
 
@@ -6703,7 +6709,7 @@ function nodeRuleOnImportJSON() {
     //checkLink
     var roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == roadmJSON.node_type);
+            return (item.node_type == roadmJSON.node_type || item.node_type == transceiverJSON.node_type);
         }
     });
 
@@ -6711,12 +6717,18 @@ function nodeRuleOnImportJSON() {
     var fromCount = 0;
     var toCount = 0;
     var edgeDetails;
+    var tempEdge = [];
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
+        tempEdge = [];
+        $.each(connectedEdges, function (index, item1) {
+            if (network.body.data.edges.get(item1).component_type != serviceJSON.component_type)
+                tempEdge.push(item1);
+        });
         fromCount = 0;
         toCount = 0;
-        for (i = 0; i < connectedEdges.length; i++) {
-            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+        for (i = 0; i < tempEdge.length; i++) {
+            edgeDetails = network.body.data.edges.get(tempEdge[i]);
             if (edgeDetails.from == item.id)
                 fromCount++;
             else if (edgeDetails.to == item.id)
@@ -6726,6 +6738,11 @@ function nodeRuleOnImportJSON() {
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
             addNodeHighlight(item.id);
         }
+        else {
+            if (item.node_type == transceiverJSON.node_type && item.transceiver_type == "") {
+                addNodeHighlight(item.id);
+            }
+        }
 
     });
 
@@ -6733,28 +6750,14 @@ function nodeRuleOnImportJSON() {
 
     roadmList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == amplifierJSON.node_type || item.node_type == fusedJSON.node_type || item.node_type == transceiverJSON.node_type);
+            return (item.node_type == amplifierJSON.node_type || item.node_type == fusedJSON.node_type);
         }
     });
-    var tempEdge = [];
+
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
-        tempEdge = [];
-        //hai
-        if (item.node_type != transceiverJSON.node_type) {
-            if (connectedEdges.length <= 1) {
-                addNodeHighlight(item.id);
-            }
-        }
-        else {//trans force option
-
-            $.each(connectedEdges, function (index, item) {
-                if (network.body.data.edges.get(item).component_type != serviceJSON.component_type)
-                    tempEdge.push(item);
-            });
-
-            if (item.transceiver_type == '' || tempEdge.length <= 1)
-                addNodeHighlight(item.id);
+        if (connectedEdges.length <= 1) {
+            addNodeHighlight(item.id);
         }
 
     });

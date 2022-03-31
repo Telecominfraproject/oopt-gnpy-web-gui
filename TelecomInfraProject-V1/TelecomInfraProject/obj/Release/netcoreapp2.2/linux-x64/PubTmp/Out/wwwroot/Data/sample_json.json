@@ -1,0 +1,985 @@
+{
+  "tip-photonic-equipment:amplifier": [
+    {
+      "type": "fixed27",
+      "gain-min": "27.0",
+      "frequency-min": "191.35",
+      "frequency-max": "196.1",
+      "gain-flatmax": "27.0",
+      "max-power-out": "21.0",
+      "has-output-voa": false,
+      "polynomial-NF": {
+        "a": "0.0",
+        "b": "0.0",
+        "c": "0.0",
+        "d": "5.5"
+      }
+    },
+    {
+      "type": "fixed22",
+      "gain-min": "22.0",
+      "frequency-min": "191.35",
+      "frequency-max": "196.1",
+      "gain-flatmax": "22.0",
+      "max-power-out": "21.0",
+      "has-output-voa": false,
+      "polynomial-NF": {
+        "a": "0.0",
+        "b": "0.0",
+        "c": "0.0",
+        "d": "5.5"
+      }
+    }
+  ],
+  "tip-photonic-equipment:fiber": [
+    {
+      "type": "SSMF",
+      "chromatic-dispersion": "16.7",
+      "gamma": "1.27",
+      "pmd-coefficient": "0.0400028124"
+    }
+  ],
+  "tip-photonic-equipment:transceiver": [
+    {
+      "type": "Cassini",
+      "frequency-min": "191.35",
+      "frequency-max": "196.1",
+      "mode": [
+        {
+          "name": "dp-qpsk",
+          "bit-rate": 100,
+          "baud-rate": "32.0",
+          "required-osnr": "11.0",
+          "in-band-tx-osnr": "40.0",
+          "grid-spacing": "37.5",
+          "tx-roll-off": "0.15",
+          "tip-photonic-simulation:cost": 1
+        },
+        {
+          "name": "16-qam",
+          "bit-rate": 200,
+          "baud-rate": "66.0",
+          "required-osnr": "15.0",
+          "in-band-tx-osnr": "40.0",
+          "grid-spacing": "75.0",
+          "tx-roll-off": "0.15",
+          "tip-photonic-simulation:cost": 1
+        }
+      ]
+    },
+    {
+      "type": "Voyager",
+      "frequency-min": "191.35",
+      "frequency-max": "196.1",
+      "mode": [
+        {
+          "name": "mode 1",
+          "bit-rate": 100,
+          "baud-rate": "32.0",
+          "required-osnr": "12.0",
+          "in-band-tx-osnr": "40.0",
+          "grid-spacing": "37.5",
+          "tx-roll-off": "0.15",
+          "tip-photonic-simulation:cost": 1
+        }
+      ]
+    }
+  ],
+  "tip-photonic-equipment:roadm": [
+    {
+      "type": "default",
+      "add-drop-osnr": "30.0",
+      "polarization-mode-dispersion": "0.0",
+      "target-channel-out-power": "-25.0",
+      "compatible-preamp": [],
+      "compatible-booster": []
+    }
+  ],
+  "tip-photonic-simulation:simulation": {
+    "grid": {
+      "frequency-min": "191.6",
+      "frequency-max": "195.1",
+      "spacing": "50.0",
+      "power": "0.0",
+      "tx-roll-off": "0.15",
+      "tx-osnr": "40.0",
+      "baud-rate": "32.0"
+    },
+    "autodesign": {
+      "allowed-inline-edfa": [],
+      "power-adjustment-for-span-loss": {
+        "maximal-reduction": "-2.0",
+        "maximal-boost": "3.0",
+        "excursion-step-size": "0.5"
+      },
+      "gain-mode": [
+        null
+      ]
+    },
+    "system-margin": "2.0"
+  },
+  "ietf-network:networks": {
+    "network": [
+      {
+        "network-id": "GNPy",
+        "network-types": {
+          "tip-photonic-topology:photonic-topology": {}
+        },
+        "node": [
+          {
+            "node-id": "TCVR 1",
+            "tip-photonic-topology:transceiver": {
+              "model": "Cassini"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -415,
+                "Y-co-ordinate": -73,
+                "city": "TCVR 1",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "TCVR 2",
+            "tip-photonic-topology:transceiver": {
+              "model": "Cassini"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 543,
+                "Y-co-ordinate": -88,
+                "city": "TCVR 2",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "ROADM 1",
+            "tip-photonic-topology:roadm": {
+              "model": ""
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 38,
+                "Y-co-ordinate": -195,
+                "city": "ROADM 1",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "ROADM 2",
+            "tip-photonic-topology:roadm": {
+              "model": ""
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -127,
+                "Y-co-ordinate": 143,
+                "city": "ROADM 2",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "ROADM 3",
+            "tip-photonic-topology:roadm": {
+              "model": ""
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 164,
+                "Y-co-ordinate": 171,
+                "city": "ROADM 3",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "ROADM 4",
+            "tip-photonic-topology:roadm": {
+              "model": ""
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -270,
+                "Y-co-ordinate": -34,
+                "city": "ROADM 4",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "ROADM 5",
+            "tip-photonic-topology:roadm": {
+              "model": ""
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 365,
+                "Y-co-ordinate": -34,
+                "city": "ROADM 5",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 1",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -206,
+                "Y-co-ordinate": -144,
+                "city": "EDFA 1",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 2",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -165,
+                "Y-co-ordinate": -80,
+                "city": "EDFA 2",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 3",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -77,
+                "Y-co-ordinate": -186,
+                "city": "EDFA 3",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 4",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -43,
+                "Y-co-ordinate": -111,
+                "city": "EDFA 4",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 5",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 99,
+                "Y-co-ordinate": -119,
+                "city": "EDFA 5",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 6",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 126,
+                "Y-co-ordinate": -196,
+                "city": "EDFA 6",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 7",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 255,
+                "Y-co-ordinate": -49,
+                "city": "EDFA 7",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 8",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 315,
+                "Y-co-ordinate": -123,
+                "city": "EDFA 8",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 9",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 302,
+                "Y-co-ordinate": 26,
+                "city": "EDFA 9",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 10",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 387,
+                "Y-co-ordinate": 74,
+                "city": "EDFA 10",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 11",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 219,
+                "Y-co-ordinate": 97,
+                "city": "EDFA 11",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 12",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 279,
+                "Y-co-ordinate": 168,
+                "city": "EDFA 12",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 13",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 80,
+                "Y-co-ordinate": 101,
+                "city": "EDFA 13",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 14",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": 53,
+                "Y-co-ordinate": 195,
+                "city": "EDFA 14",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 15",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -44,
+                "Y-co-ordinate": 101,
+                "city": "EDFA 15",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 16",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -72,
+                "Y-co-ordinate": 195,
+                "city": "EDFA 16",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 17",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -220,
+                "Y-co-ordinate": 149,
+                "city": "EDFA 17",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 18",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -156,
+                "Y-co-ordinate": 75,
+                "city": "EDFA 18",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 19",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -286,
+                "Y-co-ordinate": 72,
+                "city": "EDFA 19",
+                "region": ""
+              }
+            }
+          },
+          {
+            "node-id": "EDFA 20",
+            "tip-photonic-topology:amplifier": {
+              "model": "",
+              "gain-target": "0.0",
+              "tilt-target": "0.0",
+              "out-voa-target": "0.0"
+            },
+            "metadata": {
+              "Positions": {
+                "X-co-ordinate": -214,
+                "Y-co-ordinate": 21,
+                "city": "EDFA 20",
+                "region": ""
+              }
+            }
+          }
+        ],
+        "ietf-network-topology:link": [
+          {
+            "link-id": "1-Fiber 1 - 3",
+            "source": {
+              "source-node": "EDFA 1"
+            },
+            "destination": {
+              "dest-node": "EDFA 3"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 4 - 2",
+            "source": {
+              "source-node": "EDFA 4"
+            },
+            "destination": {
+              "dest-node": "EDFA 2"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 6 - 8",
+            "source": {
+              "source-node": "EDFA 6"
+            },
+            "destination": {
+              "dest-node": "EDFA 8"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 7 - 5",
+            "source": {
+              "source-node": "EDFA 7"
+            },
+            "destination": {
+              "dest-node": "EDFA 5"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 10 - 12",
+            "source": {
+              "source-node": "EDFA 10"
+            },
+            "destination": {
+              "dest-node": "EDFA 12"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 11 - 9",
+            "source": {
+              "source-node": "EDFA 11"
+            },
+            "destination": {
+              "dest-node": "EDFA 9"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 14 - 16",
+            "source": {
+              "source-node": "EDFA 14"
+            },
+            "destination": {
+              "dest-node": "EDFA 16"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 15 - 13",
+            "source": {
+              "source-node": "EDFA 15"
+            },
+            "destination": {
+              "dest-node": "EDFA 13"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 20 - 18",
+            "source": {
+              "source-node": "EDFA 20"
+            },
+            "destination": {
+              "dest-node": "EDFA 18"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Fiber 17 - 19",
+            "source": {
+              "source-node": "EDFA 17"
+            },
+            "destination": {
+              "dest-node": "EDFA 19"
+            },
+            "tip-photonic-topology:fiber": {
+              "type": "SSMF",
+              "length": "1.0",
+              "attenuation-in": "0.0",
+              "conn-att-in": "0.5",
+              "conn-att-out": "0.5"
+            }
+          },
+          {
+            "link-id": "1-Patch 1 - 4",
+            "source": {
+              "source-node": "TCVR 1"
+            },
+            "destination": {
+              "dest-node": "ROADM 4"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 4 - 1",
+            "source": {
+              "source-node": "ROADM 4"
+            },
+            "destination": {
+              "dest-node": "TCVR 1"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 4 - 1",
+            "source": {
+              "source-node": "ROADM 4"
+            },
+            "destination": {
+              "dest-node": "EDFA 1"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 3 - 1",
+            "source": {
+              "source-node": "EDFA 3"
+            },
+            "destination": {
+              "dest-node": "ROADM 1"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 1 - 6",
+            "source": {
+              "source-node": "ROADM 1"
+            },
+            "destination": {
+              "dest-node": "EDFA 6"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 8 - 5",
+            "source": {
+              "source-node": "EDFA 8"
+            },
+            "destination": {
+              "dest-node": "ROADM 5"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 5 - 2",
+            "source": {
+              "source-node": "ROADM 5"
+            },
+            "destination": {
+              "dest-node": "TCVR 2"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 2 - 5",
+            "source": {
+              "source-node": "TCVR 2"
+            },
+            "destination": {
+              "dest-node": "ROADM 5"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 5 - 10",
+            "source": {
+              "source-node": "ROADM 5"
+            },
+            "destination": {
+              "dest-node": "EDFA 10"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 12 - 3",
+            "source": {
+              "source-node": "EDFA 12"
+            },
+            "destination": {
+              "dest-node": "ROADM 3"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 3 - 14",
+            "source": {
+              "source-node": "ROADM 3"
+            },
+            "destination": {
+              "dest-node": "EDFA 14"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 16 - 2",
+            "source": {
+              "source-node": "EDFA 16"
+            },
+            "destination": {
+              "dest-node": "ROADM 2"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 2 - 17",
+            "source": {
+              "source-node": "ROADM 2"
+            },
+            "destination": {
+              "dest-node": "EDFA 17"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 19 - 4",
+            "source": {
+              "source-node": "EDFA 19"
+            },
+            "destination": {
+              "dest-node": "ROADM 4"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 4 - 20",
+            "source": {
+              "source-node": "ROADM 4"
+            },
+            "destination": {
+              "dest-node": "EDFA 20"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 18 - 2",
+            "source": {
+              "source-node": "EDFA 18"
+            },
+            "destination": {
+              "dest-node": "ROADM 2"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 2 - 15",
+            "source": {
+              "source-node": "ROADM 2"
+            },
+            "destination": {
+              "dest-node": "EDFA 15"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 13 - 3",
+            "source": {
+              "source-node": "EDFA 13"
+            },
+            "destination": {
+              "dest-node": "ROADM 3"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 3 - 11",
+            "source": {
+              "source-node": "ROADM 3"
+            },
+            "destination": {
+              "dest-node": "EDFA 11"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 9 - 5",
+            "source": {
+              "source-node": "EDFA 9"
+            },
+            "destination": {
+              "dest-node": "ROADM 5"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 5 - 7",
+            "source": {
+              "source-node": "ROADM 5"
+            },
+            "destination": {
+              "dest-node": "EDFA 7"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 5 - 1",
+            "source": {
+              "source-node": "EDFA 5"
+            },
+            "destination": {
+              "dest-node": "ROADM 1"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 1 - 4",
+            "source": {
+              "source-node": "ROADM 1"
+            },
+            "destination": {
+              "dest-node": "EDFA 4"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Patch 2 - 4",
+            "source": {
+              "source-node": "EDFA 2"
+            },
+            "destination": {
+              "dest-node": "ROADM 4"
+            },
+            "tip-photonic-topology:patch": {}
+          },
+          {
+            "link-id": "1-Service 1 - 2",
+            "source": {
+              "source-node": "TCVR 1"
+            },
+            "destination": {
+              "dest-node": "TCVR 2"
+            },
+            "tip-photonic-topology:service": {
+              "band-width": 100
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
