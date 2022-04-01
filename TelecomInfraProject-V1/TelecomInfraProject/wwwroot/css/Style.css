@@ -1922,10 +1922,9 @@ select {
     }
 
 .errorSummary {
-    margin-top: 0.5rem;
     overflow-y: auto;
     max-height: calc(100vh - 100px);
-    margin-top: 2.3rem;
+    margin-top: 1rem;
     overflow-y: auto;
     /* max-height: calc(100vh - 10vh); */
     /*margin-left: -3rem;*/

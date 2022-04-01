@@ -155,7 +155,7 @@ $(document).ready(function () {
     });
 
     $("#btnSaveNetwork, #btnSaveNetworkTop").click(function () {
-        
+
         if (networkValidation()) {
             //exportNetwork(true);
             $("*.ES").html("Save As");
@@ -385,7 +385,7 @@ $(document).ready(function () {
         //    allowOutsideClick: false
         //}).then((result) => {
         //    if (result.value) {
-                $("#importEqpt").click();
+        $("#importEqpt").click();
         //    }
         //});
 
@@ -3031,7 +3031,7 @@ function addFiber() {
         }
 
         if (!isSrcOk || !isDestOk) {
-            showMessage(alertType.Error, "<p>Cannot add " + dualFiberJSON.fiber_category + " from " + msg+'</p>');
+            showMessage(alertType.Error, "<p>Cannot add " + dualFiberJSON.fiber_category + " from " + msg + '</p>');
             addEdgeData = {
                 from: '',
                 to: ''
@@ -3800,7 +3800,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 }
 
                 if (isLimit) {
-                    showMessage(alertType.Error,msg);
+                    showMessage(alertType.Error, msg);
                     return;
                 }
             }
@@ -6203,9 +6203,9 @@ function showMessage(messageType, textmsg, removeTimeout) {
             dangersrc = "./Assets/img/error-toaster.png";
             $("#img_src").attr("src", dangersrc);
             if (!removeTimeout) {
-               
+
                 $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
-                
+
                 $('#toast').addClass("danger-toast");
                 clearAndSetTimeout(".danger-toast", removeTimeout);
             }
@@ -6216,8 +6216,8 @@ function showMessage(messageType, textmsg, removeTimeout) {
                 $('#toast').addClass("danger-toast-error-listing");
                 clearAndSetTimeout(".danger-toast-error-listing", removeTimeout);
             }
-            
-            
+
+
             break;
         case alertType.Warning:
             $('#msg_content').html(textmsg);
@@ -6404,7 +6404,7 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
             flag = true;
         }
     });
@@ -6432,7 +6432,7 @@ function checkMisLink() {
         connectedEdges = network.getConnectedEdges(item.id);
         tempEdge = [];
         if (connectedEdges.length <= 1) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"> One or more links to <b>' + item.label + '</b> is missing.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
 
@@ -6460,7 +6460,7 @@ function checkTransForce() {
     var flag = false;
     $.each(transList, function (index, item) {
         if (item.transceiver_type == "") {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' forcing option is missing.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' forcing option is missing.</p>');
             flag = true;
         }
 
@@ -6524,7 +6524,7 @@ function focusNode(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.err_image;
 
-    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, is_error: true }]);
+    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size:roadmJSON.err_size, is_error: true }]);
 
 }
 
@@ -6550,7 +6550,7 @@ function removeHighlight() {
         //    image = ramanampJSON.image;
 
         network.body.data.nodes.update({
-            id: nodeDetails.id, image: nodeDetails.pre_image, is_error: false
+            id: nodeDetails.id, image: nodeDetails.pre_image, size: roadmJSON.size, is_error: false
         });
     }
 }
@@ -6679,7 +6679,7 @@ function removeSpanInError(item, transUpdate) {
         image = ramanampJSON.image;
 
     network.body.data.nodes.update({
-        id: nodeDetails.id, image: DIR + image, is_error: false
+        id: nodeDetails.id, image: DIR + image, size: roadmJSON.size, is_error: false
     });
 
     var removeID;
@@ -6724,7 +6724,7 @@ function addNodeHighlight(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.w_image;
 
-    network.body.data.nodes.update([{ id: nodeID, image: DIR + image }]);
+    network.body.data.nodes.update([{ id: nodeID, size: roadmJSON.size, image: DIR + image }]);
 
 }
 
