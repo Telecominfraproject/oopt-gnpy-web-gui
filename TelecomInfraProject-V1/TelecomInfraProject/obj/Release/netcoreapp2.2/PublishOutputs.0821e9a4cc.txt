@@ -33,6 +33,7 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\edit.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\erramp.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errattenuator.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\error-listing-icon.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\error-toaster.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errramanamp.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\errroadm.svg

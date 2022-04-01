@@ -166,7 +166,7 @@ $(document).ready(function () {
 
     $("#btnExportPopup").click(function () {
         if (networkValidation()) {
-            topologyValidation();
+            //topologyValidation();
             $("*.ES").html("Export");
             $("#txtFileName").val('');
             $("#staticBackdrop1").modal('show');
@@ -3031,7 +3031,7 @@ function addFiber() {
         }
 
         if (!isSrcOk || !isDestOk) {
-            showMessage(alertType.Error, "Cannot add " + dualFiberJSON.fiber_category + " from " + msg);
+            showMessage(alertType.Error, "<p>Cannot add " + dualFiberJSON.fiber_category + " from " + msg+'</p>');
             addEdgeData = {
                 from: '',
                 to: ''
@@ -3800,7 +3800,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 }
 
                 if (isLimit) {
-                    showMessage(alertType.Error, msg);
+                    showMessage(alertType.Error,msg);
                     return;
                 }
             }
@@ -3857,12 +3857,12 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var response = nodeRule(cfrom, cto, amplifierJSON.node_type);
             if (response.flag) {
                 flag = true
-                message.push(bullet + response.message);
+                message.push(response.message);
             }
             response = nodeRule(cfrom, cto, fusedJSON.node_type);
             if (response.flag) {
                 flag = true;
-                message.push(bullet + response.message);
+                message.push(response.message);
             }
 
             //response = nodeRule(cfrom, cto, transceiverJSON.node_type);
@@ -4125,13 +4125,13 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             var response = nodeRule(cfrom, cto, amplifierJSON.node_type);
             if (response.flag) {
                 flag = true
-                message.push(bullet + response.message);
+                message.push(response.message);
             }
 
             response = nodeRule(cfrom, cto, fusedJSON.node_type);
             if (response.flag) {
                 flag = true;
-                message.push(bullet + response.message);
+                message.push(response.message);
             }
 
             //response = nodeRule(cfrom, cto, transceiverJSON.node_type);
@@ -6165,6 +6165,7 @@ function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
 }
 
 function showMessage(messageType, textmsg, removeTimeout) {
+    $("#img_src").show();
     switch (messageType) {
         case alertType.Success:
 
@@ -6173,6 +6174,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
             var successrc1 = "./Assets/img/success-toaster.png";
             $("#img_src").attr("src", successrc1);
             $('#toast').removeClass("info-toast");
+            $('#toast').removeClass("danger-toast-error-listing");
             $('#toast').removeClass("danger-toast");
             $('#toast').removeClass("warning-toast");
             $('#toast').addClass("success-toast");
@@ -6184,6 +6186,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
             var infosrc = "./Assets/img/info-toaster.png";
             $("#img_src").attr("src", infosrc);
             $('#toast').removeClass("success-toast");
+            $('#toast').removeClass("danger-toast-error-listing");
             $('#toast').removeClass("danger-toast");
             $('#toast').removeClass("warning-toast");
             $('#toast').addClass("info-toast");
@@ -6191,14 +6194,30 @@ function showMessage(messageType, textmsg, removeTimeout) {
             break;
         case alertType.Error:
             $('#msg_content').html(textmsg);
-            $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
-            var dangersrc = "./Assets/img/error-toaster.png";
-            $("#img_src").attr("src", dangersrc);
+            var dangersrc;
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");
             $('#toast').removeClass("warning-toast");
-            $('#toast').addClass("danger-toast");
-            clearAndSetTimeout(".danger-toast", removeTimeout);
+            $('#toast').removeClass("danger-toast-error-listing");
+            $('#toast').removeClass("danger-toast");
+            dangersrc = "./Assets/img/error-toaster.png";
+            $("#img_src").attr("src", dangersrc);
+            if (!removeTimeout) {
+               
+                $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
+                
+                $('#toast').addClass("danger-toast");
+                clearAndSetTimeout(".danger-toast", removeTimeout);
+            }
+            else {
+                $("#img_src").hide();
+                $('#caption').text('Messages');
+                //dangersrc = "./Assets/img/error-listing-icon.png";
+                $('#toast').addClass("danger-toast-error-listing");
+                clearAndSetTimeout(".danger-toast-error-listing", removeTimeout);
+            }
+            
+            
             break;
         case alertType.Warning:
             $('#msg_content').html(textmsg);
@@ -6207,6 +6226,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
             $("#img_src").attr("src", warningsrc);
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");
+            $('#toast').removeClass("danger-toast-error-listing");
             $('#toast').removeClass("danger-toast");
             $('#toast').addClass("warning-toast");
             clearAndSetTimeout(".warning-toast");
@@ -6328,7 +6348,7 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message += "<br /> <br />" + bullet + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += "<br /> <br />" + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 else
                     message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 flag = true;
@@ -6384,14 +6404,14 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' ' + item.label + ' must have an even number of links with an equal number of incoming and outgoing links.</span>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
             flag = true;
         }
     });
 
 
     //message = msg.join(' ') + " must have an even number of links with an equal number of incoming and outgoing links";
-    message = msg.join('</br>');
+    message = msg.join(' ');
     return { message: message, flag: flag };
 }
 
@@ -6412,7 +6432,7 @@ function checkMisLink() {
         connectedEdges = network.getConnectedEdges(item.id);
         tempEdge = [];
         if (connectedEdges.length <= 1) {
-            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' One or more links to ' + item.label + ' is missing.</span>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
 
@@ -6423,7 +6443,7 @@ function checkMisLink() {
     //if (msg.length > 1)
     //    sorp = ' are'
     //message = "One or more links to " + msg.join(' ') + sorp + " missing";
-    message = msg.join('</br>');
+    message = msg.join(' ');
     return { message: message, flag: flag };
 }
 
@@ -6440,7 +6460,7 @@ function checkTransForce() {
     var flag = false;
     $.each(transList, function (index, item) {
         if (item.transceiver_type == "") {
-            msg.push('<span class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')">' + bullet + ' ' + item.label + ' - ' + transceiverJSON.node_type + ' forcing option is missing.</span>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' forcing option is missing.</p>');
             flag = true;
         }
 
@@ -6450,7 +6470,7 @@ function checkTransForce() {
     //if (msg.length > 1)
     //    sorp = ' are'
     //message = "One or more links to " + msg.join(' ') + sorp + " missing";
-    message = msg.join('</br>');
+    message = msg.join(' ');
     return { message: message, flag: flag };
 }
 
@@ -6477,7 +6497,7 @@ function topologyValidation(isTime) {
     }
 
     if (flag) {
-        showMessage(alertType.Error, message.join(' </br>'), isTime);
+        showMessage(alertType.Error, message.join(' '), isTime);
         //return;
     }
     return flag;
@@ -6674,9 +6694,9 @@ function removeSpanInError(item, transUpdate) {
 }
 
 function checkErrorFree() {
-    var roadmRule = $("#spanEven").find('span').length;
-    var linkRule = $("#spanMisLink").find('span').length;
-    var transForce = $("#spanTransForce").find('span').length;
+    var roadmRule = $("#spanEven").find('p').length;
+    var linkRule = $("#spanMisLink").find('p').length;
+    var transForce = $("#spanTransForce").find('p').length;
 
     if (roadmRule == 0)
         $("#spanEven").empty();
