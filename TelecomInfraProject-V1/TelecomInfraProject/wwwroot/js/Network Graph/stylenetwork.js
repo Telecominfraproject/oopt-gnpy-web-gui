@@ -459,7 +459,7 @@ $(document).ready(function () {
                 );
                 data.nodes.remove(previous_nodes_diff);
             } else {
-                data.nodes.update(previous_nodes);
+                //data.nodes.update(previous_nodes);
             }
 
             if (current_edges.length > previous_edges.length) {
@@ -511,7 +511,7 @@ $(document).ready(function () {
                 );
                 data.nodes.remove(forward_nodes_diff);
             } else {
-                data.nodes.update(forward_nodes);
+                //data.nodes.update(forward_nodes);
             }
             if (current_edges.length > forward_edges.length) {
                 const forward_edges_diff = _.differenceBy(
@@ -6548,8 +6548,13 @@ function focusNode(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.err_image;
 
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
     network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size:roadmJSON.err_size, is_error: true }]);
 
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 }
 
 function removeHighlight() {
@@ -6572,10 +6577,13 @@ function removeHighlight() {
         //    image = amplifierJSON.image;
         //else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         //    image = ramanampJSON.image;
-
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
         network.body.data.nodes.update({
             id: nodeDetails.id, image: nodeDetails.pre_image, size: roadmJSON.size, is_error: false
         });
+        data.nodes.on("*", change_history_back);
+        data.edges.on("*", change_history_back);
     }
 }
 
@@ -6714,9 +6722,15 @@ function removeSpanInError(item, transUpdate) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.image;
 
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
     network.body.data.nodes.update({
         id: nodeDetails.id, image: DIR + image, size: roadmJSON.size, is_error: false
     });
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 
     var removeID;
 
@@ -6760,7 +6774,13 @@ function addNodeHighlight(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.w_image;
 
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
     network.body.data.nodes.update([{ id: nodeID, size: roadmJSON.size, image: DIR + image }]);
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 
 }
 

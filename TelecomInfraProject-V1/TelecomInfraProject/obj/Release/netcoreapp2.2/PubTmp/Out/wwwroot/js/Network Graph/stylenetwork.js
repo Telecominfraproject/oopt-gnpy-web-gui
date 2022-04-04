@@ -1131,9 +1131,13 @@ function draw(isImport) {
         }
     }
 
+    //var width = window.innerWidth;
+    //var height = window.innerHeight;
+
     var iteration = data.nodes.length + data.edges.length;
     options = {
-
+        //width: width,
+        //height: height,
         interaction: optionsJSON.interaction,
         physics: {
             stabilization: {
@@ -5245,8 +5249,18 @@ function deleteNode(nodeID) {
 
             } else {
                 //nodes.remove(nodeID);
+
+                if (nodeDetails.node_type == transceiverJSON.node_type) {
+                    removeSpanInError(nodeID);
+                    removeSpanInError(nodeID, true);
+                }
+                else
+                    removeSpanInError(nodeID);
+
                 network.body.data.nodes.remove(nodeID);
                 $("#stepCreateTopology").click();
+
+                
             }
             network.unselectAll();
         }
@@ -6428,14 +6442,24 @@ function checkMisLink() {
     var flag = false;
     var msg = [];
     var tempEdge = [];
+    var fromCount;
+    var toCount;
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
-        tempEdge = [];
-        if (connectedEdges.length <= 1) {
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < connectedEdges.length; i++) {
+            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+            if (edgeDetails.from == item.id)
+                fromCount++;
+            else if (edgeDetails.to == item.id)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
             msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
-
 
     });
 
@@ -6603,12 +6627,24 @@ function nodeValidationInEdge(cfrom, cto) {
 
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item);
-        if (connectedEdges.length <= 1) {
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < connectedEdges.length; i++) {
+            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+            if (edgeDetails.from == item)
+                fromCount++;
+            else if (edgeDetails.to == item)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
             addNodeHighlight(item);
         }
         else {
             removeSpanInError(item);
         }
+
+        
     });
 
     //
@@ -6779,9 +6815,23 @@ function nodeRuleOnImportJSON() {
 
     $.each(roadmList, function (index, item) {
         connectedEdges = network.getConnectedEdges(item.id);
-        if (connectedEdges.length <= 1) {
+
+        fromCount = 0;
+        toCount = 0;
+        for (i = 0; i < connectedEdges.length; i++) {
+            edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+            if (edgeDetails.from == item.id)
+                fromCount++;
+            else if (edgeDetails.to == item.id)
+                toCount++;
+        }
+
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount>1 || toCount>1) {
             addNodeHighlight(item.id);
         }
+        //if (connectedEdges.length <= 1) {
+        //    addNodeHighlight(item.id);
+        //}
 
     });
 }
@@ -6818,11 +6868,11 @@ function edgeStyleOnImportJSON() {
                         fromFiberCount++;
                         fiberSmooth.roundness = "0." + fromFiberCount;
                     }
-                    //network.body.data.edges.update({
-                    //    id: fiberDetails.id, smooth: fiberSmooth
+                    network.body.data.edges.update({
+                        id: fiberDetails.id, smooth: fiberSmooth
 
-                    //});
-                    fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
+                    });
+                    //fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
                 }
                 if (fiberDetails.from == cto && fiberDetails.to == cfrom) {
                     fiberCount++;
@@ -6834,36 +6884,35 @@ function edgeStyleOnImportJSON() {
                         toFiberCount++;
                         fiberSmooth.roundness = "0." + toFiberCount;
                     }
-                    //network.body.data.edges.update({
-                    //    id: fiberDetails.id, smooth: fiberSmooth
+                    network.body.data.edges.update({
+                        id: fiberDetails.id, smooth: fiberSmooth
 
-                    //});
-                    fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
+                    });
+                    //fiberData.push({ id: fiberDetails.id, smooth: fiberSmooth });
                 }
             }
         });
 
     }
 
-    var uniqueEdges = Array.from(new Set(fiberData.map(a => a.id)))
-        .map(id => {
-            return fiberData.find(a => a.id === id)
-        })
+    //var uniqueEdges = Array.from(new Set(fiberData.map(a => a.id)))
+    //    .map(id => {
+    //        return fiberData.find(a => a.id === id)
+    //    })
 
 
-    uniqueEdges = uniqueEdges.filter(v => v.smooth.roundness != 0.5);
+    //uniqueEdges = uniqueEdges.filter(v => v.smooth.roundness != 0.5);
+    //console.log(uniqueEdges);
+    //data.nodes.off("*", change_history_back);
+    //data.edges.off("*", change_history_back);
+    //$.each(uniqueEdges, function (index, item) {
+    //    network.body.data.edges.update({
+    //        id: item.id, smooth: item.smooth
 
-    data.nodes.off("*", change_history_back);
-    data.edges.off("*", change_history_back);
+    //    });
+    //});
 
-    $.each(uniqueEdges, function (index, item) {
-        network.body.data.edges.update({
-            id: item.id, smooth: item.smooth
-
-        });
-    });
-
-    data.nodes.on("*", change_history_back);
-    data.edges.on("*", change_history_back);
+    //data.nodes.on("*", change_history_back);
+    //data.edges.on("*", change_history_back);
 
 }
