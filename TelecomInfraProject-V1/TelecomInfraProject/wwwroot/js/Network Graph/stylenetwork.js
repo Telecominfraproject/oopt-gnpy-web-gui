@@ -5260,7 +5260,7 @@ function deleteNode(nodeID) {
                 network.body.data.nodes.remove(nodeID);
                 $("#stepCreateTopology").click();
 
-                
+
             }
             network.unselectAll();
         }
@@ -5411,6 +5411,22 @@ function singleFiberEdit(fiberID, callback) {
     $("#txtConnector_IN").val(edgeDetails.connector_in);
     $("#txtConnector_OUT").val(edgeDetails.connector_out);
     $("#txtSpan_Loss").val(edgeDetails.span_loss);
+
+    var span_length = $("#txtSpan_Length").val();
+    var spanlen = parseFloat(span_length);
+
+    if (spanlen <= 0) {
+        $("#txtSpan_Length").addClass('input_error');
+    }
+    else
+        $("#txtSpan_Length").removeClass('input_error');
+
+    if ($("#ddlSingleFiberType").val() == null) {
+        $("#ddlSingleFiberType").addClass('input_error');
+    }
+    else
+        $("#ddlSingleFiberType").removeClass('input_error');
+
     openDrawer('singlefiber');
     document.getElementById("btnSingleFiberUpdate").onclick = updateSingleFiber.bind(
         this,
@@ -5431,11 +5447,22 @@ function updateSingleFiber(fiberID) {
     var connector_out = $("#txtConnector_OUT").val();
     var span_loss = $("#txtSpan_Loss").val();
 
+    if ($("#ddlSingleFiberType").val() == null) {
+        showMessage(alertType.Error, 'Pleae select fiber type');
+        $("#ddlSingleFiberType").addClass('input_error');
+        return;
+    }
+    else
+        $("#ddlSingleFiberType").removeClass('input_error');
+
     var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Error, 'Pleae enter valid span length.');
+        $("#txtSpan_Length").addClass('input_error');
         return;
     }
+    else
+        $("#txtSpan_Length").removeClass('input_error');
 
     var fiberDetails = network.body.data.edges.get(fiberID);
 
@@ -5471,6 +5498,10 @@ function clearSingleFiber() {
     $("#txtConnector_IN").val('');
     $("#txtConnector_OUT").val('');
     $("#txtSpan_Loss").val('');
+
+    $("#ddlSingleFiberType").removeClass('input_error');
+    $("#txtSpan_Length").removeClass('input_error');
+
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
     network.unselectAll();
@@ -6551,7 +6582,7 @@ function focusNode(nodeID) {
     data.nodes.off("*", change_history_back);
     data.edges.off("*", change_history_back);
 
-    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size:roadmJSON.err_size, is_error: true }]);
+    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size: roadmJSON.err_size, is_error: true }]);
 
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
@@ -6652,7 +6683,7 @@ function nodeValidationInEdge(cfrom, cto) {
             removeSpanInError(item);
         }
 
-        
+
     });
 
     //
@@ -6846,7 +6877,7 @@ function nodeRuleOnImportJSON() {
                 toCount++;
         }
 
-        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount>1 || toCount>1) {
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
             addNodeHighlight(item.id);
         }
         //if (connectedEdges.length <= 1) {
