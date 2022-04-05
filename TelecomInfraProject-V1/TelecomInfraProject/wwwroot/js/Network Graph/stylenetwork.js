@@ -459,7 +459,7 @@ $(document).ready(function () {
                 );
                 data.nodes.remove(previous_nodes_diff);
             } else {
-                //data.nodes.update(previous_nodes);
+                data.nodes.update(previous_nodes);
             }
 
             if (current_edges.length > previous_edges.length) {
@@ -511,7 +511,7 @@ $(document).ready(function () {
                 );
                 data.nodes.remove(forward_nodes_diff);
             } else {
-                //data.nodes.update(forward_nodes);
+                data.nodes.update(forward_nodes);
             }
             if (current_edges.length > forward_edges.length) {
                 const forward_edges_diff = _.differenceBy(
@@ -5225,19 +5225,19 @@ function deleteNode(nodeID) {
     if (nodeDetails.node_type == ILAJSON.node_type)
         node_type = nodeDetails.amp_category;
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
             document.getElementById("roadmMenu").style.display = "none";
             document.getElementById("attenuatorMenu").style.display = "none";
             document.getElementById("ILAMenu").style.display = "none";
@@ -5263,8 +5263,8 @@ function deleteNode(nodeID) {
 
             }
             network.unselectAll();
-        }
-    });
+    //    }
+    //});
 
 }
 
@@ -5521,19 +5521,19 @@ function deleteFiber(fiberID) {
     if (fiber.label.trim() == "")
         fiberLabel = fiber.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
             var nodeDetails = network.body.data.nodes.get(fiber.from);
             var toNodeDetails = network.body.data.nodes.get(fiber.to);
 
@@ -5573,8 +5573,8 @@ function deleteFiber(fiberID) {
             nodeValidationInEdge(fiber.from, fiber.to);
             network.unselectAll();
             enableEdgeIndicator();
-        }
-    });
+    //    }
+    //});
 
 
 
@@ -5680,19 +5680,19 @@ function deletePatch(patchID) {
     if (patchDetails.label.trim() == "")
         patchLabel = patchDetails.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + patchDetails.patch_category + ' : ' + patchLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + patchDetails.patch_category + ' : ' + patchLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
             if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
                 return;
             document.getElementById("singlePatchMenu").style.display = "none";
@@ -5702,8 +5702,8 @@ function deletePatch(patchID) {
             nodeValidationInEdge(patchDetails.from, patchDetails.to);
             network.unselectAll();
             enableEdgeIndicator();
-        }
-    });
+    //    }
+    //});
 
 
 }
@@ -5811,30 +5811,30 @@ function updateService(serviceID) {
 function deleteService(serviceID) {
 
     var serviceDetails = network.body.data.edges.get(serviceID);
-    var serviceLabel = serviceDetails.label;
-    if (serviceDetails.label.trim() == "")
-        serviceLabel = serviceDetails.text
+    //var serviceLabel = serviceDetails.label;
+    //if (serviceDetails.label.trim() == "")
+    //    serviceLabel = serviceDetails.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + serviceDetails.component_type + ' : ' + serviceLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + serviceDetails.component_type + ' : ' + serviceLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
             document.getElementById("serviceMenu").style.display = "none";
             network.body.data.edges.remove(serviceID);
             multipleFiberService(serviceDetails.from, serviceDetails.to);
             network.unselectAll();
             enableEdgeIndicator();
-        }
-    });
+    //    }
+    //});
 
 
 }
