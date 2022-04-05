@@ -269,6 +269,13 @@
     "fiber_category": "Single Fiber",
     "width": 2,
     "options": {
+      "w_color": {
+        "color": "gray",
+        "highlight": "gray",
+        "hover": "gray",
+        "inherit": false,
+        "opacity": 1
+      },
       "color": {
         "color": "blue",
         "highlight": "blue",
