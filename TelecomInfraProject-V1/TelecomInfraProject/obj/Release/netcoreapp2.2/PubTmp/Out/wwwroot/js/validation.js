@@ -6,7 +6,7 @@ function nameLengthValidation(element) {
     //var maxDegree = Number(configData.node[$("#ddlNodeType").val()].max_degree);
     //var regex = /^[1-9-+()]*$/;
     //isDegreeValid = regex.test(document.getElementById("txtNodeDegree").value);
-    var msg = "";
+    var msg = ""; 
 
     if ($(elementID).val().trim() == '') {
         msg = "Please enter the name";

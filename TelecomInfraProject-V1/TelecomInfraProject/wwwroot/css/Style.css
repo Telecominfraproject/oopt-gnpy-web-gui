@@ -628,7 +628,7 @@ ul {
     width: 100%;
     max-width: 25%;
     position: absolute;
-    z-index: 1000;
+    z-index: 9999;
     /* z-index:-1;
   right:0; */
     right: -27%;
@@ -1356,14 +1356,14 @@ select {
         width: 100%;
         max-width: 25%;
         position: absolute;
-        z-index: 1000;
+        z-index: 9999;
         display: none;
         right: 0;
     }
 
     .d-visible {
         display: block;
-        /* z-index: 9999; */
+         /*z-index: 9999;*/ 
     }
 }
 

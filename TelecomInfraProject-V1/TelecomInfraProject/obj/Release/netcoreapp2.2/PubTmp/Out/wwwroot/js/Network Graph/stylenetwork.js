@@ -1871,8 +1871,20 @@ function displayFiberHover(params) {
             if (fiberDetails.span_loss)
                 span_loss = fiberDetails.span_loss;
 
-            hoverData += "Fiber type : " + fiber_type + "\n";
-            hoverData += "Span length(in km) : " + span_length + "\n";
+            //hoverData += "Fiber type : " + fiber_type + "\n";
+            //hoverData += "Span length(in km) : " + span_length + "\n";
+            if (fiber_type == "")
+                hoverData += "<span style='color:red;'>Fiber type : " + fiber_type + "</span>\n";
+            else
+                hoverData += "Fiber type : " + fiber_type + "\n";
+
+            var spanlen = parseFloat(span_length);
+
+            if (spanlen <= 0)
+                hoverData += "<span style='color:red;'>Span length(in km) : " + span_length + "</span>\n";
+            else
+                hoverData += "Span length(in km) : " + span_length + "\n";
+
             //hoverData += "Loss Coefficient(dB/km) : " + loss_coefficient + "\n";
             //hoverData += "Connector IN(dB) : " + connector_in + "\n";
             //hoverData += "Connector OUT(dB) : " + connector_out + "\n";
@@ -2751,13 +2763,21 @@ function importNetwork() {
 
                 var loss_Coefficient = fiber_config.Loss_coefficient;;
                 span_Loss = parseFloat(span_Length * loss_Coefficient);
+
+                var tempColor;
+
+                if (fiber_Type == "" || parseFloat(span_Length) <= 0)
+                    tempColor = singleFiberJSON.options.w_color;
+                else
+                    tempColor = singleFiberJSON.options.color;
+
                 importEdges.push({
                     id: token(), from: item['source']['source-node'], to: item['destination']['dest-node'], label: labelvalue, text: labelvalue,
                     view: topologyView.Functional_View, hidden: false,
                     dashes: singleFiberJSON.dashes,
                     fiber_category: singleFiberJSON.fiber_category,
                     component_type: singleFiberJSON.component_type,
-                    color: singleFiberJSON.options.color,
+                    color: tempColor,
                     width: singleFiberJSON.width,
                     arrows: singleFiberJSON.options.arrows,
                     //font: singleFiberJSON.options.font,
@@ -3905,7 +3925,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 view: topologyView.Functional_View, hidden: false,
                 dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
                 component_type: singleFiberJSON.component_type,
-                color: singleFiberJSON.options.color,
+                color: singleFiberJSON.options.w_color,
                 width: singleFiberJSON.width,
                 background: singleFiberJSON.options.background,
                 arrows: singleFiberJSON.options.arrows,
@@ -4698,9 +4718,16 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     var elabel = "";
     elabel = labelvalue;
 
+    var tempcolor;
+
+    if (fiberDetails.fiber_type != null && parseFloat(fiberDetails.span_length) > 0)
+        tempcolor = singleFiberJSON.options.color;
+    else
+        tempcolor = singleFiberJSON.options.w_color;
+
     network.body.data.edges.add({
         id: fiberID, from: fiberDetails.from, to: nodeID, label: elabel, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
-        component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
+        component_type: singleFiberJSON.component_type, color: tempcolor, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows,
         //font: singleFiberJSON.options.font,
         smooth: smooth,
@@ -4748,7 +4775,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     var fiber_config = configData[singleFiberJSON.fiber_category.replace(' ', '')].default;
     network.body.data.edges.add({
         id: newFiberID, from: nodeID, to: fiberDetails.to, label: elabel, text: labelvalue, dashes: singleFiberJSON.dashes, fiber_category: singleFiberJSON.fiber_category,
-        component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.color, background: singleFiberJSON.options.background,
+        component_type: singleFiberJSON.component_type, color: singleFiberJSON.options.w_color, background: singleFiberJSON.options.background,
         arrows: singleFiberJSON.options.arrows,
         //font: singleFiberJSON.options.font, 
         smooth: smooth,
@@ -4888,6 +4915,35 @@ function updateRoadm(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, roadm_type: $("#ddlRoadmType").val()
             });
+            var roadmtype = $("#ddlRoadmType").val();
+            var connectedEges = network.getConnectedEdges(id);
+            var tempEdge = [];
+            $.each(connectedEges, function (index, item) {
+                if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
+                    tempEdge.push(item);
+                }
+            });
+
+            var fromCount = 0;
+            var toCount = 0;
+            for (i = 0; i < tempEdge.length; i++) {
+                edgeDetails = network.body.data.edges.get(tempEdge[i]);
+                if (edgeDetails.from == id)
+                    fromCount++;
+                else if (edgeDetails.to == id)
+                    toCount++;
+            }
+
+            if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+                //addNodeHighlight(item);
+                removeID = "#spanTF" + id.replace(/\s/g, '');
+                $(removeID).remove();
+            }
+            else {
+                if (roadmtype != "")
+                    removeSpanInError(id, true);
+            }
+
         }
         clearRoadm();
     }
@@ -5043,6 +5099,30 @@ function updateAmplifier(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, amp_type: $("#ddlAmplifierType").val(),
             });
+            var amptype = $("#ddlAmplifierType").val();
+            var connectedEdges;
+            var fromCount;
+            var toCount;
+            connectedEdges = network.getConnectedEdges(id);
+            fromCount = 0;
+            toCount = 0;
+            for (i = 0; i < connectedEdges.length; i++) {
+                edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+                if (edgeDetails.from == id)
+                    fromCount++;
+                else if (edgeDetails.to == id)
+                    toCount++;
+            }
+
+
+            if (fromCount == 1 && toCount == 1) {
+                removeID = "#spanTF" + id.replace(/\s/g, '');
+                $(removeID).remove();
+
+                if (amptype != "")
+                    removeSpanInError(id, true);
+            }
+
             clearAmplifier();
         }
 
@@ -5086,6 +5166,30 @@ function updateRamanAmp(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
             });
+
+            var amptype = $("#ddlAmplifierType").val();
+            var connectedEdges;
+            var fromCount;
+            var toCount;
+            connectedEdges = network.getConnectedEdges(id);
+            fromCount = 0;
+            toCount = 0;
+            for (i = 0; i < connectedEdges.length; i++) {
+                edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+                if (edgeDetails.from == id)
+                    fromCount++;
+                else if (edgeDetails.to == id)
+                    toCount++;
+            }
+
+            if (fromCount == 1 && toCount == 1) {
+                removeID = "#spanTF" + id.replace(/\s/g, '');
+                $(removeID).remove();
+
+                if (amptype != "")
+                    removeSpanInError(id, true);
+            }
+
             clearRamanAmp();
         }
 
@@ -5225,46 +5329,46 @@ function deleteNode(nodeID) {
     if (nodeDetails.node_type == ILAJSON.node_type)
         node_type = nodeDetails.amp_category;
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
-            document.getElementById("roadmMenu").style.display = "none";
-            document.getElementById("attenuatorMenu").style.display = "none";
-            document.getElementById("ILAMenu").style.display = "none";
-            document.getElementById("amplifierMenu").style.display = "none";
-            document.getElementById("transceiverMenu").style.display = "none";
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
+    document.getElementById("roadmMenu").style.display = "none";
+    document.getElementById("attenuatorMenu").style.display = "none";
+    document.getElementById("ILAMenu").style.display = "none";
+    document.getElementById("amplifierMenu").style.display = "none";
+    document.getElementById("transceiverMenu").style.display = "none";
 
-            if (network.getConnectedEdges(nodeID).length > 0) {
-                showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
+    if (network.getConnectedEdges(nodeID).length > 0) {
+        showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
 
-            } else {
-                //nodes.remove(nodeID);
+    } else {
+        //nodes.remove(nodeID);
 
-                if (nodeDetails.node_type == transceiverJSON.node_type) {
-                    removeSpanInError(nodeID);
-                    removeSpanInError(nodeID, true);
-                }
-                else
-                    removeSpanInError(nodeID);
-
-                network.body.data.nodes.remove(nodeID);
-                $("#stepCreateTopology").click();
-
-                
-            }
-            network.unselectAll();
+        if (nodeDetails.node_type == transceiverJSON.node_type) {
+            removeSpanInError(nodeID);
+            removeSpanInError(nodeID, true);
         }
-    });
+        else
+            removeSpanInError(nodeID);
+
+        network.body.data.nodes.remove(nodeID);
+        $("#stepCreateTopology").click();
+
+
+    }
+    network.unselectAll();
+    //    }
+    //});
 
 }
 
@@ -5411,6 +5515,22 @@ function singleFiberEdit(fiberID, callback) {
     $("#txtConnector_IN").val(edgeDetails.connector_in);
     $("#txtConnector_OUT").val(edgeDetails.connector_out);
     $("#txtSpan_Loss").val(edgeDetails.span_loss);
+
+    var span_length = $("#txtSpan_Length").val();
+    var spanlen = parseFloat(span_length);
+
+    if (spanlen <= 0) {
+        $("#txtSpan_Length").addClass('input_error');
+    }
+    else
+        $("#txtSpan_Length").removeClass('input_error');
+
+    if ($("#ddlSingleFiberType").val() == null) {
+        $("#ddlSingleFiberType").addClass('input_error');
+    }
+    else
+        $("#ddlSingleFiberType").removeClass('input_error');
+
     openDrawer('singlefiber');
     document.getElementById("btnSingleFiberUpdate").onclick = updateSingleFiber.bind(
         this,
@@ -5431,11 +5551,22 @@ function updateSingleFiber(fiberID) {
     var connector_out = $("#txtConnector_OUT").val();
     var span_loss = $("#txtSpan_Loss").val();
 
+    if ($("#ddlSingleFiberType").val() == null) {
+        showMessage(alertType.Error, 'Pleae select fiber type');
+        $("#ddlSingleFiberType").addClass('input_error');
+        return;
+    }
+    else
+        $("#ddlSingleFiberType").removeClass('input_error');
+
     var spanlen = parseFloat(span_length);
     if (spanlen <= 0) {
         showMessage(alertType.Error, 'Pleae enter valid span length.');
+        $("#txtSpan_Length").addClass('input_error');
         return;
     }
+    else
+        $("#txtSpan_Length").removeClass('input_error');
 
     var fiberDetails = network.body.data.edges.get(fiberID);
 
@@ -5447,7 +5578,7 @@ function updateSingleFiber(fiberID) {
             elabel = label;
 
             network.body.data.edges.update({
-                id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length,
+                id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
             data.nodes.off("*", change_history_back);
@@ -5471,6 +5602,10 @@ function clearSingleFiber() {
     $("#txtConnector_IN").val('');
     $("#txtConnector_OUT").val('');
     $("#txtSpan_Loss").val('');
+
+    $("#ddlSingleFiberType").removeClass('input_error');
+    $("#txtSpan_Length").removeClass('input_error');
+
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
     network.unselectAll();
@@ -5490,60 +5625,60 @@ function deleteFiber(fiberID) {
     if (fiber.label.trim() == "")
         fiberLabel = fiber.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
-            var nodeDetails = network.body.data.nodes.get(fiber.from);
-            var toNodeDetails = network.body.data.nodes.get(fiber.to);
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
+    var nodeDetails = network.body.data.nodes.get(fiber.from);
+    var toNodeDetails = network.body.data.nodes.get(fiber.to);
 
-            if (checkFiberPatchServiceCon(fiber.from, fiber.to, fiber.component_type))
-                return;
+    if (checkFiberPatchServiceCon(fiber.from, fiber.to, fiber.component_type))
+        return;
 
 
-            document.getElementById("dualFiberMenu").style.display = "none";
-            document.getElementById("singleFiberMenu").style.display = "none";
-            //remove roadm list from from roadm node
+    document.getElementById("dualFiberMenu").style.display = "none";
+    document.getElementById("singleFiberMenu").style.display = "none";
+    //remove roadm list from from roadm node
 
-            arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
-            _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
+    arrRoadmTypePro = nodeDetails.roadm_type_pro ? nodeDetails.roadm_type_pro : [];
+    _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
 
-            _roadmListDB({
-                roadm_fiber_id: fiberID
-            }).remove();
-            arrRoadmTypePro = _roadmListDB().get();
-            network.body.data.nodes.update({
-                id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
-            });
-            //remove roadm list from to roadm node
-
-            arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
-            _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
-
-            _roadmListDB({
-                roadm_fiber_id: fiberID
-            }).remove();
-            arrRoadmTypePro = _roadmListDB().get();
-            network.body.data.nodes.update({
-                id: toNodeDetails.id, roadm_type_pro: arrRoadmTypePro
-            });
-
-            network.body.data.edges.remove(fiberID);
-            multipleFiberService(fiber.from, fiber.to);
-            nodeValidationInEdge(fiber.from, fiber.to);
-            network.unselectAll();
-            enableEdgeIndicator();
-        }
+    _roadmListDB({
+        roadm_fiber_id: fiberID
+    }).remove();
+    arrRoadmTypePro = _roadmListDB().get();
+    network.body.data.nodes.update({
+        id: nodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
+    //remove roadm list from to roadm node
+
+    arrRoadmTypePro = toNodeDetails.roadm_type_pro ? toNodeDetails.roadm_type_pro : [];
+    _roadmListDB.insert(JSON.stringify(arrRoadmTypePro));
+
+    _roadmListDB({
+        roadm_fiber_id: fiberID
+    }).remove();
+    arrRoadmTypePro = _roadmListDB().get();
+    network.body.data.nodes.update({
+        id: toNodeDetails.id, roadm_type_pro: arrRoadmTypePro
+    });
+
+    network.body.data.edges.remove(fiberID);
+    multipleFiberService(fiber.from, fiber.to);
+    nodeValidationInEdge(fiber.from, fiber.to);
+    network.unselectAll();
+    enableEdgeIndicator();
+    //    }
+    //});
 
 
 
@@ -5649,30 +5784,30 @@ function deletePatch(patchID) {
     if (patchDetails.label.trim() == "")
         patchLabel = patchDetails.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + patchDetails.patch_category + ' : ' + patchLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
-            if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
-                return;
-            document.getElementById("singlePatchMenu").style.display = "none";
-            document.getElementById("dualPatchMenu").style.display = "none";
-            network.body.data.edges.remove(patchID);
-            multipleFiberService(patchDetails.from, patchDetails.to);
-            nodeValidationInEdge(patchDetails.from, patchDetails.to);
-            network.unselectAll();
-            enableEdgeIndicator();
-        }
-    });
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + patchDetails.patch_category + ' : ' + patchLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
+    if (checkFiberPatchServiceCon(patchDetails.from, patchDetails.to, patchDetails.component_type))
+        return;
+    document.getElementById("singlePatchMenu").style.display = "none";
+    document.getElementById("dualPatchMenu").style.display = "none";
+    network.body.data.edges.remove(patchID);
+    multipleFiberService(patchDetails.from, patchDetails.to);
+    nodeValidationInEdge(patchDetails.from, patchDetails.to);
+    network.unselectAll();
+    enableEdgeIndicator();
+    //    }
+    //});
 
 
 }
@@ -5780,30 +5915,30 @@ function updateService(serviceID) {
 function deleteService(serviceID) {
 
     var serviceDetails = network.body.data.edges.get(serviceID);
-    var serviceLabel = serviceDetails.label;
-    if (serviceDetails.label.trim() == "")
-        serviceLabel = serviceDetails.text
+    //var serviceLabel = serviceDetails.label;
+    //if (serviceDetails.label.trim() == "")
+    //    serviceLabel = serviceDetails.text
 
-    Swal.fire({
-        icon: 'warning',
-        title: '',
-        text: 'Do you want to delete ' + serviceDetails.component_type + ' : ' + serviceLabel + ' ?',
-        showCancelButton: true,
-        confirmButtonText: "OK",
-        closeOnConfirm: true,
-        confirmButtonColor: '#49508a',
-        width: 375,
-        height: 200,
-        allowOutsideClick: false
-    }).then((result) => {
-        if (result.value) {
-            document.getElementById("serviceMenu").style.display = "none";
-            network.body.data.edges.remove(serviceID);
-            multipleFiberService(serviceDetails.from, serviceDetails.to);
-            network.unselectAll();
-            enableEdgeIndicator();
-        }
-    });
+    //Swal.fire({
+    //    icon: 'warning',
+    //    title: '',
+    //    text: 'Do you want to delete ' + serviceDetails.component_type + ' : ' + serviceLabel + ' ?',
+    //    showCancelButton: true,
+    //    confirmButtonText: "OK",
+    //    closeOnConfirm: true,
+    //    confirmButtonColor: '#49508a',
+    //    width: 375,
+    //    height: 200,
+    //    allowOutsideClick: false
+    //}).then((result) => {
+    //    if (result.value) {
+    document.getElementById("serviceMenu").style.display = "none";
+    network.body.data.edges.remove(serviceID);
+    multipleFiberService(serviceDetails.from, serviceDetails.to);
+    network.unselectAll();
+    enableEdgeIndicator();
+    //    }
+    //});
 
 
 }
@@ -6471,11 +6606,11 @@ function checkMisLink() {
     return { message: message, flag: flag };
 }
 
-function checkTransForce() {
+function checkTypeForce() {
 
     var transList = network.body.data.nodes.get({
         filter: function (item) {
-            return (item.node_type == transceiverJSON.node_type);
+            return (item.node_type == transceiverJSON.node_type || item.node_type == amplifierJSON.node_type || item.node_type == roadmJSON.node_type);
         }
     });
 
@@ -6483,10 +6618,36 @@ function checkTransForce() {
     var msg = [];
     var flag = false;
     $.each(transList, function (index, item) {
-        if (item.transceiver_type == "") {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' forcing option is missing.</p>');
-            flag = true;
+
+        if (item.node_type == transceiverJSON.node_type) {
+            if (item.transceiver_type == "") {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
+                flag = true;
+            }
         }
+        else if (item.node_type == roadmJSON.node_type) {
+            if (item.roadm_type == "") {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
+                flag = true;
+            }
+        }
+        else if (item.node_type == amplifierJSON.node_type) {
+            if (item.amp_category == amplifierJSON.amp_category) {
+                if (item.amp_type == "") {
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
+                    flag = true;
+                }
+
+            }
+            else if (item.amp_category == ramanampJSON.amp_category) {
+                if (item.amp_type == "") {
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
+                    flag = true;
+                }
+            }
+        }
+
+
 
     });
 
@@ -6514,7 +6675,7 @@ function topologyValidation(isTime) {
         message.push("<span id=spanMisLink>" + response.message + "</span>");
     }
 
-    response = checkTransForce();
+    response = checkTypeForce();
     if (response.flag) {
         flag = true;
         message.push("<span id=spanTransForce>" + response.message + "</span>");
@@ -6548,8 +6709,13 @@ function focusNode(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.err_image;
 
-    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size:roadmJSON.err_size, is_error: true }]);
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
 
+    network.body.data.nodes.update([{ id: nodeID, pre_image: nodeDetails.image, image: DIR + image, size: roadmJSON.err_size, is_error: true }]);
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 }
 
 function removeHighlight() {
@@ -6572,10 +6738,13 @@ function removeHighlight() {
         //    image = amplifierJSON.image;
         //else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         //    image = ramanampJSON.image;
-
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
         network.body.data.nodes.update({
             id: nodeDetails.id, image: nodeDetails.pre_image, size: roadmJSON.size, is_error: false
         });
+        data.nodes.on("*", change_history_back);
+        data.edges.on("*", change_history_back);
     }
 }
 
@@ -6611,8 +6780,17 @@ function nodeValidationInEdge(cfrom, cto) {
             addNodeHighlight(item);
         }
         else {
-            removeSpanInError(item);
+            if (network.body.data.nodes.get(item).roadm_type != "") {
+                removeSpanInError(item, true);
+                removeSpanInError(item);
+            }
+            else {
+                var removeID = "#span" + item.replace(/\s/g, '');
+                $(removeID).remove();
+            }
+
         }
+
     });
     // end
 
@@ -6641,10 +6819,24 @@ function nodeValidationInEdge(cfrom, cto) {
             addNodeHighlight(item);
         }
         else {
-            removeSpanInError(item);
+
+            if (network.body.data.nodes.get(item).node_type == amplifierJSON.node_type) {
+                if (network.body.data.nodes.get(item).amp_type != "") {
+                    removeSpanInError(item, true);
+                    removeSpanInError(item);
+                }
+                else {
+                    var removeID = "#span" + item.replace(/\s/g, '');
+                    $(removeID).remove();
+                }
+            }
+            else {
+                removeSpanInError(item);
+            }
+
         }
 
-        
+
     });
 
     //
@@ -6714,9 +6906,15 @@ function removeSpanInError(item, transUpdate) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.image;
 
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
     network.body.data.nodes.update({
         id: nodeDetails.id, image: DIR + image, size: roadmJSON.size, is_error: false
     });
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 
     var removeID;
 
@@ -6760,7 +6958,13 @@ function addNodeHighlight(nodeID) {
     else if (nodeDetails.amp_category == ramanampJSON.amp_category)
         image = ramanampJSON.w_image;
 
+    data.nodes.off("*", change_history_back);
+    data.edges.off("*", change_history_back);
+
     network.body.data.nodes.update([{ id: nodeID, size: roadmJSON.size, image: DIR + image }]);
+
+    data.nodes.on("*", change_history_back);
+    data.edges.on("*", change_history_back);
 
 }
 
@@ -6801,6 +7005,9 @@ function nodeRuleOnImportJSON() {
             if (item.node_type == transceiverJSON.node_type && item.transceiver_type == "") {
                 addNodeHighlight(item.id);
             }
+            else if (item.node_type == roadmJSON.node_type && item.roadm_type == "") {
+                addNodeHighlight(item.id);
+            }
         }
 
     });
@@ -6826,8 +7033,13 @@ function nodeRuleOnImportJSON() {
                 toCount++;
         }
 
-        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount>1 || toCount>1) {
+        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
             addNodeHighlight(item.id);
+        }
+        else {
+            if (item.node_type == amplifierJSON.node_type && item.amp_type == "") {
+                addNodeHighlight(item.id);
+            }
         }
         //if (connectedEdges.length <= 1) {
         //    addNodeHighlight(item.id);

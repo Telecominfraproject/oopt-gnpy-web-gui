@@ -1929,3 +1929,6 @@ select {
     /* max-height: calc(100vh - 10vh); */
     /*margin-left: -3rem;*/
 }
+.input_error{
+    border:solid 1px red;
+}
