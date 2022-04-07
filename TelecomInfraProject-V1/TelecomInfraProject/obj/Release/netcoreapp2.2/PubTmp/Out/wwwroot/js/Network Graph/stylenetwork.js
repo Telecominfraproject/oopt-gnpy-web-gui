@@ -3441,7 +3441,7 @@ function pasteNode(nodeId) {
 
 
 
-
+        realUpdate();
         document.getElementById("pasteMenu").style.display = "none";
         $("#stepCreateTopology").click();
     }
@@ -4350,6 +4350,8 @@ function addNodes(data, callback) {
     data.view = $("#ddlNetworkView").val();
     callback(data);
 
+    realUpdate();
+
     if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
         network.addNodeMode();
 
@@ -4641,7 +4643,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     if (node_type == roadmJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.w_image, number: nodelength,
             shape: roadmJSON.shape, color: roadmJSON.color,
             font: roadmJSON.font,
             size: roadmJSON.size,
@@ -4662,7 +4664,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     }
     else if (node_type == transceiverJSON.node_type) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.w_image, number: nodelength,
             shape: transceiverJSON.shape, color: transceiverJSON.color,
             //font: transceiverJSON.font,
             size: transceiverJSON.size,
@@ -4673,7 +4675,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     }
     else if (node_type == amplifierJSON.amp_category) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.w_image, number: nodelength,
             shape: amplifierJSON.shape, color: amplifierJSON.color,
             //font: amplifierJSON.font,
             size: amplifierJSON.size,
@@ -4686,7 +4688,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     }
     else if (node_type == ramanampJSON.amp_category) {
         network.body.data.nodes.add({
-            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.image, number: nodelength,
+            id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.w_image, number: nodelength,
             shape: ramanampJSON.shape, color: ramanampJSON.color,
             //font: ramanampJSON.font,
             size: ramanampJSON.size,
@@ -4697,7 +4699,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
             category: nodeDetails.default.category
         });
     }
-
+    
     data.nodes.off("*", change_history_back);
     data.edges.off("*", change_history_back);
 
@@ -4843,6 +4845,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     document.getElementById("singleFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
+    realUpdate();
     enableEdgeIndicator();
 }
 
@@ -6553,7 +6556,7 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
             flag = true;
         }
     });
@@ -6592,7 +6595,7 @@ function checkMisLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
 
@@ -6621,27 +6624,27 @@ function checkTypeForce() {
 
         if (item.node_type == transceiverJSON.node_type) {
             if (item.transceiver_type == "") {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == roadmJSON.node_type) {
             if (item.roadm_type == "") {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == amplifierJSON.node_type) {
             if (item.amp_category == amplifierJSON.amp_category) {
                 if (item.amp_type == "") {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
 
             }
             else if (item.amp_category == ramanampJSON.amp_category) {
                 if (item.amp_type == "") {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img id="img_src" width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
             }
@@ -6885,7 +6888,7 @@ function nodeValidationInEdge(cfrom, cto) {
         }
     });
     // end
-
+    realUpdate();
     checkErrorFree();
 
     //end
@@ -7127,4 +7130,10 @@ function edgeStyleOnImportJSON() {
     //data.nodes.on("*", change_history_back);
     //data.edges.on("*", change_history_back);
 
+}
+
+function realUpdate() {
+    if ($("#div_toaster").is(":visible") && !$("#img_src").is(":visible")) {
+        $("#btnValidation").click();
+    }
 }
