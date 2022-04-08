@@ -86,7 +86,6 @@
                      alt="" />
                 GNPy Optical network planning tool
             </a>
-
             <!-- button section start -->
             <div class="button_section mt-1">
                 <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
@@ -413,6 +412,23 @@
                                     <input type="checkbox" class="custom-control-input" id="cbxSingleFiber">
                                     <label class="custom-control-label" for="cbxSingleFiber">Single fiber</label>
                                 </div>
+
+                                <div class="d-flex">
+                                    <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area width">W : </b>
+                                    <img src="/Assets/img/minus.png" id="wMinus" class="minus" />
+                                    <input type="text" class="input_customwidth" id="txtw" value="W" />
+                                    <img src="/Assets/img/plus.png" id="wPlus" class="plus" />
+
+                                </div>
+                                <div class="d-flex ml-2 mr-2">
+                                    <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area height">H : </b>
+                                    <img src="/Assets/img/minus.png" class="minus" />
+                                    <input type="text" class="input_customwidth" id="txth" value="H" />
+                                    <img src="/Assets/img/plus.png" class="plus" />
+
+                                </div>
+
+
                                 <select id="ddlNetworkView" class="form-control" style="margin-top:5px;width:auto !important;">
                                     <option value="2"> Functional View </option>
                                     <option value="1" style="color:lightgray !important" disabled> NE View </option>

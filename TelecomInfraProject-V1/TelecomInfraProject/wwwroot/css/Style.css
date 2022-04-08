@@ -1932,3 +1932,29 @@ select {
 .input_error{
     border:solid 1px red;
 }
+
+.input_customwidth {
+    height: 35px;
+    border: 1px solid #d5ced4aa;
+    width: 60px;
+    margin-top: 5px;
+}
+.minus {
+    margin-right: 5px;
+    height: 35px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+.plus {
+    margin-left: 5px;
+    height: 35px;
+    margin-top: 5px;
+    cursor:pointer;
+}
+.width_custom {
+    color: #2b7c80;
+    margin-top: 10px;
+    margin-right: 5px;
+    width: 30px;
+    cursor:pointer;
+}

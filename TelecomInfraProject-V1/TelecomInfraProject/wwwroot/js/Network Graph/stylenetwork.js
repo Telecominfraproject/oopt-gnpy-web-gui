@@ -595,7 +595,24 @@ $(document).ready(function () {
             //alert();
         }
     });
+    $('#txth, #txtw').change(function () {
+        changeWorkAreaWH($(this).attr('id'));
+    });
 
+    $('.minus').click(function () {
+        var $input = $(this).parent().find('input');
+        var count = parseInt($input.val()) - 50;
+        count = count < 1 ? 1 : count;
+        $input.val(count);
+        $input.change();
+        return false;
+    });
+    $('.plus').click(function () {
+        var $input = $(this).parent().find('input');
+        $input.val(parseInt($input.val()) + 50);
+        $input.change();
+        return false;
+    });
 });
 
 function networkView(view) {
@@ -1062,7 +1079,6 @@ function destroy() {
         network = null;
     }
 }
-var options;
 function draw(isImport) {
     //destroy();
     //nodes = [];
@@ -1130,9 +1146,6 @@ function draw(isImport) {
             edges: edges
         }
     }
-
-    //var width = window.innerWidth;
-    //var height = window.innerHeight;
 
     var iteration = data.nodes.length + data.edges.length;
     options = {
@@ -1202,9 +1215,21 @@ function draw(isImport) {
         },
     };
     network = new vis.Network(container, data, options);
+
+    $('canvas').css('width', '');
+    $('canvas').css('height', '');
+    $('canvas').css('border', '1px solid lightgray');
+    $('*.vis-network').css('overflow', 'auto');
+    $("canvas").prop('width', $('canvas').width()-2);
+    $("canvas").prop('height', $('canvas').height()-2);
+
+    $("#txtw").val($('canvas').width());
+    $("#txth").val($('canvas').height());
+
     network.on("click", function (params) {
-        //$("#txtX").val(params.pointer.canvas.x);
-        //$("#txtY").val(params.pointer.canvas.y);
+        //$("#txtx").val(params.pointer.canvas.x);
+        //$("#txty").val(params.pointer.canvas.y);
+        //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
         $("#hoverDiv").hide();
         //console.log(params.pointer.canvas.x, params.pointer.canvas.y);
     });
@@ -7144,4 +7169,15 @@ function realUpdate() {
     if ($("#div_toaster").is(":visible") && !$("#img_src").is(":visible")) {
         $("#btnValidation").click();
     }
+}
+
+function changeWorkAreaWH(eleID) {
+    width = $("#txtw").val();
+    height = $("#txth").val();
+    if (eleID == "txtw")
+        $("canvas").prop('width', width);
+    else if (eleID == "txth")
+        $("canvas").prop('height', height);
+
+    network.addNodeMode();
 }
