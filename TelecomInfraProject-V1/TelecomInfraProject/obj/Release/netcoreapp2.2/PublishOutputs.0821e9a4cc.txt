@@ -82,6 +82,7 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu-icon.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\menu.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\minus.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Model Icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\multinode.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\Multiple node icon.png
@@ -97,6 +98,7 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\page.gif
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\paste icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\paste.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\plus.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\ramanamp.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\rednode.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\PubTmp\Out\wwwroot\Assets\img\redo.png

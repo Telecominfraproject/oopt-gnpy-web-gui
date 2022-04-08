@@ -586,7 +586,7 @@ $(document).ready(function () {
     });
     $('#btn_CreateNetwork').click(function () {
         $('#divSelection').hide();
-
+        $('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
         /////$("#stepGP").click();
         $("#stepCreateTopology").click();
     });
@@ -1225,6 +1225,9 @@ function draw(isImport) {
 
     $("#txtw").val($('canvas').width());
     $("#txth").val($('canvas').height());
+
+    if (isImport)
+        $('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
 
     network.on("click", function (params) {
         //$("#txtx").val(params.pointer.canvas.x);

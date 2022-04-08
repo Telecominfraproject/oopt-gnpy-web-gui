@@ -595,7 +595,24 @@ $(document).ready(function () {
             //alert();
         }
     });
+    $('#txth, #txtw').change(function () {
+        changeWorkAreaWH($(this).attr('id'));
+    });
 
+    $('.minus').click(function () {
+        var $input = $(this).parent().find('input');
+        var count = parseInt($input.val()) - 50;
+        count = count < 1 ? 1 : count;
+        $input.val(count);
+        $input.change();
+        return false;
+    });
+    $('.plus').click(function () {
+        var $input = $(this).parent().find('input');
+        $input.val(parseInt($input.val()) + 50);
+        $input.change();
+        return false;
+    });
 });
 
 function networkView(view) {
@@ -1062,7 +1079,6 @@ function destroy() {
         network = null;
     }
 }
-var options;
 function draw(isImport) {
     //destroy();
     //nodes = [];
@@ -1130,9 +1146,6 @@ function draw(isImport) {
             edges: edges
         }
     }
-
-    //var width = window.innerWidth;
-    //var height = window.innerHeight;
 
     var iteration = data.nodes.length + data.edges.length;
     options = {
@@ -1202,9 +1215,21 @@ function draw(isImport) {
         },
     };
     network = new vis.Network(container, data, options);
+
+    $('canvas').css('width', '');
+    $('canvas').css('height', '');
+    $('canvas').css('border', '1px solid lightgray');
+    $('*.vis-network').css('overflow', 'auto');
+    $("canvas").prop('width', $('canvas').width()-2);
+    $("canvas").prop('height', $('canvas').height()-2);
+
+    $("#txtw").val($('canvas').width());
+    $("#txth").val($('canvas').height());
+
     network.on("click", function (params) {
-        //$("#txtX").val(params.pointer.canvas.x);
-        //$("#txtY").val(params.pointer.canvas.y);
+        //$("#txtx").val(params.pointer.canvas.x);
+        //$("#txty").val(params.pointer.canvas.y);
+        //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
         $("#hoverDiv").hide();
         //console.log(params.pointer.canvas.x, params.pointer.canvas.y);
     });
@@ -4699,7 +4724,7 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
             category: nodeDetails.default.category
         });
     }
-    
+
     data.nodes.off("*", change_history_back);
     data.edges.off("*", change_history_back);
 
@@ -4943,7 +4968,7 @@ function updateRoadm(nodeID) {
                 $(removeID).remove();
             }
             else {
-                if (roadmtype != "")
+                if (roadmtype)
                     removeSpanInError(id, true);
             }
 
@@ -5117,13 +5142,16 @@ function updateAmplifier(nodeID) {
                     toCount++;
             }
 
-
             if (fromCount == 1 && toCount == 1) {
-                removeID = "#spanTF" + id.replace(/\s/g, '');
-                $(removeID).remove();
-
-                if (amptype != "")
+                if (amptype) {
                     removeSpanInError(id, true);
+                }
+            }
+            else {
+                if (amptype) {
+                    removeID = "#spanTF" + id.replace(/\s/g, '');
+                    $(removeID).remove();
+                }
             }
 
             clearAmplifier();
@@ -5170,7 +5198,7 @@ function updateRamanAmp(nodeID) {
                 id: id, label: label, amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
             });
 
-            var amptype = $("#ddlAmplifierType").val();
+            var amptype = $("#ddlRamanAmpType").val();
             var connectedEdges;
             var fromCount;
             var toCount;
@@ -5186,11 +5214,16 @@ function updateRamanAmp(nodeID) {
             }
 
             if (fromCount == 1 && toCount == 1) {
-                removeID = "#spanTF" + id.replace(/\s/g, '');
-                $(removeID).remove();
 
-                if (amptype != "")
+                if (amptype) {
                     removeSpanInError(id, true);
+                }
+            }
+            else {
+                if (amptype) {
+                    removeID = "#spanTF" + id.replace(/\s/g, '');
+                    $(removeID).remove();
+                }
             }
 
             clearRamanAmp();
@@ -6623,27 +6656,27 @@ function checkTypeForce() {
     $.each(transList, function (index, item) {
 
         if (item.node_type == transceiverJSON.node_type) {
-            if (item.transceiver_type == "") {
+            if (!item.transceiver_type) {
                 msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == roadmJSON.node_type) {
-            if (item.roadm_type == "") {
+            if (!item.roadm_type) {
                 msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == amplifierJSON.node_type) {
             if (item.amp_category == amplifierJSON.amp_category) {
-                if (item.amp_type == "") {
+                if (!item.amp_type) {
                     msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
 
             }
             else if (item.amp_category == ramanampJSON.amp_category) {
-                if (item.amp_type == "") {
+                if (!item.amp_type) {
                     msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
@@ -7136,4 +7169,15 @@ function realUpdate() {
     if ($("#div_toaster").is(":visible") && !$("#img_src").is(":visible")) {
         $("#btnValidation").click();
     }
+}
+
+function changeWorkAreaWH(eleID) {
+    width = $("#txtw").val();
+    height = $("#txth").val();
+    if (eleID == "txtw")
+        $("canvas").prop('width', width);
+    else if (eleID == "txth")
+        $("canvas").prop('height', height);
+
+    network.addNodeMode();
 }

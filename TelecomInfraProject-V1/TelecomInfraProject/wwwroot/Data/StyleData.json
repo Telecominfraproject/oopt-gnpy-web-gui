@@ -11,7 +11,7 @@
     "interaction": {
       "navigationButtons": true,
       "keyboard": false,
-      "dragView": true,
+      "dragView": false,
       "multiselect": true,
       "hover": true
     },
