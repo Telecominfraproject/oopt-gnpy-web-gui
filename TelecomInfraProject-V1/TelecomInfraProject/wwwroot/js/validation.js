@@ -19,13 +19,52 @@
             $("#ddlSingleFiberType").removeClass('input_error');
 
     });
-    //$("input").keydown(function () {
+    $("#ddlRoadmType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRoadmType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRoadmType").removeClass('input_error');
 
-    //    $("input").css("background-color", "yellow");
-    //});
-    //$("input").keyup(function () {
-    //    $("input").css("background-color", "pink");
-    //});
+    });
+    $("#ddlAmplifierType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlAmplifierType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlAmplifierType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpCategory").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpCategory").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpCategory").removeClass('input_error');
+
+    });
+    $("#ddlTransceiverType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlTransceiverType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlTransceiverType").removeClass('input_error');
+
+    });
+
 });
 
 function nameLengthValidation(element) {
