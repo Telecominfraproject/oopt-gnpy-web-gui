@@ -1,4 +1,33 @@
-﻿
+﻿$(document).ready(function () {
+    $("#txtSpan_Length").change(function () {
+        var span_length = $("#txtSpan_Length").val().trim();
+        var spanlen = parseFloat(span_length);
+        if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
+            $("#txtSpan_Length").addClass('input_error');
+            return;
+        }
+        else
+            $("#txtSpan_Length").removeClass('input_error');
+
+    });
+    $("#ddlSingleFiberType").change(function () {
+        if ($(this).val()=="") {
+            $("#ddlSingleFiberType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlSingleFiberType").removeClass('input_error');
+
+    });
+    //$("input").keydown(function () {
+
+    //    $("input").css("background-color", "yellow");
+    //});
+    //$("input").keyup(function () {
+    //    $("input").css("background-color", "pink");
+    //});
+});
+
 function nameLengthValidation(element) {
     var flag = true;
     var elementID = "#" + element
@@ -6,7 +35,7 @@ function nameLengthValidation(element) {
     //var maxDegree = Number(configData.node[$("#ddlNodeType").val()].max_degree);
     //var regex = /^[1-9-+()]*$/;
     //isDegreeValid = regex.test(document.getElementById("txtNodeDegree").value);
-    var msg = ""; 
+    var msg = "";
 
     if ($(elementID).val().trim() == '') {
         msg = "Please enter the name";

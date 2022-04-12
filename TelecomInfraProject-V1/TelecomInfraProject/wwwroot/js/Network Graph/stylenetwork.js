@@ -141,7 +141,7 @@ $(document).ready(function () {
         console.log("An error has occurred2.");
     });
 
-    $.getJSON("/Data/yang.json", function (data) {
+    $.getJSON("/Data/Equipment_JSON_MOD2.json", function (data) {
         eqpt_config = data;
         load_EqptConfig();
     }).fail(function () {
@@ -586,8 +586,8 @@ $(document).ready(function () {
     });
     $('#btn_CreateNetwork').click(function () {
         $('#divSelection').hide();
-        $('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
-        /////$("#stepGP").click();
+        //$('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
+        //$("#stepGP").click();
         $("#stepCreateTopology").click();
     });
     $('#cbxSingleFiber').change(function () {
@@ -595,24 +595,24 @@ $(document).ready(function () {
             //alert();
         }
     });
-    $('#txth, #txtw').change(function () {
-        changeWorkAreaWH($(this).attr('id'));
-    });
+    //$('#txth, #txtw').change(function () {
+    //    changeWorkAreaWH($(this).attr('id'));
+    //});
 
-    $('.minus').click(function () {
-        var $input = $(this).parent().find('input');
-        var count = parseInt($input.val()) - 50;
-        count = count < 1 ? 1 : count;
-        $input.val(count);
-        $input.change();
-        return false;
-    });
-    $('.plus').click(function () {
-        var $input = $(this).parent().find('input');
-        $input.val(parseInt($input.val()) + 50);
-        $input.change();
-        return false;
-    });
+    //$('.minus').click(function () {
+    //    var $input = $(this).parent().find('input');
+    //    var count = parseInt($input.val()) - 50;
+    //    count = count < 1 ? 1 : count;
+    //    $input.val(count);
+    //    $input.change();
+    //    return false;
+    //});
+    //$('.plus').click(function () {
+    //    var $input = $(this).parent().find('input');
+    //    $input.val(parseInt($input.val()) + 50);
+    //    $input.change();
+    //    return false;
+    //});
 });
 
 function networkView(view) {
@@ -1216,18 +1216,44 @@ function draw(isImport) {
     };
     network = new vis.Network(container, data, options);
 
-    $('canvas').css('width', '');
-    $('canvas').css('height', '');
-    $('canvas').css('border', '1px solid lightgray');
-    $('*.vis-network').css('overflow', 'auto');
-    $("canvas").prop('width', $('canvas').width()-2);
-    $("canvas").prop('height', $('canvas').height()-2);
+    
 
-    $("#txtw").val($('canvas').width());
-    $("#txth").val($('canvas').height());
+    //$('canvas').css('width', '');
+    //$('canvas').css('height', '');
+    //$('canvas').css('border', '1px solid lightgray');
+    //$('*.vis-network').css('overflow', 'auto');
+    //$("canvas").prop('width', $('canvas').width()-2);
+    //$("canvas").prop('height', $('canvas').height()-2);
 
-    if (isImport)
-        $('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
+    //$("#txtw").val($('canvas').width());
+    //$("#txth").val($('canvas').height());
+
+    //if (isImport)
+    //    $('*.vis-zoomIn, *.vis-zoomOut, *.vis-zoomExtends, *.vis-right, *.vis-left, *.vis-up, *.vis-down').css('position', 'fixed');
+
+    //container.addEventListener("wheel", function (e) {
+    //    if (e.wheelDelta < 0) {
+    //        //scroll down
+    //        let w, h;
+    //        w = $('canvas').width() - 50;
+    //        h = $('canvas').height() - 50;
+    //        $("canvas").prop('width', w);
+    //        $("canvas").prop('height', h);
+    //        network.addNodeMode();
+    //    } else {
+    //        //scroll up
+
+    //        let w, h;
+    //        w = $('canvas').width() + 50;
+    //        h = $('canvas').height() + 50;
+    //        $("canvas").prop('width', w);
+    //        $("canvas").prop('height', h);
+    //        network.addNodeMode();
+    //    }
+
+    //    //prevent page fom scrolling
+    //    return false;
+    //})
 
     network.on("click", function (params) {
         //$("#txtx").val(params.pointer.canvas.x);
@@ -1821,8 +1847,8 @@ function displayNodesHover(params) {
 function displayFiberHover(params) {
     var fiberDetails = network.body.data.edges.get(params.edge);
     var fiber_type = "";
-    var span_length = "0";
-    var span_loss = "0";
+    var span_length = "";
+    var span_loss = "";
     if (fiberDetails.component_type == dualPatchJSON.component_type)
         return;
     if (fiberDetails.component_type == singleFiberJSON.component_type) {
@@ -1908,7 +1934,7 @@ function displayFiberHover(params) {
 
             var spanlen = parseFloat(span_length);
 
-            if (spanlen <= 0)
+            if (isNaN(span_length) || spanlen <= 0 || span_length == "")
                 hoverData += "<span style='color:red;'>Span length(in km) : " + span_length + "</span>\n";
             else
                 hoverData += "Span length(in km) : " + span_length + "\n";
@@ -2343,7 +2369,7 @@ function exportNetwork(isSaveNetwork) {
                 "tip-photonic-topology:fiber": {
                     "type": item.fiber_type,
                     "length": item.span_length.toString(),
-                    "attenuation-in": "0.0",
+                    "attenuation-in": "",
                     "conn-att-in": item.connector_in,
                     "conn-att-out": item.connector_out,
                     //"loss_coef": item.loss_coefficient,
@@ -5557,8 +5583,7 @@ function singleFiberEdit(fiberID, callback) {
 
     var span_length = $("#txtSpan_Length").val();
     var spanlen = parseFloat(span_length);
-
-    if (spanlen <= 0) {
+    if (isNaN(span_length) || spanlen <= 0 || span_length=="") {
         $("#txtSpan_Length").addClass('input_error');
     }
     else
@@ -5599,7 +5624,7 @@ function updateSingleFiber(fiberID) {
         $("#ddlSingleFiberType").removeClass('input_error');
 
     var spanlen = parseFloat(span_length);
-    if (spanlen <= 0) {
+    if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
         showMessage(alertType.Error, 'Pleae enter valid span length.');
         $("#txtSpan_Length").addClass('input_error');
         return;

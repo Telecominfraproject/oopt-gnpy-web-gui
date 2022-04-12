@@ -140,15 +140,15 @@
     },
     "default": {
       "fiber_type": "",
-      "CD_coefficient": 0.0,
-      "PMD_coefficient": 0.0,
-      "Span_length": "0.0",
-      "Loss_coefficient": "0.0",
-      "Connector_in": "0.0",
-      "Connector_out": "0.0",
-      "Ageing_loss": "0.0",
+      "CD_coefficient": "",
+      "PMD_coefficient": "",
+      "Span_length": "",
+      "Loss_coefficient": "",
+      "Connector_in": "",
+      "Connector_out": "",
+      "Ageing_loss": "",
       "Length_based_loss": false,
-      "Span_loss": "0.0"
+      "Span_loss": ""
     }
   },
 
