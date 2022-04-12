@@ -1,4 +1,72 @@
-﻿
+﻿$(document).ready(function () {
+    $("#txtSpan_Length").change(function () {
+        var span_length = $("#txtSpan_Length").val().trim();
+        var spanlen = parseFloat(span_length);
+        if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
+            $("#txtSpan_Length").addClass('input_error');
+            return;
+        }
+        else
+            $("#txtSpan_Length").removeClass('input_error');
+
+    });
+    $("#ddlSingleFiberType").change(function () {
+        if ($(this).val()=="") {
+            $("#ddlSingleFiberType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlSingleFiberType").removeClass('input_error');
+
+    });
+    $("#ddlRoadmType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRoadmType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRoadmType").removeClass('input_error');
+
+    });
+    $("#ddlAmplifierType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlAmplifierType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlAmplifierType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpCategory").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpCategory").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpCategory").removeClass('input_error');
+
+    });
+    $("#ddlTransceiverType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlTransceiverType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlTransceiverType").removeClass('input_error');
+
+    });
+
+});
+
 function nameLengthValidation(element) {
     var flag = true;
     var elementID = "#" + element
@@ -6,7 +74,7 @@ function nameLengthValidation(element) {
     //var maxDegree = Number(configData.node[$("#ddlNodeType").val()].max_degree);
     //var regex = /^[1-9-+()]*$/;
     //isDegreeValid = regex.test(document.getElementById("txtNodeDegree").value);
-    var msg = ""; 
+    var msg = "";
 
     if ($(elementID).val().trim() == '') {
         msg = "Please enter the name";

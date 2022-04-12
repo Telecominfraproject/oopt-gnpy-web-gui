@@ -5306,6 +5306,7 @@ function updateRamanAmp(nodeID) {
 
                 if (amptype) {
                     removeSpanInError(id, true);
+                    removeSpanInError(id, true);
                 }
             }
             else {

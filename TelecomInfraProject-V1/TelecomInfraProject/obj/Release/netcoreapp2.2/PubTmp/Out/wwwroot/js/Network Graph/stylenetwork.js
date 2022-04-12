@@ -1934,7 +1934,7 @@ function displayFiberHover(params) {
 
             var spanlen = parseFloat(span_length);
 
-            if ( !(spanlen) || spanlen <= 0)
+            if (isNaN(span_length) || spanlen <= 0 || span_length == "")
                 hoverData += "<span style='color:red;'>Span length(in km) : " + span_length + "</span>\n";
             else
                 hoverData += "Span length(in km) : " + span_length + "\n";
@@ -4925,10 +4925,15 @@ function roadmEdit(nodeID, callback) {
     }
     else if (nodeDetails.node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
         $("#divRoadmType").show();
-        if (nodeDetails.roadm_type)
+        if (nodeDetails.roadm_type) {
+            $("#ddlRoadmType").removeClass('input_error');
             $("#ddlRoadmType").val(nodeDetails.roadm_type);
-        else
+        }
+        else {
             $("#ddlRoadmType").val('');
+            $("#ddlRoadmType").addClass('input_error');
+        }
+
     }
 
     document.getElementById("btnUpdateRoadm").onclick = updateRoadm.bind(
@@ -4969,6 +4974,15 @@ function updateRoadm(nodeID) {
 
         }
         else if (node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
+
+            if ($("#ddlRoadmType").val() == null) {
+                showMessage(alertType.Error, 'Pleae select type');
+                $("#ddlRoadmType").addClass('input_error');
+                return;
+            }
+            else
+                $("#ddlRoadmType").removeClass('input_error');
+
             network.body.data.nodes.update({
                 id: id, label: label, roadm_type: $("#ddlRoadmType").val()
             });
@@ -5135,6 +5149,13 @@ function amplifierEdit(nodeID, callback) {
     $("#txtAmplifierName").val(nodeDetails.label);
     $("#ddlAmplifierType").val(nodeDetails.amp_type);
 
+    if (nodeDetails.amp_type) {
+        $("#ddlAmplifierType").removeClass('input_error');
+    }
+    else {
+        $("#ddlAmplifierType").addClass('input_error');
+    }
+
     document.getElementById("btnAmplifierUpdate").onclick = updateAmplifier.bind(
         this,
         nodeID,
@@ -5151,6 +5172,15 @@ function updateAmplifier(nodeID) {
     var amp_category = network.body.data.nodes.get(nodeID).amp_category
 
     if (nameLengthValidation("txtAmplifierName")) {
+
+        if ($("#ddlAmplifierType").val() == null) {
+            showMessage(alertType.Error, 'Pleae select type');
+            $("#ddlAmplifierType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlAmplifierType").removeClass('input_error');
+
 
         if (amp_category == amplifierJSON.amp_category) {
             network.body.data.nodes.update({
@@ -5205,6 +5235,19 @@ function ramanAmpEdit(nodeID, callback) {
     $("#ddlRamanAmpType").val(nodeDetails.amp_type);
     $("#ddlRamanAmpCategory").val(nodeDetails.category);
 
+    if (nodeDetails.amp_type) {
+        $("#ddlRamanAmpType").removeClass('input_error');
+    }
+    else {
+        $("#ddlRamanAmpType").addClass('input_error');
+    }
+    if (nodeDetails.category) {
+        $("#ddlRamanAmpCategory").removeClass('input_error');
+    }
+    else {
+        $("#ddlRamanAmpCategory").addClass('input_error');
+    }
+
     document.getElementById("btnRamanAmpUpdate").onclick = updateRamanAmp.bind(
         this,
         nodeID,
@@ -5221,6 +5264,23 @@ function updateRamanAmp(nodeID) {
     var amp_category = network.body.data.nodes.get(nodeID).amp_category
 
     if (nameLengthValidation("txtRamanAmpName")) {
+
+        if ($("#ddlRamanAmpType").val() == null) {
+            showMessage(alertType.Error, 'Pleae select type');
+            $("#ddlRamanAmpType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpType").removeClass('input_error');
+
+        if ($("#ddlRamanAmpCategory").val() == null) {
+            showMessage(alertType.Error, 'Pleae select category');
+            $("#ddlRamanAmpCategory").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpCategory").removeClass('input_error');
+
 
         if (amp_category == ramanampJSON.amp_category) {
             network.body.data.nodes.update({
@@ -5252,6 +5312,7 @@ function updateRamanAmp(nodeID) {
                 if (amptype) {
                     removeID = "#spanTF" + id.replace(/\s/g, '');
                     $(removeID).remove();
+                    $(removeID).remove();
                 }
             }
 
@@ -5277,6 +5338,13 @@ function transceiverEdit(nodeID, callback) {
     $("#txtTransceiverName").val(nodeDetails.label);
     $("#ddlTransceiverType").val(nodeDetails.transceiver_type);
 
+    if (nodeDetails.transceiver_type) {
+        $("#ddlTransceiverType").removeClass('input_error');
+    }
+    else {
+        $("#ddlTransceiverType").addClass('input_error');
+    }
+
     document.getElementById("btnTransceiverUpdate").onclick = updateTransceiver.bind(
         this,
         nodeID,
@@ -5294,8 +5362,11 @@ function updateTransceiver(nodeID) {
     var transceiverType = $("#ddlTransceiverType").val();
     if (transceiverType == null || transceiverType == "") {
         showMessage(alertType.Error, 'Please select transceiver type');
+        $("#ddlTransceiverType").addClass('input_error');
         return;
     }
+    else
+        $("#ddlTransceiverType").removeClass('input_error');
 
     if (nameLengthValidation("txtTransceiverName")) {
 
@@ -5419,9 +5490,20 @@ function deleteNode(nodeID) {
     } else {
         //nodes.remove(nodeID);
 
-        if (nodeDetails.node_type == transceiverJSON.node_type) {
+        if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
             removeSpanInError(nodeID);
             removeSpanInError(nodeID, true);
+        }
+        else if (nodeDetails.node_type == amplifierJSON.node_type) {
+            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                removeSpanInError(nodeID);
+                removeSpanInError(nodeID, true);
+            }
+            if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                removeSpanInError(nodeID);
+                removeSpanInError(nodeID, true);
+                removeSpanInError(nodeID, true);
+            }
         }
         else
             removeSpanInError(nodeID);
@@ -5583,8 +5665,7 @@ function singleFiberEdit(fiberID, callback) {
 
     var span_length = $("#txtSpan_Length").val();
     var spanlen = parseFloat(span_length);
-
-    if ( !(spanlen) || spanlen <= 0) {
+    if (isNaN(span_length) || spanlen <= 0 || span_length=="") {
         $("#txtSpan_Length").addClass('input_error');
     }
     else
@@ -5625,7 +5706,7 @@ function updateSingleFiber(fiberID) {
         $("#ddlSingleFiberType").removeClass('input_error');
 
     var spanlen = parseFloat(span_length);
-    if (!(spanlen) || spanlen <= 0) {
+    if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
         showMessage(alertType.Error, 'Pleae enter valid span length.');
         $("#txtSpan_Length").addClass('input_error');
         return;
@@ -6709,6 +6790,10 @@ function checkTypeForce() {
                     msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
+                if (!item.category) {
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' category not entered by the user.</p>');
+                    flag = true;
+                }
             }
         }
 
@@ -6886,14 +6971,30 @@ function nodeValidationInEdge(cfrom, cto) {
         else {
 
             if (network.body.data.nodes.get(item).node_type == amplifierJSON.node_type) {
-                if (network.body.data.nodes.get(item).amp_type != "") {
-                    removeSpanInError(item, true);
-                    removeSpanInError(item);
+
+
+                if (network.body.data.nodes.get(item).amp_category == amplifierJSON.amp_category) {
+                    if (network.body.data.nodes.get(item).amp_type != "") {
+                        removeSpanInError(item, true);
+                        removeSpanInError(item);
+                    }
+                    else {
+                        var removeID = "#span" + item.replace(/\s/g, '');
+                        $(removeID).remove();
+                    }
                 }
-                else {
-                    var removeID = "#span" + item.replace(/\s/g, '');
-                    $(removeID).remove();
+                else if (network.body.data.nodes.get(item).amp_category == ramanampJSON.amp_category) {
+                    if (network.body.data.nodes.get(item).amp_type != "" && (network.body.data.nodes.get(item).category)) {
+                        removeSpanInError(item, true);
+                        removeSpanInError(item);
+                    }
+                    else {
+                        var removeID = "#span" + item.replace(/\s/g, '');
+                        $(removeID).remove();
+                    }
                 }
+
+
             }
             else {
                 removeSpanInError(item);
@@ -7102,9 +7203,16 @@ function nodeRuleOnImportJSON() {
             addNodeHighlight(item.id);
         }
         else {
-            if (item.node_type == amplifierJSON.node_type && item.amp_type == "") {
-                addNodeHighlight(item.id);
+            if (item.node_type == amplifierJSON.node_type)
+            {
+                if (item.amp_category == ramanampJSON.amp_category && item.amp_type == "" && !(item.category)) {
+                    addNodeHighlight(item.id);
+                }
+                else if (item.amp_category == amplifierJSON.amp_category && item.amp_type == "") {
+                    addNodeHighlight(item.id);
+                }
             }
+            
         }
         //if (connectedEdges.length <= 1) {
         //    addNodeHighlight(item.id);
