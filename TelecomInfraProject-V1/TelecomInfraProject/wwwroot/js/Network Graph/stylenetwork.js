@@ -6627,7 +6627,7 @@ function nodeRule(from, to, nodeType) {
         message = "";
         if (fromDetails.node_type == nodeType) {
             if (fromConnections.length > 1) {
-                message = fromDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing. ';
+                message = fromDetails.label + ' cannot have more than one incoming and one outgoing connection. ';
                 flag = true;
             }
             else {
@@ -6644,9 +6644,9 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message += "<br /> <br />" + toDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing';
+                    message += "<br /> <br />" + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 else
-                    message += toDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing';
+                    message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
                 flag = true;
             }
             else {
@@ -6751,10 +6751,22 @@ function checkMisLink() {
                 toCount++;
         }
 
-        if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1) {
+        //if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1 ) {
+        //    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
+        //    flag = true;
+        //}
+        if (connectedEdges.length <= 1) {
             msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
+        else if (connectedEdges.length > 1) {
+
+            if (fromCount != toCount || connectedEdges.length > 2) {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> can only have one incoming and one outgoing link.</p>');
+                flag = true;
+            }
+        }
+
         if (item.node_type == amplifierJSON.node_type) {
             if (item.amp_category == amplifierJSON.amp_category) {
                 if (!item.amp_type) {
