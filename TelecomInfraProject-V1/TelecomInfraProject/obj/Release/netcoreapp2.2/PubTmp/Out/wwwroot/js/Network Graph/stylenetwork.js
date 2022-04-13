@@ -5306,6 +5306,7 @@ function updateRamanAmp(nodeID) {
 
                 if (amptype) {
                     removeSpanInError(id, true);
+                    removeSpanInError(id, true);
                 }
             }
             else {
@@ -6626,7 +6627,7 @@ function nodeRule(from, to, nodeType) {
         message = "";
         if (fromDetails.node_type == nodeType) {
             if (fromConnections.length > 1) {
-                message = fromDetails.label + ' cannot have more than one incoming and one outgoing connection. ';
+                message = fromDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing. ';
                 flag = true;
             }
             else {
@@ -6643,9 +6644,9 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message += "<br /> <br />" + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += "<br /> <br />" + toDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing';
                 else
-                    message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += toDetails.label + ' cannot have more than 2 links, one incoming and 1 outgoing';
                 flag = true;
             }
             else {
@@ -6787,11 +6788,11 @@ function checkTypeForce() {
             }
             else if (item.amp_category == ramanampJSON.amp_category) {
                 if (!item.amp_type) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier type not entered by the user.</p>');
                     flag = true;
                 }
                 if (!item.category) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + ramanampJSON.amp_category + ' category not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier category not entered by the user.</p>');
                     flag = true;
                 }
             }
