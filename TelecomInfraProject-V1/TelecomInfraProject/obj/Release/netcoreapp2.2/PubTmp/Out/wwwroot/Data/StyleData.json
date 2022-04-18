@@ -276,6 +276,13 @@
         "inherit": false,
         "opacity": 1
       },
+      "err_color": {
+        "color": "orange",
+        "highlight": "orange",
+        "hover": "orange",
+        "inherit": false,
+        "opacity": 1
+      },
       "color": {
         "color": "blue",
         "highlight": "blue",
