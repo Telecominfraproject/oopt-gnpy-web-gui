@@ -114,4 +114,36 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.pdb
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.genruntimeconfig.cache
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.CopyComplete
+<<<<<<< HEAD
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache
+=======
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\appsettings.Development.json
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\appsettings.json
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.deps.json
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.runtimeconfig.json
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.runtimeconfig.dev.json
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.dll
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.pdb
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.Views.dll
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.Views.pdb
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.GeneratedMSBuildEditorConfig.editorconfig
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.AssemblyInfoInputs.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.AssemblyInfo.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.CoreCompileInputs.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.RazorAssemblyInfo.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.RazorAssemblyInfo.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.TagHelpers.input.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.TagHelpers.output.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.RazorCoreGenerate.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\Razor\Pages\help.cshtml.g.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\Razor\Pages\homepage.cshtml.g.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\Razor\Pages\Index.cshtml.g.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.RazorTargetAssemblyInfo.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.RazorTargetAssemblyInfo.cs
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.Views.pdb
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.dll
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.pdb
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.genruntimeconfig.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.CopyComplete
+>>>>>>> e1195de818c3c6b64f737c675557c3ba5617103f
