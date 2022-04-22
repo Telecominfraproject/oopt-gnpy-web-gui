@@ -69,3 +69,4 @@ D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\ob
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.dll
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.pdb
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.genruntimeconfig.cache
+D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.csproj.AssemblyReference.cache
