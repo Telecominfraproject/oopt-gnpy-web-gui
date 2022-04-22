@@ -206,17 +206,15 @@ $(document).ready(function () {
                 return (item.is_error == true);
             }
         });
-
         if (errNodes.length > 0 || errFiber.length > 0) {
             removeHighlight();
-
             network.moveTo({
                 position: prePosition,
                 scale: preScale,
             });
-            
+
         }
-        
+
 
     });
 
@@ -5328,7 +5326,6 @@ function updateRamanAmp(nodeID) {
                 else if (edgeDetails.to == id)
                     toCount++;
             }
-
             if (fromCount == 1 && toCount == 1) {
 
                 if (amptype) {
@@ -5753,6 +5750,7 @@ function updateSingleFiber(fiberID) {
 
             network.body.data.edges.update({
                 id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
+                pre_color: singleFiberJSON.options.color,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
             data.nodes.off("*", change_history_back);
@@ -6936,7 +6934,7 @@ function topologyValidation(isTime) {
     response = checkFiberPro();
     if (response.flag) {
         flag = true;
-        message.push("<span id=spanMisLink>" + response.message + "</span>");
+        message.push("<span id=spanTransForce>" + response.message + "</span>");
     }
 
     //response = checkTypeForce();
@@ -6995,8 +6993,7 @@ function focusNode(ID, type) {
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
 
-        network.body.data.edges.update([{ id: ID, pre_color: edgeDetails.color, color: singleFiberJSON.options.err_color,is_error: true }]);
-
+        network.body.data.edges.update([{ id: ID, pre_color: edgeDetails.color, color: singleFiberJSON.options.err_color, is_error: true }]);
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
     }
@@ -7036,13 +7033,12 @@ function removeHighlight() {
             return (item.is_error == true);
         }
     });
-
     for (var i = 0; i < errEdge.length; i++) {
         var edgeDetails = errEdge[i];
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         network.body.data.edges.update({
-            id: edgeDetails.id, color:edgeDetails.pre_color, is_error: false
+            id: edgeDetails.id, color: edgeDetails.pre_color, is_error: false
         });
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
@@ -7262,8 +7258,13 @@ function checkErrorFree() {
     if (transForce == 0)
         $("#spanTransForce").empty();
 
-    if (roadmRule == 0 && linkRule == 0 && transForce == 0)
+    if (roadmRule == 0 && linkRule == 0 && transForce == 0) {
         $("#toast").toast('hide');
+        network.moveTo({
+            position: prePosition,
+            scale: preScale,
+        });
+    }
 }
 
 function addNodeHighlight(nodeID) {

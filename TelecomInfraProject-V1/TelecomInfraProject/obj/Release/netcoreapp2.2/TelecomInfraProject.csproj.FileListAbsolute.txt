@@ -95,7 +95,6 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.pdb
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.Views.dll
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp2.2\TelecomInfraProject.Views.pdb
-D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.GeneratedMSBuildEditorConfig.editorconfig
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.AssemblyInfoInputs.cache
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.AssemblyInfo.cs
@@ -115,3 +114,4 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.pdb
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.genruntimeconfig.cache
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.CopyComplete
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp2.2\TelecomInfraProject.csproj.AssemblyReference.cache

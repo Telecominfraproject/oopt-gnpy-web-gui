@@ -19,6 +19,7 @@ var exportButton;
 var dropdownshape;
 var isService = 0;
 var isCopy = false;
+var isCopyPara = false;
 localStorage.setItem("copyedgeid", "");
 localStorage.setItem("copynodeid", "");
 localStorage.setItem("deletenodeconectededge", "");
@@ -175,6 +176,8 @@ $(document).ready(function () {
 
     $("#btnValidation").click(function () {
         if (networkValidation()) {
+            preScale = network.getScale();
+            prePosition = network.getViewPosition();
             if (!topologyValidation(true)) {
                 showMessage(alertType.Success, 'Successfully validated');
             }
@@ -206,17 +209,15 @@ $(document).ready(function () {
                 return (item.is_error == true);
             }
         });
-
         if (errNodes.length > 0 || errFiber.length > 0) {
             removeHighlight();
-
             network.moveTo({
                 position: prePosition,
                 scale: preScale,
             });
-            
+
         }
-        
+
 
     });
 
@@ -1298,97 +1299,126 @@ function draw(isImport) {
         //    return;
         //}
         //nodeMode = "";
+
         var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
-        var deletenode = network.getConnectedEdges(clickedNode.id);
-        localStorage.setItem("deletenodeconectededge", deletenode.length);
-        //_nodesDB().remove();
-        //_nodesDB.insert({ "id": clickedNode.id, "type": nodes.get(clickedNode.id).node_type });
-        if (isDualFiberMode == 1 || isSingleFiberMode == 1) {
-            isAddService = 0;
-            addServicData = {
-                from: '',
-                to: ''
-            };
-            isDualPatchMode = 0;
-            isSinglePatchMode = 0;
-            addPatchData = {
-                from: '',
-                to: ''
-            };
-            if (addEdgeData.from == '')
-                addEdgeData.from = clickedNode.options.id
-            else if (addEdgeData.to == '') {
-                if (addEdgeData.from == clickedNode.options.id) {
-                    showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-                    return;
-                }
-                addEdgeData.to = clickedNode.options.id
+        var nodeDetails = network.body.data.nodes.get(clickedNode.id);
+        var copyDetails;
+        if (isCopyPara) {
+            copyDetails = network.body.data.nodes.get(copiedNodeID);
+            type_name = copyDetails.node_type;
+            if (copyDetails.node_type == amplifierJSON.node_type) {
+                if (copyDetails.amp_category == ramanampJSON.amp_category)
+                    type_name = 'Raman Amplifier';
+                else
+                    type_name = copyDetails.amp_category;
             }
-
-            if (addEdgeData.from != '' && addEdgeData.to != '')
-                addFiber();
+            else if (copyDetails.node_type == roadmJSON.node_type)
+                type_name = copyDetails.node_type.toUpperCase();
         }
-        if (isAddService == 1) {
-            isDualFiberMode = 0;
-            isSingleFiberMode = 0;
-            isDualPatchMode = 0;
-            isSinglePatchMode = 0;
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-            addPatchData = {
-                from: '',
-                to: ''
-            };
 
-            if (addServiceData.from == '')
-                addServiceData.from = clickedNode.options.id
-            else if (addServiceData.to == '') {
-                if (addServiceData.from == clickedNode.options.id) {
-                    showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-                    return;
-                }
-                addServiceData.to = clickedNode.options.id
-            }
-
-            if (addServiceData.from != '' && addServiceData.to != '')
-                addService();
+        if (isCopyPara && copyDetails.node_type != nodeDetails.node_type) {
+            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+            return;
 
         }
-        if (isDualPatchMode == 1 || isSinglePatchMode == 1) {
-            isDualFiberMode = 0;
-            isSingleFiberMode = 0;
-            isAddService = 0;
-            addEdgeData = {
-                from: '',
-                to: ''
-            };
-            addServiceData = {
-                from: '',
-                to: ''
-            };
-
-            if (addPatchData.from == '')
-                addPatchData.from = clickedNode.options.id
-            else if (addPatchData.to == '') {
-                if (addPatchData.from == clickedNode.options.id) {
-                    showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-                    return;
-                }
-                addPatchData.to = clickedNode.options.id
+        else {
+            if (isCopyPara && copyDetails.amp_category != nodeDetails.amp_category) {
+                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                return;
             }
-
-            if (addPatchData.from != '' && addPatchData.to != '') {
-                if (isDualPatchMode == 1)
-                    addDualPatch();
-                if (isSinglePatchMode == 1)
-                    addSinglePatch();
-
-            }
-
-
+            else
+                $('#toast').toast('hide');
         }
+
+
+        //var deletenode = network.getConnectedEdges(clickedNode.id);
+        //localStorage.setItem("deletenodeconectededge", deletenode.length);
+        //if (isDualFiberMode == 1 || isSingleFiberMode == 1) {
+        //    isAddService = 0;
+        //    addServicData = {
+        //        from: '',
+        //        to: ''
+        //    };
+        //    isDualPatchMode = 0;
+        //    isSinglePatchMode = 0;
+        //    addPatchData = {
+        //        from: '',
+        //        to: ''
+        //    };
+        //    if (addEdgeData.from == '')
+        //        addEdgeData.from = clickedNode.options.id
+        //    else if (addEdgeData.to == '') {
+        //        if (addEdgeData.from == clickedNode.options.id) {
+        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
+        //            return;
+        //        }
+        //        addEdgeData.to = clickedNode.options.id
+        //    }
+
+        //    if (addEdgeData.from != '' && addEdgeData.to != '')
+        //        addFiber();
+        //}
+        //if (isAddService == 1) {
+        //    isDualFiberMode = 0;
+        //    isSingleFiberMode = 0;
+        //    isDualPatchMode = 0;
+        //    isSinglePatchMode = 0;
+        //    addEdgeData = {
+        //        from: '',
+        //        to: ''
+        //    };
+        //    addPatchData = {
+        //        from: '',
+        //        to: ''
+        //    };
+
+        //    if (addServiceData.from == '')
+        //        addServiceData.from = clickedNode.options.id
+        //    else if (addServiceData.to == '') {
+        //        if (addServiceData.from == clickedNode.options.id) {
+        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
+        //            return;
+        //        }
+        //        addServiceData.to = clickedNode.options.id
+        //    }
+
+        //    if (addServiceData.from != '' && addServiceData.to != '')
+        //        addService();
+
+        //}
+        //if (isDualPatchMode == 1 || isSinglePatchMode == 1) {
+        //    isDualFiberMode = 0;
+        //    isSingleFiberMode = 0;
+        //    isAddService = 0;
+        //    addEdgeData = {
+        //        from: '',
+        //        to: ''
+        //    };
+        //    addServiceData = {
+        //        from: '',
+        //        to: ''
+        //    };
+
+        //    if (addPatchData.from == '')
+        //        addPatchData.from = clickedNode.options.id
+        //    else if (addPatchData.to == '') {
+        //        if (addPatchData.from == clickedNode.options.id) {
+        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
+        //            return;
+        //        }
+        //        addPatchData.to = clickedNode.options.id
+        //    }
+
+        //    if (addPatchData.from != '' && addPatchData.to != '') {
+        //        if (isDualPatchMode == 1)
+        //            addDualPatch();
+        //        if (isSinglePatchMode == 1)
+        //            addSinglePatch();
+
+        //    }
+
+
+        //}
     });
     network.on("doubleClick", function (data) {
         //var type = _nodesDB().first();
@@ -1413,7 +1443,6 @@ function draw(isImport) {
         var edgeDatas = this.body.edges[this.getEdgeAt(data.pointer.DOM)];
         var nodeData = "";
         var edgeData = "";
-
         if (nodeDatas != undefined)
             nodeData = nodeDatas.id;
         if (edgeDatas != undefined)
@@ -1438,6 +1467,65 @@ function draw(isImport) {
             }
             return;
         }
+        var copyDetails;
+        var type_name;
+
+        if (isCopyPara) {
+            copyDetails = network.body.data.nodes.get(copiedNodeID);
+            type_name = copyDetails.node_type;
+            if (copyDetails.node_type == amplifierJSON.node_type) {
+                if (copyDetails.amp_category == ramanampJSON.amp_category)
+                    type_name = 'Raman Amplifier';
+                else
+                    type_name = amp_category;
+            }
+            else if (copyDetails.node_type == roadmJSON.node_type)
+                type_name = copyDetails.node_type.toUpperCase();
+
+        }
+
+
+        if (isCopyPara && type != copyDetails.node_type) {
+
+            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+            return;
+        }
+        else {
+            if (isCopyPara && type == copyDetails.node_type) {
+
+                if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
+                    if (amp_category != copyDetails.amp_category) {
+                        showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                        return;
+                    }
+                }
+
+                $('#toast').toast('hide');
+                showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
+                document.getElementById("rcProCancel").onclick = cancelPro.bind(
+                    this,
+                    nodeData,
+                    callback
+
+                );
+                var nodesArray = [];
+
+                if (data.nodes.length > 0)
+                    nodesArray = data.nodes;
+                else
+                    nodesArray.push(nodeData);
+
+                document.getElementById("rcApplyPro").onclick = applyPro.bind(
+                    this,
+                    nodesArray,
+                    callback
+
+                );
+                return;
+            }
+        }
+
+
 
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
@@ -1484,6 +1572,12 @@ function draw(isImport) {
                                 callback
 
                             );
+                            document.getElementById("rcRoadmCopyPara").onclick = copyNodePro.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
@@ -1504,6 +1598,12 @@ function draw(isImport) {
                                 callback
 
                             );
+                            //document.getElementById("rcAttenuatorCopyPara").onclick = copyNodePro.bind(
+                            //    this,
+                            //    nodeData,
+                            //    callback
+
+                            //);
                         }
                         else if (type == ILAJSON.node_type) {
                             if (amp_category == ILAJSON.amp_category) {
@@ -1546,6 +1646,12 @@ function draw(isImport) {
                                     callback
 
                                 );
+                                document.getElementById("rcAmplifierCopyPara").onclick = copyNodePro.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                             else if (amp_category == ramanampJSON.amp_category) {
                                 showContextMenu(data.event.pageX, data.event.pageY, "ramanAmpMenu");
@@ -1561,6 +1667,12 @@ function draw(isImport) {
                                     callback
                                 );
                                 document.getElementById("rcRamanAmpCopy").onclick = copyNode.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
+                                document.getElementById("rcRamanAmpCopyPara").onclick = copyNodePro.bind(
                                     this,
                                     nodeData,
                                     callback
@@ -1582,6 +1694,12 @@ function draw(isImport) {
                                 callback
                             );
                             document.getElementById("rcTransceiverCopy").onclick = copyNode.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
+                            document.getElementById("rcTransceiverCopyPara").onclick = copyNodePro.bind(
                                 this,
                                 nodeData,
                                 callback
@@ -3422,6 +3540,74 @@ function singlePatchMode() {
     };
 }
 
+var copiedNodeID;
+function copyNodePro(nodeID, callback) {
+    showHideDrawerandMenu();
+    isCopyPara = true;
+    copiedNodeID = nodeID;
+    //document.getElementById("rcProCancel").onclick = cancelPro.bind(
+    //    this,
+    //    nodeID,
+    //    callback
+
+    //);
+    //document.getElementById("rcApplyPro").onclick = applyPro.bind(
+    //    this,
+    //    nodeID,
+    //    callback
+
+    //);
+}
+
+function cancelPro(nodeId) {
+    clearCopiedData();
+}
+
+function applyPro(nodes, callback) {
+    if (isCopyPara) {
+        isCopyPara = false;
+        var nodeDetails = network.body.data.nodes.get(copiedNodeID);
+        if (nodeDetails.node_type == roadmJSON.node_type) {
+            for (var i = 0; i < nodes.length; i++) {
+                network.body.data.nodes.update({
+                    id: nodes[i], roadm_type: nodeDetails.roadm_type
+                });
+            }
+        }
+        else if (nodeDetails.node_type == transceiverJSON.node_type) {
+            for (var i = 0; i < nodes.length; i++) {
+                network.body.data.nodes.update({
+                    id: nodes[i], transceiver_type: nodeDetails.transceiver_type
+                });
+            }
+        }
+        else if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+            for (var i = 0; i < nodes.length; i++) {
+                network.body.data.nodes.update({
+                    id: nodes[i], amp_type: nodeDetails.amp_type
+                });
+            }
+        }
+        else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+            for (var i = 0; i < nodes.length; i++) {
+                network.body.data.nodes.update({
+                    id: nodes[i], amp_type: nodeDetails.amp_type, category: nodeDetails.category
+                });
+            }
+        }
+        clearCopiedData();
+    }
+}
+
+function clearCopiedData() {
+    isCopyPara = false;
+    copiedNodeID = "";
+    UnSelectAll();
+    $('#toast').toast('hide');
+    document.getElementById("templateMenu").style.display = "none";
+    $("#stepCreateTopology").click();
+}
+
 function copyNode(nodeID, callback) {
     showHideDrawerandMenu();
     isCopy = true;
@@ -3456,7 +3642,7 @@ function pasteNode(nodeId) {
                 font: roadmJSON.font,
                 size: roadmJSON.size,
                 view: $("#ddlNetworkView").val(), hidden: false,
-                roadm_type: nodeDetails.default.roadm_type,
+                roadm_type: nodeData.roadm_type,
                 node_type: nodeDetails.default.node_type, node_degree: nodeDetails.default.node_degree, component_type: roadmJSON.component_type,
                 roadm_type_pro: []
             });
@@ -4015,9 +4201,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
                 span_loss: span_Loss,
             });
+
             realUpdate();
             nodeValidationInEdge(cfrom, cto);
-
         }
 
         data.nodes.off("*", change_history_back);
@@ -5328,7 +5514,6 @@ function updateRamanAmp(nodeID) {
                 else if (edgeDetails.to == id)
                     toCount++;
             }
-
             if (fromCount == 1 && toCount == 1) {
 
                 if (amptype) {
@@ -5753,6 +5938,7 @@ function updateSingleFiber(fiberID) {
 
             network.body.data.edges.update({
                 id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
+                pre_color: singleFiberJSON.options.color,
                 loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
             });
             data.nodes.off("*", change_history_back);
@@ -6936,7 +7122,7 @@ function topologyValidation(isTime) {
     response = checkFiberPro();
     if (response.flag) {
         flag = true;
-        message.push("<span id=spanMisLink>" + response.message + "</span>");
+        message.push("<span id=spanTransForce>" + response.message + "</span>");
     }
 
     //response = checkTypeForce();
@@ -6957,8 +7143,6 @@ var prePosition;
 function focusNode(ID, type) {
     removeHighlight();
     UnSelectAll();
-    preScale = network.getScale();
-    prePosition = network.getViewPosition();
     if (type == 1) {
         var image;
         var scaleOption = { scale: 1.0 };
@@ -6995,8 +7179,7 @@ function focusNode(ID, type) {
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
 
-        network.body.data.edges.update([{ id: ID, pre_color: edgeDetails.color, color: singleFiberJSON.options.err_color,is_error: true }]);
-
+        network.body.data.edges.update([{ id: ID, pre_color: edgeDetails.color, color: singleFiberJSON.options.err_color, is_error: true }]);
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
     }
@@ -7036,13 +7219,12 @@ function removeHighlight() {
             return (item.is_error == true);
         }
     });
-
     for (var i = 0; i < errEdge.length; i++) {
         var edgeDetails = errEdge[i];
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
         network.body.data.edges.update({
-            id: edgeDetails.id, color:edgeDetails.pre_color, is_error: false
+            id: edgeDetails.id, color: edgeDetails.pre_color, is_error: false
         });
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
@@ -7262,8 +7444,13 @@ function checkErrorFree() {
     if (transForce == 0)
         $("#spanTransForce").empty();
 
-    if (roadmRule == 0 && linkRule == 0 && transForce == 0)
+    if (roadmRule == 0 && linkRule == 0 && transForce == 0) {
         $("#toast").toast('hide');
+        network.moveTo({
+            position: prePosition,
+            scale: preScale,
+        });
+    }
 }
 
 function addNodeHighlight(nodeID) {
