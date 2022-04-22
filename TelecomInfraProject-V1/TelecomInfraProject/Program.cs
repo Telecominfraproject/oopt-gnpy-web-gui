@@ -19,6 +19,10 @@ namespace TelecomInfraProject
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+         // .UseKestrel()
+          .UseStartup<Startup>()
+          .UseIISIntegration()
+          .UseContentRoot(Directory.GetCurrentDirectory());  
+         
     }
 }

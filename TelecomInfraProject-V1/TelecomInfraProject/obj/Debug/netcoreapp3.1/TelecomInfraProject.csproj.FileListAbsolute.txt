@@ -8,10 +8,8 @@ D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcor
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\TelecomInfraProject.pdb
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\TelecomInfraProject.Views.dll
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\TelecomInfraProject.Views.pdb
-D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
-D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
-D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
-D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp3.1\TelecomInfraProject.csproj.AssemblyReference.cache
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Server.Kestrel.Https.dll
+D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp3.1\TelecomInfraProject.GeneratedMSBuildEditorConfig.editorconfig
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp3.1\TelecomInfraProject.AssemblyInfoInputs.cache
 D:\GitRepository\TIP\TelecomInfraProject-V1\TelecomInfraProject\obj\Debug\netcoreapp3.1\TelecomInfraProject.AssemblyInfo.cs
