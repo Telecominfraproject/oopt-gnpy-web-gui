@@ -31,6 +31,6 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.Views.pdb
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.genruntimeconfig.cache
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.csproj.CopyComplete
-D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\Microsoft.DotNet.PlatformAbstractions.dll
-D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\Microsoft.Extensions.DependencyModel.dll
-D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\Newtonsoft.Json.dll
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Server.Kestrel.Https.dll
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions.dll
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.csproj.AssemblyReference.cache

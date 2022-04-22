@@ -1477,7 +1477,7 @@ function draw(isImport) {
                 if (copyDetails.amp_category == ramanampJSON.amp_category)
                     type_name = 'Raman Amplifier';
                 else
-                    type_name = amp_category;
+                    type_name = copyDetails.amp_category;
             }
             else if (copyDetails.node_type == roadmJSON.node_type)
                 type_name = copyDetails.node_type.toUpperCase();
@@ -3564,37 +3564,40 @@ function cancelPro(nodeId) {
 }
 
 function applyPro(nodes, callback) {
+    var isUpdated = false;
     if (isCopyPara) {
-        isCopyPara = false;
         var nodeDetails = network.body.data.nodes.get(copiedNodeID);
-        if (nodeDetails.node_type == roadmJSON.node_type) {
-            for (var i = 0; i < nodes.length; i++) {
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodeDetails.node_type == roadmJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 network.body.data.nodes.update({
                     id: nodes[i], roadm_type: nodeDetails.roadm_type
                 });
+                isUpdated = true;
             }
-        }
-        else if (nodeDetails.node_type == transceiverJSON.node_type) {
-            for (var i = 0; i < nodes.length; i++) {
+            else if (nodeDetails.node_type == transceiverJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 network.body.data.nodes.update({
                     id: nodes[i], transceiver_type: nodeDetails.transceiver_type
                 });
+                isUpdated = true;
+            }
+            if (nodeDetails.node_type == amplifierJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
+                if (nodeDetails.amp_category == amplifierJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
+                    network.body.data.nodes.update({
+                        id: nodes[i], amp_type: nodeDetails.amp_type
+                    });
+                    isUpdated = true;
+                }
+                else if (nodeDetails.amp_category == ramanampJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
+                    network.body.data.nodes.update({
+                        id: nodes[i], amp_type: nodeDetails.amp_type, category: nodeDetails.category
+                    });
+                    isUpdated = true;
+                }
             }
         }
-        else if (nodeDetails.amp_category == amplifierJSON.amp_category) {
-            for (var i = 0; i < nodes.length; i++) {
-                network.body.data.nodes.update({
-                    id: nodes[i], amp_type: nodeDetails.amp_type
-                });
-            }
-        }
-        else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-            for (var i = 0; i < nodes.length; i++) {
-                network.body.data.nodes.update({
-                    id: nodes[i], amp_type: nodeDetails.amp_type, category: nodeDetails.category
-                });
-            }
-        }
+
+        if (isUpdated)
+            showMessage(alertType.Success, "Template applied successfully.");
         clearCopiedData();
     }
 }
