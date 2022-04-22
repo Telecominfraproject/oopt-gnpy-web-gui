@@ -501,6 +501,7 @@ function showHideDrawerandMenu() {
     document.getElementById("singlePatchMenu").style.display = "none";
     document.getElementById("dualPatchMenu").style.display = "none";
     document.getElementById("ramanAmpMenu").style.display = "none";
+    document.getElementById("templateMenu").style.display = "none";
 
     closeDrawer('roadm');
     closeDrawer('attenuator');

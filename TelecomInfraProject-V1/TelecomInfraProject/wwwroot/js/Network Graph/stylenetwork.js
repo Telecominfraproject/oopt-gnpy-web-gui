@@ -1317,13 +1317,13 @@ function draw(isImport) {
         }
 
         if (isCopyPara && copyDetails.node_type != nodeDetails.node_type) {
-            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+            showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
             return;
 
         }
         else {
             if (isCopyPara && copyDetails.amp_category != nodeDetails.amp_category) {
-                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                 return;
             }
             else
@@ -1474,6 +1474,8 @@ function draw(isImport) {
             var type_name;
 
             if (isCopyPara) {
+
+               
                 copyDetails = network.body.data.nodes.get(copiedNodeID);
                 type_name = copyDetails.node_type;
                 if (copyDetails.node_type == amplifierJSON.node_type) {
@@ -1484,6 +1486,11 @@ function draw(isImport) {
                 }
                 else if (copyDetails.node_type == roadmJSON.node_type)
                     type_name = copyDetails.node_type.toUpperCase();
+
+                if (nodeData == copiedNodeID) {
+                    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
+                    return;
+                }
 
             }
 
@@ -1498,7 +1505,7 @@ function draw(isImport) {
 
                     if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
                         if (amp_category != copyDetails.amp_category) {
-                            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                            showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                             return;
                         }
                     }
