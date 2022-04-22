@@ -1462,70 +1462,73 @@ function draw(isImport) {
             patch_category = network.body.data.edges.get(edgeData).patch_category;
         }
         else {
-            if (isCopy) {
-                showContextMenu(data.event.pageX, data.event.pageY, "pasteMenu");
-            }
-            return;
-        }
-        var copyDetails;
-        var type_name;
-
-        if (isCopyPara) {
-            copyDetails = network.body.data.nodes.get(copiedNodeID);
-            type_name = copyDetails.node_type;
-            if (copyDetails.node_type == amplifierJSON.node_type) {
-                if (copyDetails.amp_category == ramanampJSON.amp_category)
-                    type_name = 'Raman Amplifier';
-                else
-                    type_name = copyDetails.amp_category;
-            }
-            else if (copyDetails.node_type == roadmJSON.node_type)
-                type_name = copyDetails.node_type.toUpperCase();
-
-        }
-
-
-        if (isCopyPara && type != copyDetails.node_type) {
-
-            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
-            return;
-        }
-        else {
-            if (isCopyPara && type == copyDetails.node_type) {
-
-                if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
-                    if (amp_category != copyDetails.amp_category) {
-                        showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
-                        return;
-                    }
+            if (showMenu == 1) {
+                if (isCopy) {
+                    showContextMenu(data.event.pageX, data.event.pageY, "pasteMenu");
                 }
+            }
+            return;
+        }
+        if (showMenu == 1) {
+            var copyDetails;
+            var type_name;
 
-                $('#toast').toast('hide');
-                showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
-                document.getElementById("rcProCancel").onclick = cancelPro.bind(
-                    this,
-                    nodeData,
-                    callback
+            if (isCopyPara) {
+                copyDetails = network.body.data.nodes.get(copiedNodeID);
+                type_name = copyDetails.node_type;
+                if (copyDetails.node_type == amplifierJSON.node_type) {
+                    if (copyDetails.amp_category == ramanampJSON.amp_category)
+                        type_name = 'Raman Amplifier';
+                    else
+                        type_name = copyDetails.amp_category;
+                }
+                else if (copyDetails.node_type == roadmJSON.node_type)
+                    type_name = copyDetails.node_type.toUpperCase();
 
-                );
-                var nodesArray = [];
+            }
 
-                if (data.nodes.length > 0)
-                    nodesArray = data.nodes;
-                else
-                    nodesArray.push(nodeData);
 
-                document.getElementById("rcApplyPro").onclick = applyPro.bind(
-                    this,
-                    nodesArray,
-                    callback
+            if (isCopyPara && type != copyDetails.node_type) {
 
-                );
+                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
                 return;
             }
+            else {
+                if (isCopyPara && type == copyDetails.node_type) {
+
+                    if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
+                        if (amp_category != copyDetails.amp_category) {
+                            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                            return;
+                        }
+                    }
+
+                    $('#toast').toast('hide');
+                    showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
+                    document.getElementById("rcProCancel").onclick = cancelPro.bind(
+                        this,
+                        nodeData,
+                        callback
+
+                    );
+                    var nodesArray = [];
+
+                    if (data.nodes.length > 0)
+                        nodesArray = data.nodes;
+                    else
+                        nodesArray.push(nodeData);
+
+                    document.getElementById("rcApplyPro").onclick = applyPro.bind(
+                        this,
+                        nodesArray,
+                        callback
+
+                    );
+                    return;
+                }
+            }
+
         }
-
-
 
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
