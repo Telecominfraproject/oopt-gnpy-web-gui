@@ -1486,17 +1486,17 @@ function draw(isImport) {
                 else if (copyDetails.node_type == roadmJSON.node_type)
                     type_name = copyDetails.node_type.toUpperCase();
 
-                if (nodeData == copiedNodeID) {
-                    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
-                    return;
-                }
+                //if (nodeData == copiedNodeID) {
+                //    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
+                //    return;
+                //}
 
             }
 
 
             if (isCopyPara && type != copyDetails.node_type) {
 
-                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                 return;
             }
             else {

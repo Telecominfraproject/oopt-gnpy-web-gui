@@ -1317,13 +1317,13 @@ function draw(isImport) {
         }
 
         if (isCopyPara && copyDetails.node_type != nodeDetails.node_type) {
-            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+            showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
             return;
 
         }
         else {
             if (isCopyPara && copyDetails.amp_category != nodeDetails.amp_category) {
-                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                 return;
             }
             else
@@ -1469,6 +1469,7 @@ function draw(isImport) {
             }
             return;
         }
+
         if (showMenu == 1) {
             var copyDetails;
             var type_name;
@@ -1485,12 +1486,17 @@ function draw(isImport) {
                 else if (copyDetails.node_type == roadmJSON.node_type)
                     type_name = copyDetails.node_type.toUpperCase();
 
+                //if (nodeData == copiedNodeID) {
+                //    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
+                //    return;
+                //}
+
             }
 
 
             if (isCopyPara && type != copyDetails.node_type) {
 
-                showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                 return;
             }
             else {
@@ -1498,7 +1504,7 @@ function draw(isImport) {
 
                     if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
                         if (amp_category != copyDetails.amp_category) {
-                            showMessage(alertType.Error, 'Please select same node (' + type_name + ')');
+                            showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                             return;
                         }
                     }
@@ -3545,21 +3551,35 @@ function singlePatchMode() {
 
 var copiedNodeID;
 function copyNodePro(nodeID, callback) {
+    var isOk = false;
+    var nodeDetails = network.body.data.nodes.get(nodeID);
+    if (nodeDetails.node_type == roadmJSON.node_type) {
+        if (!nodeDetails.roadm_type && nodeDetails.roadm_type == "")
+            isOk = true;
+
+    }
+    if (nodeDetails.node_type == transceiverJSON.node_type) {
+        if (!nodeDetails.transceiver_type && nodeDetails.transceiver_type == "")
+            isOk = true;
+    }
+    if (nodeDetails.node_type == amplifierJSON.node_type) {
+        if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+            if (!nodeDetails.amp_type && nodeDetails.amp_type == "")
+                isOk = true;
+        }
+        else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+            if ((!nodeDetails.amp_type && nodeDetails.amp_type == "") || (!nodeDetails.category && nodeDetails.category == ""))
+                isOk = true;
+        }
+    }
+
+    if (isOk) {
+        showMessage(alertType.Error, "Template is empty");
+        return;
+    }
     showHideDrawerandMenu();
     isCopyPara = true;
     copiedNodeID = nodeID;
-    //document.getElementById("rcProCancel").onclick = cancelPro.bind(
-    //    this,
-    //    nodeID,
-    //    callback
-
-    //);
-    //document.getElementById("rcApplyPro").onclick = applyPro.bind(
-    //    this,
-    //    nodeID,
-    //    callback
-
-    //);
 }
 
 function cancelPro(nodeId) {
@@ -3575,12 +3595,14 @@ function applyPro(nodes, callback) {
                 network.body.data.nodes.update({
                     id: nodes[i], roadm_type: nodeDetails.roadm_type
                 });
+                realUpdate_Roadm(nodes[i], nodeDetails.roadm_type);
                 isUpdated = true;
             }
             else if (nodeDetails.node_type == transceiverJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 network.body.data.nodes.update({
                     id: nodes[i], transceiver_type: nodeDetails.transceiver_type
                 });
+                realUpdate_Transceiver(nodes[i], nodeDetails.transceiver_type);
                 isUpdated = true;
             }
             if (nodeDetails.node_type == amplifierJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
@@ -3588,12 +3610,14 @@ function applyPro(nodes, callback) {
                     network.body.data.nodes.update({
                         id: nodes[i], amp_type: nodeDetails.amp_type
                     });
+                    realUpdate_Amplifier(nodes[i], nodeDetails.amp_type);
                     isUpdated = true;
                 }
                 else if (nodeDetails.amp_category == ramanampJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
                     network.body.data.nodes.update({
                         id: nodes[i], amp_type: nodeDetails.amp_type, category: nodeDetails.category
                     });
+                    realUpdate_RamanAmp(nodes[i], nodeDetails.amp_type);
                     isUpdated = true;
                 }
             }
@@ -5205,34 +5229,35 @@ function updateRoadm(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, roadm_type: $("#ddlRoadmType").val()
             });
-            var roadmtype = $("#ddlRoadmType").val();
-            var connectedEges = network.getConnectedEdges(id);
-            var tempEdge = [];
-            $.each(connectedEges, function (index, item) {
-                if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
-                    tempEdge.push(item);
-                }
-            });
+            realUpdate_Roadm(id, $("#ddlRoadmType").val());
+            //var roadmtype = $("#ddlRoadmType").val();
+            //var connectedEges = network.getConnectedEdges(id);
+            //var tempEdge = [];
+            //$.each(connectedEges, function (index, item) {
+            //    if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
+            //        tempEdge.push(item);
+            //    }
+            //});
 
-            var fromCount = 0;
-            var toCount = 0;
-            for (i = 0; i < tempEdge.length; i++) {
-                edgeDetails = network.body.data.edges.get(tempEdge[i]);
-                if (edgeDetails.from == id)
-                    fromCount++;
-                else if (edgeDetails.to == id)
-                    toCount++;
-            }
+            //var fromCount = 0;
+            //var toCount = 0;
+            //for (i = 0; i < tempEdge.length; i++) {
+            //    edgeDetails = network.body.data.edges.get(tempEdge[i]);
+            //    if (edgeDetails.from == id)
+            //        fromCount++;
+            //    else if (edgeDetails.to == id)
+            //        toCount++;
+            //}
 
-            if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-                //addNodeHighlight(item);
-                removeID = "#spanTF" + id.replace(/\s/g, '');
-                $(removeID).remove();
-            }
-            else {
-                if (roadmtype)
-                    removeSpanInError(id, true);
-            }
+            //if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+            //    //addNodeHighlight(item);
+            //    removeID = "#spanTF" + id.replace(/\s/g, '');
+            //    $(removeID).remove();
+            //}
+            //else {
+            //    if (roadmtype)
+            //        removeSpanInError(id, true);
+            //}
 
         }
         clearRoadm();
@@ -5246,6 +5271,37 @@ function clearRoadm() {
     closeDrawer('roadm');
     network.unselectAll();
     _roadmListDB().remove();
+}
+
+function realUpdate_Roadm(id, rtype) {
+    var roadmtype = rtype;
+    var connectedEges = network.getConnectedEdges(id);
+    var tempEdge = [];
+    $.each(connectedEges, function (index, item) {
+        if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
+            tempEdge.push(item);
+        }
+    });
+
+    var fromCount = 0;
+    var toCount = 0;
+    for (i = 0; i < tempEdge.length; i++) {
+        edgeDetails = network.body.data.edges.get(tempEdge[i]);
+        if (edgeDetails.from == id)
+            fromCount++;
+        else if (edgeDetails.to == id)
+            toCount++;
+    }
+
+    if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+        //addNodeHighlight(item);
+        removeID = "#spanTF" + id.replace(/\s/g, '');
+        $(removeID).remove();
+    }
+    else {
+        if (roadmtype)
+            removeSpanInError(id, true);
+    }
 }
 
 function attenuatorEdit(nodeID, callback) {
@@ -5405,33 +5461,7 @@ function updateAmplifier(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label, amp_type: $("#ddlAmplifierType").val(),
             });
-            var amptype = $("#ddlAmplifierType").val();
-            var connectedEdges;
-            var fromCount;
-            var toCount;
-            connectedEdges = network.getConnectedEdges(id);
-            fromCount = 0;
-            toCount = 0;
-            for (i = 0; i < connectedEdges.length; i++) {
-                edgeDetails = network.body.data.edges.get(connectedEdges[i]);
-                if (edgeDetails.from == id)
-                    fromCount++;
-                else if (edgeDetails.to == id)
-                    toCount++;
-            }
-
-            if (fromCount == 1 && toCount == 1) {
-                if (amptype) {
-                    removeSpanInError(id, true);
-                }
-            }
-            else {
-                if (amptype) {
-                    removeID = "#spanTF" + id.replace(/\s/g, '');
-                    $(removeID).remove();
-                }
-            }
-
+            realUpdate_Amplifier(id, $("#ddlAmplifierType").val());
             clearAmplifier();
         }
 
@@ -5444,6 +5474,35 @@ function clearAmplifier() {
     $("#ddlAmplifierType").val('');
     closeDrawer('amplifier');
     network.unselectAll();
+}
+function realUpdate_Amplifier(id, rtype) {
+    var amptype = rtype;
+    var connectedEdges;
+    var fromCount;
+    var toCount;
+    connectedEdges = network.getConnectedEdges(id);
+    fromCount = 0;
+    toCount = 0;
+    for (i = 0; i < connectedEdges.length; i++) {
+        edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+        if (edgeDetails.from == id)
+            fromCount++;
+        else if (edgeDetails.to == id)
+            toCount++;
+    }
+
+    if (fromCount == 1 && toCount == 1) {
+        if (amptype) {
+            removeSpanInError(id, true);
+        }
+    }
+    else {
+        if (amptype) {
+            removeID = "#spanTF" + id.replace(/\s/g, '');
+            $(removeID).remove();
+        }
+    }
+
 }
 
 function ramanAmpEdit(nodeID, callback) {
@@ -5506,35 +5565,7 @@ function updateRamanAmp(nodeID) {
                 id: id, label: label, amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
             });
 
-            var amptype = $("#ddlRamanAmpType").val();
-            var connectedEdges;
-            var fromCount;
-            var toCount;
-            connectedEdges = network.getConnectedEdges(id);
-            fromCount = 0;
-            toCount = 0;
-            for (i = 0; i < connectedEdges.length; i++) {
-                edgeDetails = network.body.data.edges.get(connectedEdges[i]);
-                if (edgeDetails.from == id)
-                    fromCount++;
-                else if (edgeDetails.to == id)
-                    toCount++;
-            }
-            if (fromCount == 1 && toCount == 1) {
-
-                if (amptype) {
-                    removeSpanInError(id, true);
-                    removeSpanInError(id, true);
-                }
-            }
-            else {
-                if (amptype) {
-                    removeID = "#spanTF" + id.replace(/\s/g, '');
-                    $(removeID).remove();
-                    $(removeID).remove();
-                }
-            }
-
+            realUpdate_RamanAmp(id, $("#ddlRamanAmpType").val());
             clearRamanAmp();
         }
 
@@ -5548,6 +5579,38 @@ function clearRamanAmp() {
     $("#ddlRamanAmpCategory").val('');
     closeDrawer('ramanamp');
     network.unselectAll();
+}
+function realUpdate_RamanAmp(id, rtype) {
+    var amptype = rtype;
+    var connectedEdges;
+    var fromCount;
+    var toCount;
+    connectedEdges = network.getConnectedEdges(id);
+    fromCount = 0;
+    toCount = 0;
+    for (i = 0; i < connectedEdges.length; i++) {
+        edgeDetails = network.body.data.edges.get(connectedEdges[i]);
+        if (edgeDetails.from == id)
+            fromCount++;
+        else if (edgeDetails.to == id)
+            toCount++;
+    }
+    if (fromCount == 1 && toCount == 1) {
+
+        if (amptype) {
+            removeSpanInError(id, true);
+            removeSpanInError(id, true);
+        }
+    }
+    else {
+        if (amptype) {
+            removeID = "#spanTF" + id.replace(/\s/g, '');
+            $(removeID).remove();
+            $(removeID).remove();
+        }
+    }
+
+
 }
 
 function transceiverEdit(nodeID, callback) {
@@ -5625,33 +5688,8 @@ function updateTransceiver(nodeID) {
                 network.body.data.nodes.update({
                     id: id, label: label, transceiver_type: transceiverType
                 });
+                realUpdate_Transceiver(id, "");
 
-                var connectedEges = network.getConnectedEdges(id);
-                var tempEdge = [];
-                $.each(connectedEges, function (index, item) {
-                    if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
-                        tempEdge.push(item);
-                    }
-                });
-
-                var fromCount = 0;
-                var toCount = 0;
-                for (i = 0; i < tempEdge.length; i++) {
-                    edgeDetails = network.body.data.edges.get(tempEdge[i]);
-                    if (edgeDetails.from == id)
-                        fromCount++;
-                    else if (edgeDetails.to == id)
-                        toCount++;
-                }
-
-                if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-                    //addNodeHighlight(item);
-                    removeID = "#spanTF" + id.replace(/\s/g, '');
-                    $(removeID).remove();
-                }
-                else {
-                    removeSpanInError(id, true);
-                }
 
 
                 //if (tempEdge.length > 1) {
@@ -5676,6 +5714,34 @@ function clearTransceiver() {
     $("#ddlDataRate").val('');
     closeDrawer('transceiver');
     network.unselectAll();
+}
+function realUpdate_Transceiver(id, rtype) {
+    var connectedEges = network.getConnectedEdges(id);
+    var tempEdge = [];
+    $.each(connectedEges, function (index, item) {
+        if (network.body.data.edges.get(item).component_type != serviceJSON.component_type) {
+            tempEdge.push(item);
+        }
+    });
+
+    var fromCount = 0;
+    var toCount = 0;
+    for (i = 0; i < tempEdge.length; i++) {
+        edgeDetails = network.body.data.edges.get(tempEdge[i]);
+        if (edgeDetails.from == id)
+            fromCount++;
+        else if (edgeDetails.to == id)
+            toCount++;
+    }
+
+    if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
+        //addNodeHighlight(item);
+        removeID = "#spanTF" + id.replace(/\s/g, '');
+        $(removeID).remove();
+    }
+    else {
+        removeSpanInError(id, true);
+    }
 }
 
 function deleteNode(nodeID) {
@@ -6722,7 +6788,6 @@ function showMessage(messageType, textmsg, removeTimeout) {
             dangersrc = "./Assets/img/error-toaster.png";
             $("#img_src").attr("src", dangersrc);
             if (!removeTimeout) {
-
                 $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
 
                 $('#toast').addClass("danger-toast");
