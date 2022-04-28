@@ -1548,24 +1548,24 @@ function draw(isImport) {
 
                         $('#toast').toast('hide');
 
-                        if (isCopyPara) {
+                        //if (isCopyPara) {
 
-                            showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
-                            document.getElementById("rcProCancel").onclick = cancelPro.bind(
-                                this,
-                                nodeData,
-                                callback
+                        //    showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
+                        //    document.getElementById("rcProCancel").onclick = cancelPro.bind(
+                        //        this,
+                        //        nodeData,
+                        //        callback
 
-                            );
+                        //    );
 
-                            document.getElementById("rcApplyPro").onclick = applyPro.bind(
-                                this,
-                                nodesArray,
-                                callback
+                        //    document.getElementById("rcApplyPro").onclick = applyPro.bind(
+                        //        this,
+                        //        nodesArray,
+                        //        callback
 
-                            );
-                            return;
-                        }
+                        //    );
+                        //    return;
+                        //}
 
                     }
                 }
@@ -1620,15 +1620,31 @@ function draw(isImport) {
                 {
                     if (nodeData != undefined) {
                         if (type == roadmJSON.node_type) {
-                            showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
-                            if (nodesArray.length > 1) {
-                                $("#rcRoadmCopy").hide();
+
+
+                            $("#rcRoadmCopy").show();
+                            $("#rcRoadmApplyPro").hide();
+                            $("#rcRoadmCopyPara").show();
+                            $("#rcRoadmCancel").hide();
+
+                            if (isCopyPara) {
+                                $("#rcRoadmCopy").show();
+                                $("#rcRoadmApplyPro").show();
                                 $("#rcRoadmCopyPara").hide();
+                                $("#rcRoadmCancel").show();
                             }
                             else {
-                                $("#rcRoadmCopy").show();
-                                $("#rcRoadmCopyPara").show();
+                                if (nodesArray.length > 1) {
+                                    $("#rcRoadmCopy").hide();
+                                    $("#rcRoadmCopyPara").hide();
+                                }
+                                else {
+                                    $("#rcRoadmCopy").show();
+                                    $("#rcRoadmCopyPara").show();
+                                }
                             }
+
+                            showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
                             document.getElementById("rcRoadmEdit").onclick = roadmEdit.bind(
                                 this,
                                 nodesArray,
@@ -1652,6 +1668,20 @@ function draw(isImport) {
                                 callback
 
                             );
+                            document.getElementById("rcRoadmApplyPro").onclick = applyPro.bind(
+                                this,
+                                nodesArray,
+                                callback
+
+                            );
+                            document.getElementById("rcRoadmCancel").onclick = cancelPro.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
+
+                           
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
@@ -1701,6 +1731,12 @@ function draw(isImport) {
                                 );
                             }
                             else if (amp_category == amplifierJSON.amp_category) {
+
+                                $("#rcAmplifierCopy").show();
+                                $("#rcAmplifierCopyPara").show();
+                                $("#rcAmpApplyPro").hide();
+                                $("#rcAmpCancel").hide();
+
                                 if (nodesArray.length > 1) {
                                     $("#rcAmplifierCopy").hide();
                                     $("#rcAmplifierCopyPara").hide();
@@ -1709,6 +1745,14 @@ function draw(isImport) {
                                     $("#rcAmplifierCopy").show();
                                     $("#rcAmplifierCopyPara").show();
                                 }
+
+                                if (isCopyPara) {
+                                    $("#rcAmplifierCopy").show();
+                                    $("#rcAmplifierCopyPara").hide();
+                                    $("#rcAmpApplyPro").show();
+                                    $("#rcAmpCancel").show();
+                                }
+
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
                                 document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
                                     this,
@@ -1733,8 +1777,26 @@ function draw(isImport) {
                                     callback
 
                                 );
+                                document.getElementById("rcAmpApplyPro").onclick = applyPro.bind(
+                                    this,
+                                    nodesArray,
+                                    callback
+
+                                );
+                                document.getElementById("rcAmpCancel").onclick = cancelPro.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                             else if (amp_category == ramanampJSON.amp_category) {
+
+                                $("#rcRamanAmpCopy").show();
+                                $("#rcRamanAmpCopyPara").show();
+                                $("#rcRamanCancel").hide();
+                                $("#rcRamanApplyPro").hide();
+
                                 if (nodesArray.length > 1) {
                                     $("#rcRamanAmpCopy").hide();
                                     $("#rcRamanAmpCopyPara").hide();
@@ -1743,6 +1805,14 @@ function draw(isImport) {
                                     $("#rcRamanAmpCopy").show();
                                     $("#rcRamanAmpCopyPara").show();
                                 }
+
+                                if (isCopyPara) {
+                                    $("#rcRamanAmpCopy").show();
+                                    $("#rcRamanAmpCopyPara").hide();
+                                    $("#rcRamanApplyPro").show();
+                                    $("#rcRamanCancel").show();
+                                }
+
                                 showContextMenu(data.event.pageX, data.event.pageY, "ramanAmpMenu");
                                 document.getElementById("rcRamanAmpEdit").onclick = ramanAmpEdit.bind(
                                     this,
@@ -1767,9 +1837,27 @@ function draw(isImport) {
                                     callback
 
                                 );
+                                document.getElementById("rcRamanApplyPro").onclick = applyPro.bind(
+                                    this,
+                                    nodesArray,
+                                    callback
+
+                                );
+                                document.getElementById("rcRamanCancel").onclick = cancelPro.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                         }
                         else if (type == transceiverJSON.node_type) {
+
+                            $("#rcTransceiverCopy").show();
+                            $("#rcTransceiverCopyPara").show();
+                            $("#rcTransApplyPro").hide();
+                            $("#rcTransCancel").hide();
+
                             if (nodesArray.length > 1) {
                                 $("#rcTransceiverCopy").hide();
                                 $("#rcTransceiverCopyPara").hide();
@@ -1777,6 +1865,12 @@ function draw(isImport) {
                             else {
                                 $("#rcTransceiverCopy").show();
                                 $("#rcTransceiverCopyPara").show();
+                            }
+                            if (isCopyPara) {
+                                $("#rcTransceiverCopy").show();
+                                $("#rcTransceiverCopyPara").hide();
+                                $("#rcTransApplyPro").show();
+                                $("#rcTransCancel").show();
                             }
                             showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
                             document.getElementById("rcTransceiverEdit").onclick = transceiverEdit.bind(
@@ -1797,6 +1891,18 @@ function draw(isImport) {
 
                             );
                             document.getElementById("rcTransceiverCopyPara").onclick = copyNodePro.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
+                            document.getElementById("rcTransApplyPro").onclick = applyPro.bind(
+                                this,
+                                nodesArray,
+                                callback
+
+                            );
+                            document.getElementById("rcTransCancel").onclick = cancelPro.bind(
                                 this,
                                 nodeData,
                                 callback
@@ -7123,7 +7229,7 @@ function nodeRule(from, to, nodeType) {
         message = "";
         if (fromDetails.node_type == nodeType) {
             if (fromConnections.length > 1) {
-                message = fromDetails.label + ' cannot have more than one incoming and one outgoing connection. ';
+                message = fromDetails.label + ' can only support 2 links, one outgoing, and one incoming. ';
                 flag = true;
             }
             else {
@@ -7140,9 +7246,9 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message += "<br /> <br />" + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += "<br /> <br />" + toDetails.label + ' can only support 2 links, one outgoing, and one incoming';
                 else
-                    message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += toDetails.label + ' can only support 2 links, one outgoing, and one incoming';
                 flag = true;
             }
             else {
@@ -7257,8 +7363,12 @@ function checkMisLink() {
         }
         else if (connectedEdges.length > 1) {
 
-            if (fromCount != toCount || connectedEdges.length > 2) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> can only have one incoming and one outgoing link.</p>');
+            if ((connectedEdges.length == 2 && fromCount == 2) || (connectedEdges.length == 2 && toCount == 2)) {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support 2 links of the same type, must have one incoming and one outgoing link</p>');
+                flag = true;
+            }
+            else if (fromCount != toCount || connectedEdges.length > 2) {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support more than 2 links</p>');
                 flag = true;
             }
         }
