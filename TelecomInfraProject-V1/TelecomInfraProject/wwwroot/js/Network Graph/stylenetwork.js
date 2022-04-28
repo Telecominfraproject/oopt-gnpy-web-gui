@@ -1653,7 +1653,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcRoadmDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcRoadmCopy").onclick = copyNode.bind(
@@ -1681,7 +1681,7 @@ function draw(isImport) {
 
                             );
 
-                           
+
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
@@ -1693,7 +1693,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcAttenuatorDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcAttenuatorCopy").onclick = copyNode.bind(
@@ -1762,7 +1762,7 @@ function draw(isImport) {
                                 );
                                 document.getElementById("rcAmplifierDelete").onclick = deleteNode.bind(
                                     this,
-                                    nodeData,
+                                    nodesArray,
                                     callback
                                 );
                                 document.getElementById("rcAmplifierCopy").onclick = copyNode.bind(
@@ -1822,7 +1822,7 @@ function draw(isImport) {
                                 );
                                 document.getElementById("rcRamanAmpDelete").onclick = deleteNode.bind(
                                     this,
-                                    nodeData,
+                                    nodesArray,
                                     callback
                                 );
                                 document.getElementById("rcRamanAmpCopy").onclick = copyNode.bind(
@@ -1881,7 +1881,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcTransceiverDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcTransceiverCopy").onclick = copyNode.bind(
@@ -6058,63 +6058,51 @@ function realUpdate_Transceiver(id, rtype) {
     }
 }
 
-function deleteNode(nodeID) {
-    var nodeDetails = network.body.data.nodes.get(nodeID);
-    var node_type = nodeDetails.node_type;
-    if (nodeDetails.node_type == ILAJSON.node_type)
-        node_type = nodeDetails.amp_category;
+function deleteNode(nodeList) {
 
-    //Swal.fire({
-    //    icon: 'warning',
-    //    title: '',
-    //    text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
-    //    showCancelButton: true,
-    //    confirmButtonText: "OK",
-    //    closeOnConfirm: true,
-    //    confirmButtonColor: '#49508a',
-    //    width: 375,
-    //    height: 200,
-    //    allowOutsideClick: false
-    //}).then((result) => {
-    //    if (result.value) {
-    document.getElementById("roadmMenu").style.display = "none";
-    document.getElementById("attenuatorMenu").style.display = "none";
-    document.getElementById("ILAMenu").style.display = "none";
-    document.getElementById("amplifierMenu").style.display = "none";
-    document.getElementById("transceiverMenu").style.display = "none";
+    var nodeID;
+    for (var i = 0; i < nodeList.length; i++) {
+        nodeID = nodeList[i];
+        var nodeDetails = network.body.data.nodes.get(nodeID);
+        var node_type = nodeDetails.node_type;
+        if (nodeDetails.node_type == ILAJSON.node_type)
+            node_type = nodeDetails.amp_category;
 
-    if (network.getConnectedEdges(nodeID).length > 0) {
-        showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
+        document.getElementById("roadmMenu").style.display = "none";
+        document.getElementById("attenuatorMenu").style.display = "none";
+        document.getElementById("ILAMenu").style.display = "none";
+        document.getElementById("amplifierMenu").style.display = "none";
+        document.getElementById("transceiverMenu").style.display = "none";
 
-    } else {
-        //nodes.remove(nodeID);
+        if (network.getConnectedEdges(nodeID).length > 0) {
+            showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
 
-        if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
-            removeSpanInError(nodeID);
-            removeSpanInError(nodeID, true);
-        }
-        else if (nodeDetails.node_type == amplifierJSON.node_type) {
-            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+        } else {
+            //nodes.remove(nodeID);
+
+            if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
                 removeSpanInError(nodeID);
                 removeSpanInError(nodeID, true);
             }
-            if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-                removeSpanInError(nodeID);
-                removeSpanInError(nodeID, true);
-                removeSpanInError(nodeID, true);
+            else if (nodeDetails.node_type == amplifierJSON.node_type) {
+                if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                    removeSpanInError(nodeID);
+                    removeSpanInError(nodeID, true);
+                }
+                if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                    removeSpanInError(nodeID);
+                    removeSpanInError(nodeID, true);
+                    removeSpanInError(nodeID, true);
+                }
             }
+            else
+                removeSpanInError(nodeID);
+
+            network.body.data.nodes.remove(nodeID);
         }
-        else
-            removeSpanInError(nodeID);
-
-        network.body.data.nodes.remove(nodeID);
-        $("#stepCreateTopology").click();
-
-
     }
+    $("#stepCreateTopology").click();
     network.unselectAll();
-    //    }
-    //});
 
 }
 
