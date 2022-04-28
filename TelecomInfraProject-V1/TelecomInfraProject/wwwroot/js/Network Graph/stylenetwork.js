@@ -374,7 +374,21 @@ $(document).ready(function () {
 
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
-            fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+            var span_length = $("#txtSpan_Length").val();
+            var spanlen = parseFloat(span_length);
+            var loss_coeff = $("#txtLoss_Coefficient").val();
+            var lossCoeff = parseFloat(loss_coeff);
+            if (isNaN(span_length) || spanlen <= 0 || span_length == "" || isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+                showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
+                $("#txtLoss_Coefficient").addClass('input_error');
+            }
+            else {
+                fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+                $("#txtLoss_Coefficient").removeClass('input_error');
+            }
+        }
+        else {
+            $("#txtLoss_Coefficient").removeClass('input_error');
         }
     });
     $('#cbx_FiberALBL').change(function () {
@@ -6237,6 +6251,8 @@ function clearCbxandAccordian() {
 }
 
 function singleFiberEdit(fiberID, callback) {
+    $("#txtLoss_Coefficient").removeClass('input_error');
+    $('#cbxLength_Based_Loss').prop('checked', false);
     document.getElementById("singleFiberMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(fiberID);
     var connectedNode = network.getConnectedNodes(fiberID);
@@ -6301,6 +6317,18 @@ function updateSingleFiber(fiberID) {
     else
         $("#txtSpan_Length").removeClass('input_error');
 
+    if ($('#cbxLength_Based_Loss').is(":checked")) {
+        var loss_coeff = $("#txtLoss_Coefficient").val();
+        var lossCoeff = parseFloat(loss_coeff);
+        if (isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+            showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
+            $("#txtLoss_Coefficient").addClass('input_error');
+            return;
+        }
+        else
+            $("#txtLoss_Coefficient").removeClass('input_error');
+    }
+
     var fiberDetails = network.body.data.edges.get(fiberID);
 
     if (nameLengthValidation("txtSinlgeFiberName")) {
@@ -6343,6 +6371,7 @@ function clearSingleFiber() {
 
     $("#ddlSingleFiberType").removeClass('input_error');
     $("#txtSpan_Length").removeClass('input_error');
+    $("#txtLoss_Coefficient").removeClass('input_error');
 
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
