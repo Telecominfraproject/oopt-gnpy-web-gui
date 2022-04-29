@@ -376,22 +376,24 @@ $(document).ready(function () {
 
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
-            var span_length = $("#txtSpan_Length").val();
+            var span_length = $("#txtSpan_Length").val().trim();
             var spanlen = parseFloat(span_length);
-            var loss_coeff = $("#txtLoss_Coefficient").val();
+            var loss_coeff = $("#txtLoss_Coefficient").val().trim();
             var lossCoeff = parseFloat(loss_coeff);
             if (isNaN(span_length) || spanlen <= 0 || span_length == "" || isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+                $('#cbxLength_Based_Loss').prop('checked', false);
                 showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
-                $("#txtLoss_Coefficient").addClass('input_error');
+
             }
             else {
                 fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
-                $("#txtLoss_Coefficient").removeClass('input_error');
+
             }
         }
         else {
-            $("#txtLoss_Coefficient").removeClass('input_error');
+            $("#txtSpan_Loss").val('');
         }
+
     });
     $('#cbx_FiberALBL').change(function () {
         if (this.checked) {
@@ -1364,6 +1366,7 @@ function draw(isImport) {
                 showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                 network.body.nodes[clickedNode.id].selected = false;
                 network.redraw();
+                nodeSelect = true;
                 return;
 
             }
@@ -1372,6 +1375,7 @@ function draw(isImport) {
                     showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                     network.body.nodes[clickedNode.id].selected = false;
                     network.redraw();
+                    nodeSelect = true;
                     return;
                 }
                 else
@@ -5439,10 +5443,13 @@ function updateRoadm(nodeID) {
 
             if (nodeID.length > 1) {
                 for (var i = 0; i < nodeID.length; i++) {
-                    network.body.data.nodes.update({
-                        id: nodeID[i], roadm_type: $("#ddlRoadmType").val()
-                    });
-                    realUpdate_Roadm(nodeID[i], $("#ddlRoadmType").val());
+
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + roadmJSON.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeID[i], roadm_type: $("#ddlRoadmType").val()
+                        });
+                        realUpdate_Roadm(nodeID[i], $("#ddlRoadmType").val());
+                    }
                 }
             } else {
                 network.body.data.nodes.update({
@@ -5691,10 +5698,13 @@ function updateAmplifier(nodeID) {
 
             if (nodeID.length > 1) {
                 for (var i = 0; i < nodeID.length; i++) {
-                    network.body.data.nodes.update({
-                        id: nodeID[i], amp_type: $("#ddlAmplifierType").val()
-                    });
-                    realUpdate_Amplifier(nodeID[i], $("#ddlAmplifierType").val());
+
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeID[i], amp_type: $("#ddlAmplifierType").val()
+                        });
+                        realUpdate_Amplifier(nodeID[i], $("#ddlAmplifierType").val());
+                    }
                 }
             } else {
                 network.body.data.nodes.update({
@@ -5817,10 +5827,12 @@ function updateRamanAmp(nodeID) {
         if (amp_category == ramanampJSON.amp_category) {
             if (nodeID.length > 1) {
                 for (var i = 0; i < nodeID.length; i++) {
-                    network.body.data.nodes.update({
-                        id: nodeID[i], amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
-                    });
-                    realUpdate_RamanAmp(nodeID[i], $("#ddlRamanAmpType").val());
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeID[i], amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
+                        });
+                        realUpdate_RamanAmp(nodeID[i], $("#ddlRamanAmpType").val());
+                    }
                 }
             } else {
                 network.body.data.nodes.update({
@@ -5916,80 +5928,159 @@ function updateTransceiver(nodeID) {
 
     if (nameLengthValidation("txtTransceiverName")) {
 
-        for (var i = 0; i < nodeID.length; i++) {
-            var id = nodeID[i];
-            var label = $("#txtTransceiverName").val().trim();
-            var nodeDetails = network.body.data.nodes.get(id);
-            var transceiverType = $("#ddlTransceiverType").val();
-            if (transceiverType == null || transceiverType == "") {
-                showMessage(alertType.Error, 'Please select transceiver type');
-                $("#ddlTransceiverType").addClass('input_error');
-                return;
-            }
-            else
-                $("#ddlTransceiverType").removeClass('input_error');
-
-
-            var connectedEdges = network.getConnectedEdges(id);
-            var fromTransType = "";
-            var toTransType = "";
-            var isOk = true;
-            $.each(connectedEdges, function (index, item) {
-
-                if (!isOk)
-                    return;
-                var edgeDetails = network.body.data.edges.get(item);
-                if (edgeDetails.component_type == serviceJSON.component_type) {
-                    if (edgeDetails.from == id) {
-
-                        fromTransType = transceiverType;
-                        toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
-                    }
-                    else if (edgeDetails.to == id) {
-                        toTransType = transceiverType;
-                        fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
-                    }
-
-                    if (toTransType != fromTransType) {
-                        isOk = false;
-                        showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+        if (nodeID.length > 1) {
+            for (var i = 0; i < nodeID.length; i++) {
+                if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image) {
+                    var id = nodeID[i];
+                    var label = $("#txtTransceiverName").val().trim();
+                    var nodeDetails = network.body.data.nodes.get(id);
+                    var transceiverType = $("#ddlTransceiverType").val();
+                    if (transceiverType == null || transceiverType == "") {
+                        showMessage(alertType.Error, 'Please select transceiver type');
+                        $("#ddlTransceiverType").addClass('input_error');
                         return;
                     }
-                }
+                    else
+                        $("#ddlTransceiverType").removeClass('input_error');
 
-            });
 
-            if (isOk) {
-                if (nodeDetails.node_type == transceiverJSON.node_type) {
+                    var connectedEdges = network.getConnectedEdges(id);
+                    var fromTransType = "";
+                    var toTransType = "";
+                    var isOk = true;
+                    $.each(connectedEdges, function (index, item) {
 
-                    if (nodeID.length > 1) {
+                        if (!isOk)
+                            return;
+                        var edgeDetails = network.body.data.edges.get(item);
+                        if (edgeDetails.component_type == serviceJSON.component_type) {
+                            if (edgeDetails.from == id) {
 
-                        network.body.data.nodes.update({
-                            id: id, transceiver_type: transceiverType
-                        });
-                        realUpdate_Transceiver(id, "");
+                                fromTransType = transceiverType;
+                                toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
+                            }
+                            else if (edgeDetails.to == id) {
+                                toTransType = transceiverType;
+                                fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
+                            }
 
-                    } else {
-                        network.body.data.nodes.update({
-                            id: id, label: label, transceiver_type: transceiverType
-                        });
-                        realUpdate_Transceiver(id, "");
+                            if (toTransType != fromTransType) {
+                                isOk = false;
+                                showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                                return;
+                            }
+                        }
+
+                    });
+
+                    if (isOk) {
+                        if (nodeDetails.node_type == transceiverJSON.node_type) {
+
+                            if (nodeID.length > 1) {
+
+                                network.body.data.nodes.update({
+                                    id: id, transceiver_type: transceiverType
+                                });
+                                realUpdate_Transceiver(id, "");
+
+                            } else {
+                                network.body.data.nodes.update({
+                                    id: id, label: label, transceiver_type: transceiverType
+                                });
+                                realUpdate_Transceiver(id, "");
+                            }
+
+                            //if (tempEdge.length > 1) {
+                            //    removeSpanInError(id, true);
+                            //}
+                            //else {
+
+                            //    removeID = "#spanTF" + id.replace(/\s/g, '');
+                            //    $(removeID).remove();
+                            //}
+
+
+                        }
                     }
-
-                    //if (tempEdge.length > 1) {
-                    //    removeSpanInError(id, true);
-                    //}
-                    //else {
-
-                    //    removeID = "#spanTF" + id.replace(/\s/g, '');
-                    //    $(removeID).remove();
-                    //}
-
 
                 }
             }
         }
+        else {
+                var id = nodeID[nodeID.length-1];
+                var label = $("#txtTransceiverName").val().trim();
+                var nodeDetails = network.body.data.nodes.get(id);
+                var transceiverType = $("#ddlTransceiverType").val();
+                if (transceiverType == null || transceiverType == "") {
+                    showMessage(alertType.Error, 'Please select transceiver type');
+                    $("#ddlTransceiverType").addClass('input_error');
+                    return;
+                }
+                else
+                    $("#ddlTransceiverType").removeClass('input_error');
 
+
+                var connectedEdges = network.getConnectedEdges(id);
+                var fromTransType = "";
+                var toTransType = "";
+                var isOk = true;
+                $.each(connectedEdges, function (index, item) {
+
+                    if (!isOk)
+                        return;
+                    var edgeDetails = network.body.data.edges.get(item);
+                    if (edgeDetails.component_type == serviceJSON.component_type) {
+                        if (edgeDetails.from == id) {
+
+                            fromTransType = transceiverType;
+                            toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
+                        }
+                        else if (edgeDetails.to == id) {
+                            toTransType = transceiverType;
+                            fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
+                        }
+
+                        if (toTransType != fromTransType) {
+                            isOk = false;
+                            showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                            return;
+                        }
+                    }
+
+                });
+
+                if (isOk) {
+                    if (nodeDetails.node_type == transceiverJSON.node_type) {
+
+                        if (nodeID.length > 1) {
+
+                            network.body.data.nodes.update({
+                                id: id, transceiver_type: transceiverType
+                            });
+                            realUpdate_Transceiver(id, "");
+
+                        } else {
+                            network.body.data.nodes.update({
+                                id: id, label: label, transceiver_type: transceiverType
+                            });
+                            realUpdate_Transceiver(id, "");
+                        }
+
+                        //if (tempEdge.length > 1) {
+                        //    removeSpanInError(id, true);
+                        //}
+                        //else {
+
+                        //    removeID = "#spanTF" + id.replace(/\s/g, '');
+                        //    $(removeID).remove();
+                        //}
+
+
+                    }
+                }
+
+            
+        }
         clearTransceiver();
     }
 
@@ -6224,7 +6315,7 @@ function singleFiberEdit(fiberID, callback) {
     $("#txtConnector_OUT").val(edgeDetails.connector_out);
     $("#txtSpan_Loss").val(edgeDetails.span_loss);
 
-    var span_length = $("#txtSpan_Length").val();
+    var span_length = $("#txtSpan_Length").val().trim();
     var spanlen = parseFloat(span_length);
     if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
         $("#txtSpan_Length").addClass('input_error');
@@ -6252,8 +6343,8 @@ function updateSingleFiber(fiberID) {
     var id = fiberID;
     var label = $("#txtSinlgeFiberName").val().trim();
     var fiber_type = $("#ddlSingleFiberType").val();
-    var span_length = $("#txtSpan_Length").val();
-    var loss_coefficient = $("#txtLoss_Coefficient").val();
+    var span_length = $("#txtSpan_Length").val().trim();
+    var loss_coefficient = $("#txtLoss_Coefficient").val().trim();
     var connector_in = $("#txtConnector_IN").val();
     var connector_out = $("#txtConnector_OUT").val();
     var span_loss = $("#txtSpan_Loss").val();
@@ -6276,15 +6367,11 @@ function updateSingleFiber(fiberID) {
         $("#txtSpan_Length").removeClass('input_error');
 
     if ($('#cbxLength_Based_Loss').is(":checked")) {
-        var loss_coeff = $("#txtLoss_Coefficient").val();
-        var lossCoeff = parseFloat(loss_coeff);
-        if (isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+        var lossCoeff = parseFloat(loss_coefficient);
+        if (isNaN(loss_coefficient) || lossCoeff <= 0 || loss_coefficient == "") {
             showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
-            $("#txtLoss_Coefficient").addClass('input_error');
             return;
         }
-        else
-            $("#txtLoss_Coefficient").removeClass('input_error');
     }
 
     var fiberDetails = network.body.data.edges.get(fiberID);
@@ -6329,7 +6416,6 @@ function clearSingleFiber() {
 
     $("#ddlSingleFiberType").removeClass('input_error');
     $("#txtSpan_Length").removeClass('input_error');
-    $("#txtLoss_Coefficient").removeClass('input_error');
 
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
@@ -7781,6 +7867,7 @@ function removeSpanInError(item, transUpdate) {
         id: nodeDetails.id, image: DIR + image, size: roadmJSON.size, is_error: false
     });
 
+    console.log(nodeDetails.id, DIR + image);
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
 
@@ -8036,8 +8123,69 @@ function remove_NodeHighlight() {
         var nodeDetails = hNodes[i];
         data.nodes.off("*", change_history_back);
         data.edges.off("*", change_history_back);
-        network.body.data.nodes.update({
-            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-        });
+
+        if (nodeDetails.node_type == roadmJSON.node_type) {
+            if (nodeDetails.image != DIR + roadmJSON.image) {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                });
+            }
+            else {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, is_highlight: false
+                });
+            }
+        }
+        else if (nodeDetails.node_type == fusedJSON.node_type) {
+            if (nodeDetails.image != DIR + fusedJSON.image) {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                });
+            }
+            else {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, is_highlight: false
+                });
+            }
+        }
+        else if (nodeDetails.node_type == transceiverJSON.node_type) {
+            if (nodeDetails.image != DIR + transceiverJSON.image) {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                });
+            }
+            else {
+                network.body.data.nodes.update({
+                    id: nodeDetails.id, is_highlight: false
+                });
+            }
+        }
+        else if (nodeDetails.node_type == amplifierJSON.node_type) {
+            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                if (nodeDetails.image != DIR + amplifierJSON.image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
+                else {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, is_highlight: false
+                    });
+                }
+            }
+            else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                if (nodeDetails.image != DIR + ramanampJSON.image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
+                else {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, is_highlight: false
+                    });
+                }
+            }
+        }
+
     }
 }
