@@ -11,15 +11,18 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\amptriangle.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Analyze icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\analyze.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Apply_template.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\back-map.jpg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\back.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\cam.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\camera icon.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\cancel.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\capture-image.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\client logo 01.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\client logo 02.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\copy icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\copy.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Copy_template.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Create Network icon.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\create-f.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\create-icon.png
@@ -58,6 +61,11 @@ D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\ne
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\help.jpg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\help1.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Hero img.svg
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\h_amplifier.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\h_attenuator.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\h_raman.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\h_roadm.png
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\h_transceiver.png
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Icon awesome-camera.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\Icon ionic-ios-expand.svg
 D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\PubTmp\Out\wwwroot\Assets\img\ILA.svg

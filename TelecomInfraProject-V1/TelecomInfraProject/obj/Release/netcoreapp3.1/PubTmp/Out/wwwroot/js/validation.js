@@ -9,7 +9,38 @@
         else
             $("#txtSpan_Length").removeClass('input_error');
 
+        if ($('#cbxLength_Based_Loss').is(":checked")) {
+            fiberCalc();
+                
+        }
     });
+    $("#txtLoss_Coefficient").change(function () {
+        if ($('#cbxLength_Based_Loss').is(":checked")) {
+            var span_length = $("#txtLoss_Coefficient").val().trim();
+            var spanlen = parseFloat(span_length);
+            if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
+                $("#txtLoss_Coefficient").addClass('input_error');
+                return;
+            }
+            else
+                $("#txtLoss_Coefficient").removeClass('input_error');
+
+            fiberCalc();
+        }
+        else
+            $("#txtLoss_Coefficient").removeClass('input_error');
+
+        
+
+    });
+    function fiberCalc() {
+        var span_length = $("#txtSpan_Length").val();
+        var spanlen = parseFloat(span_length);
+        var loss_coeff = $("#txtLoss_Coefficient").val();
+        var lossCoeff = parseFloat(loss_coeff);
+        if (!isNaN(span_length) || spanlen >= 0 || span_length != "" || !isNaN(loss_coeff) || lossCoeff >= 0 || loss_coeff != "")
+            fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+    }
     $("#ddlSingleFiberType").change(function () {
         if ($(this).val()=="") {
             $("#ddlSingleFiberType").addClass('input_error');

@@ -75,6 +75,8 @@ var tBandwidth = "";
 var eqptData = "";
 var bullet = "&#9632; ";
 
+var nodeSelect = false;
+
 var hiddenEdgeTextOptions = {
     edges: {
         font: {
@@ -374,7 +376,21 @@ $(document).ready(function () {
 
     $('#cbxLength_Based_Loss').change(function () {
         if (this.checked) {
-            fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+            var span_length = $("#txtSpan_Length").val();
+            var spanlen = parseFloat(span_length);
+            var loss_coeff = $("#txtLoss_Coefficient").val();
+            var lossCoeff = parseFloat(loss_coeff);
+            if (isNaN(span_length) || spanlen <= 0 || span_length == "" || isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+                showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
+                $("#txtLoss_Coefficient").addClass('input_error');
+            }
+            else {
+                fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+                $("#txtLoss_Coefficient").removeClass('input_error');
+            }
+        }
+        else {
+            $("#txtLoss_Coefficient").removeClass('input_error');
         }
     });
     $('#cbx_FiberALBL').change(function () {
@@ -1290,12 +1306,34 @@ function draw(isImport) {
         //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
         $("#hoverDiv").hide();
         //console.log(params.pointer.canvas.x, params.pointer.canvas.y);
+
+        if (!params.event.srcEvent.ctrlKey)
+            remove_NodeHighlight();
+        else {
+
+            var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
+            var nodeDetails = network.body.data.nodes.get(clickedNode.id);
+            if (!nodeSelect) {
+                if (!network.body.nodes[clickedNode.id].selected) {
+                    if (nodeDetails.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                        });
+                    }
+                }
+            }
+
+        }
+        nodeSelect = false;
+
     });
+
     network.on("selectEdge", function (data) {
         //nodeMode = "";
 
     });
     network.on("selectNode", function (params) {
+
         //if (isExpandedView || isImportJSON) {
         //    return;
         //}
@@ -1303,7 +1341,8 @@ function draw(isImport) {
         var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
         var nodeDetails = network.body.data.nodes.get(clickedNode.id);
         var copyDetails;
-        if (isCopyPara || (!isCopyPara && params.nodes.length > 1 && params.event.srcEvent.ctrlKey)) {
+        //if (isCopyPara || (!isCopyPara && params.nodes.length > 1 && params.event.srcEvent.ctrlKey)) {
+        if (isCopyPara || (!isCopyPara && params.event.srcEvent.ctrlKey)) {
 
             if (isCopyPara)
                 copyDetails = network.body.data.nodes.get(copiedNodeID);
@@ -1338,111 +1377,42 @@ function draw(isImport) {
                 else
                     $('#toast').toast('hide');
             }
+
+            if (params.event.srcEvent.ctrlKey) {
+                var image;
+                if (nodeDetails.node_type == roadmJSON.node_type) {
+                    image = roadmJSON.h_image;
+                }
+                else if (nodeDetails.node_type == fusedJSON.node_type) {
+                    image = fusedJSON.h_image;
+                }
+                else if (nodeDetails.node_type == transceiverJSON.node_type) {
+                    image = transceiverJSON.h_image;
+                }
+                else if (nodeDetails.node_type == amplifierJSON.node_type) {
+                    if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                        image = amplifierJSON.h_image;
+                    }
+                    else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                        image = ramanampJSON.h_image;
+                    }
+                }
+
+                if (image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: DIR + image, h_image: nodeDetails.image, is_highlight: true
+                    });
+                }
+
+                nodeSelect = true;
+            }
+            else {
+                nodeSelect = false;
+            }
+
         }
-        //else {
-        //    if (params.nodes.length > 1 && params.event.srcEvent.ctrlKey) {
-        //        var nodeDetails = network.body.data.nodes.get(params.nodes[0]);
-        //        var destDetails = network.body.data.nodes.get(clickedNode.id);
-        //        if (nodeDetails.node_type != destDetails.node_type) {
-        //            showMessage(alertType.Error, 'Please select same type of node (' + nodeDetails.node_type + ')');
-        //            network.body.nodes[clickedNode.id].selected = false;
-        //            network.redraw();
-        //            return;
-        //        }
-        //        else
-        //            $('#toast').toast('hide');
-        //    }
-        //}
 
 
-        //var deletenode = network.getConnectedEdges(clickedNode.id);
-        //localStorage.setItem("deletenodeconectededge", deletenode.length);
-        //if (isDualFiberMode == 1 || isSingleFiberMode == 1) {
-        //    isAddService = 0;
-        //    addServicData = {
-        //        from: '',
-        //        to: ''
-        //    };
-        //    isDualPatchMode = 0;
-        //    isSinglePatchMode = 0;
-        //    addPatchData = {
-        //        from: '',
-        //        to: ''
-        //    };
-        //    if (addEdgeData.from == '')
-        //        addEdgeData.from = clickedNode.options.id
-        //    else if (addEdgeData.to == '') {
-        //        if (addEdgeData.from == clickedNode.options.id) {
-        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-        //            return;
-        //        }
-        //        addEdgeData.to = clickedNode.options.id
-        //    }
-
-        //    if (addEdgeData.from != '' && addEdgeData.to != '')
-        //        addFiber();
-        //}
-        //if (isAddService == 1) {
-        //    isDualFiberMode = 0;
-        //    isSingleFiberMode = 0;
-        //    isDualPatchMode = 0;
-        //    isSinglePatchMode = 0;
-        //    addEdgeData = {
-        //        from: '',
-        //        to: ''
-        //    };
-        //    addPatchData = {
-        //        from: '',
-        //        to: ''
-        //    };
-
-        //    if (addServiceData.from == '')
-        //        addServiceData.from = clickedNode.options.id
-        //    else if (addServiceData.to == '') {
-        //        if (addServiceData.from == clickedNode.options.id) {
-        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-        //            return;
-        //        }
-        //        addServiceData.to = clickedNode.options.id
-        //    }
-
-        //    if (addServiceData.from != '' && addServiceData.to != '')
-        //        addService();
-
-        //}
-        //if (isDualPatchMode == 1 || isSinglePatchMode == 1) {
-        //    isDualFiberMode = 0;
-        //    isSingleFiberMode = 0;
-        //    isAddService = 0;
-        //    addEdgeData = {
-        //        from: '',
-        //        to: ''
-        //    };
-        //    addServiceData = {
-        //        from: '',
-        //        to: ''
-        //    };
-
-        //    if (addPatchData.from == '')
-        //        addPatchData.from = clickedNode.options.id
-        //    else if (addPatchData.to == '') {
-        //        if (addPatchData.from == clickedNode.options.id) {
-        //            showMessage(alertType.Error, 'Please click destination ' + roadmJSON.component_type);
-        //            return;
-        //        }
-        //        addPatchData.to = clickedNode.options.id
-        //    }
-
-        //    if (addPatchData.from != '' && addPatchData.to != '') {
-        //        if (isDualPatchMode == 1)
-        //            addDualPatch();
-        //        if (isSinglePatchMode == 1)
-        //            addSinglePatch();
-
-        //    }
-
-
-        //}
     });
     network.on("doubleClick", function (data) {
         //var type = _nodesDB().first();
@@ -1548,24 +1518,24 @@ function draw(isImport) {
 
                         $('#toast').toast('hide');
 
-                        if (isCopyPara) {
+                        //if (isCopyPara) {
 
-                            showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
-                            document.getElementById("rcProCancel").onclick = cancelPro.bind(
-                                this,
-                                nodeData,
-                                callback
+                        //    showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
+                        //    document.getElementById("rcProCancel").onclick = cancelPro.bind(
+                        //        this,
+                        //        nodeData,
+                        //        callback
 
-                            );
+                        //    );
 
-                            document.getElementById("rcApplyPro").onclick = applyPro.bind(
-                                this,
-                                nodesArray,
-                                callback
+                        //    document.getElementById("rcApplyPro").onclick = applyPro.bind(
+                        //        this,
+                        //        nodesArray,
+                        //        callback
 
-                            );
-                            return;
-                        }
+                        //    );
+                        //    return;
+                        //}
 
                     }
                 }
@@ -1620,15 +1590,31 @@ function draw(isImport) {
                 {
                     if (nodeData != undefined) {
                         if (type == roadmJSON.node_type) {
-                            showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
-                            if (nodesArray.length > 1) {
-                                $("#rcRoadmCopy").hide();
+
+
+                            $("#rcRoadmCopy").show();
+                            $("#rcRoadmApplyPro").hide();
+                            $("#rcRoadmCopyPara").show();
+                            $("#rcRoadmCancel").hide();
+
+                            if (isCopyPara) {
+                                $("#rcRoadmCopy").show();
+                                $("#rcRoadmApplyPro").show();
                                 $("#rcRoadmCopyPara").hide();
+                                $("#rcRoadmCancel").show();
                             }
                             else {
-                                $("#rcRoadmCopy").show();
-                                $("#rcRoadmCopyPara").show();
+                                if (nodesArray.length > 1) {
+                                    $("#rcRoadmCopy").hide();
+                                    $("#rcRoadmCopyPara").hide();
+                                }
+                                else {
+                                    $("#rcRoadmCopy").show();
+                                    $("#rcRoadmCopyPara").show();
+                                }
                             }
+
+                            showContextMenu(data.event.pageX, data.event.pageY, "roadmMenu");
                             document.getElementById("rcRoadmEdit").onclick = roadmEdit.bind(
                                 this,
                                 nodesArray,
@@ -1637,7 +1623,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcRoadmDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcRoadmCopy").onclick = copyNode.bind(
@@ -1652,6 +1638,20 @@ function draw(isImport) {
                                 callback
 
                             );
+                            document.getElementById("rcRoadmApplyPro").onclick = applyPro.bind(
+                                this,
+                                nodesArray,
+                                callback
+
+                            );
+                            document.getElementById("rcRoadmCancel").onclick = cancelPro.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
+
+
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
@@ -1663,7 +1663,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcAttenuatorDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcAttenuatorCopy").onclick = copyNode.bind(
@@ -1701,6 +1701,12 @@ function draw(isImport) {
                                 );
                             }
                             else if (amp_category == amplifierJSON.amp_category) {
+
+                                $("#rcAmplifierCopy").show();
+                                $("#rcAmplifierCopyPara").show();
+                                $("#rcAmpApplyPro").hide();
+                                $("#rcAmpCancel").hide();
+
                                 if (nodesArray.length > 1) {
                                     $("#rcAmplifierCopy").hide();
                                     $("#rcAmplifierCopyPara").hide();
@@ -1709,6 +1715,14 @@ function draw(isImport) {
                                     $("#rcAmplifierCopy").show();
                                     $("#rcAmplifierCopyPara").show();
                                 }
+
+                                if (isCopyPara) {
+                                    $("#rcAmplifierCopy").show();
+                                    $("#rcAmplifierCopyPara").hide();
+                                    $("#rcAmpApplyPro").show();
+                                    $("#rcAmpCancel").show();
+                                }
+
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
                                 document.getElementById("rcAmplifierEdit").onclick = amplifierEdit.bind(
                                     this,
@@ -1718,7 +1732,7 @@ function draw(isImport) {
                                 );
                                 document.getElementById("rcAmplifierDelete").onclick = deleteNode.bind(
                                     this,
-                                    nodeData,
+                                    nodesArray,
                                     callback
                                 );
                                 document.getElementById("rcAmplifierCopy").onclick = copyNode.bind(
@@ -1733,8 +1747,26 @@ function draw(isImport) {
                                     callback
 
                                 );
+                                document.getElementById("rcAmpApplyPro").onclick = applyPro.bind(
+                                    this,
+                                    nodesArray,
+                                    callback
+
+                                );
+                                document.getElementById("rcAmpCancel").onclick = cancelPro.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                             else if (amp_category == ramanampJSON.amp_category) {
+
+                                $("#rcRamanAmpCopy").show();
+                                $("#rcRamanAmpCopyPara").show();
+                                $("#rcRamanCancel").hide();
+                                $("#rcRamanApplyPro").hide();
+
                                 if (nodesArray.length > 1) {
                                     $("#rcRamanAmpCopy").hide();
                                     $("#rcRamanAmpCopyPara").hide();
@@ -1743,6 +1775,14 @@ function draw(isImport) {
                                     $("#rcRamanAmpCopy").show();
                                     $("#rcRamanAmpCopyPara").show();
                                 }
+
+                                if (isCopyPara) {
+                                    $("#rcRamanAmpCopy").show();
+                                    $("#rcRamanAmpCopyPara").hide();
+                                    $("#rcRamanApplyPro").show();
+                                    $("#rcRamanCancel").show();
+                                }
+
                                 showContextMenu(data.event.pageX, data.event.pageY, "ramanAmpMenu");
                                 document.getElementById("rcRamanAmpEdit").onclick = ramanAmpEdit.bind(
                                     this,
@@ -1752,7 +1792,7 @@ function draw(isImport) {
                                 );
                                 document.getElementById("rcRamanAmpDelete").onclick = deleteNode.bind(
                                     this,
-                                    nodeData,
+                                    nodesArray,
                                     callback
                                 );
                                 document.getElementById("rcRamanAmpCopy").onclick = copyNode.bind(
@@ -1767,9 +1807,27 @@ function draw(isImport) {
                                     callback
 
                                 );
+                                document.getElementById("rcRamanApplyPro").onclick = applyPro.bind(
+                                    this,
+                                    nodesArray,
+                                    callback
+
+                                );
+                                document.getElementById("rcRamanCancel").onclick = cancelPro.bind(
+                                    this,
+                                    nodeData,
+                                    callback
+
+                                );
                             }
                         }
                         else if (type == transceiverJSON.node_type) {
+
+                            $("#rcTransceiverCopy").show();
+                            $("#rcTransceiverCopyPara").show();
+                            $("#rcTransApplyPro").hide();
+                            $("#rcTransCancel").hide();
+
                             if (nodesArray.length > 1) {
                                 $("#rcTransceiverCopy").hide();
                                 $("#rcTransceiverCopyPara").hide();
@@ -1777,6 +1835,12 @@ function draw(isImport) {
                             else {
                                 $("#rcTransceiverCopy").show();
                                 $("#rcTransceiverCopyPara").show();
+                            }
+                            if (isCopyPara) {
+                                $("#rcTransceiverCopy").show();
+                                $("#rcTransceiverCopyPara").hide();
+                                $("#rcTransApplyPro").show();
+                                $("#rcTransCancel").show();
                             }
                             showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
                             document.getElementById("rcTransceiverEdit").onclick = transceiverEdit.bind(
@@ -1787,7 +1851,7 @@ function draw(isImport) {
                             );
                             document.getElementById("rcTransceiverDelete").onclick = deleteNode.bind(
                                 this,
-                                nodeData,
+                                nodesArray,
                                 callback
                             );
                             document.getElementById("rcTransceiverCopy").onclick = copyNode.bind(
@@ -1797,6 +1861,18 @@ function draw(isImport) {
 
                             );
                             document.getElementById("rcTransceiverCopyPara").onclick = copyNodePro.bind(
+                                this,
+                                nodeData,
+                                callback
+
+                            );
+                            document.getElementById("rcTransApplyPro").onclick = applyPro.bind(
+                                this,
+                                nodesArray,
+                                callback
+
+                            );
+                            document.getElementById("rcTransCancel").onclick = cancelPro.bind(
                                 this,
                                 nodeData,
                                 callback
@@ -3762,6 +3838,7 @@ function clearCopiedData() {
     $('#toast').toast('hide');
     document.getElementById("templateMenu").style.display = "none";
     $("#stepCreateTopology").click();
+    remove_NodeHighlight();
 }
 
 function copyNode(nodeID, callback) {
@@ -3870,6 +3947,7 @@ function pasteNode(nodeId) {
 }
 function UnSelectAll() {
     network.unselectAll();
+    remove_NodeHighlight();
 }
 
 function wholePage() {
@@ -4537,7 +4615,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
         data.edges.on("*", change_history_back);
 
     }
-    network.unselectAll();
+    UnSelectAll();
     network.addEdgeMode();
 }
 
@@ -5412,8 +5490,8 @@ function clearRoadm() {
     $("#divRoadmPro").empty();
     $("#ddlRoadmType").val('');
     closeDrawer('roadm');
-    network.unselectAll();
     _roadmListDB().remove();
+    UnSelectAll();
 }
 
 function realUpdate_Roadm(id, rtype) {
@@ -5484,7 +5562,7 @@ function updateAttenuator(nodeID) {
 function clearAttenuator() {
     $("#txtAttenuatorName").val('');
     closeDrawer('attenuator');
-    network.unselectAll();
+    UnSelectAll();
 }
 
 function ILAEdit(nodeID, callback) {
@@ -5556,7 +5634,7 @@ function clearILA() {
     $("#ddlBoosterType").val('');
     $("#divILAPro").empty();
     closeDrawer('ILA');
-    network.unselectAll();
+    UnSelectAll();
     _roadmListDB().remove();
 }
 
@@ -5636,7 +5714,7 @@ function clearAmplifier() {
     $("#txtAmplifierName").val('');
     $("#ddlAmplifierType").val('');
     closeDrawer('amplifier');
-    network.unselectAll();
+    UnSelectAll();
 }
 function realUpdate_Amplifier(id, rtype) {
     var amptype = rtype;
@@ -5764,7 +5842,7 @@ function clearRamanAmp() {
     $("#ddlRamanAmpType").val('');
     $("#ddlRamanAmpCategory").val('');
     closeDrawer('ramanamp');
-    network.unselectAll();
+    UnSelectAll();
 }
 function realUpdate_RamanAmp(id, rtype) {
     var amptype = rtype;
@@ -5921,7 +5999,7 @@ function clearTransceiver() {
     $("#ddlTransceiverType").val('');
     $("#ddlDataRate").val('');
     closeDrawer('transceiver');
-    network.unselectAll();
+    UnSelectAll();
 }
 function realUpdate_Transceiver(id, rtype) {
     var connectedEges = network.getConnectedEdges(id);
@@ -5952,63 +6030,51 @@ function realUpdate_Transceiver(id, rtype) {
     }
 }
 
-function deleteNode(nodeID) {
-    var nodeDetails = network.body.data.nodes.get(nodeID);
-    var node_type = nodeDetails.node_type;
-    if (nodeDetails.node_type == ILAJSON.node_type)
-        node_type = nodeDetails.amp_category;
+function deleteNode(nodeList) {
 
-    //Swal.fire({
-    //    icon: 'warning',
-    //    title: '',
-    //    text: 'Do you want to delete ' + node_type + ' : ' + nodeDetails.label + ' ?',
-    //    showCancelButton: true,
-    //    confirmButtonText: "OK",
-    //    closeOnConfirm: true,
-    //    confirmButtonColor: '#49508a',
-    //    width: 375,
-    //    height: 200,
-    //    allowOutsideClick: false
-    //}).then((result) => {
-    //    if (result.value) {
-    document.getElementById("roadmMenu").style.display = "none";
-    document.getElementById("attenuatorMenu").style.display = "none";
-    document.getElementById("ILAMenu").style.display = "none";
-    document.getElementById("amplifierMenu").style.display = "none";
-    document.getElementById("transceiverMenu").style.display = "none";
+    var nodeID;
+    for (var i = 0; i < nodeList.length; i++) {
+        nodeID = nodeList[i];
+        var nodeDetails = network.body.data.nodes.get(nodeID);
+        var node_type = nodeDetails.node_type;
+        if (nodeDetails.node_type == ILAJSON.node_type)
+            node_type = nodeDetails.amp_category;
 
-    if (network.getConnectedEdges(nodeID).length > 0) {
-        showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
+        document.getElementById("roadmMenu").style.display = "none";
+        document.getElementById("attenuatorMenu").style.display = "none";
+        document.getElementById("ILAMenu").style.display = "none";
+        document.getElementById("amplifierMenu").style.display = "none";
+        document.getElementById("transceiverMenu").style.display = "none";
 
-    } else {
-        //nodes.remove(nodeID);
+        if (network.getConnectedEdges(nodeID).length > 0) {
+            showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
 
-        if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
-            removeSpanInError(nodeID);
-            removeSpanInError(nodeID, true);
-        }
-        else if (nodeDetails.node_type == amplifierJSON.node_type) {
-            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+        } else {
+            //nodes.remove(nodeID);
+
+            if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
                 removeSpanInError(nodeID);
                 removeSpanInError(nodeID, true);
             }
-            if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-                removeSpanInError(nodeID);
-                removeSpanInError(nodeID, true);
-                removeSpanInError(nodeID, true);
+            else if (nodeDetails.node_type == amplifierJSON.node_type) {
+                if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                    removeSpanInError(nodeID);
+                    removeSpanInError(nodeID, true);
+                }
+                if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                    removeSpanInError(nodeID);
+                    removeSpanInError(nodeID, true);
+                    removeSpanInError(nodeID, true);
+                }
             }
+            else
+                removeSpanInError(nodeID);
+
+            network.body.data.nodes.remove(nodeID);
         }
-        else
-            removeSpanInError(nodeID);
-
-        network.body.data.nodes.remove(nodeID);
-        $("#stepCreateTopology").click();
-
-
     }
-    network.unselectAll();
-    //    }
-    //});
+    $("#stepCreateTopology").click();
+    UnSelectAll();
 
 }
 
@@ -6128,7 +6194,7 @@ function clearDualFiber() {
     clearCbxandAccordian();
 
     closeDrawer('dualfiber');
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
 }
 function clearCbxandAccordian() {
@@ -6143,6 +6209,8 @@ function clearCbxandAccordian() {
 }
 
 function singleFiberEdit(fiberID, callback) {
+    $("#txtLoss_Coefficient").removeClass('input_error');
+    $('#cbxLength_Based_Loss').prop('checked', false);
     document.getElementById("singleFiberMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(fiberID);
     var connectedNode = network.getConnectedNodes(fiberID);
@@ -6207,6 +6275,18 @@ function updateSingleFiber(fiberID) {
     else
         $("#txtSpan_Length").removeClass('input_error');
 
+    if ($('#cbxLength_Based_Loss').is(":checked")) {
+        var loss_coeff = $("#txtLoss_Coefficient").val();
+        var lossCoeff = parseFloat(loss_coeff);
+        if (isNaN(loss_coeff) || lossCoeff <= 0 || loss_coeff == "") {
+            showMessage(alertType.Error, "Length based loss requires span length and loss coefficient to be entered");
+            $("#txtLoss_Coefficient").addClass('input_error');
+            return;
+        }
+        else
+            $("#txtLoss_Coefficient").removeClass('input_error');
+    }
+
     var fiberDetails = network.body.data.edges.get(fiberID);
 
     if (nameLengthValidation("txtSinlgeFiberName")) {
@@ -6249,10 +6329,11 @@ function clearSingleFiber() {
 
     $("#ddlSingleFiberType").removeClass('input_error');
     $("#txtSpan_Length").removeClass('input_error');
+    $("#txtLoss_Coefficient").removeClass('input_error');
 
     $('#cbxLength_Based_Loss').prop('checked', false);
     closeDrawer('singlefiber');
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
 }
 
@@ -6319,7 +6400,7 @@ function deleteFiber(fiberID) {
     network.body.data.edges.remove(fiberID);
     multipleFiberService(fiber.from, fiber.to);
     nodeValidationInEdge(fiber.from, fiber.to);
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
     //    }
     //});
@@ -6448,7 +6529,7 @@ function deletePatch(patchID) {
     network.body.data.edges.remove(patchID);
     multipleFiberService(patchDetails.from, patchDetails.to);
     nodeValidationInEdge(patchDetails.from, patchDetails.to);
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
     //    }
     //});
@@ -6459,7 +6540,7 @@ function clearSinglePatch() {
 
     $("#txtSinglePatchName").val('');
     closeDrawer('singlepatch');
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
 }
 
@@ -6508,7 +6589,7 @@ function clearDualPatch() {
 
     $("#txtDualPatchName").val('');
     closeDrawer('dualpatch');
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
 }
 
@@ -6579,7 +6660,7 @@ function deleteService(serviceID) {
     document.getElementById("serviceMenu").style.display = "none";
     network.body.data.edges.remove(serviceID);
     multipleFiberService(serviceDetails.from, serviceDetails.to);
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
     //    }
     //});
@@ -6594,7 +6675,7 @@ function clearService() {
     $("#txtBandwidth").val('');
     $("#ddlCentralFrq").val('');
     closeDrawer('service');
-    network.unselectAll();
+    UnSelectAll();
     enableEdgeIndicator();
 }
 
@@ -6605,7 +6686,8 @@ function clearService() {
 
 function closeMenu(menuID) {
     document.getElementById(menuID).style.display = "none";
-    network.unselectAll();
+    UnSelectAll();
+
 }
 
 //append node,preamp, booster type
@@ -7123,7 +7205,7 @@ function nodeRule(from, to, nodeType) {
         message = "";
         if (fromDetails.node_type == nodeType) {
             if (fromConnections.length > 1) {
-                message = fromDetails.label + ' cannot have more than one incoming and one outgoing connection. ';
+                message = fromDetails.label + ' can only support 2 links, one outgoing, and one incoming. ';
                 flag = true;
             }
             else {
@@ -7140,9 +7222,9 @@ function nodeRule(from, to, nodeType) {
             if (toConnections.length > 1) {
 
                 if (message != "")
-                    message += "<br /> <br />" + toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += "<br /> <br />" + toDetails.label + ' can only support 2 links, one outgoing, and one incoming';
                 else
-                    message += toDetails.label + ' cannot have more than one incoming and one outgoing connection';
+                    message += toDetails.label + ' can only support 2 links, one outgoing, and one incoming';
                 flag = true;
             }
             else {
@@ -7257,8 +7339,12 @@ function checkMisLink() {
         }
         else if (connectedEdges.length > 1) {
 
-            if (fromCount != toCount || connectedEdges.length > 2) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> can only have one incoming and one outgoing link.</p>');
+            if ((connectedEdges.length == 2 && fromCount == 2) || (connectedEdges.length == 2 && toCount == 2)) {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support 2 links of the same type, must have one incoming and one outgoing link</p>');
+                flag = true;
+            }
+            else if (fromCount != toCount || connectedEdges.length > 2) {
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support more than 2 links</p>');
                 flag = true;
             }
         }
@@ -7937,4 +8023,21 @@ function changeWorkAreaWH(eleID) {
         $("canvas").prop('height', height);
 
     network.addNodeMode();
+}
+
+function remove_NodeHighlight() {
+    var hNodes = network.body.data.nodes.get({
+        filter: function (item) {
+            return (item.is_highlight == true);
+        }
+    });
+
+    for (var i = 0; i < hNodes.length; i++) {
+        var nodeDetails = hNodes[i];
+        data.nodes.off("*", change_history_back);
+        data.edges.off("*", change_history_back);
+        network.body.data.nodes.update({
+            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+        });
+    }
 }
