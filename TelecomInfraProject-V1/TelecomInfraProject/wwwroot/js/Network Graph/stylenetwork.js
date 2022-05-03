@@ -1326,6 +1326,14 @@ function draw(isImport) {
             }
 
         }
+        var sNodes = network.body.data.nodes.get({
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
+
+        if (sNodes.length == 0)
+            network.unselectAll();
         nodeSelect = false;
 
     });
@@ -1348,8 +1356,21 @@ function draw(isImport) {
 
             if (isCopyPara)
                 copyDetails = network.body.data.nodes.get(copiedNodeID);
-            else
-                copyDetails = network.body.data.nodes.get(params.nodes[0]);
+            else {
+                var sNodes = network.body.data.nodes.get({
+                    filter: function (item) {
+                        return (item.is_highlight == true);
+                    }
+                });
+                if (params.nodes.length > 1) {
+                    if (sNodes.length > 0)
+                        copyDetails = network.body.data.nodes.get(sNodes[0].id);
+                    else
+                        copyDetails = network.body.data.nodes.get(params.nodes[0]);
+                } else {
+                    copyDetails = network.body.data.nodes.get(params.nodes[0]);
+                }
+            }
 
             type_name = copyDetails.node_type;
             if (copyDetails.node_type == amplifierJSON.node_type) {
@@ -1364,8 +1385,8 @@ function draw(isImport) {
 
             if (copyDetails.node_type != nodeDetails.node_type) {
                 showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                network.body.nodes[clickedNode.id].selected = false;
-                network.redraw();
+                //network.body.nodes[clickedNode.id].selected = false;
+                //network.redraw();
                 nodeSelect = true;
                 return;
 
@@ -1373,8 +1394,6 @@ function draw(isImport) {
             else {
                 if (copyDetails.amp_category != nodeDetails.amp_category) {
                     showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                    network.body.nodes[clickedNode.id].selected = false;
-                    network.redraw();
                     nodeSelect = true;
                     return;
                 }
@@ -1448,10 +1467,16 @@ function draw(isImport) {
         if (edgeDatas != undefined)
             edgeData = edgeDatas.id;
 
-        var nodesArray = [];
+        var sNodes = network.body.data.nodes.get({
+            fields: ['id'],
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
 
-        if (data.nodes.length > 0) {
-            nodesArray = data.nodes;
+        var nodesArray = [];
+        if (data.nodes.length > 0 && sNodes.length>0) {
+            nodesArray = sNodes;
             //nodesArray.push(nodeData);
         }
         else
@@ -1550,22 +1575,24 @@ function draw(isImport) {
 
         //to add only same type of node on multiple select
         nodesArray = [];
-        if (data.nodes.length > 0) {
+        if (data.nodes.length > 0 && sNodes.length > 0) {
 
-            for (var i = 0; i < data.nodes.length; i++) {
-                if (network.body.data.nodes.get(data.nodes[0]).node_type == network.body.data.nodes.get(data.nodes[i]).node_type) {
-                    if ((network.body.data.nodes.get(data.nodes[0]).node_type == network.body.data.nodes.get(data.nodes[i]).node_type) && network.body.data.nodes.get(data.nodes[0]).node_type == amplifierJSON.node_type) {
-                        if (network.body.data.nodes.get(data.nodes[0]).amp_category == network.body.data.nodes.get(data.nodes[i]).amp_category)
+            for (var i = 0; i < sNodes.length; i++) {
+                if (network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) {
+                    if ((network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) && network.body.data.nodes.get(sNodes[0].id).node_type == amplifierJSON.node_type) {
+                        if (network.body.data.nodes.get(sNodes[0].id).amp_category == network.body.data.nodes.get(sNodes[i].id).amp_category)
                             nodesArray.push(data.nodes[i]);
 
                     }
                     else
-                        nodesArray.push(data.nodes[i]);
+                        nodesArray.push(sNodes[i].id);
                 }
             }
         }
         else
             nodesArray.push(nodeData);
+
+        
 
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
@@ -1608,7 +1635,7 @@ function draw(isImport) {
                                 $("#rcRoadmCancel").show();
                             }
                             else {
-                                if (nodesArray.length > 1) {
+                                if (nodesArray.length > 1 && sNodes.length>1) {
                                     $("#rcRoadmCopy").hide();
                                     $("#rcRoadmCopyPara").hide();
                                 }
@@ -1711,7 +1738,7 @@ function draw(isImport) {
                                 $("#rcAmpApplyPro").hide();
                                 $("#rcAmpCancel").hide();
 
-                                if (nodesArray.length > 1) {
+                                if (nodesArray.length > 1 && sNodes.length > 1) {
                                     $("#rcAmplifierCopy").hide();
                                     $("#rcAmplifierCopyPara").hide();
                                 }
@@ -1771,7 +1798,7 @@ function draw(isImport) {
                                 $("#rcRamanCancel").hide();
                                 $("#rcRamanApplyPro").hide();
 
-                                if (nodesArray.length > 1) {
+                                if (nodesArray.length > 1 && sNodes.length > 1) {
                                     $("#rcRamanAmpCopy").hide();
                                     $("#rcRamanAmpCopyPara").hide();
                                 }
@@ -1832,7 +1859,7 @@ function draw(isImport) {
                             $("#rcTransApplyPro").hide();
                             $("#rcTransCancel").hide();
 
-                            if (nodesArray.length > 1) {
+                            if (nodesArray.length > 1 && sNodes.length > 1) {
                                 $("#rcTransceiverCopy").hide();
                                 $("#rcTransceiverCopyPara").hide();
                             }
@@ -3754,76 +3781,117 @@ function cancelPro(nodeId) {
     clearCopiedData();
 }
 
+function applyRoadmPro(nodeID, roadm_type) {
+    network.body.data.nodes.update({
+        id: nodeID, roadm_type: roadm_type
+    });
+    realUpdate_Roadm(nodeID, roadm_type);
+
+}
+function applyTransPro(nodeID, node_type, trans_type) {
+    var id = nodeID;
+    var connectedEdges = network.getConnectedEdges(id);
+    var fromTransType = "";
+    var toTransType = "";
+    var isOk = true;
+    transceiverType = trans_type;
+    $.each(connectedEdges, function (index, item) {
+
+        if (!isOk)
+            return;
+        var edgeDetails = network.body.data.edges.get(item);
+        if (edgeDetails.component_type == serviceJSON.component_type) {
+            if (edgeDetails.from == id) {
+
+                fromTransType = transceiverType;
+                toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
+            }
+            else if (edgeDetails.to == id) {
+                toTransType = transceiverType;
+                fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
+            }
+
+            if (toTransType != fromTransType) {
+                isOk = false;
+                showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
+                return;
+            }
+        }
+
+    });
+
+    if (isOk) {
+        if (node_type == transceiverJSON.node_type) {
+
+            network.body.data.nodes.update({
+                id: id, transceiver_type: transceiverType
+            });
+            realUpdate_Transceiver(id, transceiverType);
+
+
+        }
+    }
+    return isOk;
+}
+function applyAmpPro(nodeID, amp_type) {
+    network.body.data.nodes.update({
+        id: nodeID, amp_type: amp_type
+    });
+    realUpdate_Amplifier(nodeID, amp_type);
+}
+function applyRamanAmpPro(nodeID, amp_type, category) {
+    network.body.data.nodes.update({
+        id: nodeID, amp_type: amp_type, category: category
+    });
+    realUpdate_RamanAmp(nodeID, amp_type);
+
+}
 function applyPro(nodes, callback) {
     var isUpdated = false;
     if (isCopyPara) {
         var nodeDetails = network.body.data.nodes.get(copiedNodeID);
         for (var i = 0; i < nodes.length; i++) {
             if (nodeDetails.node_type == roadmJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
-                network.body.data.nodes.update({
-                    id: nodes[i], roadm_type: nodeDetails.roadm_type
-                });
-                realUpdate_Roadm(nodes[i], nodeDetails.roadm_type);
+                if (nodes.length > 1) {
+                    if (network.body.data.nodes.get(nodes[i]).image == DIR + roadmJSON.h_image)
+                        applyRoadmPro(nodes[i], nodeDetails.roadm_type);
+                }
+                else {
+                    applyRoadmPro(nodes[i], nodeDetails.roadm_type);
+                }
                 isUpdated = true;
+
             }
             else if (nodeDetails.node_type == transceiverJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
-                var id = nodes[i];
-                var connectedEdges = network.getConnectedEdges(id);
-                var fromTransType = "";
-                var toTransType = "";
-                var isOk = true;
-                transceiverType = nodeDetails.transceiver_type;
-                $.each(connectedEdges, function (index, item) {
-
-                    if (!isOk)
-                        return;
-                    var edgeDetails = network.body.data.edges.get(item);
-                    if (edgeDetails.component_type == serviceJSON.component_type) {
-                        if (edgeDetails.from == id) {
-
-                            fromTransType = transceiverType;
-                            toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
-                        }
-                        else if (edgeDetails.to == id) {
-                            toTransType = transceiverType;
-                            fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
-                        }
-
-                        if (toTransType != fromTransType) {
-                            isOk = false;
-                            showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
-                            return;
-                        }
-                    }
-
-                });
-
-                if (isOk) {
-                    if (nodeDetails.node_type == transceiverJSON.node_type) {
-
-                        network.body.data.nodes.update({
-                            id: id, transceiver_type: nodeDetails.transceiver_type
-                        });
-                        realUpdate_Transceiver(id, nodeDetails.transceiver_type);
-
-
-                    }
+                if (nodes.length > 1) {
+                    if (network.body.data.nodes.get(nodes[i]).image == DIR + transceiverJSON.h_image)
+                        isUpdated = applyTransPro(nodes[i], nodeDetails.node_type, nodeDetails.transceiver_type);
                 }
-                isUpdated = isOk;
+                else {
+                    isUpdated = applyTransPro(nodes[i], nodeDetails.node_type, nodeDetails.transceiver_type);
+                }
             }
             if (nodeDetails.node_type == amplifierJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 if (nodeDetails.amp_category == amplifierJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
-                    network.body.data.nodes.update({
-                        id: nodes[i], amp_type: nodeDetails.amp_type
-                    });
-                    realUpdate_Amplifier(nodes[i], nodeDetails.amp_type);
+                    if (nodes.length > 1) {
+                        if (network.body.data.nodes.get(nodes[i]).image == DIR + amplifierJSON.h_image)
+                            applyAmpPro(nodes[i], nodeDetails.amp_type);
+                    }
+                    else {
+                        applyAmpPro(nodes[i], nodeDetails.amp_type);
+                    }
                     isUpdated = true;
                 }
                 else if (nodeDetails.amp_category == ramanampJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
-                    network.body.data.nodes.update({
-                        id: nodes[i], amp_type: nodeDetails.amp_type, category: nodeDetails.category
-                    });
-                    realUpdate_RamanAmp(nodes[i], nodeDetails.amp_type);
+
+                    if (nodes.length > 1) {
+                        if (network.body.data.nodes.get(nodes[i]).image == DIR + amplifierJSON.h_image)
+                            applyRamanAmpPro(nodes[i], nodeDetails.amp_type, nodeDetails.category);
+                    }
+                    else {
+                        applyRamanAmpPro(nodes[i], nodeDetails.amp_type, nodeDetails.category);
+                    }
+
                     isUpdated = true;
                 }
             }
@@ -3946,6 +4014,7 @@ function pasteNode(nodeId) {
 
         realUpdate();
         document.getElementById("pasteMenu").style.display = "none";
+        UnSelectAll();
         $("#stepCreateTopology").click();
     }
 }
@@ -6007,79 +6076,79 @@ function updateTransceiver(nodeID) {
             }
         }
         else {
-                var id = nodeID[nodeID.length-1];
-                var label = $("#txtTransceiverName").val().trim();
-                var nodeDetails = network.body.data.nodes.get(id);
-                var transceiverType = $("#ddlTransceiverType").val();
-                if (transceiverType == null || transceiverType == "") {
-                    showMessage(alertType.Error, 'Please select transceiver type');
-                    $("#ddlTransceiverType").addClass('input_error');
+            var id = nodeID[nodeID.length - 1];
+            var label = $("#txtTransceiverName").val().trim();
+            var nodeDetails = network.body.data.nodes.get(id);
+            var transceiverType = $("#ddlTransceiverType").val();
+            if (transceiverType == null || transceiverType == "") {
+                showMessage(alertType.Error, 'Please select transceiver type');
+                $("#ddlTransceiverType").addClass('input_error');
+                return;
+            }
+            else
+                $("#ddlTransceiverType").removeClass('input_error');
+
+
+            var connectedEdges = network.getConnectedEdges(id);
+            var fromTransType = "";
+            var toTransType = "";
+            var isOk = true;
+            $.each(connectedEdges, function (index, item) {
+
+                if (!isOk)
                     return;
-                }
-                else
-                    $("#ddlTransceiverType").removeClass('input_error');
+                var edgeDetails = network.body.data.edges.get(item);
+                if (edgeDetails.component_type == serviceJSON.component_type) {
+                    if (edgeDetails.from == id) {
 
+                        fromTransType = transceiverType;
+                        toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
+                    }
+                    else if (edgeDetails.to == id) {
+                        toTransType = transceiverType;
+                        fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
+                    }
 
-                var connectedEdges = network.getConnectedEdges(id);
-                var fromTransType = "";
-                var toTransType = "";
-                var isOk = true;
-                $.each(connectedEdges, function (index, item) {
-
-                    if (!isOk)
+                    if (toTransType != fromTransType) {
+                        isOk = false;
+                        showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
                         return;
-                    var edgeDetails = network.body.data.edges.get(item);
-                    if (edgeDetails.component_type == serviceJSON.component_type) {
-                        if (edgeDetails.from == id) {
-
-                            fromTransType = transceiverType;
-                            toTransType = network.body.data.nodes.get(edgeDetails.to).transceiver_type;
-                        }
-                        else if (edgeDetails.to == id) {
-                            toTransType = transceiverType;
-                            fromTransType = network.body.data.nodes.get(edgeDetails.from).transceiver_type;
-                        }
-
-                        if (toTransType != fromTransType) {
-                            isOk = false;
-                            showMessage(alertType.Error, serviceJSON.component_type + " can be created/updated only between " + transceiverJSON.node_type + " of same type");
-                            return;
-                        }
-                    }
-
-                });
-
-                if (isOk) {
-                    if (nodeDetails.node_type == transceiverJSON.node_type) {
-
-                        if (nodeID.length > 1) {
-
-                            network.body.data.nodes.update({
-                                id: id, transceiver_type: transceiverType
-                            });
-                            realUpdate_Transceiver(id, "");
-
-                        } else {
-                            network.body.data.nodes.update({
-                                id: id, label: label, transceiver_type: transceiverType
-                            });
-                            realUpdate_Transceiver(id, "");
-                        }
-
-                        //if (tempEdge.length > 1) {
-                        //    removeSpanInError(id, true);
-                        //}
-                        //else {
-
-                        //    removeID = "#spanTF" + id.replace(/\s/g, '');
-                        //    $(removeID).remove();
-                        //}
-
-
                     }
                 }
 
-            
+            });
+
+            if (isOk) {
+                if (nodeDetails.node_type == transceiverJSON.node_type) {
+
+                    if (nodeID.length > 1) {
+
+                        network.body.data.nodes.update({
+                            id: id, transceiver_type: transceiverType
+                        });
+                        realUpdate_Transceiver(id, "");
+
+                    } else {
+                        network.body.data.nodes.update({
+                            id: id, label: label, transceiver_type: transceiverType
+                        });
+                        realUpdate_Transceiver(id, "");
+                    }
+
+                    //if (tempEdge.length > 1) {
+                    //    removeSpanInError(id, true);
+                    //}
+                    //else {
+
+                    //    removeID = "#spanTF" + id.replace(/\s/g, '');
+                    //    $(removeID).remove();
+                    //}
+
+
+                }
+            }
+
+
         }
         clearTransceiver();
     }
@@ -6123,45 +6192,21 @@ function realUpdate_Transceiver(id, rtype) {
 
 function deleteNode(nodeList) {
 
-    var nodeID;
     for (var i = 0; i < nodeList.length; i++) {
-        nodeID = nodeList[i];
-        var nodeDetails = network.body.data.nodes.get(nodeID);
-        var node_type = nodeDetails.node_type;
-        if (nodeDetails.node_type == ILAJSON.node_type)
-            node_type = nodeDetails.amp_category;
-
-        document.getElementById("roadmMenu").style.display = "none";
-        document.getElementById("attenuatorMenu").style.display = "none";
-        document.getElementById("ILAMenu").style.display = "none";
-        document.getElementById("amplifierMenu").style.display = "none";
-        document.getElementById("transceiverMenu").style.display = "none";
-
-        if (network.getConnectedEdges(nodeID).length > 0) {
-            showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + ", then try to delete");
-
-        } else {
-            //nodes.remove(nodeID);
-
-            if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
-                removeSpanInError(nodeID);
-                removeSpanInError(nodeID, true);
-            }
-            else if (nodeDetails.node_type == amplifierJSON.node_type) {
-                if (nodeDetails.amp_category == amplifierJSON.amp_category) {
-                    removeSpanInError(nodeID);
-                    removeSpanInError(nodeID, true);
-                }
-                if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-                    removeSpanInError(nodeID);
-                    removeSpanInError(nodeID, true);
-                    removeSpanInError(nodeID, true);
-                }
-            }
-            else
-                removeSpanInError(nodeID);
-
-            network.body.data.nodes.remove(nodeID);
+        if (nodeList.length > 1) {
+            if (network.body.data.nodes.get(nodeList[i]).image == DIR + roadmJSON.h_image)
+                removeNodes(nodeList[i]);
+            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + fusedJSON.h_image)
+                removeNodes(nodeList[i]);
+            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + transceiverJSON.h_image)
+                removeNodes(nodeList[i]);
+            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + amplifierJSON.h_image)
+                removeNodes(nodeList[i]);
+            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + ramanampJSON.h_image)
+                removeNodes(nodeList[i]);
+        }
+        else {
+            removeNodes(nodeList[i]);
         }
     }
     $("#stepCreateTopology").click();
@@ -6169,6 +6214,45 @@ function deleteNode(nodeList) {
 
 }
 
+function removeNodes(nodeID) {
+    var nodeDetails = network.body.data.nodes.get(nodeID);
+    var node_type = nodeDetails.node_type;
+    if (nodeDetails.node_type == ILAJSON.node_type)
+        node_type = nodeDetails.amp_category;
+
+    document.getElementById("roadmMenu").style.display = "none";
+    document.getElementById("attenuatorMenu").style.display = "none";
+    document.getElementById("ILAMenu").style.display = "none";
+    document.getElementById("amplifierMenu").style.display = "none";
+    document.getElementById("transceiverMenu").style.display = "none";
+
+    if (network.getConnectedEdges(nodeID).length > 0) {
+        showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + " - " + nodeDetails.label + ", then try to delete");
+
+    } else {
+        //nodes.remove(nodeID);
+
+        if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
+            removeSpanInError(nodeID);
+            removeSpanInError(nodeID, true);
+        }
+        else if (nodeDetails.node_type == amplifierJSON.node_type) {
+            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
+                removeSpanInError(nodeID);
+                removeSpanInError(nodeID, true);
+            }
+            if (nodeDetails.amp_category == ramanampJSON.amp_category) {
+                removeSpanInError(nodeID);
+                removeSpanInError(nodeID, true);
+                removeSpanInError(nodeID, true);
+            }
+        }
+        else
+            removeSpanInError(nodeID);
+
+        network.body.data.nodes.remove(nodeID);
+    }
+}
 function dualFiberEdit(fiberID, callback) {
     document.getElementById("dualFiberMenu").style.display = "none";
 
