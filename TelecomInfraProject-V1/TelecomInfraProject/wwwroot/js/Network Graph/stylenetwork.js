@@ -1308,19 +1308,20 @@ function draw(isImport) {
         //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
         $("#hoverDiv").hide();
         //console.log(params.pointer.canvas.x, params.pointer.canvas.y);
-
         if (!params.event.srcEvent.ctrlKey)
             remove_NodeHighlight();
         else {
 
             var clickedNode = this.body.nodes[this.getNodeAt(params.pointer.DOM)];
-            var nodeDetails = network.body.data.nodes.get(clickedNode.id);
-            if (!nodeSelect) {
-                if (!network.body.nodes[clickedNode.id].selected) {
-                    if (nodeDetails.h_image) {
-                        network.body.data.nodes.update({
-                            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                        });
+            if (clickedNode != undefined) {
+                var nodeDetails = network.body.data.nodes.get(clickedNode.id);
+                if (!nodeSelect) {
+                    if (!network.body.nodes[clickedNode.id].selected) {
+                        if (nodeDetails.h_image) {
+                            network.body.data.nodes.update({
+                                id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                            });
+                        }
                     }
                 }
             }
@@ -1343,7 +1344,6 @@ function draw(isImport) {
 
     });
     network.on("selectNode", function (params) {
-
         //if (isExpandedView || isImportJSON) {
         //    return;
         //}
@@ -1366,7 +1366,7 @@ function draw(isImport) {
                     if (sNodes.length > 0)
                         copyDetails = network.body.data.nodes.get(sNodes[0].id);
                     else
-                        copyDetails = network.body.data.nodes.get(params.nodes[0]);
+                        copyDetails = network.body.data.nodes.get(params.nodes[params.nodes.length-1]);
                 } else {
                     copyDetails = network.body.data.nodes.get(params.nodes[0]);
                 }
@@ -1475,7 +1475,7 @@ function draw(isImport) {
         });
 
         var nodesArray = [];
-        if (data.nodes.length > 0 && sNodes.length>0) {
+        if (data.nodes.length > 0 && sNodes.length > 0) {
             nodesArray = sNodes;
             //nodesArray.push(nodeData);
         }
@@ -1508,12 +1508,12 @@ function draw(isImport) {
         if (showMenu == 1) {
             var copyDetails;
             var type_name;
-            if (isCopyPara || (data.nodes.length > 1)) {
+            if (isCopyPara || (sNodes.length > 0)) {
 
                 if (isCopyPara)
                     copyDetails = network.body.data.nodes.get(copiedNodeID);
                 else
-                    copyDetails = network.body.data.nodes.get(data.nodes[0]);
+                    copyDetails = network.body.data.nodes.get(sNodes[0].id);
 
                 type_name = copyDetails.node_type;
                 if (copyDetails.node_type == amplifierJSON.node_type) {
@@ -1592,7 +1592,7 @@ function draw(isImport) {
         else
             nodesArray.push(nodeData);
 
-        
+
 
         if (type == serviceJSON.component_type) {
             if (showMenu == 2)//enable service menu
@@ -1635,7 +1635,7 @@ function draw(isImport) {
                                 $("#rcRoadmCancel").show();
                             }
                             else {
-                                if (nodesArray.length > 1 && sNodes.length>1) {
+                                if (nodesArray.length > 1 && sNodes.length > 1) {
                                     $("#rcRoadmCopy").hide();
                                     $("#rcRoadmCopyPara").hide();
                                 }
