@@ -1366,7 +1366,7 @@ function draw(isImport) {
                     if (sNodes.length > 0)
                         copyDetails = network.body.data.nodes.get(sNodes[0].id);
                     else
-                        copyDetails = network.body.data.nodes.get(params.nodes[params.nodes.length-1]);
+                        copyDetails = network.body.data.nodes.get(params.nodes[params.nodes.length - 1]);
                 } else {
                     copyDetails = network.body.data.nodes.get(params.nodes[0]);
                 }
@@ -3883,9 +3883,8 @@ function applyPro(nodes, callback) {
                     isUpdated = true;
                 }
                 else if (nodeDetails.amp_category == ramanampJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
-
                     if (nodes.length > 1) {
-                        if (network.body.data.nodes.get(nodes[i]).image == DIR + amplifierJSON.h_image)
+                        if (network.body.data.nodes.get(nodes[i]).image == DIR + ramanampJSON.h_image)
                             applyRamanAmpPro(nodes[i], nodeDetails.amp_type, nodeDetails.category);
                     }
                     else {
