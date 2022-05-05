@@ -1318,8 +1318,9 @@ function draw(isImport) {
                 if (!nodeSelect) {
                     if (!network.body.nodes[clickedNode.id].selected) {
                         if (nodeDetails.h_image) {
+                            console.log("click event  - image : " + nodeDetails.h_image, "h image :" + nodeDetails.image);
                             network.body.data.nodes.update({
-                                id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                                id: nodeDetails.id, image: nodeDetails.h_image, h_image: nodeDetails.image, is_highlight: false
                             });
                         }
                     }
@@ -1381,6 +1382,8 @@ function draw(isImport) {
             }
             else if (copyDetails.node_type == roadmJSON.node_type)
                 type_name = copyDetails.node_type.toUpperCase();
+            else if (copyDetails.node_type == fusedJSON.node_type)
+                type_name = "Attenuator";
 
 
             if (copyDetails.node_type != nodeDetails.node_type) {
@@ -1404,26 +1407,59 @@ function draw(isImport) {
             if (params.event.srcEvent.ctrlKey) {
                 var image;
                 if (nodeDetails.node_type == roadmJSON.node_type) {
-                    image = roadmJSON.h_image;
+
+                    if (nodeDetails.image == DIR + roadmJSON.h_image) {
+                        image = nodeDetails.h_image;
+                    }
+                    else
+                        image = DIR + roadmJSON.h_image;
                 }
                 else if (nodeDetails.node_type == fusedJSON.node_type) {
-                    image = fusedJSON.h_image;
+                    if (nodeDetails.image == DIR + fusedJSON.h_image) {
+                        image = nodeDetails.h_image;
+                    }
+                    else
+                        image = DIR + fusedJSON.h_image;
                 }
                 else if (nodeDetails.node_type == transceiverJSON.node_type) {
-                    image = transceiverJSON.h_image;
+                    if (nodeDetails.image == DIR + transceiverJSON.h_image) {
+                        image = nodeDetails.h_image;
+                    }
+                    else
+                        image = DIR + transceiverJSON.h_image;
                 }
                 else if (nodeDetails.node_type == amplifierJSON.node_type) {
                     if (nodeDetails.amp_category == amplifierJSON.amp_category) {
-                        image = amplifierJSON.h_image;
+                        if (nodeDetails.image == DIR + amplifierJSON.h_image) {
+                            image = nodeDetails.h_image;
+                        }
+                        else
+                            image = DIR + amplifierJSON.h_image;
                     }
                     else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-                        image = ramanampJSON.h_image;
+                        if (nodeDetails.image == DIR + ramanampJSON.h_image) {
+                            image = nodeDetails.h_image;
+                        }
+                        else
+                            image = DIR + ramanampJSON.h_image;
                     }
                 }
 
                 if (image) {
+                    var highlight = true;
+                    if (image == DIR + roadmJSON.image || image == DIR + roadmJSON.w_image)
+                        highlight = false;
+                    else if (image == DIR + fusedJSON.image || image == DIR + fusedJSON.w_image)
+                        highlight = false;
+                    else if (image == DIR + transceiverJSON.image || image == DIR + transceiverJSON.w_image)
+                        highlight = false;
+                    else if (image == DIR + amplifierJSON.image || image == DIR + amplifierJSON.w_image)
+                        highlight = false;
+                    else if (image == DIR + ramanampJSON.image || image == DIR + ramanampJSON.w_image)
+                        highlight = false;
+
                     network.body.data.nodes.update({
-                        id: nodeDetails.id, image: DIR + image, h_image: nodeDetails.image, is_highlight: true
+                        id: nodeDetails.id, image: image, h_image: nodeDetails.image, is_highlight: highlight
                     });
                 }
 
@@ -1524,6 +1560,8 @@ function draw(isImport) {
                 }
                 else if (copyDetails.node_type == roadmJSON.node_type)
                     type_name = copyDetails.node_type.toUpperCase();
+                else if (copyDetails.node_type == fusedJSON.node_type)
+                    type_name = "Attenuator";
 
                 //if (nodeData == copiedNodeID) {
                 //    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
@@ -8209,9 +8247,17 @@ function remove_NodeHighlight() {
 
         if (nodeDetails.node_type == roadmJSON.node_type) {
             if (nodeDetails.image != DIR + roadmJSON.image) {
-                network.body.data.nodes.update({
-                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                });
+                console.log('hai' + nodeDetails.image, 'h : ' + nodeDetails.h_image);
+                if (nodeDetails.h_image == DIR + roadmJSON.h_image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
+                else {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
             }
             else {
                 network.body.data.nodes.update({
@@ -8221,9 +8267,16 @@ function remove_NodeHighlight() {
         }
         else if (nodeDetails.node_type == fusedJSON.node_type) {
             if (nodeDetails.image != DIR + fusedJSON.image) {
-                network.body.data.nodes.update({
-                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                });
+                if (nodeDetails.h_image == DIR + fusedJSON.h_image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
+                else {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
             }
             else {
                 network.body.data.nodes.update({
@@ -8233,9 +8286,16 @@ function remove_NodeHighlight() {
         }
         else if (nodeDetails.node_type == transceiverJSON.node_type) {
             if (nodeDetails.image != DIR + transceiverJSON.image) {
-                network.body.data.nodes.update({
-                    id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                });
+                if (nodeDetails.h_image == DIR + transceiverJSON.h_image) {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
+                else {
+                    network.body.data.nodes.update({
+                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                    });
+                }
             }
             else {
                 network.body.data.nodes.update({
@@ -8246,9 +8306,16 @@ function remove_NodeHighlight() {
         else if (nodeDetails.node_type == amplifierJSON.node_type) {
             if (nodeDetails.amp_category == amplifierJSON.amp_category) {
                 if (nodeDetails.image != DIR + amplifierJSON.image) {
-                    network.body.data.nodes.update({
-                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                    });
+                    if (nodeDetails.h_image == DIR + amplifierJSON.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
+                        });
+                    }
+                    else {
+                        network.body.data.nodes.update({
+                            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                        });
+                    }
                 }
                 else {
                     network.body.data.nodes.update({
@@ -8258,9 +8325,16 @@ function remove_NodeHighlight() {
             }
             else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
                 if (nodeDetails.image != DIR + ramanampJSON.image) {
-                    network.body.data.nodes.update({
-                        id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
-                    });
+                    if (nodeDetails.h_image == DIR + ramanampJSON.h_image) {
+                        network.body.data.nodes.update({
+                            id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
+                        });
+                    }
+                    else {
+                        network.body.data.nodes.update({
+                            id: nodeDetails.id, image: nodeDetails.h_image, is_highlight: false
+                        });
+                    }
                 }
                 else {
                     network.body.data.nodes.update({
