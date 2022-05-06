@@ -76,8 +76,6 @@ var eqptData = "";
 var bullet = "&#9632; ";
 
 var nodeSelect = false;
-var tempUndo = [];
-var tempRedo = [];
 
 var hiddenEdgeTextOptions = {
     edges: {
@@ -111,7 +109,7 @@ var displayNodeLabels = false;
 
 $(document).ready(function () {
 
-    $.getJSON("/Data/StyleData.json", function (data) {
+    $.getJSON("https://tiptool.vee-services.com/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
         hiddenNodeTextDisplayOptions = {
@@ -136,10 +134,11 @@ $(document).ready(function () {
         console.log("An error has occurred1.");
     });
 
-    $.getJSON("/Data/ConfigurationData.json", function (data) {
+    $.getJSON("https://tiptool.vee-services.com/Data/ConfigurationData.json", function (data) {
 
         configData = data;
-        DIR = configData.node.dir;
+        DIR = "Assets/img/";
+        //DIR = configData.node.dir;
         //$("*.siteLength").text(' (Max Length ' + configData.node.site_length + ')');
         $("[id='siteLength']").each(function () {
             $(this).text(' (Max Length ' + configData.node.site_length + ')');
@@ -148,7 +147,7 @@ $(document).ready(function () {
         console.log("An error has occurred2.");
     });
 
-    $.getJSON("/Data/Equipment_JSON_MOD2.json", function (data) {
+    $.getJSON("https://tiptool.vee-services.com/Data/Equipment_JSON_MOD2.json", function (data) {
         eqpt_config = data;
         load_EqptConfig();
     }).fail(function () {
@@ -490,54 +489,47 @@ $(document).ready(function () {
     //start undo and redo
     redo_css_inactive();
     undo_css_inactive();
-
     $("#button_undo").on("click", function () {
-        //if (tempUndo.length > 0) {
-        //    tempRedo.push(tempUndo[tempUndo.length - 1]);
-        //    data.nodes.remove(tempUndo[tempUndo.length - 1]);
-        //    tempUndo.pop();
-        //}
         if (history_list_back.length > 1) {
-
             const current_nodes = data.nodes.get(data.nodes.getIds());
             const current_edges = data.edges.get(data.edges.getIds());
             const previous_nodes = history_list_back[1].nodes_his;
             const previous_edges = history_list_back[1].edges_his;
-        // event off
-        data.nodes.off("*", change_history_back);
-        data.edges.off("*", change_history_back);
-        // undo without events
-        if (current_nodes.length > previous_nodes.length) {
-            const previous_nodes_diff = _.differenceBy(
-                current_nodes,
-                previous_nodes,
-                "id"
-            );
-            data.nodes.remove(previous_nodes_diff);
-        } else {
-            data.nodes.update(previous_nodes);
-        }
+            // event off
+            data.nodes.off("*", change_history_back);
+            data.edges.off("*", change_history_back);
+            // undo without events
+            if (current_nodes.length > previous_nodes.length) {
+                const previous_nodes_diff = _.differenceBy(
+                    current_nodes,
+                    previous_nodes,
+                    "id"
+                );
+                data.nodes.remove(previous_nodes_diff);
+            } else {
+                data.nodes.update(previous_nodes);
+            }
 
-        if (current_edges.length > previous_edges.length) {
-            const previous_edges_diff = _.differenceBy(
-                current_edges,
-                previous_edges,
-                "id"
-            );
-            data.edges.remove(previous_edges_diff);
-        } else {
-            data.edges.update(previous_edges);
-        }
-        // recover event on
-        data.nodes.on("*", change_history_back);
-        data.edges.on("*", change_history_back);
+            if (current_edges.length > previous_edges.length) {
+                const previous_edges_diff = _.differenceBy(
+                    current_edges,
+                    previous_edges,
+                    "id"
+                );
+                data.edges.remove(previous_edges_diff);
+            } else {
+                data.edges.update(previous_edges);
+            }
+            // recover event on
+            data.nodes.on("*", change_history_back);
+            data.edges.on("*", change_history_back);
 
-        history_list_forward.unshift({
-            nodes_his: history_list_back[0].nodes_his,
-            edges_his: history_list_back[0].edges_his
-        });
-        history_list_back.shift();
-         //apply css
+            history_list_forward.unshift({
+                nodes_his: history_list_back[0].nodes_his,
+                edges_his: history_list_back[0].edges_his
+            });
+            history_list_back.shift();
+            // apply css
             css_for_undo_redo_chnage();
             $(btnAddRoadm).removeClass('highlight');
             $(btnAddFused).removeClass('highlight');
@@ -550,13 +542,6 @@ $(document).ready(function () {
     });
 
     $("#button_redo").on("click", function () {
-
-        //if (tempRedo.length > 0) {
-        //    tempUndo.push(tempRedo[tempRedo.length - 1]);
-        //    data.nodes.update(tempRedo[tempRedo.length - 1]);
-        //    tempRedo.pop();
-        //}
-
         if (history_list_forward.length > 0) {
             const current_nodes = data.nodes.get(data.nodes.getIds());
             const current_edges = data.edges.get(data.edges.getIds());
@@ -4982,7 +4967,7 @@ function addNodes(data, callback) {
     if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
         network.addNodeMode();
 
-    tempUndo.push(network.body.data.nodes.get(data.id));
+
 }
 
 var nofNode = 1;
