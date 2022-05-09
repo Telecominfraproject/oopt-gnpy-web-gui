@@ -108,8 +108,10 @@ var hiddenNodeTextDisplayOptions;
 var displayNodeLabels = false;
 
 $(document).ready(function () {
+    
+    //https://tiptool.vee-services.com/Data/StyleData.json
 
-    $.getJSON("https://tiptool.vee-services.com/Data/StyleData.json", function (data) {
+    $.getJSON("Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
         hiddenNodeTextDisplayOptions = {
@@ -134,11 +136,13 @@ $(document).ready(function () {
         console.log("An error has occurred1.");
     });
 
-    $.getJSON("https://tiptool.vee-services.com/Data/ConfigurationData.json", function (data) {
+    //https://tiptool.vee-services.com/Data/ConfigurationData.json
+
+    $.getJSON("Data/ConfigurationData.json", function (data) {
 
         configData = data;
-        DIR = "Assets/img/";
-        //DIR = configData.node.dir;
+        //DIR = "Assets/img/";
+        DIR = configData.node.dir;
         //$("*.siteLength").text(' (Max Length ' + configData.node.site_length + ')');
         $("[id='siteLength']").each(function () {
             $(this).text(' (Max Length ' + configData.node.site_length + ')');
@@ -147,7 +151,10 @@ $(document).ready(function () {
         console.log("An error has occurred2.");
     });
 
-    $.getJSON("https://tiptool.vee-services.com/Data/Equipment_JSON_MOD2.json", function (data) {
+
+    //https://tiptool.vee-services.com/Data/Equipment_JSON_MOD2.json
+
+    $.getJSON("Data/Equipment_JSON_MOD2.json", function (data) {
         eqpt_config = data;
         load_EqptConfig();
     }).fail(function () {

@@ -70,3 +70,10 @@ D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\ob
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.pdb
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.genruntimeconfig.cache
 D:\GitRepository\oopt-gnpy-web-gui\TelecomInfraProject-V1\TelecomInfraProject\obj\Release\netcoreapp3.1\TelecomInfraProject.csproj.AssemblyReference.cache
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\ConfigurationData.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\eqpt_config.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\Equipment_Config_MAster.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\Equipment_JSON_MOD2.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\sample_json.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\StyleData.json
+D:\Git Repository\Main\TelecomInfraProject-V1\TelecomInfraProject\bin\Release\netcoreapp3.1\html_source\Data\yang.json

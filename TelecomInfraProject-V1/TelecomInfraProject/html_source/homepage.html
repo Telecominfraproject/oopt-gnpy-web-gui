@@ -11,28 +11,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="Assets/img/telecom-favicon.ico" type="image/gif" sizes="16x16">
     <script src="js/Helper/Helper.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
-          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+    <link href="css/cdn/bootstrap.min.css" rel="stylesheet" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous" />
 
     <link rel="stylesheet" href="css/Style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/cdn/font-awesome.min.css" rel="stylesheet" />
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/babel-regenerator-runtime@6.5.0/runtime.js"></script>
+    <link href="css/cdn/roboto-css.css" rel="stylesheet" />
+    <link href="css/cdn/oswald-css.css" rel="stylesheet" />
+    <link href="css/cdn/icon.css" rel="stylesheet" />
+
+    <script src="js/CdnURL/polyfill.min.js" integrity="sha512-uzOpZ74myvXTYZ+mXUsPhDF+/iL/n32GDxdryI2SJronkEyKC8FBFRLiBQ7l7U/PTYebDbgTtbqTa6/vGtU23A==" crossorigin="anonymous"></script>
+    <script src="js/CdnURL/runtime.js"></script>
+
     <script src="js/Network Graph/FileSaver.js"></script>
     <script src="js/Network Graph/jsstore.js"></script>
     <script src="js/Network Graph/jsstore.worker.js"></script>
 
     <!--<script src="js/vis-network.min.js"></script>-->
+    <!--<script src="js/CdnURL/vis.js"></script>-->
     <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.js"></script>-->
+
     <script src="js/visunminify.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" rel="stylesheet" type="text/css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <link href="css/cdn/vis-network.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/CdnURL/lodash.min.js"></script>
+    <script src="js/CdnURL/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <link href="css/cdn/all.css" rel="stylesheet" />
 
     <script src="js/alea.js"></script>
     <script src="js/exampleUtil.js"></script>
@@ -43,9 +47,8 @@
     <script src="js/Network Graph/stylenetwork.js"></script>
 
     <script src="js/Network Graph/canvas-toBlob.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js" integrity="sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js" integrity="sha256-FPJJt8nA+xL4RU6/gsriA8p8xAeLGatoyTjldvQKGdE=" crossorigin="anonymous"></script>
+    <script src="js/CdnURL/html2canvas.min.js" integrity="sha256-c3RzsUWg+y2XljunEQS0LqWdQ04X1D3j22fd/8JCAKw=" crossorigin="anonymous"></script>
+    <script src="js/CdnURL/FileSaver.min.js" integrity="sha256-FPJJt8nA+xL4RU6/gsriA8p8xAeLGatoyTjldvQKGdE=" crossorigin="anonymous"></script>
     <script src="js/validation.js"></script>
 </head>
 
@@ -92,7 +95,7 @@
     </div>-->
     <div class="background_img">
         <nav class="navbar navbar-light pb-0 nav-clr">
-            <a class="navbar-brand logo" href="homepage">
+            <a class="navbar-brand logo" href="homepage.html">
                 <img src="Assets/img/Logo icon.svg" width="30" height="30" class="d-inline-block align-top d-mbl-none"
                      alt="" />
                 GNPy Optical network planning tool
@@ -183,7 +186,7 @@
                     <img src="Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
                          title="About" />
                 </label>
-                <a href="help" class=" mx-2" data-toggle="tooltip" data-placement="top" title="Help">
+                <a href="help.html" class=" mx-2" data-toggle="tooltip" data-placement="top" title="Help">
                     <img src="Assets/img/Help icon.svg" width="25px" />
                 </a>
             </div>
@@ -1328,15 +1331,13 @@
     <script src="js/main.js"></script>
 
 
-    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    <!--<script src="js/CdnURL/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
             crossorigin="anonymous"></script>-->
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    <script src="js/CdnURL/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
             crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"
-            integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
+    <script src="js/CdnURL/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2"
             crossorigin="anonymous"></script>
+
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
