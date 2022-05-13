@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="38.087" height="30.128" viewBox="0 0 38.087 30.128">
-  <g id="Multiple_node_icon" data-name="Multiple node icon" transform="translate(-83.955 -130.338)">
-    <g id="Group_4263" data-name="Group 4263" transform="translate(83.955 130.338)">
-      <circle id="Ellipse_24" data-name="Ellipse 24" cx="13.327" cy="13.327" r="13.327" fill="#1eabbc"/>
-      <path id="Path_189" data-name="Path 189" d="M29.834,22.326a10.186,10.186,0,0,1-.158,1.9,13.589,13.589,0,0,1-11.7,11.27A11.378,11.378,0,0,1,16,35.652V9a11.377,11.377,0,0,1,1.976.152,13.589,13.589,0,0,1,11.7,11.27,10.186,10.186,0,0,1,.158,1.9Z" transform="translate(-2.673 -8.999)" fill="#29818c"/>
-    </g>
-    <path id="Path_5476" data-name="Path 5476" d="M17.176,8.21a8.966,8.966,0,1,0,8.966,8.966A8.966,8.966,0,0,0,17.176,8.21Zm3.5,9.531H17.741v2.936a.565.565,0,0,1-1.131,0V17.741H13.675a.565.565,0,0,1,0-1.131h2.936V13.675a.565.565,0,1,1,1.131,0v2.936h2.936a.565.565,0,0,1,0,1.131Z" transform="translate(95.9 134.324)" fill="#149933"/>
-  </g>
-</svg>
