@@ -76,6 +76,8 @@ var eqptData = "";
 var bullet = "&#9632; ";
 
 var nodeSelect = false;
+var tempUndo = [];
+var tempRedo = [];
 
 var hiddenEdgeTextOptions = {
     edges: {
@@ -108,10 +110,8 @@ var hiddenNodeTextDisplayOptions;
 var displayNodeLabels = false;
 
 $(document).ready(function () {
-    
-    //https://tiptool.vee-services.com/Data/StyleData.json
 
-    $.getJSON("Data/StyleData.json", function (data) {
+    $.getJSON("/Data/StyleData.json", function (data) {
         optionsJSON = data.options;
         roadmJSON = data.Roadm;
         hiddenNodeTextDisplayOptions = {
@@ -136,12 +136,9 @@ $(document).ready(function () {
         console.log("An error has occurred1.");
     });
 
-    //https://tiptool.vee-services.com/Data/ConfigurationData.json
-
-    $.getJSON("Data/ConfigurationData.json", function (data) {
+    $.getJSON("/Data/ConfigurationData.json", function (data) {
 
         configData = data;
-        //DIR = "Assets/img/";
         DIR = configData.node.dir;
         //$("*.siteLength").text(' (Max Length ' + configData.node.site_length + ')');
         $("[id='siteLength']").each(function () {
@@ -151,10 +148,7 @@ $(document).ready(function () {
         console.log("An error has occurred2.");
     });
 
-
-    //https://tiptool.vee-services.com/Data/Equipment_JSON_MOD2.json
-
-    $.getJSON("Data/Equipment_JSON_MOD2.json", function (data) {
+    $.getJSON("/Data/Equipment_JSON_MOD2.json", function (data) {
         eqpt_config = data;
         load_EqptConfig();
     }).fail(function () {
@@ -496,101 +490,232 @@ $(document).ready(function () {
     //start undo and redo
     redo_css_inactive();
     undo_css_inactive();
+
     $("#button_undo").on("click", function () {
-        if (history_list_back.length > 1) {
-            const current_nodes = data.nodes.get(data.nodes.getIds());
-            const current_edges = data.edges.get(data.edges.getIds());
-            const previous_nodes = history_list_back[1].nodes_his;
-            const previous_edges = history_list_back[1].edges_his;
-            // event off
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            // undo without events
-            if (current_nodes.length > previous_nodes.length) {
-                const previous_nodes_diff = _.differenceBy(
-                    current_nodes,
-                    previous_nodes,
-                    "id"
-                );
-                data.nodes.remove(previous_nodes_diff);
-            } else {
-                data.nodes.update(previous_nodes);
+        if (tempUndo.length > 0) {
+            var tempData = tempUndo[tempUndo.length - 1];
+            if (!tempData.isMultiple) {
+                var isBreak = false;
+                if (tempData.isUpdate) {
+                    var undoLength = tempUndo.length;
+                    for (var i = 1; i < undoLength; i++) {
+                        if (!tempUndo[undoLength - (i + 1)].isMultiple) {
+                            if (tempUndo[undoLength - 1].id == tempUndo[undoLength - (i + 1)].id) {
+                                if (tempData.component_type == roadmJSON.component_type)
+                                    data.nodes.update(tempUndo[undoLength - (i + 1)]);
+                                else {
+                                    data.edges.update(tempUndo[undoLength - (i + 1)]);
+                                    nodeValidationInEdge(tempUndo[undoLength - (i + 1)].from, tempUndo[undoLength - (i + 1)].to);
+                                    multipleFiberService(tempUndo[undoLength - (i + 1)].from, tempUndo[undoLength - (i + 1)].to);
+                                }
+                                isBreak = true;
+                                break;
+                            }
+                        }
+                        else {
+                            for (var j = 0; j < tempUndo[undoLength - (i + 1)].list.length; j++) {
+                                if (tempUndo[undoLength - 1].id == tempUndo[undoLength - (i + 1)].list[j].id) {
+                                    if (tempData.component_type == roadmJSON.component_type)
+                                        data.nodes.update(tempUndo[undoLength - (i + 1)].list[j]);
+                                    else {
+                                        data.edges.update(tempUndo[undoLength - (i + 1)].list[j]);
+                                        nodeValidationInEdge(tempUndo[undoLength - (i + 1)].list[j].from, tempUndo[undoLength - (i + 1)].list[j].to);
+                                        multipleFiberService(tempUndo[undoLength - (i + 1)].list[j].from, tempUndo[undoLength - (i + 1)].list[j].to);
+                                    }
+                                    isBreak = true;
+                                    break;
+                                }
+                            }
+                            if (isBreak)
+                                break;
+                        }
+                    }
+                    if (!isBreak) {
+                        if (tempData.component_type == roadmJSON.component_type)
+                            data.nodes.remove(tempUndo[undoLength - 1]);
+                        else {
+                            data.edges.remove(tempUndo[undoLength - 1]);
+                            nodeValidationInEdge(tempUndo[undoLength - 1].from, tempUndo[undoLength - 1].to);
+                            multipleFiberService(tempUndo[undoLength - 1].from, tempUndo[undoLength - 1].to);
+                        }
+                    }
+                }
+                else if (tempData.isDelete) {
+                    if (tempData.component_type == roadmJSON.component_type)
+                        data.nodes.update(tempData);
+                    else {
+                        data.edges.update(tempData);
+                        nodeValidationInEdge(tempData.from, tempData.to);
+                        multipleFiberService(tempData.from, tempData.to);
+                    }
+                    tempUndo[tempUndo.length - 1].isDelete = false;
+                    tempUndo[tempUndo.length - 1].isUpdate = true;
+                }
+                else {
+                    if (tempData.component_type == roadmJSON.component_type)
+                        data.nodes.remove(tempData);
+                    else {
+                        data.edges.remove(tempData);
+                        nodeValidationInEdge(tempData.from, tempData.to);
+                        multipleFiberService(tempData.from, tempData.to);
+                    }
+                }
+                tempUndo.pop();
             }
-
-            if (current_edges.length > previous_edges.length) {
-                const previous_edges_diff = _.differenceBy(
-                    current_edges,
-                    previous_edges,
-                    "id"
-                );
-                data.edges.remove(previous_edges_diff);
-            } else {
-                data.edges.update(previous_edges);
+            else {
+                if (tempData.isUpdate) {
+                    for (var i = 0; i < tempData.list.length; i++) {
+                        for (var j = 0; j < tempData.preList.length; j++) {
+                            if (tempData.list[i].id == tempData.preList[j].id) {
+                                data.nodes.update(tempData.preList[j]);
+                                break;
+                            }
+                        }
+                        //data.nodes.update(tempData.list[i]);
+                    }
+                }
+                else {
+                    for (var i = 0; i < tempData.list.length; i++) {
+                        data.nodes.update(tempData.list[i]);
+                    }
+                }
+                tempUndo.pop();
             }
-            // recover event on
-            data.nodes.on("*", change_history_back);
-            data.edges.on("*", change_history_back);
-
-            history_list_forward.unshift({
-                nodes_his: history_list_back[0].nodes_his,
-                edges_his: history_list_back[0].edges_his
-            });
-            history_list_back.shift();
-            // apply css
-            css_for_undo_redo_chnage();
-            $(btnAddRoadm).removeClass('highlight');
-            $(btnAddFused).removeClass('highlight');
-            $(btnAddILA).removeClass('highlight');
-            $(btnAddAmplifier).removeClass('highlight');
-            $(btnAddTransceiver).removeClass('highlight')
-            nodeMode = 0;
-            enableEdgeIndicator();
         }
+        remove_NodeHighlight();
+
+        $(btnAddRoadm).removeClass('highlight');
+        $(btnAddFused).removeClass('highlight');
+        $(btnAddILA).removeClass('highlight');
+        $(btnAddAmplifier).removeClass('highlight');
+        $(btnAddTransceiver).removeClass('highlight')
+        nodeMode = 0;
+        enableEdgeIndicator();
+
+
+        //if (history_list_back.length > 1) {
+
+        //    const current_nodes = data.nodes.get(data.nodes.getIds());
+        //    const current_edges = data.edges.get(data.edges.getIds());
+        //    const previous_nodes = history_list_back[1].nodes_his;
+        //    const previous_edges = history_list_back[1].edges_his;
+        //// event off
+        //data.nodes.off("*", change_history_back);
+        //data.edges.off("*", change_history_back);
+        //// undo without events
+        //if (current_nodes.length > previous_nodes.length) {
+        //    const previous_nodes_diff = _.differenceBy(
+        //        current_nodes,
+        //        previous_nodes,
+        //        "id"
+        //    );
+        //    data.nodes.remove(previous_nodes_diff);
+        //} else {
+        //    data.nodes.update(previous_nodes);
+        //}
+
+        //if (current_edges.length > previous_edges.length) {
+        //    const previous_edges_diff = _.differenceBy(
+        //        current_edges,
+        //        previous_edges,
+        //        "id"
+        //    );
+        //    data.edges.remove(previous_edges_diff);
+        //} else {
+        //    data.edges.update(previous_edges);
+        //}
+        //// recover event on
+        //data.nodes.on("*", change_history_back);
+        //data.edges.on("*", change_history_back);
+
+        //history_list_forward.unshift({
+        //    nodes_his: history_list_back[0].nodes_his,
+        //    edges_his: history_list_back[0].edges_his
+        //});
+        //history_list_back.shift();
+        // //apply css
+        //    css_for_undo_redo_chnage();
+        //    $(btnAddRoadm).removeClass('highlight');
+        //    $(btnAddFused).removeClass('highlight');
+        //    $(btnAddILA).removeClass('highlight');
+        //    $(btnAddAmplifier).removeClass('highlight');
+        //    $(btnAddTransceiver).removeClass('highlight')
+        //    nodeMode = 0;
+        //    enableEdgeIndicator();
+        //}
     });
 
     $("#button_redo").on("click", function () {
-        if (history_list_forward.length > 0) {
-            const current_nodes = data.nodes.get(data.nodes.getIds());
-            const current_edges = data.edges.get(data.edges.getIds());
-            const forward_nodes = history_list_forward[0].nodes_his;
-            const forward_edges = history_list_forward[0].edges_his;
-            // event off
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            // redo without events
-            if (current_nodes.length > forward_nodes.length) {
-                const forward_nodes_diff = _.differenceBy(
-                    current_nodes,
-                    forward_nodes,
-                    "id"
-                );
-                data.nodes.remove(forward_nodes_diff);
-            } else {
-                data.nodes.update(forward_nodes);
-            }
-            if (current_edges.length > forward_edges.length) {
-                const forward_edges_diff = _.differenceBy(
-                    current_edges,
-                    forward_edges,
-                    "id"
-                );
-                data.edges.remove(forward_edges_diff);
-            } else {
-                data.edges.update(forward_edges);
-            }
-            // recover event on
-            data.nodes.on("*", change_history_back);
-            data.edges.on("*", change_history_back);
-            history_list_back.unshift({
-                nodes_his: history_list_forward[0].nodes_his,
-                edges_his: history_list_forward[0].edges_his
-            });
-            // history_list_forward
-            history_list_forward.shift();
-            // apply css
-            css_for_undo_redo_chnage();
-            enableEdgeIndicator();
-        }
+
+        //if (tempRedo.length > 0) {
+        //    debugger;
+        //    if (tempRedo[tempRedo.length - 1].isDelete) {
+        //        tempRedo[tempRedo.length - 1].isDelete = false;
+        //        tempUndo.push(tempRedo[tempRedo.length - 1]);
+        //        data.nodes.remove(tempRedo[tempRedo.length - 1]);
+
+        //    }
+        //    else {
+        //        tempUndo.push(tempRedo[tempRedo.length - 1]);
+        //        data.nodes.update(tempRedo[tempRedo.length - 1]);
+        //        tempRedo.pop();
+        //    }
+        //}
+
+        //if (tempRedo.length > 0) {
+        //    if (tempRedo[tempRedo.length - 1].isUpdate) {
+        //        tempUndo.push(tempRedo[tempRedo.length - 1]);
+        //        data.nodes.remove(tempRedo[tempRedo.length - 1]);
+        //    }
+        //    else {
+        //        tempUndo.push(tempUndo[tempUndo.length - 1]);
+        //        data.nodes.update(tempUndo[tempUndo.length - 2]);
+        //    }
+        //    tempRedo.pop();
+        //} 
+
+        //if (history_list_forward.length > 0) {
+        //    const current_nodes = data.nodes.get(data.nodes.getIds());
+        //    const current_edges = data.edges.get(data.edges.getIds());
+        //    const forward_nodes = history_list_forward[0].nodes_his;
+        //    const forward_edges = history_list_forward[0].edges_his;
+        //    // event off
+        //    data.nodes.off("*", change_history_back);
+        //    data.edges.off("*", change_history_back);
+        //    // redo without events
+        //    if (current_nodes.length > forward_nodes.length) {
+        //        const forward_nodes_diff = _.differenceBy(
+        //            current_nodes,
+        //            forward_nodes,
+        //            "id"
+        //        );
+        //        data.nodes.remove(forward_nodes_diff);
+        //    } else {
+        //        data.nodes.update(forward_nodes);
+        //    }
+        //    if (current_edges.length > forward_edges.length) {
+        //        const forward_edges_diff = _.differenceBy(
+        //            current_edges,
+        //            forward_edges,
+        //            "id"
+        //        );
+        //        data.edges.remove(forward_edges_diff);
+        //    } else {
+        //        data.edges.update(forward_edges);
+        //    }
+        //    // recover event on
+        //    data.nodes.on("*", change_history_back);
+        //    data.edges.on("*", change_history_back);
+        //    history_list_back.unshift({
+        //        nodes_his: history_list_forward[0].nodes_his,
+        //        edges_his: history_list_forward[0].edges_his
+        //    });
+        //    // history_list_forward
+        //    history_list_forward.shift();
+        //    // apply css
+        //    css_for_undo_redo_chnage();
+        //    enableEdgeIndicator();
+        //}
     });
     //end undo and redo
 
@@ -3832,7 +3957,6 @@ function applyRoadmPro(nodeID, roadm_type) {
         id: nodeID, roadm_type: roadm_type
     });
     realUpdate_Roadm(nodeID, roadm_type);
-
 }
 function applyTransPro(nodeID, node_type, trans_type) {
     var id = nodeID;
@@ -3896,45 +4020,74 @@ function applyPro(nodes, callback) {
     var isUpdated = false;
     if (isCopyPara) {
         var nodeDetails = network.body.data.nodes.get(copiedNodeID);
+        var preUpdateList = [];
+        removeNodeList = [];
         for (var i = 0; i < nodes.length; i++) {
             if (nodeDetails.node_type == roadmJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 if (nodes.length > 1) {
-                    if (network.body.data.nodes.get(nodes[i]).image == DIR + roadmJSON.h_image)
+                    if (network.body.data.nodes.get(nodes[i]).image == DIR + roadmJSON.h_image) {
+                        preUpdateList.push(network.body.data.nodes.get(nodes[i]));
                         applyRoadmPro(nodes[i], nodeDetails.roadm_type);
+                        removeNodeList.push(network.body.data.nodes.get(nodes[i]));
+                    }
                 }
                 else {
                     applyRoadmPro(nodes[i], nodeDetails.roadm_type);
+                    var tdata = network.body.data.nodes.get(nodes[i]);
+                    tdata.isUpdate = true;
+                    tempUndo.push(tdata);
                 }
                 isUpdated = true;
 
             }
             else if (nodeDetails.node_type == transceiverJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 if (nodes.length > 1) {
-                    if (network.body.data.nodes.get(nodes[i]).image == DIR + transceiverJSON.h_image)
+                    if (network.body.data.nodes.get(nodes[i]).image == DIR + transceiverJSON.h_image) {
+                        var temptrans = network.body.data.nodes.get(nodes[i]);
                         isUpdated = applyTransPro(nodes[i], nodeDetails.node_type, nodeDetails.transceiver_type);
+                        if (isUpdated) {
+                            preUpdateList.push(temptrans);
+                            removeNodeList.push(network.body.data.nodes.get(nodes[i]));
+                        }
+                    }
                 }
                 else {
                     isUpdated = applyTransPro(nodes[i], nodeDetails.node_type, nodeDetails.transceiver_type);
+                    var tdata = network.body.data.nodes.get(nodes[i]);
+                    tdata.isUpdate = true;
+                    tempUndo.push(tdata);
                 }
             }
             if (nodeDetails.node_type == amplifierJSON.node_type && network.body.data.nodes.get(nodes[i]).node_type == nodeDetails.node_type) {
                 if (nodeDetails.amp_category == amplifierJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
                     if (nodes.length > 1) {
-                        if (network.body.data.nodes.get(nodes[i]).image == DIR + amplifierJSON.h_image)
+                        if (network.body.data.nodes.get(nodes[i]).image == DIR + amplifierJSON.h_image) {
+                            preUpdateList.push(network.body.data.nodes.get(nodes[i]));
                             applyAmpPro(nodes[i], nodeDetails.amp_type);
+                            removeNodeList.push(network.body.data.nodes.get(nodes[i]));
+                        }
                     }
                     else {
                         applyAmpPro(nodes[i], nodeDetails.amp_type);
+                        var tdata = network.body.data.nodes.get(nodes[i]);
+                        tdata.isUpdate = true;
+                        tempUndo.push(tdata);
                     }
                     isUpdated = true;
                 }
                 else if (nodeDetails.amp_category == ramanampJSON.amp_category && nodeDetails.amp_category == network.body.data.nodes.get(nodes[i]).amp_category) {
                     if (nodes.length > 1) {
-                        if (network.body.data.nodes.get(nodes[i]).image == DIR + ramanampJSON.h_image)
+                        if (network.body.data.nodes.get(nodes[i]).image == DIR + ramanampJSON.h_image) {
+                            preUpdateList.push(network.body.data.nodes.get(nodes[i]));
                             applyRamanAmpPro(nodes[i], nodeDetails.amp_type, nodeDetails.category);
+                            removeNodeList.push(network.body.data.nodes.get(nodes[i]));
+                        }
                     }
                     else {
                         applyRamanAmpPro(nodes[i], nodeDetails.amp_type, nodeDetails.category);
+                        var tdata = network.body.data.nodes.get(nodes[i]);
+                        tdata.isUpdate = true;
+                        tempUndo.push(tdata);
                     }
 
                     isUpdated = true;
@@ -3942,8 +4095,18 @@ function applyPro(nodes, callback) {
             }
         }
 
-        if (isUpdated)
-            showMessage(alertType.Success, "Template applied successfully.");
+        if (removeNodeList.length > 0) {
+            var updateList = {
+                isMultiple: true,
+                isUpdate: true,
+                preList: preUpdateList,
+                list: removeNodeList
+            }
+            tempUndo.push(updateList);
+        }
+
+        //if (isUpdated)
+        //    showMessage(alertType.Success, "Template applied successfully.");
         clearCopiedData();
     }
 }
@@ -4061,6 +4224,7 @@ function pasteNode(nodeId) {
         document.getElementById("pasteMenu").style.display = "none";
         UnSelectAll();
         $("#stepCreateTopology").click();
+        tempUndo.push(network.body.data.nodes.get(nodeID));
     }
 }
 function UnSelectAll() {
@@ -4555,7 +4719,12 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             });
 
             realUpdate();
+            //var tedge = network.body.data.edges.get(fiberID);
+            //tedge.isUpdate = false;
+            //tempUndo.push(tedge);
             nodeValidationInEdge(cfrom, cto);
+
+
         }
 
         data.nodes.off("*", change_history_back);
@@ -4563,6 +4732,9 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         multipleFiberService(cfrom, cto);
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
+        var tedge = network.body.data.edges.get(fiberID);
+        tedge.isUpdate = false;
+        tempUndo.push(tedge);
     }
 }
 
@@ -4705,7 +4877,7 @@ function countFiberService(isdualfiber, issinglefiber, isservice, ispatch, cfrom
 
 //Add service//cmode 1-add
 function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
-
+    var serviceID = token();
     if (cmode == 1) {
 
         var bandwidth = configData[serviceJSON.component_type].default.band_width;
@@ -4719,7 +4891,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
         if (!fiberSmooth)
             fiberSmooth = fiberJSON.options.smooth;
         network.body.data.edges.add({
-            id: token(), from: cfrom, to: cto, label: elabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
+            id: serviceID, from: cfrom, to: cto, label: elabel, text: clabel, dashes: serviceJSON.dashes, width: serviceJSON.width,
             component_type: serviceJSON.component_type, color: serviceJSON.options.color, background: serviceJSON.options.background,
             arrows: serviceJSON.options.arrows,
             //font: serviceJSON.options.font,
@@ -4732,6 +4904,9 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
 
+        var tedge = network.body.data.edges.get(serviceID);
+        tedge.isUpdate = false;
+        tempUndo.push(tedge);
     }
     UnSelectAll();
     network.addEdgeMode();
@@ -4741,7 +4916,7 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
 function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
     if (cmode == 1) {
-
+        var patchID = token();
         if (!isImport)
             clabel = countFiberService(false, false, false, true, cfrom, cto) + '-' + clabel;
 
@@ -4789,7 +4964,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             }
 
             network.body.data.edges.add({
-                id: token(), from: cfrom, to: cto, label: elabel, text: clabel,
+                id: patchID, from: cfrom, to: cto, label: elabel, text: clabel,
                 dashes: singlePatchJSON.dashes, width: singlePatchJSON.width,
                 component_type: singlePatchJSON.component_type, patch_category: singlePatchJSON.patch_category,
                 color: singlePatchJSON.options.color, background: singlePatchJSON.options.background,
@@ -4822,7 +4997,7 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
             }
             //end
             network.body.data.edges.add({
-                id: token(), from: cfrom, to: cto, label: elabel, text: ctext,
+                id: patchID, from: cfrom, to: cto, label: elabel, text: ctext,
                 dashes: dualPatchJSON.dashes, width: dualPatchJSON.width,
                 component_type: dualPatchJSON.component_type, patch_category: dualPatchJSON.patch_category,
                 color: dualPatchJSON.options.color, background: dualPatchJSON.options.background,
@@ -4838,6 +5013,10 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         multipleFiberService(cfrom, cto);
         data.nodes.on("*", change_history_back);
         data.edges.on("*", change_history_back);
+
+        var tedge = network.body.data.edges.get(patchID);
+        tedge.isUpdate = false;
+        tempUndo.push(tedge);
     }
 }
 
@@ -4966,6 +5145,7 @@ function addNodes(data, callback) {
     data.node_degree = nodeDetails.default.node_degree;
     data.component_type = roadmJSON.component_type;
     data.hidden = false;
+    data.isUpdate = false;
     data.view = $("#ddlNetworkView").val();
     callback(data);
 
@@ -4973,8 +5153,7 @@ function addNodes(data, callback) {
 
     if (nodeMode == nodeType.ROADM || nodeMode == nodeType.ILA || nodeMode == nodeType.Attenuator || nodeMode == nodeType.Transceiver || nodeMode == nodeType.Amplifier || nodeMode == nodeType.RamanAmplifier)
         network.addNodeMode();
-
-
+    tempUndo.push(network.body.data.nodes.get(data.id));
 }
 
 var nofNode = 1;
@@ -5322,7 +5501,9 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     data.nodes.off("*", change_history_back);
     data.edges.off("*", change_history_back);
 
-
+    //var tnode = network.body.data.nodes.get(nodeID);
+    //tnode.isUpdate = false;
+    //tempUndo.push(tnode);
 
     //network.body.data.edges.add({
     //    id: token(), from: fiberDetails.fromId, to: nodeID, label: fiberDetails.label,smooth:smooth
@@ -5333,6 +5514,10 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
     //});
 
     network.body.data.edges.remove(fiberID);
+
+
+
+
     var labelvalue = getLabel(fiberDetails.from, nodeID, singleFiberJSON.component_type);
     //var textvalue = roadmJSON.node_type + "- [ " + network.body.data.nodes.get(fiberDetails.from).label + ' - ' + network.body.data.nodes.get(nodeID).label + " ]";
     labelvalue = countFiberService(false, true, false, false, fiberDetails.from, nodeID) + '-' + labelvalue;
@@ -5461,6 +5646,26 @@ function singleFiberInsertNode(fiberID, node_type, callback) {
 
     //}
 
+    fiberDetails.isUpdate = false;
+    fiberDetails.isDelete = true;
+    tempUndo.push(fiberDetails);
+
+    nodeDetails.isUpdate = false;
+    tempUndo.push(nodeDetails);
+
+    fDetails = network.body.data.edges.get(fiberID);
+    fDetails.isUpdate = false;
+    tempUndo.push(fDetails);
+
+
+    nDetails = network.body.data.edges.get(newFiberID);
+    nDetails.isUpdate = false;
+    tempUndo.push(nDetails);
+
+
+
+
+
     document.getElementById("singleFiberMenu").style.display = "none";
     data.nodes.on("*", change_history_back);
     data.edges.on("*", change_history_back);
@@ -5520,7 +5725,7 @@ function roadmEdit(nodeID, callback) {
     );
 }
 function updateRoadm(nodeID) {
-
+    removeNodeList = [];
     if (nameLengthValidation("txtRoadmName")) {
         var id = nodeID[nodeID.length - 1];
         var label = $("#txtRoadmName").val().trim();
@@ -5555,22 +5760,46 @@ function updateRoadm(nodeID) {
             else
                 $("#ddlRoadmType").removeClass('input_error');
 
+
+            var preUpdateList = [];
             if (nodeID.length > 1) {
                 for (var i = 0; i < nodeID.length; i++) {
 
                     if (network.body.data.nodes.get(nodeID[i]).image == DIR + roadmJSON.h_image) {
+
+                        preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], roadm_type: $("#ddlRoadmType").val()
                         });
                         realUpdate_Roadm(nodeID[i], $("#ddlRoadmType").val());
+
+                        var tdata = network.body.data.nodes.get(nodeID[i]);
+                        //tdata.isUpdate = true;
+                        removeNodeList.push(tdata);
                     }
                 }
+                if (removeNodeList.length > 0) {
+                    var updateList = {
+                        isMultiple: true,
+                        isUpdate: true,
+                        preList: preUpdateList,
+                        list: removeNodeList
+                    }
+                    tempUndo.push(updateList);
+                }
+
             } else {
                 network.body.data.nodes.update({
                     id: id, label: label, roadm_type: $("#ddlRoadmType").val()
                 });
                 realUpdate_Roadm(id, $("#ddlRoadmType").val());
+
+                var tdata = network.body.data.nodes.get(id);
+                tdata.isUpdate = true;
+                tempUndo.push(tdata);
             }
+
+
 
             //var roadmtype = $("#ddlRoadmType").val();
             //var connectedEges = network.getConnectedEdges(id);
@@ -5673,6 +5902,9 @@ function updateAttenuator(nodeID) {
             network.body.data.nodes.update({
                 id: id, label: label
             });
+            var tdata = network.body.data.nodes.get(id);
+            tdata.isUpdate = true;
+            tempUndo.push(tdata);
             clearAttenuator();
         }
 
@@ -5793,6 +6025,7 @@ function amplifierEdit(nodeID, callback) {
     );
 }
 function updateAmplifier(nodeID) {
+    removeNodeList = [];
     if (nameLengthValidation("txtAmplifierName")) {
 
         var id = nodeID[nodeID.length - 1];
@@ -5811,20 +6044,38 @@ function updateAmplifier(nodeID) {
         if (amp_category == amplifierJSON.amp_category) {
 
             if (nodeID.length > 1) {
+                var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
 
                     if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image) {
+                        preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlAmplifierType").val()
                         });
                         realUpdate_Amplifier(nodeID[i], $("#ddlAmplifierType").val());
+                        var tdata = network.body.data.nodes.get(nodeID[i]);
+                        //tdata.isUpdate = true;
+                        removeNodeList.push(tdata);
                     }
+                }
+                if (removeNodeList.length > 0) {
+                    var updateList = {
+                        isMultiple: true,
+                        isUpdate: true,
+                        preList: preUpdateList,
+                        list: removeNodeList
+                    }
+                    tempUndo.push(updateList);
                 }
             } else {
                 network.body.data.nodes.update({
                     id: id, label: label, amp_type: $("#ddlAmplifierType").val()
                 });
                 realUpdate_Amplifier(id, $("#ddlAmplifierType").val());
+
+                var tdata = network.body.data.nodes.get(id);
+                tdata.isUpdate = true;
+                tempUndo.push(tdata);
             }
 
             clearAmplifier();
@@ -5914,7 +6165,7 @@ function ramanAmpEdit(nodeID, callback) {
     );
 }
 function updateRamanAmp(nodeID) {
-
+    removeNodeList = [];
     if (nameLengthValidation("txtRamanAmpName")) {
 
         var id = nodeID[nodeID.length - 1];
@@ -5940,13 +6191,27 @@ function updateRamanAmp(nodeID) {
 
         if (amp_category == ramanampJSON.amp_category) {
             if (nodeID.length > 1) {
+                var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
                     if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image) {
+                        preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
                         });
                         realUpdate_RamanAmp(nodeID[i], $("#ddlRamanAmpType").val());
+                        var tdata = network.body.data.nodes.get(nodeID[i]);
+                        //tdata.isUpdate = true;
+                        removeNodeList.push(tdata);
                     }
+                }
+                if (removeNodeList.length > 0) {
+                    var updateList = {
+                        isMultiple: true,
+                        isUpdate: true,
+                        preList: preUpdateList,
+                        list: removeNodeList
+                    }
+                    tempUndo.push(updateList);
                 }
             } else {
                 network.body.data.nodes.update({
@@ -5954,6 +6219,9 @@ function updateRamanAmp(nodeID) {
                 });
 
                 realUpdate_RamanAmp(id, $("#ddlRamanAmpType").val());
+                var tdata = network.body.data.nodes.get(id);
+                tdata.isUpdate = true;
+                tempUndo.push(tdata);
             }
 
             clearRamanAmp();
@@ -6039,10 +6307,10 @@ function transceiverEdit(nodeID, callback) {
     );
 }
 function updateTransceiver(nodeID) {
-
+    removeNodeList = [];
     if (nameLengthValidation("txtTransceiverName")) {
-
         if (nodeID.length > 1) {
+            var preUpdateList = [];
             for (var i = 0; i < nodeID.length; i++) {
                 if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image) {
                     var id = nodeID[i];
@@ -6092,16 +6360,22 @@ function updateTransceiver(nodeID) {
 
                             if (nodeID.length > 1) {
 
+                                preUpdateList.push(network.body.data.nodes.get(id));
                                 network.body.data.nodes.update({
                                     id: id, transceiver_type: transceiverType
                                 });
                                 realUpdate_Transceiver(id, "");
+                                var tdata = network.body.data.nodes.get(id);
+                                removeNodeList.push(tdata);
 
                             } else {
                                 network.body.data.nodes.update({
                                     id: id, label: label, transceiver_type: transceiverType
                                 });
                                 realUpdate_Transceiver(id, "");
+                                var tdata = network.body.data.nodes.get(id);
+                                tdata.isUpdate = true;
+                                tempUndo.push(tdata);
                             }
 
                             //if (tempEdge.length > 1) {
@@ -6118,6 +6392,16 @@ function updateTransceiver(nodeID) {
                     }
 
                 }
+            }
+
+            if (removeNodeList.length > 0) {
+                var updateList = {
+                    isMultiple: true,
+                    isUpdate: true,
+                    preList: preUpdateList,
+                    list: removeNodeList
+                }
+                tempUndo.push(updateList);
             }
         }
         else {
@@ -6180,6 +6464,10 @@ function updateTransceiver(nodeID) {
                         realUpdate_Transceiver(id, "");
                     }
 
+                    var tdata = network.body.data.nodes.get(id);
+                    tdata.isUpdate = true;
+                    tempUndo.push(tdata);
+
                     //if (tempEdge.length > 1) {
                     //    removeSpanInError(id, true);
                     //}
@@ -6235,31 +6523,42 @@ function realUpdate_Transceiver(id, rtype) {
     }
 }
 
+var removeNodeList = [];
 function deleteNode(nodeList) {
-
+    removeNodeList = [];
     for (var i = 0; i < nodeList.length; i++) {
         if (nodeList.length > 1) {
             if (network.body.data.nodes.get(nodeList[i]).image == DIR + roadmJSON.h_image)
-                removeNodes(nodeList[i]);
+                removeNodes(nodeList[i], true);
             else if (network.body.data.nodes.get(nodeList[i]).image == DIR + fusedJSON.h_image)
-                removeNodes(nodeList[i]);
+                removeNodes(nodeList[i], true);
             else if (network.body.data.nodes.get(nodeList[i]).image == DIR + transceiverJSON.h_image)
-                removeNodes(nodeList[i]);
+                removeNodes(nodeList[i], true);
             else if (network.body.data.nodes.get(nodeList[i]).image == DIR + amplifierJSON.h_image)
-                removeNodes(nodeList[i]);
+                removeNodes(nodeList[i], true);
             else if (network.body.data.nodes.get(nodeList[i]).image == DIR + ramanampJSON.h_image)
-                removeNodes(nodeList[i]);
+                removeNodes(nodeList[i], true);
         }
         else {
             removeNodes(nodeList[i]);
         }
     }
+
+    if (nodeList.length > 1 && removeNodeList.length > 0) {
+        var reList = {
+            isMultiple: true,
+            isUpdate: false,
+            list: removeNodeList
+        }
+        tempUndo.push(reList);
+    }
+
     $("#stepCreateTopology").click();
     UnSelectAll();
 
 }
 
-function removeNodes(nodeID) {
+function removeNodes(nodeID, isMutiple) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     var node_type = nodeDetails.node_type;
     if (nodeDetails.node_type == ILAJSON.node_type)
@@ -6295,7 +6594,21 @@ function removeNodes(nodeID) {
         else
             removeSpanInError(nodeID);
 
+        //var tremove = network.body.data.nodes.get(nodeID)
+
+
+        if (isMutiple) {
+            removeNodeList.push(nodeDetails);
+        }
+        else {
+            nodeDetails.isDelete = true;
+            nodeDetails.isUpdate = false;
+            tempUndo.push(nodeDetails);
+        }
+
         network.body.data.nodes.remove(nodeID);
+
+
     }
 }
 function dualFiberEdit(fiberID, callback) {
@@ -6526,6 +6839,11 @@ function updateSingleFiber(fiberID) {
             checkErrorFree();
             data.nodes.on("*", change_history_back);
             data.edges.on("*", change_history_back);
+
+            var tdata = network.body.data.edges.get(id);
+            tdata.isUpdate = true;
+            tempUndo.push(tdata);
+
             clearSingleFiber();
         }
 
@@ -6612,9 +6930,16 @@ function deleteFiber(fiberID) {
         id: toNodeDetails.id, roadm_type_pro: arrRoadmTypePro
     });
 
+
+    var tedge = network.body.data.edges.get(fiberID);
     network.body.data.edges.remove(fiberID);
     multipleFiberService(fiber.from, fiber.to);
     nodeValidationInEdge(fiber.from, fiber.to);
+
+    tedge.isDelete = true;
+    tedge.isUpdate = false;
+    tempUndo.push(tedge);
+
     UnSelectAll();
     enableEdgeIndicator();
     //    }
@@ -6710,6 +7035,11 @@ function updateSinglePatch(patchID) {
             multipleFiberService(patchDetails.from, patchDetails.to);
             data.nodes.on("*", change_history_back);
             data.edges.on("*", change_history_back);
+
+            var tdata = network.body.data.edges.get(id);
+            tdata.isUpdate = true;
+            tempUndo.push(tdata);
+
             clearSinglePatch();
         }
 
@@ -6741,9 +7071,15 @@ function deletePatch(patchID) {
         return;
     document.getElementById("singlePatchMenu").style.display = "none";
     document.getElementById("dualPatchMenu").style.display = "none";
+    var patchd = network.body.data.edges.get(patchID);
     network.body.data.edges.remove(patchID);
     multipleFiberService(patchDetails.from, patchDetails.to);
     nodeValidationInEdge(patchDetails.from, patchDetails.to);
+
+    patchd.isDelete = true;
+    patchd.isUpdate = false;
+    tempUndo.push(patchd);
+
     UnSelectAll();
     enableEdgeIndicator();
     //    }
@@ -6846,6 +7182,11 @@ function updateService(serviceID) {
             multipleFiberService(serviceDetails.from, serviceDetails.to);
             data.nodes.on("*", change_history_back);
             data.edges.on("*", change_history_back);
+
+            var tdata = network.body.data.edges.get(id);
+            tdata.isUpdate = true;
+            tempUndo.push(tdata);
+
             clearService();
         }
 
@@ -6873,8 +7214,14 @@ function deleteService(serviceID) {
     //}).then((result) => {
     //    if (result.value) {
     document.getElementById("serviceMenu").style.display = "none";
+    var serviced = network.body.data.edges.get(serviceID);
     network.body.data.edges.remove(serviceID);
     multipleFiberService(serviceDetails.from, serviceDetails.to);
+
+    serviced.isDelete = true;
+    serviced.isUpdate = false;
+    tempUndo.push(serviced);
+
     UnSelectAll();
     enableEdgeIndicator();
     //    }

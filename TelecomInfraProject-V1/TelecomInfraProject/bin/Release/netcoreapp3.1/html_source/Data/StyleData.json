@@ -56,7 +56,7 @@
 
   "Roadm": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "newroadm.svg",
     "err_image": "err_roadm.png",
@@ -83,7 +83,7 @@
   },
   "ILA": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "ILA.svg",
     "err_image": "ILA.svg",
@@ -110,7 +110,7 @@
   },
   "Amplifier": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "newamp.svg",
     "err_image": "err_amplifier.png",
@@ -137,7 +137,7 @@
   },
   "RamanAmplifier": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "ramanamp.svg",
     "err_image": "err_raman.png",
@@ -164,7 +164,7 @@
   },
   "Fused": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "newattenuator.svg",
     "err_image": "err_attenuator.png",
@@ -191,7 +191,7 @@
   },
   "Transceiver": {
     "shape": "image",
-    "size": 16,
+    "size": 20,
     "err_size": 22,
     "image": "newtransceiver.svg",
     "err_image": "err_transceiver.png",
