@@ -1527,10 +1527,16 @@ function draw(isImport) {
 
             }
             else {
-                if (copyDetails.amp_category != nodeDetails.amp_category) {
-                    showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                    nodeSelect = true;
-                    return;
+                if (copyDetails.amp_category && nodeDetails.amp_category) {
+                    if (copyDetails.amp_category != nodeDetails.amp_category) {
+                        showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                        nodeSelect = true;
+                        return;
+                    }
+                    else {
+                        $('#toast').toast('hide');
+                    }
+
                 }
                 else
                     $('#toast').toast('hide');
@@ -1770,7 +1776,7 @@ function draw(isImport) {
                 if (network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) {
                     if ((network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) && network.body.data.nodes.get(sNodes[0].id).node_type == amplifierJSON.node_type) {
                         if (network.body.data.nodes.get(sNodes[0].id).amp_category == network.body.data.nodes.get(sNodes[i].id).amp_category)
-                            nodesArray.push(data.nodes[i]);
+                            nodesArray.push(sNodes[i].id);
 
                     }
                     else
@@ -1780,7 +1786,6 @@ function draw(isImport) {
         }
         else
             nodesArray.push(nodeData);
-
 
 
         if (type == serviceJSON.component_type) {
@@ -6065,7 +6070,7 @@ function updateAmplifier(nodeID) {
                 var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
 
-                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image) {
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.fh_image) {
                         preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlAmplifierType").val()
@@ -6211,7 +6216,7 @@ function updateRamanAmp(nodeID) {
             if (nodeID.length > 1) {
                 var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
-                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image) {
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.fh_image) {
                         preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
@@ -6330,7 +6335,7 @@ function updateTransceiver(nodeID) {
         if (nodeID.length > 1) {
             var preUpdateList = [];
             for (var i = 0; i < nodeID.length; i++) {
-                if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image) {
+                if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.fh_image) {
                     var id = nodeID[i];
                     var label = $("#txtTransceiverName").val().trim();
                     var nodeDetails = network.body.data.nodes.get(id);
