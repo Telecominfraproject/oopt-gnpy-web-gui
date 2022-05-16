@@ -1451,7 +1451,6 @@ function draw(isImport) {
                 if (!nodeSelect) {
                     if (!network.body.nodes[clickedNode.id].selected) {
                         if (nodeDetails.h_image) {
-                            console.log("click event  - image : " + nodeDetails.h_image, "h image :" + nodeDetails.image);
                             network.body.data.nodes.update({
                                 id: nodeDetails.id, image: nodeDetails.h_image, h_image: nodeDetails.image, is_highlight: false
                             });
@@ -1528,10 +1527,16 @@ function draw(isImport) {
 
             }
             else {
-                if (copyDetails.amp_category != nodeDetails.amp_category) {
-                    showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                    nodeSelect = true;
-                    return;
+                if (copyDetails.amp_category && nodeDetails.amp_category) {
+                    if (copyDetails.amp_category != nodeDetails.amp_category) {
+                        showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                        nodeSelect = true;
+                        return;
+                    }
+                    else {
+                        $('#toast').toast('hide');
+                    }
+
                 }
                 else
                     $('#toast').toast('hide');
@@ -1540,41 +1545,60 @@ function draw(isImport) {
             if (params.event.srcEvent.ctrlKey) {
                 var image;
                 if (nodeDetails.node_type == roadmJSON.node_type) {
-
                     if (nodeDetails.image == DIR + roadmJSON.h_image) {
                         image = nodeDetails.h_image;
                     }
-                    else
-                        image = DIR + roadmJSON.h_image;
+                    else {
+                        if (nodeDetails.image == DIR + roadmJSON.w_image)
+                            image = DIR + roadmJSON.h_image;
+                        else if (nodeDetails.image == DIR + roadmJSON.image)
+                            image = DIR + roadmJSON.fh_image;
+                    }
                 }
                 else if (nodeDetails.node_type == fusedJSON.node_type) {
                     if (nodeDetails.image == DIR + fusedJSON.h_image) {
                         image = nodeDetails.h_image;
                     }
-                    else
-                        image = DIR + fusedJSON.h_image;
+                    else {
+                        if (nodeDetails.image == DIR + fusedJSON.w_image)
+                            image = DIR + fusedJSON.h_image;
+                        else if (nodeDetails.image == DIR + fusedJSON.image)
+                            image = DIR + fusedJSON.fh_image;
+                    }
                 }
                 else if (nodeDetails.node_type == transceiverJSON.node_type) {
                     if (nodeDetails.image == DIR + transceiverJSON.h_image) {
                         image = nodeDetails.h_image;
                     }
-                    else
-                        image = DIR + transceiverJSON.h_image;
+                    else {
+                        if (nodeDetails.image == DIR + transceiverJSON.w_image)
+                            image = DIR + transceiverJSON.h_image;
+                        else if (nodeDetails.image == DIR + transceiverJSON.image)
+                            image = DIR + transceiverJSON.fh_image;
+                    }
                 }
                 else if (nodeDetails.node_type == amplifierJSON.node_type) {
                     if (nodeDetails.amp_category == amplifierJSON.amp_category) {
                         if (nodeDetails.image == DIR + amplifierJSON.h_image) {
                             image = nodeDetails.h_image;
                         }
-                        else
-                            image = DIR + amplifierJSON.h_image;
+                        else {
+                            if (nodeDetails.image == DIR + amplifierJSON.w_image)
+                                image = DIR + amplifierJSON.h_image;
+                            else if (nodeDetails.image == DIR + amplifierJSON.image)
+                                image = DIR + amplifierJSON.fh_image;
+                        }
                     }
                     else if (nodeDetails.amp_category == ramanampJSON.amp_category) {
                         if (nodeDetails.image == DIR + ramanampJSON.h_image) {
                             image = nodeDetails.h_image;
                         }
-                        else
-                            image = DIR + ramanampJSON.h_image;
+                        else {
+                            if (nodeDetails.image == DIR + ramanampJSON.w_image)
+                                image = DIR + ramanampJSON.h_image;
+                            else if (nodeDetails.image == DIR + ramanampJSON.image)
+                                image = DIR + ramanampJSON.fh_image;
+                        }
                     }
                 }
 
@@ -1752,7 +1776,7 @@ function draw(isImport) {
                 if (network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) {
                     if ((network.body.data.nodes.get(sNodes[0].id).node_type == network.body.data.nodes.get(sNodes[i].id).node_type) && network.body.data.nodes.get(sNodes[0].id).node_type == amplifierJSON.node_type) {
                         if (network.body.data.nodes.get(sNodes[0].id).amp_category == network.body.data.nodes.get(sNodes[i].id).amp_category)
-                            nodesArray.push(data.nodes[i]);
+                            nodesArray.push(sNodes[i].id);
 
                     }
                     else
@@ -1762,7 +1786,6 @@ function draw(isImport) {
         }
         else
             nodesArray.push(nodeData);
-
 
 
         if (type == serviceJSON.component_type) {
@@ -6047,7 +6070,7 @@ function updateAmplifier(nodeID) {
                 var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
 
-                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image) {
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + amplifierJSON.fh_image) {
                         preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlAmplifierType").val()
@@ -6193,7 +6216,7 @@ function updateRamanAmp(nodeID) {
             if (nodeID.length > 1) {
                 var preUpdateList = [];
                 for (var i = 0; i < nodeID.length; i++) {
-                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image) {
+                    if (network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + ramanampJSON.fh_image) {
                         preUpdateList.push(network.body.data.nodes.get(nodeID[i]));
                         network.body.data.nodes.update({
                             id: nodeID[i], amp_type: $("#ddlRamanAmpType").val(), category: $("#ddlRamanAmpCategory").val()
@@ -6312,7 +6335,7 @@ function updateTransceiver(nodeID) {
         if (nodeID.length > 1) {
             var preUpdateList = [];
             for (var i = 0; i < nodeID.length; i++) {
-                if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image) {
+                if (network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.h_image || network.body.data.nodes.get(nodeID[i]).image == DIR + transceiverJSON.fh_image) {
                     var id = nodeID[i];
                     var label = $("#txtTransceiverName").val().trim();
                     var nodeDetails = network.body.data.nodes.get(id);
@@ -8602,7 +8625,6 @@ function remove_NodeHighlight() {
 
         if (nodeDetails.node_type == roadmJSON.node_type) {
             if (nodeDetails.image != DIR + roadmJSON.image) {
-                console.log('hai' + nodeDetails.image, 'h : ' + nodeDetails.h_image);
                 if (nodeDetails.h_image == DIR + roadmJSON.h_image) {
                     network.body.data.nodes.update({
                         id: nodeDetails.id, image: nodeDetails.image, h_image: nodeDetails.h_image, is_highlight: false
