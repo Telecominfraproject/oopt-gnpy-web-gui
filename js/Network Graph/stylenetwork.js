@@ -557,17 +557,15 @@ $(document).ready(function () {
                 }
                 else if (tempData.isDelete) {
                     if (tempData.component_type == roadmJSON.component_type) {
+                        data.nodes.update(tempData);
                         var redoupdate = data.nodes.get(tempData.id);
                         tempRedo.push(redoupdate);
 
-                        data.nodes.update(tempData);
-
                     }
                     else {
+                        data.edges.update(tempData);
                         var redoupdate = data.edges.get(tempData.id);
                         tempRedo.push(redoupdate);
-
-                        data.edges.update(tempData);
                         nodeValidationInEdge(tempData.from, tempData.to);
                         multipleFiberService(tempData.from, tempData.to);
                     }
