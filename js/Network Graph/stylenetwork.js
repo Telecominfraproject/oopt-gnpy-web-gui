@@ -623,57 +623,6 @@ $(document).ready(function () {
         nodeMode = 0;
         enableEdgeIndicator();
 
-
-        //if (history_list_back.length > 1) {
-
-        //    const current_nodes = data.nodes.get(data.nodes.getIds());
-        //    const current_edges = data.edges.get(data.edges.getIds());
-        //    const previous_nodes = history_list_back[1].nodes_his;
-        //    const previous_edges = history_list_back[1].edges_his;
-        //// event off
-        //data.nodes.off("*", change_history_back);
-        //data.edges.off("*", change_history_back);
-        //// undo without events
-        //if (current_nodes.length > previous_nodes.length) {
-        //    const previous_nodes_diff = _.differenceBy(
-        //        current_nodes,
-        //        previous_nodes,
-        //        "id"
-        //    );
-        //    data.nodes.remove(previous_nodes_diff);
-        //} else {
-        //    data.nodes.update(previous_nodes);
-        //}
-
-        //if (current_edges.length > previous_edges.length) {
-        //    const previous_edges_diff = _.differenceBy(
-        //        current_edges,
-        //        previous_edges,
-        //        "id"
-        //    );
-        //    data.edges.remove(previous_edges_diff);
-        //} else {
-        //    data.edges.update(previous_edges);
-        //}
-        //// recover event on
-        //data.nodes.on("*", change_history_back);
-        //data.edges.on("*", change_history_back);
-
-        //history_list_forward.unshift({
-        //    nodes_his: history_list_back[0].nodes_his,
-        //    edges_his: history_list_back[0].edges_his
-        //});
-        //history_list_back.shift();
-        // //apply css
-        //    css_for_undo_redo_chnage();
-        //    $(btnAddRoadm).removeClass('highlight');
-        //    $(btnAddFused).removeClass('highlight');
-        //    $(btnAddILA).removeClass('highlight');
-        //    $(btnAddAmplifier).removeClass('highlight');
-        //    $(btnAddTransceiver).removeClass('highlight')
-        //    nodeMode = 0;
-        //    enableEdgeIndicator();
-        //}
     });
 
     $("#button_redo").on("click", function () {
@@ -693,6 +642,8 @@ $(document).ready(function () {
                     }
                     else {
                         data.edges.remove(tempData);
+                        nodeValidationInEdge(tempData.from, tempData.to);
+                        multipleFiberService(tempData.from, tempData.to);
                     }
 
 
@@ -709,6 +660,8 @@ $(document).ready(function () {
                     }
                     else {
                         data.edges.update(tempData);
+                        nodeValidationInEdge(tempData.from, tempData.to);
+                        multipleFiberService(tempData.from, tempData.to);
                     }
 
                     tempRedo.pop();
@@ -747,60 +700,6 @@ $(document).ready(function () {
         nodeMode = 0;
         enableEdgeIndicator();
 
-        //if (tempRedo.length > 0) {
-        //    if (tempRedo[tempRedo.length - 1].isUpdate) {
-        //        tempUndo.push(tempRedo[tempRedo.length - 1]);
-        //        data.nodes.remove(tempRedo[tempRedo.length - 1]);
-        //    }
-        //    else {
-        //        tempUndo.push(tempUndo[tempUndo.length - 1]);
-        //        data.nodes.update(tempUndo[tempUndo.length - 2]);
-        //    }
-        //    tempRedo.pop();
-        //} 
-
-        //if (history_list_forward.length > 0) {
-        //    const current_nodes = data.nodes.get(data.nodes.getIds());
-        //    const current_edges = data.edges.get(data.edges.getIds());
-        //    const forward_nodes = history_list_forward[0].nodes_his;
-        //    const forward_edges = history_list_forward[0].edges_his;
-        //    // event off
-        //    data.nodes.off("*", change_history_back);
-        //    data.edges.off("*", change_history_back);
-        //    // redo without events
-        //    if (current_nodes.length > forward_nodes.length) {
-        //        const forward_nodes_diff = _.differenceBy(
-        //            current_nodes,
-        //            forward_nodes,
-        //            "id"
-        //        );
-        //        data.nodes.remove(forward_nodes_diff);
-        //    } else {
-        //        data.nodes.update(forward_nodes);
-        //    }
-        //    if (current_edges.length > forward_edges.length) {
-        //        const forward_edges_diff = _.differenceBy(
-        //            current_edges,
-        //            forward_edges,
-        //            "id"
-        //        );
-        //        data.edges.remove(forward_edges_diff);
-        //    } else {
-        //        data.edges.update(forward_edges);
-        //    }
-        //    // recover event on
-        //    data.nodes.on("*", change_history_back);
-        //    data.edges.on("*", change_history_back);
-        //    history_list_back.unshift({
-        //        nodes_his: history_list_forward[0].nodes_his,
-        //        edges_his: history_list_forward[0].edges_his
-        //    });
-        //    // history_list_forward
-        //    history_list_forward.shift();
-        //    // apply css
-        //    css_for_undo_redo_chnage();
-        //    enableEdgeIndicator();
-        //}
     });
     //end undo and redo
 
@@ -1605,8 +1504,6 @@ function draw(isImport) {
 
             if (copyDetails.node_type != nodeDetails.node_type) {
                 showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                //network.body.nodes[clickedNode.id].selected = false;
-                //network.redraw();
                 nodeSelect = true;
                 return;
 
@@ -5808,6 +5705,20 @@ function roadmEdit(nodeID, callback) {
             $("#divRoadmName").hide();
             $("#ddlRoadmType").val('');
             $("#ddlRoadmType").addClass('input_error');
+            var matchCount = 1;
+            for (var i = 0; i < nodeID.length - 1; i++) {
+                if (network.body.data.nodes.get(nodeID[i]).roadm_type == nodeDetails.roadm_type) {
+                    matchCount++;
+                }
+            }
+            if (matchCount == nodeID.length) {
+                if (nodeDetails.roadm_type) {
+                    $("#ddlRoadmType").val(nodeDetails.roadm_type);
+                    $("#ddlRoadmType").removeClass('input_error');
+                }
+            }
+
+
         }
         else {
             $("#divRoadmName").show();
@@ -6112,6 +6023,20 @@ function amplifierEdit(nodeID, callback) {
         $("#divAmpName").hide();
         $("#ddlAmplifierType").val('');
         $("#ddlAmplifierType").addClass('input_error');
+
+        var matchCount = 1;
+        for (var i = 0; i < nodeID.length - 1; i++) {
+            if (network.body.data.nodes.get(nodeID[i]).amp_type == nodeDetails.amp_type) {
+                matchCount++;
+            }
+        }
+        if (matchCount == nodeID.length) {
+            if (nodeDetails.amp_type) {
+                $("#ddlAmplifierType").val(nodeDetails.amp_type);
+                $("#ddlAmplifierType").removeClass('input_error');
+            }
+        }
+
     }
     else {
         $("#divAmpName").show();
@@ -6244,6 +6169,22 @@ function ramanAmpEdit(nodeID, callback) {
         $("#ddlRamanAmpType").addClass('input_error');
         $("#ddlRamanAmpCategory").val('');
         $("#ddlRamanAmpCategory").addClass('input_error');
+
+        var matchCount = 1;
+        for (var i = 0; i < nodeID.length - 1; i++) {
+            if (network.body.data.nodes.get(nodeID[i]).amp_type == nodeDetails.amp_type && network.body.data.nodes.get(nodeID[i]).category == nodeDetails.category) {
+                matchCount++;
+            }
+        }
+        if (matchCount == nodeID.length) {
+            if (nodeDetails.amp_type && nodeDetails.category) {
+                $("#ddlRamanAmpType").val(nodeDetails.amp_type);
+                $("#ddlRamanAmpType").removeClass('input_error');
+                $("#ddlRamanAmpCategory").val(nodeDetails.category);
+                $("#ddlRamanAmpCategory").removeClass('input_error');
+            }
+        }
+
     }
     else {
         $("#divRamanAmpName").show();
@@ -6393,6 +6334,20 @@ function transceiverEdit(nodeID, callback) {
         $("#divTransName").hide();
         $("#ddlTransceiverType").val('');
         $("#ddlTransceiverType").addClass('input_error');
+
+        var matchCount = 1;
+        for (var i = 0; i < nodeID.length - 1; i++) {
+            if (network.body.data.nodes.get(nodeID[i]).transceiver_type == nodeDetails.transceiver_type) {
+                matchCount++;
+            }
+        }
+        if (matchCount == nodeID.length) {
+            if (nodeDetails.transceiver_type) {
+                $("#ddlTransceiverType").val(nodeDetails.transceiver_type);
+                $("#ddlTransceiverType").removeClass('input_error');
+            }
+        }
+
     }
     else {
         $("#divTransName").show();
