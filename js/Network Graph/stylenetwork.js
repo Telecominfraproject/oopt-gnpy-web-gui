@@ -1,4 +1,4 @@
-﻿//const { de } = require("../visunminify");
+﻿//const { de } = require("../visunminify");;
 
 //const { type } = require("jquery");
 
@@ -1420,6 +1420,7 @@ function draw(isImport) {
     //})
 
     network.on("click", function (params) {
+
         //$("#txtx").val(params.pointer.canvas.x);
         //$("#txty").val(params.pointer.canvas.y);
         //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
@@ -1461,6 +1462,15 @@ function draw(isImport) {
 
     });
     network.on("selectNode", function (params) {
+
+        //console.log('click');
+        //console.log(isCopyPara);
+        var selectedNodes = network.body.data.nodes.get({
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
+
         //if (isExpandedView || isImportJSON) {
         //    return;
         //}
@@ -1502,26 +1512,65 @@ function draw(isImport) {
                 type_name = "Attenuator";
 
 
-            if (copyDetails.node_type != nodeDetails.node_type) {
-                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                nodeSelect = true;
-                return;
+            if ((isCopyPara && selectedNodes.length == 0) || (isCopyPara && selectedNodes.length > 0)) {
+                if (isCopyPara && selectedNodes.length > 0 && selectedNodes[selectedNodes.length - 1].node_type != nodeDetails.node_type) {
+                    copyDetails = selectedNodes[selectedNodes.length - 1];
+                    if (copyDetails.node_type != nodeDetails.node_type) {
+                        showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                        nodeSelect = true;
+                        return;
 
-            }
-            else {
-                if (copyDetails.amp_category && nodeDetails.amp_category) {
-                    if (copyDetails.amp_category != nodeDetails.amp_category) {
+                    }
+                    else {
+                        if (copyDetails.amp_category && nodeDetails.amp_category) {
+                            if (copyDetails.amp_category != nodeDetails.amp_category) {
+                                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                                nodeSelect = true;
+                                return;
+                            }
+                            else {
+                                $('#toast').toast('hide');
+                            }
+
+                        }
+                        else
+                            $('#toast').toast('hide');
+                    }
+                }
+                else {
+                    if (isCopyPara && selectedNodes.length > 0 && selectedNodes[selectedNodes.length - 1].amp_category != nodeDetails.amp_category) {
                         showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                         nodeSelect = true;
                         return;
                     }
-                    else {
+                    else
                         $('#toast').toast('hide');
-                    }
+                }
+
+            }
+            else {
+
+                if (copyDetails.node_type != nodeDetails.node_type) {
+                    showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                    nodeSelect = true;
+                    return;
 
                 }
-                else
-                    $('#toast').toast('hide');
+                else {
+                    if (copyDetails.amp_category && nodeDetails.amp_category) {
+                        if (copyDetails.amp_category != nodeDetails.amp_category) {
+                            showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                            nodeSelect = true;
+                            return;
+                        }
+                        else {
+                            $('#toast').toast('hide');
+                        }
+
+                    }
+                    else
+                        $('#toast').toast('hide');
+                }
             }
 
             if (params.event.srcEvent.ctrlKey) {
@@ -1630,6 +1679,10 @@ function draw(isImport) {
         //}
         //nodeMode = "";
         //data.preventDefault();
+        var tempNodeType;
+        if (isCopyPara)
+            tempNodeType = network.body.data.nodes.get(copiedNodeID).node_type;
+
         insertNodeX = data.pointer.canvas.x;
         insertNodeY = data.pointer.canvas.y;
         $("#hoverDiv").hide();
@@ -1685,8 +1738,13 @@ function draw(isImport) {
             var type_name;
             if (isCopyPara || (sNodes.length > 0)) {
 
-                if (isCopyPara)
-                    copyDetails = network.body.data.nodes.get(copiedNodeID);
+                if (isCopyPara) {
+                    /*copyDetails = network.body.data.nodes.get(copiedNodeID);*/
+                    if (sNodes.length > 0)
+                        copyDetails = network.body.data.nodes.get(sNodes[sNodes.length - 1].id);
+                    else
+                        copyDetails = network.body.data.nodes.get(nodeDatas.id);
+                }
                 else
                     copyDetails = network.body.data.nodes.get(sNodes[0].id);
 
@@ -1702,10 +1760,6 @@ function draw(isImport) {
                 else if (copyDetails.node_type == fusedJSON.node_type)
                     type_name = "Attenuator";
 
-                //if (nodeData == copiedNodeID) {
-                //    showMessage(alertType.Error, 'Please select same type of other node (' + type_name + ')');
-                //    return;
-                //}
 
                 if (type != copyDetails.node_type) {
 
@@ -1723,25 +1777,6 @@ function draw(isImport) {
                         }
 
                         $('#toast').toast('hide');
-
-                        //if (isCopyPara) {
-
-                        //    showContextMenu(data.event.pageX, data.event.pageY, "templateMenu");
-                        //    document.getElementById("rcProCancel").onclick = cancelPro.bind(
-                        //        this,
-                        //        nodeData,
-                        //        callback
-
-                        //    );
-
-                        //    document.getElementById("rcApplyPro").onclick = applyPro.bind(
-                        //        this,
-                        //        nodesArray,
-                        //        callback
-
-                        //    );
-                        //    return;
-                        //}
 
                     }
                 }
@@ -1793,31 +1828,33 @@ function draw(isImport) {
         else {
             if (showMenu == 1)//2 enable node and fiber menus
             {
+
                 if (type == roadmJSON.node_type || type == ILAJSON.node_type || type == fusedJSON.node_type || type == transceiverJSON.node_type)//node || amp ||fused||transceiver
                 {
                     if (nodeData != undefined) {
                         if (type == roadmJSON.node_type) {
 
 
-                            $("#rcRoadmCopy").show();
+                            //$("#rcRoadmCopy").show();
                             $("#rcRoadmApplyPro").hide();
                             $("#rcRoadmCopyPara").show();
                             $("#rcRoadmCancel").hide();
 
-                            if (isCopyPara) {
-                                $("#rcRoadmCopy").show();
-                                $("#rcRoadmApplyPro").show();
+                            if (nodesArray.length > 1 && sNodes.length > 1) {
+                                $("#rcRoadmCopy").hide();
                                 $("#rcRoadmCopyPara").hide();
-                                $("#rcRoadmCancel").show();
                             }
                             else {
-                                if (nodesArray.length > 1 && sNodes.length > 1) {
-                                    $("#rcRoadmCopy").hide();
+                                $("#rcRoadmCopy").show();
+                                $("#rcRoadmCopyPara").show();
+                            }
+
+
+                            if (isCopyPara) {
+                                if (tempNodeType == type) {
+                                    $("#rcRoadmApplyPro").show();
+                                    $("#rcRoadmCancel").show();
                                     $("#rcRoadmCopyPara").hide();
-                                }
-                                else {
-                                    $("#rcRoadmCopy").show();
-                                    $("#rcRoadmCopyPara").show();
                                 }
                             }
 
@@ -1862,6 +1899,14 @@ function draw(isImport) {
                         }
                         else if (type == fusedJSON.node_type) {
                             showContextMenu(data.event.pageX, data.event.pageY, "attenuatorMenu");
+
+                            if (nodesArray.length > 1 && sNodes.length > 1) {
+                                $("#rcAttenuatorCopy").hide();
+                            }
+                            else {
+                                $("#rcAttenuatorCopy").show();
+                            }
+
                             document.getElementById("rcAttenuatorEdit").onclick = attenuatorEdit.bind(
                                 this,
                                 nodeData,
@@ -1924,10 +1969,12 @@ function draw(isImport) {
                                 }
 
                                 if (isCopyPara) {
-                                    $("#rcAmplifierCopy").show();
-                                    $("#rcAmplifierCopyPara").hide();
-                                    $("#rcAmpApplyPro").show();
-                                    $("#rcAmpCancel").show();
+                                    if (network.body.data.nodes.get(copiedNodeID).amp_category == amp_category) {
+                                        $("#rcAmpApplyPro").show();
+                                        $("#rcAmpCancel").show();
+                                        $("#rcAmplifierCopyPara").hide();
+                                    }
+
                                 }
 
                                 showContextMenu(data.event.pageX, data.event.pageY, "amplifierMenu");
@@ -1984,10 +2031,11 @@ function draw(isImport) {
                                 }
 
                                 if (isCopyPara) {
-                                    $("#rcRamanAmpCopy").show();
-                                    $("#rcRamanAmpCopyPara").hide();
-                                    $("#rcRamanApplyPro").show();
-                                    $("#rcRamanCancel").show();
+                                    if (network.body.data.nodes.get(copiedNodeID).amp_category == amp_category) {
+                                        $("#rcRamanApplyPro").show();
+                                        $("#rcRamanCancel").show();
+                                        $("#rcRamanAmpCopyPara").hide();
+                                    }
                                 }
 
                                 showContextMenu(data.event.pageX, data.event.pageY, "ramanAmpMenu");
@@ -2044,10 +2092,12 @@ function draw(isImport) {
                                 $("#rcTransceiverCopyPara").show();
                             }
                             if (isCopyPara) {
-                                $("#rcTransceiverCopy").show();
-                                $("#rcTransceiverCopyPara").hide();
-                                $("#rcTransApplyPro").show();
-                                $("#rcTransCancel").show();
+                                if (tempNodeType == type) {
+                                    $("#rcTransApplyPro").show();
+                                    $("#rcTransCancel").show();
+                                    $("#rcTransceiverCopyPara").hide();
+                                }
+
                             }
                             showContextMenu(data.event.pageX, data.event.pageY, "transceiverMenu");
                             document.getElementById("rcTransceiverEdit").onclick = transceiverEdit.bind(
