@@ -1515,6 +1515,18 @@ function draw(isImport) {
             if ((isCopyPara && selectedNodes.length == 0) || (isCopyPara && selectedNodes.length > 0)) {
                 if (isCopyPara && selectedNodes.length > 0 && selectedNodes[selectedNodes.length - 1].node_type != nodeDetails.node_type) {
                     copyDetails = selectedNodes[selectedNodes.length - 1];
+                    type_name = copyDetails.node_type;
+                    if (copyDetails.node_type == amplifierJSON.node_type) {
+                        if (copyDetails.amp_category == ramanampJSON.amp_category)
+                            type_name = 'Raman Amplifier';
+                        else
+                            type_name = copyDetails.amp_category;
+                    }
+                    else if (copyDetails.node_type == roadmJSON.node_type)
+                        type_name = copyDetails.node_type.toUpperCase();
+                    else if (copyDetails.node_type == fusedJSON.node_type)
+                        type_name = "Attenuator";
+
                     if (copyDetails.node_type != nodeDetails.node_type) {
                         showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                         nodeSelect = true;
@@ -1539,6 +1551,20 @@ function draw(isImport) {
                 }
                 else {
                     if (isCopyPara && selectedNodes.length > 0 && selectedNodes[selectedNodes.length - 1].amp_category != nodeDetails.amp_category) {
+
+                        copyDetails = selectedNodes[selectedNodes.length - 1];
+                        type_name = copyDetails.node_type;
+                        if (copyDetails.node_type == amplifierJSON.node_type) {
+                            if (copyDetails.amp_category == ramanampJSON.amp_category)
+                                type_name = 'Raman Amplifier';
+                            else
+                                type_name = copyDetails.amp_category;
+                        }
+                        else if (copyDetails.node_type == roadmJSON.node_type)
+                            type_name = copyDetails.node_type.toUpperCase();
+                        else if (copyDetails.node_type == fusedJSON.node_type)
+                            type_name = "Attenuator";
+
                         showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
                         nodeSelect = true;
                         return;
