@@ -6665,17 +6665,20 @@ function realUpdate_Transceiver(id, rtype) {
 var removeNodeList = [];
 function deleteNode(nodeList) {
     removeNodeList = [];
+    var h_image;
     for (var i = 0; i < nodeList.length; i++) {
         if (nodeList.length > 1) {
-            if (network.body.data.nodes.get(nodeList[i]).image == DIR + roadmJSON.h_image)
+            h_image = network.body.data.nodes.get(nodeList[i]).image;
+
+            if (h_image == DIR + roadmJSON.h_image || h_image == DIR + roadmJSON.fh_image)
                 removeNodes(nodeList[i], true);
-            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + fusedJSON.h_image)
+            else if (h_image == DIR + fusedJSON.h_image || h_image == DIR + fusedJSON.fh_image)
                 removeNodes(nodeList[i], true);
-            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + transceiverJSON.h_image)
+            else if (h_image == DIR + transceiverJSON.h_image || h_image == DIR + transceiverJSON.fh_image)
                 removeNodes(nodeList[i], true);
-            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + amplifierJSON.h_image)
+            else if (h_image == DIR + amplifierJSON.h_image || h_image == DIR + amplifierJSON.fh_image)
                 removeNodes(nodeList[i], true);
-            else if (network.body.data.nodes.get(nodeList[i]).image == DIR + ramanampJSON.h_image)
+            else if (h_image == DIR + ramanampJSON.h_image || h_image == DIR + ramanampJSON.fh_image)
                 removeNodes(nodeList[i], true);
         }
         else {
@@ -6709,46 +6712,42 @@ function removeNodes(nodeID, isMutiple) {
     document.getElementById("amplifierMenu").style.display = "none";
     document.getElementById("transceiverMenu").style.display = "none";
 
-    if (network.getConnectedEdges(nodeID).length > 0) {
-        showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + " - " + nodeDetails.label + ", then try to delete");
+    //if (network.getConnectedEdges(nodeID).length > 0) {
+    //    showMessage(alertType.Error, "Unpair " + roadmJSON.component_type + " - " + nodeDetails.label + ", then try to delete");
 
-    } else {
-        //nodes.remove(nodeID);
+    //} else {
 
-        if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
+    if (nodeDetails.node_type == transceiverJSON.node_type || nodeDetails.node_type == roadmJSON.node_type) {
+        removeSpanInError(nodeID);
+        removeSpanInError(nodeID, true);
+    }
+    else if (nodeDetails.node_type == amplifierJSON.node_type) {
+        if (nodeDetails.amp_category == amplifierJSON.amp_category) {
             removeSpanInError(nodeID);
             removeSpanInError(nodeID, true);
         }
-        else if (nodeDetails.node_type == amplifierJSON.node_type) {
-            if (nodeDetails.amp_category == amplifierJSON.amp_category) {
-                removeSpanInError(nodeID);
-                removeSpanInError(nodeID, true);
-            }
-            if (nodeDetails.amp_category == ramanampJSON.amp_category) {
-                removeSpanInError(nodeID);
-                removeSpanInError(nodeID, true);
-                removeSpanInError(nodeID, true);
-            }
-        }
-        else
+        if (nodeDetails.amp_category == ramanampJSON.amp_category) {
             removeSpanInError(nodeID);
-
-        //var tremove = network.body.data.nodes.get(nodeID)
-
-
-        if (isMutiple) {
-            removeNodeList.push(nodeDetails);
+            removeSpanInError(nodeID, true);
+            removeSpanInError(nodeID, true);
         }
-        else {
-            nodeDetails.isDelete = true;
-            nodeDetails.isUpdate = false;
-            tempUndo.push(nodeDetails);
-        }
-
-        network.body.data.nodes.remove(nodeID);
-
-
     }
+    else
+        removeSpanInError(nodeID);
+
+    if (isMutiple) {
+        removeNodeList.push(nodeDetails);
+    }
+    else {
+        nodeDetails.isDelete = true;
+        nodeDetails.isUpdate = false;
+        tempUndo.push(nodeDetails);
+    }
+
+    network.body.data.nodes.remove(nodeID);
+
+
+    //}
 }
 function dualFiberEdit(fiberID, callback) {
     document.getElementById("dualFiberMenu").style.display = "none";
