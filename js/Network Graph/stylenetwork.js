@@ -593,19 +593,32 @@ $(document).ready(function () {
             else {
                 if (tempData.isUpdate) {
                     for (var i = 0; i < tempData.list.length; i++) {
-                        for (var j = 0; j < tempData.preList.length; j++) {
-                            if (tempData.list[i].id == tempData.preList[j].id) {
-                                data.nodes.update(tempData.preList[j]);
-                                break;
+
+                        if (tempData.list[i].component_type == roadmJSON.component_type) {
+                            for (var j = 0; j < tempData.preList.length; j++) {
+                                if (tempData.list[i].id == tempData.preList[j].id) {
+                                    data.nodes.update(tempData.preList[j]);
+                                    break;
+                                }
                             }
                         }
-                        //data.nodes.update(tempData.list[i]);
+                        else if (tempData.list[i].component_type == singleFiberJSON.component_type) {
+                            for (var j = 0; j < tempData.preList.length; j++) {
+                                if (tempData.list[i].id == tempData.preList[j].id) {
+                                    data.edges.update(tempData.preList[j]);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     tempRedo.push(tempData);
                 }
                 else {
                     for (var i = 0; i < tempData.list.length; i++) {
-                        data.nodes.update(tempData.list[i]);
+                        if (tempData.list[i].component_type == roadmJSON.component_type)
+                            data.nodes.update(tempData.list[i]);
+                        else if (tempData.list[i].component_type == singleFiberJSON.component_type)
+                            data.edges.update(tempData.list[i]);
                     }
 
                     tempRedo.push(tempData);
@@ -671,15 +684,28 @@ $(document).ready(function () {
 
                 if (!tempData.isUpdate) {
                     for (var i = 0; i < tempData.list.length; i++) {
-                        data.nodes.remove(tempData.list[i]);
+                        if (tempData.list[i].component_type == roadmJSON.component_type)
+                            data.nodes.remove(tempData.list[i]);
+                        else if (tempData.list[i].component_type == singleFiberJSON.component_type)
+                            data.edges.remove(tempData.list[i]);
                     }
                 }
                 else {
                     for (var i = 0; i < tempData.preList.length; i++) {
-                        for (var j = 0; j < tempData.list.length; j++) {
-                            if (tempData.list[j].id == tempData.preList[i].id) {
-                                data.nodes.update(tempData.list[i]);
-                                break;
+                        if (tempData.preList[i].component_type == roadmJSON.component_type) {
+                            for (var j = 0; j < tempData.list.length; j++) {
+                                if (tempData.list[j].id == tempData.preList[i].id) {
+                                    data.nodes.update(tempData.list[i]);
+                                    break;
+                                }
+                            }
+                        }
+                        else if (tempData.preList[i].component_type == singleFiberJSON.component_type) {
+                            for (var j = 0; j < tempData.list.length; j++) {
+                                if (tempData.list[j].id == tempData.preList[i].id) {
+                                    data.edges.update(tempData.list[i]);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -1421,6 +1447,7 @@ function draw(isImport) {
 
     network.on("click", function (params) {
 
+
         //$("#txtx").val(params.pointer.canvas.x);
         //$("#txty").val(params.pointer.canvas.y);
         //alert(params.pointer.canvas.x+' , '+ params.pointer.canvas.y);
@@ -1457,14 +1484,108 @@ function draw(isImport) {
 
     });
 
-    network.on("selectEdge", function (data) {
+    network.on("selectEdge", function (params) {
+        //console.log('click');
+        //console.log(isCopyPara);
+
+
+        if (params.nodes.length > 0)
+            return;
+
+        var selectedEdges = network.body.data.edges.get({
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
+
+        //if (isExpandedView || isImportJSON) {
+        //    return;
+        //}
         //nodeMode = "";
+        var clickedEdge = this.body.edges[this.getEdgeAt(params.pointer.DOM)];
+        var edgeDetails = network.body.data.edges.get(clickedEdge.id);
+        var copyDetails;
+        //if (isCopyPara || (!isCopyPara && params.nodes.length > 1 && params.event.srcEvent.ctrlKey)) {
+        if (params.event.srcEvent.ctrlKey) {
+
+            var sEdges = network.body.data.edges.get({
+                filter: function (item) {
+                    return (item.is_highlight == true);
+                }
+            });
+            if (params.edges.length > 1) {
+                if (sEdges.length > 0)
+                    copyDetails = network.body.data.edges.get(sEdges[0].id);
+                else
+                    copyDetails = network.body.data.edges.get(params.edges[params.edges.length - 1]);
+            } else {
+                copyDetails = network.body.data.edges.get(params.edges[0]);
+            }
+
+            if (selectedEdges.length >= 0) {
+                if (selectedEdges.length > 0 && selectedEdges[selectedEdges.length - 1].component_type != selectedEdges.component_type) {
+                    copyDetails = selectedEdges[selectedEdges.length - 1];
+
+                    if (copyDetails.component_type != edgeDetails.component_type) {
+                        showMessage(alertType.Error, 'Please select same type of fiber');
+                        return;
+                    }
+                    else {
+                        $('#toast').toast('hide');
+                    }
+                }
+                else {
+                    $('#toast').toast('hide');
+                }
+
+            }
+
+
+            if (params.event.srcEvent.ctrlKey) {
+                var color;
+                if (edgeDetails.component_type == singleFiberJSON.component_type) {
+                    if (edgeDetails.color == singleFiberJSON.options.h_color || edgeDetails.color == singleFiberJSON.options.fh_color) {
+                        color = edgeDetails.h_color;
+                    }
+                    else {
+                        if (edgeDetails.color == singleFiberJSON.options.w_color)
+                            color = singleFiberJSON.options.h_color;
+                        else if (edgeDetails.color == singleFiberJSON.options.color)
+                            color = singleFiberJSON.options.fh_color;
+                    }
+                }
+                if (color) {
+                    var highlight = true;
+                    if (color == singleFiberJSON.options.color || color == singleFiberJSON.options.w_color)
+                        highlight = false;
+
+                    network.body.data.edges.update({
+                        id: edgeDetails.id, color: color, h_color: edgeDetails.color, is_highlight: highlight
+                    });
+                }
+
+            }
+
+
+        }
+
 
     });
     network.on("selectNode", function (params) {
 
         //console.log('click');
         //console.log(isCopyPara);
+        var hEdges = network.body.data.edges.get({
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
+
+        if (hEdges.length > 0) {
+            showMessage(alertType.Error, 'Please select same type of fiber');
+            return;
+        }
+
         var selectedNodes = network.body.data.nodes.get({
             filter: function (item) {
                 return (item.is_highlight == true);
@@ -1700,6 +1821,7 @@ function draw(isImport) {
     network.on("oncontext", function (data, callback) {
 
 
+
         //if (isExpandedView || isImportJSON) {
         //    return;
         //}
@@ -1733,8 +1855,24 @@ function draw(isImport) {
             nodesArray = sNodes;
             //nodesArray.push(nodeData);
         }
-        else
+        else if (nodeData != "")
             nodesArray.push(nodeData);
+
+        var hEdges = network.body.data.edges.get({
+            fields: ['id'],
+            filter: function (item) {
+                return (item.is_highlight == true);
+            }
+        });
+
+
+        var edgesArray = [];
+        if (hEdges.length > 0) {
+            edgesArray = hEdges;
+        }
+        else if (nodeData == "" && edgeData != "") {
+            edgesArray.push({ id: edgeData });
+        }
 
 
         var type = "";
@@ -1762,7 +1900,7 @@ function draw(isImport) {
         if (showMenu == 1) {
             var copyDetails;
             var type_name;
-            if (isCopyPara || (sNodes.length > 0)) {
+            if ((isCopyPara || sNodes.length > 0) && hEdges.length == 0) {
 
                 if (isCopyPara) {
                     /*copyDetails = network.body.data.nodes.get(copiedNodeID);*/
@@ -1809,6 +1947,22 @@ function draw(isImport) {
 
             }
 
+
+            if (edgesArray.length > 0) {
+                if (hEdges.length > 0)
+                    copyDetails = network.body.data.edges.get(hEdges[hEdges.length - 1].id);
+                else
+                    copyDetails = network.body.data.edges.get(edgeDatas.id);
+                if (type != copyDetails.component_type) {
+
+                    showMessage(alertType.Error, 'Please select same type of fiber');
+                    return;
+                }
+                else {
+                    $('#toast').toast('hide');
+                }
+
+            }
         }
 
         //to add only same type of node on multiple select
@@ -2211,44 +2365,54 @@ function draw(isImport) {
                             if ($("#menuSingleFiberInser").text() == "-")
                                 $("#menuSingleFiberInser").click();
                             showContextMenu(data.event.pageX, data.event.pageY, "singleFiberMenu");
+
+                            $("#insertMenu").show();
+
+                            if (edgesArray.length > 1 && hEdges.length > 1) {
+                                $("#insertMenu").hide();
+                            }
+                            else {
+
+                            }
+
                             document.getElementById("rcSingleInsertROADM").onclick = singleFiberInsertNode.bind(
                                 this,
-                                edgeData,
+                                edgesArray[0].id,
                                 'Roadm',
                                 callback
                             );
                             document.getElementById("rcSingleInsertAttenuator").onclick = singleFiberInsertNode.bind(
                                 this,
-                                edgeData,
+                                edgesArray[0].id,
                                 'Fused',
                                 callback
                             );
                             //document.getElementById("rcSingleInsertTransceiver").onclick = singleFiberInsertNode.bind(
                             //    this,
-                            //    edgeData,
+                            //    edgesArray[0],
                             //    'Transceiver',
                             //    callback
                             //);
                             document.getElementById("rcSingleInsertAmplifier").onclick = singleFiberInsertNode.bind(
                                 this,
-                                edgeData,
+                                edgesArray[0].id,
                                 'Amplifier',
                                 callback
                             );
                             document.getElementById("rcSingleInsertRamanAmp").onclick = singleFiberInsertNode.bind(
                                 this,
-                                edgeData,
+                                edgesArray[0].id,
                                 'RamanAmplifier',
                                 callback
                             );
                             document.getElementById("rcSingleFiberEdit").onclick = singleFiberEdit.bind(
                                 this,
-                                edgeData,
+                                edgesArray,
                                 callback
                             );
                             document.getElementById("rcSingleFiberDelete").onclick = deleteFiber.bind(
                                 this,
-                                edgeData,
+                                edgesArray,
                                 callback
                             );
                         }
@@ -5848,7 +6012,7 @@ function updateRoadm(nodeID) {
         else if (node_type == roadmJSON.node_type && $("#ddlNetworkView").val() == topologyView.Functional_View) {
 
             if ($("#ddlRoadmType").val() == null) {
-                showMessage(alertType.Error, 'Pleae select type');
+                showMessage(alertType.Error, 'Please select type');
                 $("#ddlRoadmType").addClass('input_error');
                 return;
             }
@@ -6142,7 +6306,7 @@ function updateAmplifier(nodeID) {
         var amp_category = network.body.data.nodes.get(id).amp_category
 
         if ($("#ddlAmplifierType").val() == null) {
-            showMessage(alertType.Error, 'Pleae select type');
+            showMessage(alertType.Error, 'Please select type');
             $("#ddlAmplifierType").addClass('input_error');
             return;
         }
@@ -6298,7 +6462,7 @@ function updateRamanAmp(nodeID) {
         var amp_category = network.body.data.nodes.get(id).amp_category
 
         if ($("#ddlRamanAmpType").val() == null) {
-            showMessage(alertType.Error, 'Pleae select type');
+            showMessage(alertType.Error, 'Please select type');
             $("#ddlRamanAmpType").addClass('input_error');
             return;
         }
@@ -6306,7 +6470,7 @@ function updateRamanAmp(nodeID) {
             $("#ddlRamanAmpType").removeClass('input_error');
 
         if ($("#ddlRamanAmpCategory").val() == null) {
-            showMessage(alertType.Error, 'Pleae select category');
+            showMessage(alertType.Error, 'Please select category');
             $("#ddlRamanAmpCategory").addClass('input_error');
             return;
         }
@@ -6700,7 +6864,7 @@ function deleteNode(nodeList) {
 
 }
 
-function removeNodes(nodeID, isMutiple) {
+function removeNodes(nodeID, isMultiple) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     var node_type = nodeDetails.node_type;
     if (nodeDetails.node_type == ILAJSON.node_type)
@@ -6735,7 +6899,7 @@ function removeNodes(nodeID, isMutiple) {
     else
         removeSpanInError(nodeID);
 
-    if (isMutiple) {
+    if (isMultiple) {
         removeNodeList.push(nodeDetails);
     }
     else {
@@ -6882,18 +7046,54 @@ function clearCbxandAccordian() {
 function singleFiberEdit(fiberID, callback) {
     $("#txtLoss_Coefficient").removeClass('input_error');
     $('#cbxLength_Based_Loss').prop('checked', false);
+
+    $("#txtSinlgeFiberName").val('');
+    $("#txtSource").val('');
+    $("#txtDestination").val('');
+    $("#ddlSingleFiberType").val('');
+    $("#txtSpan_Length").val('');
+    $("#txtLoss_Coefficient").val('');
+    $("#txtConnector_IN").val('');
+    $("#txtConnector_OUT").val('');
+    $("#txtSpan_Loss").val('');
+
     document.getElementById("singleFiberMenu").style.display = "none";
-    var edgeDetails = network.body.data.edges.get(fiberID);
-    var connectedNode = network.getConnectedNodes(fiberID);
+    var edgeDetails = network.body.data.edges.get(fiberID[fiberID.length - 1].id);
+    var connectedNode = network.getConnectedNodes(fiberID[fiberID.length - 1].id);
+
     $("#txtSinlgeFiberName").val(edgeDetails.text);
     $("#txtSource").val(network.body.data.nodes.get(connectedNode[0]).label);
     $("#txtDestination").val(network.body.data.nodes.get(connectedNode[1]).label);
-    $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
-    $("#txtSpan_Length").val(edgeDetails.span_length);
-    $("#txtLoss_Coefficient").val(edgeDetails.loss_coefficient);
-    $("#txtConnector_IN").val(edgeDetails.connector_in);
-    $("#txtConnector_OUT").val(edgeDetails.connector_out);
-    $("#txtSpan_Loss").val(edgeDetails.span_loss);
+
+    $("#divFiberNameCon").show();
+    if (fiberID.length > 1) {
+        $("#divFiberNameCon").hide();
+
+        var matchCount = 1;
+        for (var i = 0; i < fiberID.length - 1; i++) {
+            if (network.body.data.edges.get(fiberID[i].id).fiber_type == edgeDetails.fiber_type) {
+                matchCount++;
+            }
+        }
+        if (matchCount == fiberID.length) {
+            if (edgeDetails.fiber_type) {
+                $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
+            }
+        }
+
+    }
+    else {
+        $("#ddlSingleFiberType").val(edgeDetails.fiber_type);
+        $("#txtSpan_Length").val(edgeDetails.span_length);
+        $("#txtLoss_Coefficient").val(edgeDetails.loss_coefficient);
+        $("#txtConnector_IN").val(edgeDetails.connector_in);
+        $("#txtConnector_OUT").val(edgeDetails.connector_out);
+        $("#txtSpan_Loss").val(edgeDetails.span_loss);
+    }
+
+
+
+
 
     var span_length = $("#txtSpan_Length").val().trim();
     var spanlen = parseFloat(span_length);
@@ -6903,11 +7103,17 @@ function singleFiberEdit(fiberID, callback) {
     else
         $("#txtSpan_Length").removeClass('input_error');
 
+
+
+
+
     if ($("#ddlSingleFiberType").val() == null) {
         $("#ddlSingleFiberType").addClass('input_error');
     }
     else
         $("#ddlSingleFiberType").removeClass('input_error');
+
+
 
     openDrawer('singlefiber');
     document.getElementById("btnSingleFiberUpdate").onclick = updateSingleFiber.bind(
@@ -6919,8 +7125,8 @@ function singleFiberEdit(fiberID, callback) {
     );
 }
 function updateSingleFiber(fiberID) {
-
-    var id = fiberID;
+    removeEdgeList = [];
+    var id = fiberID[fiberID.length - 1].id;
     var label = $("#txtSinlgeFiberName").val().trim();
     var fiber_type = $("#ddlSingleFiberType").val();
     var span_length = $("#txtSpan_Length").val().trim();
@@ -6930,7 +7136,7 @@ function updateSingleFiber(fiberID) {
     var span_loss = $("#txtSpan_Loss").val();
 
     if ($("#ddlSingleFiberType").val() == null) {
-        showMessage(alertType.Error, 'Pleae select fiber type');
+        showMessage(alertType.Error, 'Please select fiber type');
         $("#ddlSingleFiberType").addClass('input_error');
         return;
     }
@@ -6939,7 +7145,7 @@ function updateSingleFiber(fiberID) {
 
     var spanlen = parseFloat(span_length);
     if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
-        showMessage(alertType.Error, 'Pleae enter valid span length.');
+        showMessage(alertType.Error, 'Please enter valid span length.');
         $("#txtSpan_Length").addClass('input_error');
         return;
     }
@@ -6954,7 +7160,7 @@ function updateSingleFiber(fiberID) {
         }
     }
 
-    var fiberDetails = network.body.data.edges.get(fiberID);
+    var fiberDetails = network.body.data.edges.get(id);
 
     if (nameLengthValidation("txtSinlgeFiberName")) {
 
@@ -6963,24 +7169,64 @@ function updateSingleFiber(fiberID) {
             var elabel = "";
             elabel = label;
 
-            network.body.data.edges.update({
-                id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
-                pre_color: singleFiberJSON.options.color,
-                loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
-            });
-            data.nodes.off("*", change_history_back);
-            data.edges.off("*", change_history_back);
-            multipleFiberService(fiberDetails.from, fiberDetails.to);
-            removeID = "#spanFP" + id.replace(/\s/g, '');
-            $(removeID).remove();
-            $(removeID).remove();
-            checkErrorFree();
-            data.nodes.on("*", change_history_back);
-            data.edges.on("*", change_history_back);
+            var preUpdateList = [];
+            if (fiberID.length > 1) {
 
-            var tdata = network.body.data.edges.get(id);
-            tdata.isUpdate = true;
-            tempUndo.push(tdata);
+                for (var i = 0; i < fiberID.length; i++) {
+                    if (network.body.data.edges.get(fiberID[i].id).color == singleFiberJSON.options.h_color || network.body.data.edges.get(fiberID[i].id).color == singleFiberJSON.options.fh_color) {
+
+                        var fiber = network.body.data.edges.get(fiberID[i].id);
+                        preUpdateList.push(fiber);
+                        network.body.data.edges.update({
+                            id: fiberID[i].id, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
+                            h_color: singleFiberJSON.options.color,
+                            pre_color: singleFiberJSON.options.color,
+                            loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
+                        });
+
+
+                        multipleFiberService(fiber.from, fiber.to);
+                        removeID = "#spanFP" + fiberID[i].id.replace(/\s/g, '');
+                        $(removeID).remove();
+                        $(removeID).remove();
+                        checkErrorFree();
+
+
+                        var tdata = network.body.data.edges.get(fiberID[i].id);
+                        removeEdgeList.push(tdata);
+                    }
+                }
+                if (removeEdgeList.length > 0) {
+                    var updateList = {
+                        isMultiple: true,
+                        isUpdate: true,
+                        preList: preUpdateList,
+                        list: removeEdgeList
+                    }
+                    tempUndo.push(updateList);
+                }
+
+            }
+            else {
+                network.body.data.edges.update({
+                    id: id, label: elabel, text: label, fiber_type: fiber_type, span_length: span_length, color: singleFiberJSON.options.color,
+                    h_color: singleFiberJSON.options.color,
+                    pre_color: singleFiberJSON.options.color,
+                    loss_coefficient: loss_coefficient, connector_in: connector_in, connector_out: connector_out, span_loss: span_loss
+                });
+
+
+                multipleFiberService(fiberDetails.from, fiberDetails.to);
+                removeID = "#spanFP" + id.replace(/\s/g, '');
+                $(removeID).remove();
+                $(removeID).remove();
+                checkErrorFree();
+
+
+                var tdata = network.body.data.edges.get(id);
+                tdata.isUpdate = true;
+                tempUndo.push(tdata);
+            }
 
             clearSingleFiber();
         }
@@ -7008,32 +7254,45 @@ function clearSingleFiber() {
     enableEdgeIndicator();
 }
 
-function deleteFiber(fiberID) {
+var removeEdgeList = [];
+function deleteFiber(fiberList) {
 
+    removeEdgeList = [];
+    var h_color;
+    for (var i = 0; i < fiberList.length; i++) {
+        if (fiberList.length > 1) {
+            h_color = network.body.data.edges.get(fiberList[i].id).color;
+
+            if (h_color == singleFiberJSON.options.h_color || h_color == singleFiberJSON.options.fh_color)
+                removeFiber(fiberList[i].id, true);
+
+        }
+        else {
+            removeFiber(fiberList[i].id);
+        }
+    }
+
+    if (fiberList.length > 1 && removeEdgeList.length > 0) {
+        var reList = {
+            isMultiple: true,
+            isUpdate: false,
+            list: removeEdgeList
+        }
+        tempUndo.push(reList);
+    }
+
+    UnSelectAll();
+    enableEdgeIndicator();
+
+}
+
+function removeFiber(fiberID, isMultiple) {
     var fiber = network.body.data.edges.get(fiberID);
-
-    //if (checkNodeServiceConnection(fiber.from, fiber.to)) {
-    //    alert('cannot remove ' + fiber.fiber_category + ' : ' + fiber.label);
-    //    return;
-    //}
 
     var fiberLabel = fiber.label;
     if (fiber.label.trim() == "")
         fiberLabel = fiber.text
 
-    //Swal.fire({
-    //    icon: 'warning',
-    //    title: '',
-    //    text: 'Do you want to delete ' + fiber.fiber_category + ' : ' + fiberLabel + ' ?',
-    //    showCancelButton: true,
-    //    confirmButtonText: "OK",
-    //    closeOnConfirm: true,
-    //    confirmButtonColor: '#49508a',
-    //    width: 375,
-    //    height: 200,
-    //    allowOutsideClick: false
-    //}).then((result) => {
-    //    if (result.value) {
     var nodeDetails = network.body.data.nodes.get(fiber.from);
     var toNodeDetails = network.body.data.nodes.get(fiber.to);
 
@@ -7074,14 +7333,17 @@ function deleteFiber(fiberID) {
     multipleFiberService(fiber.from, fiber.to);
     nodeValidationInEdge(fiber.from, fiber.to);
 
-    tedge.isDelete = true;
-    tedge.isUpdate = false;
-    tempUndo.push(tedge);
 
-    UnSelectAll();
-    enableEdgeIndicator();
-    //    }
-    //});
+
+    if (isMultiple) {
+        removeEdgeList.push(tedge);
+    }
+    else {
+        tedge.isDelete = true;
+        tedge.isUpdate = false;
+        tempUndo.push(tedge);
+    }
+
 
 
 
@@ -8836,5 +9098,16 @@ function remove_NodeHighlight() {
             }
         }
 
+    }
+
+    var hEdges = network.body.data.edges.get({
+        filter: function (item) {
+            return (item.is_highlight == true);
+        }
+    });
+    for (var i = 0; i < hEdges.length; i++) {
+        network.body.data.edges.update({
+            id: hEdges[i].id, color: hEdges[i].h_color, h_color: hEdges[i].color, is_highlight: false
+        });
     }
 }

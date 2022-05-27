@@ -107,7 +107,7 @@ function nameLengthValidation(element) {
         flag = false;
     }
     else if (Number($(elementID).val().trim().length) > maxLength) {
-        msg = "Name length should be below than 20";
+        msg = "Name length should be less than or equal to 20";
         flag = false;
     }
     //else if ($("#txtNodeDegree").val().trim() == '') {

@@ -295,6 +295,20 @@
         "inherit": false,
         "opacity": 1
       },
+      "h_color": {
+        "color": "brown",
+        "highlight": "brown",
+        "hover": "brown",
+        "inherit": false,
+        "opacity": 1
+      },
+      "fh_color": {
+        "color": "green",
+        "highlight": "green",
+        "hover": "green",
+        "inherit": false,
+        "opacity": 1
+      },
       "color": {
         "color": "blue",
         "highlight": "blue",
