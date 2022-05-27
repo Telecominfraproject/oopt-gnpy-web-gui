@@ -606,6 +606,8 @@ $(document).ready(function () {
                             for (var j = 0; j < tempData.preList.length; j++) {
                                 if (tempData.list[i].id == tempData.preList[j].id) {
                                     data.edges.update(tempData.preList[j]);
+                                    nodeValidationInEdge(tempData.preList[j].from, tempData.preList[j].to);
+                                    multipleFiberService(tempData.preList[j].from, tempData.preList[j].to);
                                     break;
                                 }
                             }
@@ -617,8 +619,11 @@ $(document).ready(function () {
                     for (var i = 0; i < tempData.list.length; i++) {
                         if (tempData.list[i].component_type == roadmJSON.component_type)
                             data.nodes.update(tempData.list[i]);
-                        else if (tempData.list[i].component_type == singleFiberJSON.component_type)
+                        else if (tempData.list[i].component_type == singleFiberJSON.component_type) {
                             data.edges.update(tempData.list[i]);
+                            nodeValidationInEdge(tempData.list[i].from, tempData.list[i].to);
+                            multipleFiberService(tempData.list[i].from, tempData.list[i].to);
+                        }
                     }
 
                     tempRedo.push(tempData);
@@ -686,8 +691,11 @@ $(document).ready(function () {
                     for (var i = 0; i < tempData.list.length; i++) {
                         if (tempData.list[i].component_type == roadmJSON.component_type)
                             data.nodes.remove(tempData.list[i]);
-                        else if (tempData.list[i].component_type == singleFiberJSON.component_type)
+                        else if (tempData.list[i].component_type == singleFiberJSON.component_type) {
                             data.edges.remove(tempData.list[i]);
+                            nodeValidationInEdge(tempData.list[i].from, tempData.list[i].to);
+                            multipleFiberService(tempData.list[i].from, tempData.list[i].to);
+                        }
                     }
                 }
                 else {
@@ -704,6 +712,8 @@ $(document).ready(function () {
                             for (var j = 0; j < tempData.list.length; j++) {
                                 if (tempData.list[j].id == tempData.preList[i].id) {
                                     data.edges.update(tempData.list[i]);
+                                    nodeValidationInEdge(tempData.list[i].from, tempData.list[i].to);
+                                    multipleFiberService(tempData.list[i].from, tempData.list[i].to);
                                     break;
                                 }
                             }
