@@ -3239,18 +3239,16 @@ function pasteNode(nodeId) {
     if (isCopy) {
         isCopy = false;
         var nodeID = token();
-        var nodeData = network.body.data.nodes.get(nodeId);
+        var nodeData = "";
+        nodeData = network.body.data.nodes.get(nodeId);
         var nodeDetails = configData.node[nodeData.node_type];
         var node_type = nodeData.node_type;
         var result = nodeName(node_type, nodeData.amp_category);
         nodelength = result.nodeLength
         nodeLabel = result.label
-        nodeData.label = nodeLabel;
-        nodeData.number = nodelength;
-
         if (node_type == roadmJSON.node_type) {
             network.body.data.nodes.add({
-                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.w_image, number: nodeData.number,
+                id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + roadmJSON.w_image, number: nodelength,
                 shape: roadmJSON.shape, color: roadmJSON.color,
                 font: roadmJSON.font,
                 size: roadmJSON.size,
@@ -3262,7 +3260,7 @@ function pasteNode(nodeId) {
         }
         else if (node_type == fusedJSON.node_type) {
             network.body.data.nodes.add({
-                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.w_image, number: nodeData.number,
+                id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + fusedJSON.w_image, number: nodelength,
                 shape: fusedJSON.shape, color: fusedJSON.color,
                 size: fusedJSON.size,
                 view: $("#ddlNetworkView").val(), hidden: false,
@@ -3271,7 +3269,7 @@ function pasteNode(nodeId) {
         }
         else if (node_type == transceiverJSON.node_type) {
             network.body.data.nodes.add({
-                id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.w_image, number: nodeData.number,
+                id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + transceiverJSON.w_image, number: nodelength,
                 shape: transceiverJSON.shape, color: transceiverJSON.color,
                 size: transceiverJSON.size,
                 view: $("#ddlNetworkView").val(), hidden: false,
@@ -3283,7 +3281,7 @@ function pasteNode(nodeId) {
 
             if (nodeData.amp_category == ILAJSON.amp_category) {
                 network.body.data.nodes.add({
-                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.w_image, number: nodeData.number,
+                    id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ILAJSON.w_image, number: nodelength,
                     shape: ILAJSON.shape, color: ILAJSON.color,
                     size: ILAJSON.size,
                     view: $("#ddlNetworkView").val(), hidden: false,
@@ -3293,7 +3291,7 @@ function pasteNode(nodeId) {
             }
             else if (nodeData.amp_category == amplifierJSON.amp_category) {
                 network.body.data.nodes.add({
-                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.w_image, number: nodeData.number,
+                    id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + amplifierJSON.w_image, number: nodelength,
                     shape: amplifierJSON.shape, color: amplifierJSON.color,
                     size: amplifierJSON.size,
                     view: $("#ddlNetworkView").val(), hidden: false,
@@ -3303,7 +3301,7 @@ function pasteNode(nodeId) {
             }
             else if (nodeData.amp_category == ramanampJSON.amp_category) {
                 network.body.data.nodes.add({
-                    id: nodeID, label: nodeData.label, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.w_image, number: nodeData.number,
+                    id: nodeID, label: nodeLabel, x: insertNodeX, y: insertNodeY, image: DIR + ramanampJSON.w_image, number: nodelength,
                     shape: ramanampJSON.shape, color: ramanampJSON.color,
                     size: ramanampJSON.size,
                     view: $("#ddlNetworkView").val(), hidden: false,
