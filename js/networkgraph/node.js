@@ -1017,12 +1017,26 @@ function removeNodes(nodeID, isMultiple) {
         tempUndo.push(nodeDetails);
     }
 
+    if (isCopyPara) {
+        if (nodeID == copiedNodeID) {
+            isCopyPara = false;
+            copiedNodeID = "";
+        }
+    }
+    else if (isCopy) {
+        if (nodeID == copyID) {
+            isCopy = false;
+            copyID = "";
+        }
+    }
+
     network.body.data.nodes.remove(nodeID);
 }
 
 function copyNode(nodeID, callback) {
     showHideDrawerandMenu();
     isCopy = true;
+    copyID = nodeID;
     document.getElementById("btnPasteNode").onclick = pasteNode.bind(
         this,
         nodeID,

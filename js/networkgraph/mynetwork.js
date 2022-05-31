@@ -15,6 +15,7 @@ var exportButton;
 var dropdownshape;
 var isService = 0;
 var isCopy = false;
+var copyID;
 var isCopyPara = false;
 localStorage.setItem("copyedgeid", "");
 localStorage.setItem("copynodeid", "");
