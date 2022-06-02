@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Lq3sVrCWvj7nnoA22LK4JgD0+yfBDtLW+KX5wM5mDIxCxrFoUcOhKth/7dJQtePgiQVUcthM83KZec22DY+ZcA==",
+  "dgSpecHash": "MDQ7ort9X4lh0ndUGFQ11Qrpv2TBOnsHqb2a8WyIGQMj2WxZpEdPW8qgLSS0TgXcI8TJ4F5G7aYaoRAQIOtq9Q==",
   "success": true,
-  "projectFilePath": "D:\\Git Repository\\Main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
+  "projectFilePath": "D:\\Git Repository\\branch_cleanup\\main\\TelecomInfraProject-V1\\TelecomInfraProject\\TelecomInfraProject.csproj",
   "expectedPackageFiles": [
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",
