@@ -121,18 +121,18 @@ function checkLink() {
         }
 
         if (fromCount != toCount || (fromCount == 0 && toCount == 0)) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> must have an even number of links with an equal number of incoming and outgoing links.</p>');
             flag = true;
         }
         if (item.node_type == transceiverJSON.node_type) {
             if (!item.transceiver_type) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == roadmJSON.node_type) {
             if (!item.roadm_type) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
@@ -173,21 +173,21 @@ function checkMisLink() {
         }
 
         //if (fromCount != toCount || (fromCount == 0 && toCount == 0) || fromCount > 1 || toCount > 1 ) {
-        //    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
+        //    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNode(\'' + item.id + '\')"><img width="25" src="./Assets/img/error-listing-icon.svg"> One or more links to <b>' + item.label + '</b> is missing.</p>');
         //    flag = true;
         //}
         if (connectedEdges.length <= 1) {
-            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> One or more links to <b>' + item.label + '</b> is missing.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> One or more links to <b>' + item.label + '</b> is missing.</p>');
             flag = true;
         }
         else if (connectedEdges.length > 1) {
 
             if ((connectedEdges.length == 2 && fromCount == 2) || (connectedEdges.length == 2 && toCount == 2)) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support 2 links of the same type, must have one incoming and one outgoing link</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"><b>' + item.label + '</b> cannot support 2 links of the same type, must have one incoming and one outgoing link</p>');
                 flag = true;
             }
             else if (fromCount != toCount || connectedEdges.length > 2) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"><b>' + item.label + '</b> cannot support more than 2 links</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'span' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"><b>' + item.label + '</b> cannot support more than 2 links</p>');
                 flag = true;
             }
         }
@@ -195,18 +195,18 @@ function checkMisLink() {
         if (item.node_type == amplifierJSON.node_type) {
             if (item.amp_category == amplifierJSON.amp_category) {
                 if (!item.amp_type) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
 
             }
             else if (item.amp_category == ramanampJSON.amp_category) {
                 if (!item.amp_type) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - Raman amplifier type not entered by the user.</p>');
                     flag = true;
                 }
                 if (!item.category) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier category not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - Raman amplifier category not entered by the user.</p>');
                     flag = true;
                 }
 
@@ -234,31 +234,31 @@ function checkTypeForce() {
 
         if (item.node_type == transceiverJSON.node_type) {
             if (!item.transceiver_type) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + transceiverJSON.node_type + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == roadmJSON.node_type) {
             if (!item.roadm_type) {
-                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
+                msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + roadmJSON.node_type.toUpperCase() + ' type not entered by the user.</p>');
                 flag = true;
             }
         }
         else if (item.node_type == amplifierJSON.node_type) {
             if (item.amp_category == amplifierJSON.amp_category) {
                 if (!item.amp_type) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + amplifierJSON.amp_category + ' type not entered by the user.</p>');
                     flag = true;
                 }
 
             }
             else if (item.amp_category == ramanampJSON.amp_category) {
                 if (!item.amp_type) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier type not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - Raman amplifier type not entered by the user.</p>');
                     flag = true;
                 }
                 if (!item.category) {
-                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - Raman amplifier category not entered by the user.</p>');
+                    msg.push('<p class="focusNode" title="Click here to focus the node" id=\'spanTF' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',1)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - Raman amplifier category not entered by the user.</p>');
                     flag = true;
                 }
             }
@@ -289,11 +289,11 @@ function checkFiberPro() {
         span_length = item.span_length;
         spanlen = parseFloat(span_length);
         if (item.fiber_type == "") {
-            msg.push('<p class="focusNode" title="Click here to focus the fiber" id=\'spanFP' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',2)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + singleFiberJSON.component_type + ' type not entered by the user.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the fiber" id=\'spanFP' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',2)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + singleFiberJSON.component_type + ' type not entered by the user.</p>');
             flag = true;
         }
         if (isNaN(span_length) || spanlen <= 0 || span_length == "") {
-            msg.push('<p class="focusNode" title="Click here to focus the fiber" id=\'spanFP' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',2)"><img width="25" src="./Assets/img/error-listing-icon.png"> <b>' + item.label + '</b> - ' + singleFiberJSON.component_type + ' length not entered by the user.</p>');
+            msg.push('<p class="focusNode" title="Click here to focus the fiber" id=\'spanFP' + item.id.replace(/\s/g, '') + '\' onClick="focusNodeFiber(\'' + item.id + '\',2)"><img width="25" src="./Assets/img/error-listing-icon.svg"> <b>' + item.label + '</b> - ' + singleFiberJSON.component_type + ' length not entered by the user.</p>');
             flag = true;
         }
 

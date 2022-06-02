@@ -3074,7 +3074,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
 
             $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Success));
-            var successrc1 = "./Assets/img/success-toaster.png";
+            var successrc1 = "./Assets/img/success-toaster.svg";
             $("#img_src").attr("src", successrc1);
             $('#toast').removeClass("info-toast");
             $('#toast').removeClass("danger-toast-error-listing");
@@ -3086,7 +3086,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
         case alertType.Info:
             $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Info));
-            var infosrc = "./Assets/img/info-toaster.png";
+            var infosrc = "./Assets/img/info-toaster.svg";
             $("#img_src").attr("src", infosrc);
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("danger-toast-error-listing");
@@ -3103,7 +3103,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
             $('#toast').removeClass("warning-toast");
             $('#toast').removeClass("danger-toast-error-listing");
             $('#toast').removeClass("danger-toast");
-            dangersrc = "./Assets/img/error-toaster.png";
+            dangersrc = "./Assets/img/error-toaster.svg";
             $("#img_src").attr("src", dangersrc);
             if (!removeTimeout) {
                 $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Error));
@@ -3114,7 +3114,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
             else {
                 $("#img_src").hide();
                 $('#caption').text('Messages');
-                //dangersrc = "./Assets/img/error-listing-icon.png";
+                //dangersrc = "./Assets/img/error-listing-icon.svg";
                 $('#toast').addClass("danger-toast-error-listing");
                 clearAndSetTimeout(".danger-toast-error-listing", removeTimeout);
             }
@@ -3124,7 +3124,7 @@ function showMessage(messageType, textmsg, removeTimeout) {
         case alertType.Warning:
             $('#msg_content').html(textmsg);
             $('#caption').text(Object.keys(alertType).find(key => alertType[key] === alertType.Warning));
-            var warningsrc = "./Assets/img/warning-toaster.png";
+            var warningsrc = "./Assets/img/warning-toaster.svg";
             $("#img_src").attr("src", warningsrc);
             $('#toast').removeClass("success-toast");
             $('#toast').removeClass("info-toast");

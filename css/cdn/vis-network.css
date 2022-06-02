@@ -639,43 +639,43 @@ div.vis-network div.vis-navigation div.vis-button {
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-up {
-        background-image: url(img/network/upArrow.png);
+        background-image: url(img/network/upArrow.svg);
         bottom: 50px;
         left: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-down {
-        background-image: url(img/network/downArrow.png);
+        background-image: url(img/network/downArrow.svg);
         bottom: 10px;
         left: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-left {
-        background-image: url(img/network/leftArrow.png);
+        background-image: url(img/network/leftArrow.svg);
         bottom: 10px;
         left: 15px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-right {
-        background-image: url(img/network/rightArrow.png);
+        background-image: url(img/network/rightArrow.svg);
         bottom: 10px;
         left: 95px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
-        background-image: url(img/network/plus.png);
+        background-image: url(img/network/plus.svg);
         bottom: 10px;
         right: 15px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
-        background-image: url(img/network/minus.png);
+        background-image: url(img/network/minus.svg);
         bottom: 10px;
         right: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
-        background-image: url(img/network/zoomExtends.png);
+        background-image: url(img/network/zoomExtends.svg);
         bottom: 50px;
         right: 15px;
     }
