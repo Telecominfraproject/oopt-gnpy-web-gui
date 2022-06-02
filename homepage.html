@@ -1,0 +1,1374 @@
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>TIP-Workplace</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="Assets/img/telecom-favicon.ico" type="image/gif" sizes="16x16">
+    <script src="js/helper/helper.js"></script>
+    <link href="css/cdn/bootstrap.min.css" rel="stylesheet"  />
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="css/cdn/font-awesome.css" rel="stylesheet" />
+    <link href="css/cdn/roboto-css.css" rel="stylesheet" />
+    <link href="css/cdn/oswald-css.css" rel="stylesheet" />
+    <link href="css/cdn/icon.css" rel="stylesheet" />
+    <link href="css/cdn/vis-network.css" rel="stylesheet" type="text/css" />
+    <script src="js/CdnURL/lodash.js"></script>
+    <script src="js/CdnURL/jquery-1.12.4.min.js"></script>
+    <link href="css/cdn/all.css" rel="stylesheet" />
+    <script src="js/localDB/taffy.js"></script>
+    <script src="js/networkgraph/vis.js"></script>
+    <script src="js/networkgraph/filesaver.js"></script>
+    <script src="js/networkgraph/alea.js"></script>
+    <script src="js/networkgraph/exampleUtil.js"></script>
+    <script src="js/networkgraph/node.js"></script>
+    <script src="js/networkgraph/fiber.js"></script>
+    <script src="js/networkgraph/patch.js"></script>
+    <script src="js/networkgraph/service.js"></script>
+    <script src="js/networkgraph/constraints.js"></script>
+    <script src="js/networkgraph/validation.js"></script>
+    <script src="js/networkgraph/mynetwork.js"></script>
+    <script src="js/CdnURL/html2canvas.min.js"></script>
+
+</head>
+
+<body class="body-index" onload="init(false);">
+
+    <div class="loader" id="loader" style="display:none;">
+        <div style="margin:200px auto;">
+            <h2 class="mb-0">Loading  <span id="per">10%</span><span class="dot">  .</span><span class="dot">.</span><span class="dot">.</span></h2>
+            <div class="container1">
+                <div class="bar"></div>
+            </div>
+        </div>
+    </div>
+    <div class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" id="toast"
+         data-autohide="false" data-delay="10000" style="position: absolute; top: 0px; right: 20px; z-index:9999;">
+        <div class="toast-header">
+            <div class="d-flex align-items-start" id="div_toaster">
+                <img id="img_src" class="rounded mr-2" alt="..." width="35px">
+                <div class="w-90 text-break" style="margin-top: 6px;">
+                    <strong class="mr-auto" id="caption"></strong>
+                    <p id="msg_content" class="errorSummary"></p>
+                </div>
+                <button type="button" class="ml-2 mb-1 close" id="errorClose" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+    <!--<div class="toast danger-toast-error-listing hide" role="alert" aria-live="assertive" aria-atomic="true" id="toast1"
+           data-autohide="false" data-delay="10000" style="position: absolute; top: 40px; right: 20px; z-index:9;">
+        <div class="toast-header">
+            <div class="d-flex align-items-start">
+                <div class="w-90 text-break" style="margin-top: 6px;">
+                    <strong class="mr-auto">Messages</strong>
+                    <p id="msg_content1" class="errorSummary"></p>
+                </div>
+                <button type="button" class="ml-2 mb-1 close" id="errorClose1" data-dismiss="toast1" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+
+    </div>-->
+    <div class="background_img">
+        <nav class="navbar navbar-light pb-0 nav-clr">
+            <a class="navbar-brand logo" href="homepage.html">
+                <img src="Assets/img/Logo icon.svg" width="30" height="30" class="d-inline-block align-top d-mbl-none"
+                     alt="" />
+                GNPy Optical network planning tool
+            </a>
+            <!-- button section start -->
+            <div class="button_section mt-1">
+                <!-- <button type="button" class="btn btn-white mx-2" data-toggle="modal" data-target="#staticBackdrop">
+                  Create
+                  Network<img src="Assets/img/Create.svg" class="mx-2 mb-1" />
+                </button> -->
+                <!-- Create new Modal start -->
+                <div class="modal modal1 fade" id="staticBackdrop4" data-backdrop="false" data-keyboard="false" tabindex="-1"
+                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered global-modal-w">
+                        <div class="modal-content modal-content-borderless mt-5">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">
+                                    Simulation Parameters
+                                </h5>
+                                <button type="button" class="close" id="btnCloseGP" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container">
+
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label for="">Frequency Min</label>
+                                            <input type="text" class="form-control" id="txtFrgMin" placeholder="Enter Frequency Min Value" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label for="">Frequency Max</label>
+                                            <input type="text" class="form-control" id="txtFrqMax" placeholder="Enter Frequency Max Value" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label for="">Grid spacing</label>
+                                            <input type="number" step="12.5" class="form-control" id="txtGridSpac" placeholder="Enter Grid spacing" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label for="">No of Channels</label>
+                                            <input type="text" class="form-control" id="txtNoOfChannel" placeholder="Enter No of Channels" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-6 col-lg-6 col-xl-6">
+                                        <div class="form-group">
+                                            <label for="">Ageing Margin</label>
+                                            <input type="text" class="form-control" id="txtAgeingMargin" placeholder="Enter Ageing Margin" />
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn modal-btn" id="btnSaveGP">Apply</button>
+                                <button type="button" class="btn cancel-btn" id="btnCloseSP">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--<div id="button_undo">
+                    undo
+                    <i class="fas fa-arrow-left "></i>
+                </div>
+                <div id="button_redo">
+                    redo
+                    <i class="fas fa-arrow-right  "></i>
+                </div>-->
+                <!--X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />-->
+                <!--<button type="button" id="importEqptLink" class="btn upload-btn">
+                    Import data
+                    <img src="Assets/img/import-icon.png" class="mx-2" />
+                </button>-->
+                <input style="display:none" type="file" id="importEqpt" value="Upload File" />
+                <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
+                    <img src="Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
+                         title="About" />
+                </label>
+                <a href="help.html" class=" mx-2" data-toggle="tooltip" data-placement="top" title="Help">
+                    <img src="Assets/img/Help icon.svg" width="25px" />
+                </a>
+            </div>
+            <!-- button section End -->
+        </nav>
+        <div class="container-fluid" id="divSelection">
+            <div class="row align-items-center rowheightset">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3 text-btn-right">
+                    <div class="bg-card-change select-box" id="btn_CreateNetwork">
+                        <img src="Assets/img/create-icon.png" class="select-in-img p-3">
+                        <button class="select-role-btn w-100 font-weight-bold">Create New network</button>
+                    </div>
+                </div>
+                <div class="col-lg-3 text-btn-left">
+                    <div class="bg-card-change select-box" id="importEqptLink">
+                        <img src="Assets/img/import-icon-1.png" class="select-in-img1 p-3">
+                        <button class="select-role-btn w-100 font-weight-bold">Import Network using JSON</button>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </div>
+        <div class="row align-items-center bg-white">
+            <div class="row stepper-tab w-100">
+                <ul class="nav nav-pills w-100" id="pills-tab" role="tablist">
+
+                    <!--<li class="nav-item tab-view-885" role="presentation" onclick="stepColor(1)" id="step1" data-toggle="modal" data-target="#staticBackdrop4">
+                        <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#global"
+                           role="tab" aria-controls="pills-profile" aria-selected="false">
+                            <span class="material-icons pr-2">
+                                speed
+                            </span>
+                            Define Simulation parameters
+                        </a>
+                    </li>-->
+
+                    <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(2)" id="step2">
+                        <a class="nav-link d-inline-flex" id="stepCreateTopology" data-toggle="pill" href="#edit-topology"
+                           role="tab" aria-controls="pills-profile" aria-selected="false">
+                            <span class="material-icons pr-2">
+                                edit_note
+                            </span>
+                            Create/Edit topology
+                        </a>
+                    </li>
+                    <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(3)" id="step3">
+                        <a class="nav-link d-inline-flex" id="stepAddService" data-toggle="pill" href="#add-service"
+                           role="tab" aria-controls="pills-contact" aria-selected="false">
+                            <span class="material-icons">
+                                post_add
+                            </span>
+                            Add/Edit services
+                        </a>
+                    </li>
+                    <li class="nav-item tab-view-885" role="presentation" onclick="stepColor(4)" id="step4">
+                        <a class="nav-link d-inline-flex" id="stepSaveNetwork" data-toggle="pill" href="#save-network"
+                           role="tab" aria-controls="pills-contact" aria-selected="false">
+                            <span class="material-icons pr-2">
+                                analytics
+                            </span>
+                            Analyze network
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content stp-tab" id="pills-tabContent">
+
+                    <div class="tab-pane fade" id="edit-topology" role="tabpanel" aria-labelledby="pills-profile-tab">
+                        <div class="group-node">
+                            <div class="create-back" id="btnAddRoadm">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newroadm.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="ROADM" />
+                                </div><span class="sidebar-text1">ROADM</span>
+                            </div>
+                            <div class="create-back" id="btnAddFused">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newattenuator.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Attenuator" />
+                                </div><span class="sidebar-text1">Attenuator</span>
+                            </div>
+
+                            <div class="create-back" id="btnAddTransceiver">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newtransceiver.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Transceiver" />
+                                </div><span class="sidebar-text1">Transceiver</span>
+                            </div>
+                        </div>
+                        <div class="group-node mt-2">
+                            <div class="create-back" id="btnAddILA" style="display:none">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/ILA.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="ILA" />
+                                </div><span class="sidebar-text1">ILA</span>
+                            </div>
+                            <div class="create-back" id="btnAddAmplifier">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newamp.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Amplifier" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Amplifier</span>
+                            </div>
+                            <div class="create-back" id="btnAddRamAmp">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/ramanamp.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Raman Amplifier" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Raman Amplifier</span>
+                            </div>
+                        </div>
+                        <div class="group-node mt-2">
+                            <div class="create-back" id="btnAddDualFiber" style="display:none">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newdualfiber.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Dual fiber" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Dual fiber</span>
+                            </div>
+                            <div class="create-back" id="btnAddSingleFiber">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newdualfiber.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Single fiber" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Single fiber</span>
+                            </div>
+                            <div class="create-back" id="btnAddDualPatch" style="display:none">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newdualpatch.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Dual Patch" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Dual Patch</span>
+                            </div>
+                            <div class="create-back" id="btnAddSinglePatch">
+                                <div class="card icon-group hover-show">
+                                    <img src="Assets/img/newdualpatch.svg"
+                                         class="mx-auto icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                         title="Single Patch" style="padding: 1px;" />
+                                </div><span class="sidebar-text1">Single Patch</span>
+                            </div>
+                        </div>
+
+                        <span class="material-icons toggle-arrow" id="toggle-arrow-2">
+                            chevron_left
+                        </span>
+                    </div>
+                    <div class="tab-pane fade d-non" id="add-service" role="tabpanel" aria-labelledby="pills-contact-tab">
+                        <div class="create-back" id="btnServiceActive">
+                            <div class="card icon-group hover-show">
+                                <img src="Assets/img/service.svg"
+                                     class="mx-auto  icon-name justify-content-center align-items-center w-100 h-100" data-toggle="tooltip" data-placement="top"
+                                     title="Service" />
+                                <!--  <p class="m-0 btn-p">Add Service</p> -->
+                            </div><span class="sidebar-text2">Service</span>
+                        </div>
+                        <span class="material-icons toggle-arrow" id="toggle-arrow-3">
+                            chevron_left
+                        </span>
+                    </div>
+                    <div class="tab-pane fade" id="save-network" role="tabpanel" aria-labelledby="pills-contact-tab">
+
+                        <div class="create-back" id="btnSaveNetwork">
+                            <img src="Assets/img/save1.png" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
+                                 title="Save network" />&nbsp;<span class="sidebar-text3">Save network</span>
+                        </div>
+                        <div class="create-back" id="btnExportPopup">
+                            <img src="Assets/img/export.png" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
+                                 title="Export network" />&nbsp;<span class="sidebar-text3">Export network</span>
+                        </div>
+
+                        <!-- <button type="button" class="btn btn-secondary btn-lg create-back" disabled style="margin-top: -1px;cursor: not-allowed;">  </button> -->
+                        <button type="button" class="btn btn-secondary btn-lg create-back1" disabled>
+                            <img src="Assets/img/analyze.svg" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
+                                 title="Analyze network" style="background-color: white;border-radius: 50%;padding: 2px;" />&nbsp;<span class="sidebar-text3">Analyze network</span>
+                        </button>
+                        <span class="material-icons toggle-arrow" id="toggle-arrow-4">
+                            chevron_left
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="modal fade" id="aboutLabel" data-backdrop="static" data-keyboard="false" tabindex="-1"
+             aria-labelledby="aboutpagemodal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="aboutpagemodal">About</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <div>
+                            <img src="Assets/img/Logo.svg" alt="" srcset="" class="about_logo" />
+                            <p for="">Version: 1.0.0</p>
+                            <p>Copyrights @ 2022 GNPy Optical Network Planning Tool.</p>
+                            <p>Powered By</p>
+                            <img src="Assets/img/client logo 02.svg" alt="" srcset="" />
+                            <img src="Assets/img/client logo 01.svg" alt="" srcset="" />
+                            <p>All rights reserved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card network-area ">
+            <div class="inner-body inner-height">
+                <div class="work_area map-bg pt-0">
+                    <div class="row bg-white border-bottom align-items-center" style="height:47px;">
+
+
+                        <div class="col-lg-12">
+                            <!--data-toggle="modal" data-target="#staticBackdrop4" onclick="stepColor(1)" id="step1"-->
+                            <span class="nav-item tab-view-885" role="presentation">
+                                <a class="nav-link d-inline-flex" id="stepGP" data-toggle="pill" href="#global" style="padding: 11px 0px 0px 0px; color: #2b7c80"
+                                   role="tab" aria-controls="pills-profile" aria-selected="false">
+                                    <span class="material-icons pr-2">
+                                        settings
+                                    </span>
+                                    Simulation parameters
+                                </a>
+
+                            </span>
+
+                            <div class="float-right d-flex">
+
+                                <div class="custom-control custom-checkbox" style="display: none; align-items: center">
+                                    <input type="checkbox" class="custom-control-input" id="cbxSingleFiber">
+                                    <label class="custom-control-label" for="cbxSingleFiber">Single fiber</label>
+                                </div>
+
+                                <div class="d-flex" style="display:none !important;">
+                                    <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area width">W : </b>
+                                    <img src="Assets/img/minus.png" id="wMinus" class="minus" />
+                                    <input type="text" class="input_customwidth" id="txtw" value="W" />
+                                    <img src="Assets/img/plus.png" id="wPlus" class="plus" />
+
+                                </div>
+                                <div class="d-flex ml-2 mr-2" style="display:none !important;">
+                                    <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area height">H : </b>
+                                    <img src="Assets/img/minus.png" class="minus" />
+                                    <input type="text" class="input_customwidth" id="txth" value="H" />
+                                    <img src="Assets/img/plus.png" class="plus" />
+
+                                </div>
+
+
+                                <select id="ddlNetworkView" class="form-control" style="margin-top:5px;width:auto !important;">
+                                    <option value="2"> Functional View </option>
+                                    <option value="1" style="color:lightgray !important" disabled> NE View </option>
+                                    <option value="3" style="color:lightgray !important" disabled> Geographical View </option>
+                                </select>
+                                <div class="custom-control custom-switch d-flex align-items-center w-100 ml-2 mr-2">
+                                    <input type="checkbox" class="custom-control-input" id="showHideEle">
+                                    <label class="custom-control-label pl-1" for="showHideEle">Show labels</label>
+                                </div>
+                                <!--<i id="showHideEle" style="padding-top: 15px; padding-right: 6px; padding-left: 6px; cursor: pointer; color: #2b7c80;" data-toggle="tooltip" data-placement="top" title="Show/Hide Fiber/Service label" class="fa fa-eye-slash" aria-hidden="true"></i>-->
+                                <a href="#" id="button_undo" data-toggle="tooltip" data-placement="top" title="Undo">
+                                    <img src="Assets/img/undo.png" />
+                                </a>
+                                <a href="#" id="button_redo" data-toggle="tooltip" data-placement="top" title="Redo">
+                                    <img src="Assets/img/redo.png" />
+                                </a>
+                                <a href="#" id="btncaptureimagenetwork" data-toggle="tooltip" data-placement="top" title="Screen Capture">
+                                    <img src="Assets/img/capture-image.png" />
+                                </a>
+
+                                <a href="#" id="btnSaveNetworkTop" data-toggle="tooltip" data-placement="top" title="Save As">
+                                    <img src="Assets/img/save.png" />
+                                </a>
+                                <button id="btnValidation"
+                                        style="background: #2b7c80; color: #fff; border: none; padding: 5px 20px; border-radius: 5px; width: 100%; margin-right: 10px; height: 38px; margin-top: 4px;">
+                                    Check Errors
+                                </button>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="mynetwork" style="height: calc(100vh - 160px);">
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="attenuator">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Attenuator Properties</label>
+                        <div data-tab="multi">
+                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('attenuator')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Attenuator name</label><span class="f-s-12" id="siteLength"></span>
+                            <input id="txtAttenuatorName" type="text" placeholder="Enter Attenuator name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateAttenuator" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseAttenuator" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="roadm">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">ROADM properties</label>
+                        <div>
+                            <span class="close close-btnn" data-tab="single" onclick="closeDrawer('roadm')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group" id="divRoadmName">
+                            <label class="f-s-17">ROADM name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtRoadmName" placeholder="Enter ROADM name" class="form-control" />
+                        </div>
+                        <div class="form-group" id="divRoadmType">
+                            <label class="f-s-17">ROADM Type</label>
+                            <select id="ddlRoadmType" class="form-control">
+                            </select>
+                        </div>
+                        <div id="divRoadmPro">
+
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateRoadm" class="btn btn-primary-n w-100">
+                                    Apply
+                                </button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseRoadm" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="dualfiber">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Dual fiber properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="fibre" onclick="closeDrawer('dualfiber')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Fiber name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtFiberName"
+                                   placeholder="Enter Fiber Name"
+                                   class="form-control" />
+                        </div>
+                        <div class="accordion-fiber">
+                            <p class="title m-0 f-s-17" id="pFiberA">Fiber A</p>
+                            <span class="show-fiber" id="aFiberA">+</span>
+                        </div>
+                        <div class="info-fiber">
+                            <div class="panel">
+
+                                <div class="form-group">
+                                    <label class="f-s-17">Fiber type</label>
+                                    <select id="ddlFiberAType" class="form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Span length(in km)</label>
+                                    <input type="text" id="txtFiberASL"
+                                           placeholder="Enter Span length"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                                    <input type="text" id="txtFiberALC"
+                                           placeholder="Enter Loss Coefficient"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Connector IN(dB)</label>
+                                    <input type="text" id="txtFiberACIN"
+                                           placeholder="Enter Connector IN"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Connector OUT(dB)</label>
+                                    <input type="text" id="txtFiberACOUT"
+                                           placeholder="Connector OUT"
+                                           class="form-control" />
+                                </div>
+
+                                <div>
+                                    <label class="container-check f-s-17">
+                                        Length Based Loss
+                                        <input type="checkbox" id="cbx_FiberALBL">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Span loss</label>
+                                    <input type="text" id="txtFiberASpanLoss"
+                                           placeholder="Enter Span loss"
+                                           class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-end">
+                            <label class="container-check f-s-17">
+                                Clone
+                                <input type="checkbox" id="cbx_clone">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="accordion-fiber">
+                            <p class="title m-0 f-s-17" id="pFiberB">Fiber B</p>
+                            <span class="show-fiber" id="aFiberB">+</span>
+                        </div>
+                        <div class="info-fiber">
+                            <div class="panel">
+
+                                <div class="form-group">
+                                    <label class="f-s-17">Fiber type</label>
+                                    <select id="ddlFiberBType" class="form-control"></select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Span length(in km)</label>
+                                    <input type="text" id="txtFiberBSL"
+                                           placeholder="Enter Span length"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                                    <input type="text" id="txtFiberBLC"
+                                           placeholder="Enter Loss Coefficient"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Connector IN(dB)</label>
+                                    <input type="text" id="txtFiberBCIN"
+                                           placeholder="Enter Connector IN"
+                                           class="form-control" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Connector OUT(dB)</label>
+                                    <input type="text" id="txtFiberBCOUT"
+                                           placeholder="Connector OUT"
+                                           class="form-control" />
+                                </div>
+
+                                <div>
+                                    <label class="container-check f-s-17">
+                                        Length Based Loss
+                                        <input type="checkbox" id="cbx_FiberBLBL">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="f-s-17">Span loss</label>
+                                    <input type="text" id="txtFiberBSpanLoss"
+                                           placeholder="Enter Span loss"
+                                           class="form-control" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnDualFiberUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseDualFiber" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="singlepatch">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Single Patch Properties</label>
+                        <div data-tab="multi">
+                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('singlepatch')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Patch name</label><span class="f-s-12" id="siteLength"></span>
+                            <input id="txtSinglePatchName" type="text" placeholder="Enter Patch name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateSinglePatch" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseSinglePatch" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mutinode-drawer-container" id="dualpatch">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Dual Patch Properties</label>
+                        <div data-tab="multi">
+                            <span class="close close-btnn" id="multii" data-tab="multi" onclick="closeDrawer('dualpatch')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Patch name</label><span class="f-s-12" id="siteLength"></span>
+                            <input id="txtDualPatchName" type="text" placeholder="Enter Patch name" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateDualPatch" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseDualPatch" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="singlefiber">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Single fiber properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="fibre" onclick="closeDrawer('singlefiber')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div id="divFiberNameCon">
+                            <div class="form-group mt-2">
+                                <label class="f-s-17">Fiber name</label><span class="f-s-12" id="siteLength"></span>
+                                <input type="text" id="txtSinlgeFiberName" placeholder="Enter Fiber name" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="f-s-17">Source(Tx)</label>
+                                <input type="text" id="txtSource" readonly
+                                       placeholder="Enter Source"
+                                       class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="f-s-17">Destination(Rx)</label>
+                                <input type="text" id="txtDestination" readonly
+                                       placeholder="Enter Destination"
+                                       class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Fiber type</label>
+                            <select id="ddlSingleFiberType" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Span length(in km)</label>
+                            <input id="txtSpan_Length"
+                                   placeholder="Enter Span length"
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Loss Coefficient(dB/km)</label>
+                            <input type="text" id="txtLoss_Coefficient"
+                                   placeholder="Enter Loss Coefficient"
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Connector IN(dB)</label>
+                            <input type="text" id="txtConnector_IN"
+                                   placeholder="Enter Connector IN"
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Connector OUT(dB)</label>
+                            <input type="text" id="txtConnector_OUT"
+                                   placeholder="Connector OUT"
+                                   class="form-control" />
+                        </div>
+                        <div>
+                            <label class="container-check f-s-17">
+                                Length Based Loss
+                                <input type="checkbox" id="cbxLength_Based_Loss">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Span loss</label>
+                            <input type="text" id="txtSpan_Loss"
+                                   placeholder="Enter Span loss"
+                                   class="form-control" />
+                        </div>
+
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnSingleFiberUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseSingleFiber" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="ILA">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">ILA Properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="ILA" onclick="closeDrawer('ILA')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">ILA name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtILAName" placeholder="Enter ILA name" class="form-control" />
+                        </div>
+                        <div id="divILAPro">
+
+                        </div>
+                        <div class="form-group" style="display:none">
+                            <label class="f-s-17">Amplifier A</label>
+                            <select id="ddlPreAmpType" class="form-control"></select>
+                        </div>
+                        <div class="form-group" style="display:none">
+                            <label class="f-s-17">Amplifier B</label>
+                            <select id="ddlBoosterType" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnILAUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseILA" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="amplifier">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Amplifier Properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="amplifier" onclick="closeDrawer('amplifier')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group" id="divAmpName">
+                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtAmplifierName" placeholder="Enter Amplifier name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier Type</label>
+                            <select id="ddlAmplifierType" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnAmplifierUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseAmplifier" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="ramanamp">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Raman Amplifier Properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="amplifier" onclick="closeDrawer('ramanamp')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group" id="divRamanAmpName">
+                            <label class="f-s-17">Amplifier name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtRamanAmpName" placeholder="Enter Amplifier name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier Type</label>
+                            <select id="ddlRamanAmpType" class="form-control">
+                                <option value="Raman Amp1">Raman Amp1</option>
+                                <option value="Raman Amp2">Raman Amp2</option>
+                                <option value="Raman Amp3">Raman Amp3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Amplifier Category</label>
+                            <select id="ddlRamanAmpCategory" class="form-control">
+                                <option value="Counter Propagating">Counter Propagating</option>
+                                <option value="Co-Propagating">Co-Propagating</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnRamanAmpUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseRamanAmp" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mutinode-drawer-container" id="transceiver">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Transceiver Properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" onclick="closeDrawer('transceiver')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group" id="divTransName">
+                            <label class="f-s-17">Transceiver name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtTransceiverName" placeholder="Enter Transceiver name" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Transceiver Type</label>
+                            <select id="ddlTransceiverType" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnTransceiverUpdate" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseTransceiver" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!--amplifire end-->
+                <!--add service-->
+                <div class="mutinode-drawer-container" id="service">
+                    <div class="mutinode-header pl-3 pr-3 pb-1 pt-3 d-flex justify-content-between">
+                        <label class="f-s-20 dark-heading mb-0">Service properties</label>
+                        <div>
+                            <span class="close close-btnn" id="single" data-tab="service" onclick="closeDrawer('service')">
+                                <span aria-hidden="true">&times;</span>
+                            </span>
+                        </div>
+                    </div>
+                    <hr class="mt-1" />
+
+                    <!--mutinode field body-->
+                    <div class="multinode-body pl-3 pr-3">
+                        <div class="form-group">
+                            <label class="f-s-17">Service name</label><span class="f-s-12" id="siteLength"></span>
+                            <input type="text" id="txtServiceName"
+                                   placeholder="Enter Service Name"
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-14">Source</label>
+                            <input type="text" id="txtServiceSrc" readonly
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-14">Destination</label>
+                            <input type="text" id="txtServiceDest" readonly
+                                   class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label class="f-s-17">Bandwidth (in Gbps)</label>
+                            <input type="number" id="txtBandwidth" step="50"
+                                   class="form-control" />
+                        </div>
+
+                    </div>
+                    <div class="multinode-footer pl-3 pr-3">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnUpdateService" class="btn btn-primary-n w-100">Apply</button>
+                            </div>
+                            <div class="col-md-6 col-lg-6 col-12 col-sm-12 col-xl-6">
+                                <button id="btnCloseService" class="btn btn-gray-n w-100">Cancel</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--
+        <div class="footer">
+          <p class="m-0">Powered by Vayu Group and Telecom Infra Project</p>
+          <p class="m-0">Privacy</p>
+        </div> -->
+        <!-- Export Modal Start -->
+    </div>
+    <div class="modal fade" id="staticBackdrop1" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title ES" id="staticBackdropLabel">
+                        Export
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="f-s-17">File Name</label>
+                        <input type="text" id="txtFileName" placeholder="Enter File Name" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6 m-auto">
+                                <button class="yes-btn w-100" id="btnExportNetwork">OK</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="staticBackdrop6" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">
+                        Add/Edit services
+                    </h5>
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button> -->
+                </div>
+                <div class="modal-body">
+                    <p class="confirm-export">Are you sure you want to proceed for creating service?</p>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6 m-auto">
+                                <button class="yes-btn w-100" data-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Export Modal Ends -->
+    <!-- Apply Modal Starts -->
+    <div class="modal fade" id="staticBackdrop2" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">
+                        Apply
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="confirm-export">Are you sure want to Apply?</p>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <button class="yes-btn w-100" data-dismiss="modal" onclick="closeDrawer('single')">YES</button>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <button class="no-btn w-100">NO</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Apply Modal Ends -->
+    <!-- service Modal Starts -->
+    <div class="modal fade" id="staticBackdrop3" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">
+                        Service
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="confirm-export1">
+                        You cannot add or edit the network topology once the service gets added. <br>Please
+                        confirm to continue the service.
+                    </p>
+                </div>
+                <div class="modal-footer">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <button class="yes-btn w-100" data-dismiss="modal" onclick="closeDrawer('single')">YES</button>
+                            </div>
+                            <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                                <button class="no-btn w-100">NO</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- service Modal Ends -->
+    <div class="dropdown-menu" id="roadmMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('roadmMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcRoadmEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit ROADM</span></a>
+        <a class="dropdown-item" id="rcRoadmDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete ROADM</span></a>
+        <a class="dropdown-item" id="rcRoadmCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcRoadmCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcRoadmApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcRoadmCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="attenuatorMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('attenuatorMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcAttenuatorEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Attenuator</span></a>
+        <a class="dropdown-item" id="rcAttenuatorDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Attenuator</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCopyPara" style="display:none;" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcAttenuatorApplyPro" style="display:none;" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCancel" style="display:none;" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="ILAMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('ILAMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcILAEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit ILA</span></a>
+        <a class="dropdown-item" id="rcILADelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete ILA</span></a>
+        <a class="dropdown-item" id="rcILACopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+    </div>
+    <div class="dropdown-menu" id="amplifierMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('amplifierMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Amplifier</span></a>
+        <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Amplifier</span></a>
+        <a class="dropdown-item" id="rcAmplifierCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcAmplifierCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcAmpApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcAmpCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="ramanAmpMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('ramanAmpMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcRamanAmpEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Raman Amplifier</span></a>
+        <a class="dropdown-item" id="rcRamanAmpDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Raman Amplifier</span></a>
+        <a class="dropdown-item" id="rcRamanAmpCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcRamanAmpCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcRamanApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcRamanCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcTransceiverEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Transceiver</span></a>
+        <a class="dropdown-item" id="rcTransceiverDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Transceiver</span></a>
+        <a class="dropdown-item" id="rcTransceiverCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
+        <a class="dropdown-item" id="rcTransceiverCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcTransApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcTransCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="templateMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('templateMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcApplyPro" href="#"><img src="Assets/img/paste.svg" alt="" class="mr-2"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcProCancel" href="#"><img src="Assets/img/paste.svg" alt="" class="mr-2"> <span>Cancel</span></a>
+    </div>
+    <div class="dropdown-menu" id="pasteMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('pasteMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="btnPasteNode" href="#"><img src="Assets/img/paste.svg" alt="" class="mr-2 icon_menu"> <span>Paste</span></a>
+    </div>
+    <div class="dropdown-menu" id="dualFiberMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('dualFiberMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcDualFiberEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Dual Fiber</span></a>
+        <a class="dropdown-item" id="rcDualFiberDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Dual Fiber</span></a>
+        <div class="accordion-fiber" style="height:34px;margin:1px;background-color:#99c6ef;display:-webkit-box">
+            <span class="show-fiber" style="width:28px;height:26px;" id="menuInserNode">+</span><p class="title m-0 f-s-17" style="color:black;padding-left:10px;" id="jeomwspiybyhpvhdl4r9">Insert Node</p>
+
+        </div>
+        <div class="info-fiber" style="padding:0px;">
+            <div class="panel">
+                <a class="dropdown-item" id="rcDualInsertROADM" href="#"><img src="Assets/img/newroadm.svg" alt="" class="mr-2 middleNode"> <span>ROADM</span></a>
+                <a class="dropdown-item" id="rcDualInsertAttenuator" href="#"><img src="Assets/img/newattenuator.svg" alt="" class="mr-2 middleNode"> <span>Attenuator</span></a>
+                <!--<a class="dropdown-item" id="rcDualInsertTransceiver" href="#"><img src="Assets/img/newtransceiver.svg" alt="" class="mr-2 middleNode"> <span>Transceiver</span></a>-->
+                <a class="dropdown-item" id="rcDualInsertILA" href="#"><img src="Assets/img/ILA.svg" alt="" class="mr-2 middleNode"> <span>ILA</span></a>
+            </div>
+        </div>
+
+    </div>
+    <div class="dropdown-menu" id="singleFiberMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('singleFiberMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcSingleFiberEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Single Fiber</span></a>
+        <a class="dropdown-item" id="rcSingleFiberDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Single Fiber</span></a>
+        <div id="insertMenu" class="accordion-fiber" style="height:34px;margin:1px;background-color:#99c6ef;display:-webkit-box">
+            <span class="show-fiber" style="width:28px;height:26px;" id="menuSingleFiberInser">+</span><p class="title m-0 f-s-17" style="color:black;padding-left:10px;" id="jeomwspiybyhpvhdl4r9">Insert Node</p>
+        </div>
+        <div class="info-fiber" style="padding:0px;">
+            <div class="panel">
+                <a class="dropdown-item" id="rcSingleInsertROADM" href="#"><img src="Assets/img/newroadm.svg" alt="" class="mr-2 middleNode"> <span>ROADM</span></a>
+                <a class="dropdown-item" id="rcSingleInsertAttenuator" href="#"><img src="Assets/img/newattenuator.svg" alt="" class="mr-2 middleNode"> <span>Attenuator</span></a>
+                <!--<a class="dropdown-item" id="rcSingleInsertTransceiver" href="#"><img src="Assets/img/newtransceiver.svg" alt="" class="mr-2 middleNode"> <span>Transceiver</span></a>-->
+                <a class="dropdown-item" id="rcSingleInsertAmplifier" href="#"><img src="Assets/img/newamp.svg" alt="" class="mr-2 middleNode"> <span>Amplifier</span></a>
+                <a class="dropdown-item" id="rcSingleInsertRamanAmp" href="#"><img src="Assets/img/ramanamp.svg" alt="" class="mr-2 middleNode"> <span>Raman Amplifier</span></a>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-menu" id="singlePatchMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('singlePatchMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcSinglePatchEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Single Patch</span></a>
+        <a class="dropdown-item" id="rcSinglePatchDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Single Patch</span></a>
+    </div>
+    <div class="dropdown-menu" id="dualPatchMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('dualPatchMenu')">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcDualPatchEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Dual Patch</span></a>
+        <a class="dropdown-item" id="rcDualPatchDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Dual Patch</span></a>
+    </div>
+    <div class="dropdown-menu" id="serviceMenu" aria-labelledby="dropdownMenuButton">
+        <span class="close close-btnn1" onclick="closeMenu('serviceMenu')" data-tab="single">
+            <span aria-hidden="true">x</span>
+        </span>
+        <a class="dropdown-item" id="rcServiceEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2"> <span>Edit Service</span></a>
+        <a class="dropdown-item" id="rcServiceDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2"> <span>Delete Service</span></a>
+    </div>
+    <div class="dropdown-menu" id="hoverDiv" style="z-index:1001;padding:0px;;" aria-labelledby="dropdownMenuButton">
+    </div>
+
+    <!-- Script language -->
+    <script src="js/main.js"></script>
+    <script src="js/CdnURL/popper.min.js"></script>
+    <script src="js/CdnURL/bootstrap.min.js"></script>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            accordianFun();
+        });
+
+        function accordianFun() {
+            var shows = document.querySelectorAll(".show-fiber");
+            var infos = document.querySelectorAll(".info-fiber");
+            var accordions = document.querySelectorAll(".accordion-fiber");
+
+            for (let i = 0; i < shows.length; i++) {
+                shows[i].onclick = function () {
+                    for (let j = 0; j < shows.length; j++) {
+                        if (shows[j] != this) {
+                            infos[j].classList.remove("reveal");
+                            shows[j].innerHTML = "+";
+                            accordions[j].classList.remove("radius");
+                        }
+                    }
+                    accordions[i].classList.toggle("radius");
+                    infos[i].classList.toggle("reveal");
+                    if (infos[i].className.includes("reveal")) shows[i].innerHTML = "-";
+                    else shows[i].innerHTML = "+";
+                };
+            }
+        }
+    </script>
+
+    <script>
+        $(document).on('change', '.up', function () {
+            var names = [];
+            var length = $(this).get(0).files.length;
+            for (var i = 0; i < $(this).get(0).files.length; ++i) {
+                names.push($(this).get(0).files[i].name);
+            }
+            // $("input[name=file]").val(names);
+            if (length > 2) {
+                var fileName = names.join(', ');
+                $(this).closest('.form-group').find('.form-control').attr("value", length + " files selected");
+            }
+            else {
+                $(this).closest('.form-group').find('.form-control').attr("value", names);
+            }
+        });
+    </script>
+
+</body>
+</html>

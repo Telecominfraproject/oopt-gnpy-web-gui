@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="470.999" height="55" viewBox="0 0 470.999 55">
+  <g id="Group_43" data-name="Group 43" transform="translate(-11.337 -13.434)">
+    <text id="Optical_Network_Planning_Tool" data-name="Optical Network Planning Tool" transform="translate(79.336 51.434)" fill="#1eabbc" font-size="30" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0">Optical Network Planning Tool</tspan></text>
+    <g id="Group_40" data-name="Group 40" transform="translate(11.753 13.434)">
+      <path id="Subtraction_1" data-name="Subtraction 1" d="M6,12A6,6,0,0,1,3.664.472,6,6,0,0,1,8.335,11.528,5.963,5.963,0,0,1,6,12ZM6,2.864A3.136,3.136,0,1,0,9.136,6,3.14,3.14,0,0,0,6,2.864Z" transform="translate(19.583 0)" fill="#29818c"/>
+      <path id="Subtraction_2" data-name="Subtraction 2" d="M6,12A6,6,0,0,1,3.664.472,6,6,0,0,1,8.335,11.528,5.963,5.963,0,0,1,6,12ZM6,2.864A3.136,3.136,0,1,0,9.136,6,3.14,3.14,0,0,0,6,2.864Z" transform="translate(44.583 27)" fill="#29818c"/>
+      <path id="Subtraction_3" data-name="Subtraction 3" d="M6,12A6,6,0,0,1,3.664.472,6,6,0,0,1,8.335,11.528,5.963,5.963,0,0,1,6,12ZM6,2.864A3.136,3.136,0,1,0,9.136,6,3.14,3.14,0,0,0,6,2.864Z" transform="translate(-0.417 32)" fill="#29818c"/>
+      <path id="Subtraction_4" data-name="Subtraction 4" d="M6,12A6,6,0,0,1,3.664.472,6,6,0,0,1,8.335,11.528,5.963,5.963,0,0,1,6,12ZM6,2.864A3.136,3.136,0,1,0,9.136,6,3.14,3.14,0,0,0,6,2.864Z" transform="translate(28.583 43)" fill="#29818c"/>
+      <path id="Path_19" data-name="Path 19" d="M212.676,8309.93l1.887,2.1,3.15-2.968-2.07-2.044Z" transform="translate(-185.092 -8298.737)" fill="#29818c"/>
+      <path id="Path_22" data-name="Path 22" d="M0,0H4.212V3.4H0Z" transform="translate(32.522 16.544) rotate(-43)" fill="#29818c"/>
+      <path id="Path_23" data-name="Path 23" d="M0,0H4.212V28.656H0Z" transform="matrix(0.848, 0.53, -0.53, 0.848, 21.276, 8.559)" fill="#29818c"/>
+      <path id="Path_25" data-name="Path 25" d="M0,0H4.212V14.5H0Z" transform="matrix(0.695, 0.719, -0.719, 0.695, 45.961, 34.812)" fill="#29818c"/>
+      <path id="Path_24" data-name="Path 24" d="M0,0H4.212V19.885H0Z" transform="matrix(-0.407, 0.914, -0.914, -0.407, 30.13, 45.853)" fill="#29818c"/>
+      <path id="Path_21" data-name="Path 21" d="M0,0H4.212V3.4H0Z" transform="translate(38.093 22.387) rotate(-43)" fill="#29818c"/>
+      <path id="Path_20" data-name="Path 20" d="M0,0H4.212V3.4H0Z" transform="translate(43.49 28.229) rotate(-43)" fill="#29818c"/>
+    </g>
+  </g>
+</svg>
