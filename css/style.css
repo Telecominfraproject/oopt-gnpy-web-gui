@@ -1961,3 +1961,9 @@ select {
 .icon_menu{
     height:14px;
 }
+.img-top {
+    width: 34px;
+    height: 34px;
+    margin-top: 7px;
+    margin-left:5px;
+}
