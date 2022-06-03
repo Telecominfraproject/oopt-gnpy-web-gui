@@ -1964,6 +1964,7 @@ select {
 .img-top {
     width: 34px;
     height: 34px;
-    margin-top: 7px;
+    margin-top: 5px;
     margin-left:5px;
+    margin-right:7px;
 }
