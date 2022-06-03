@@ -5,7 +5,7 @@ body {
 .back-body {
     background-repeat: no-repeat;
     background-size: cover;
-    background-image: url("../Assets/img/Innerpage_bg.jpg");
+    background-image: url("../Assets/img/Innerpage_bg.svg");
     height: 100vh;
     font-family: roboto;
 }
@@ -832,7 +832,7 @@ background-color: #fff;
 }
 
 .map-bg {
-    background-image: url(../Assets/img/map-bg.png);
+    background-image: url(../Assets/img/map-bg.svg);
     z-index: 1;
     background-size: cover;
     background-position: center;

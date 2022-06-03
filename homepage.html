@@ -152,20 +152,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!--<div id="button_undo">
-                    undo
-                    <i class="fas fa-arrow-left "></i>
-                </div>
-                <div id="button_redo">
-                    redo
-                    <i class="fas fa-arrow-right  "></i>
-                </div>-->
-                <!--X:<input id="txtX" type="text" />Y:<input id="txtY" type="text" />-->
-                <!--<button type="button" id="importEqptLink" class="btn upload-btn">
-                    Import data
-                    <img src="Assets/img/import-icon.png" class="mx-2" />
-                </button>-->
                 <input style="display:none" type="file" id="importEqpt" value="Upload File" />
                 <label class="mx-2 about_icon" data-toggle="modal" data-target="#aboutLabel">
                     <img src="Assets/img/About icon.svg" alt="" srcset="" class="" data-toggle="tooltip" data-placement="top"
@@ -182,13 +168,13 @@
                 <div class="col-lg-3"></div>
                 <div class="col-lg-3 text-btn-right">
                     <div class="bg-card-change select-box" id="btn_CreateNetwork">
-                        <img src="Assets/img/create-icon.png" class="select-in-img p-3">
+                        <img src="Assets/img/create-icon.svg" class="select-in-img p-3">
                         <button class="select-role-btn w-100 font-weight-bold">Create New network</button>
                     </div>
                 </div>
                 <div class="col-lg-3 text-btn-left">
                     <div class="bg-card-change select-box" id="importEqptLink">
-                        <img src="Assets/img/import-icon-1.png" class="select-in-img1 p-3">
+                        <img src="Assets/img/import-icon.svg" class="select-in-img1 p-3">
                         <button class="select-role-btn w-100 font-weight-bold">Import Network using JSON</button>
                     </div>
                 </div>
@@ -339,11 +325,11 @@
                     <div class="tab-pane fade" id="save-network" role="tabpanel" aria-labelledby="pills-contact-tab">
 
                         <div class="create-back" id="btnSaveNetwork">
-                            <img src="Assets/img/save1.png" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
+                            <img src="Assets/img/save.svg" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
                                  title="Save network" />&nbsp;<span class="sidebar-text3">Save network</span>
                         </div>
                         <div class="create-back" id="btnExportPopup">
-                            <img src="Assets/img/export.png" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
+                            <img src="Assets/img/export.svg" width="20px" height="20px" data-toggle="tooltip" data-placement="top"
                                  title="Export network" />&nbsp;<span class="sidebar-text3">Export network</span>
                         </div>
 
@@ -415,16 +401,16 @@
 
                                 <div class="d-flex" style="display:none !important;">
                                     <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area width">W : </b>
-                                    <img src="Assets/img/minus.png" id="wMinus" class="minus" />
+                                    <img src="Assets/img/minus.svg" id="wMinus" class="minus" />
                                     <input type="text" class="input_customwidth" id="txtw" value="W" />
-                                    <img src="Assets/img/plus.png" id="wPlus" class="plus" />
+                                    <img src="Assets/img/plus.svg" id="wPlus" class="plus" />
 
                                 </div>
                                 <div class="d-flex ml-2 mr-2" style="display:none !important;">
                                     <b class="width_custom" data-toggle="tooltip" data-placement="top" title="" data-original-title="Work area height">H : </b>
-                                    <img src="Assets/img/minus.png" class="minus" />
+                                    <img src="Assets/img/minus.svg" class="minus" />
                                     <input type="text" class="input_customwidth" id="txth" value="H" />
-                                    <img src="Assets/img/plus.png" class="plus" />
+                                    <img src="Assets/img/plus.svg" class="plus" />
 
                                 </div>
 
@@ -1181,9 +1167,9 @@
         <a class="dropdown-item" id="rcRoadmEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit ROADM</span></a>
         <a class="dropdown-item" id="rcRoadmDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete ROADM</span></a>
         <a class="dropdown-item" id="rcRoadmCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
-        <a class="dropdown-item" id="rcRoadmCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
-        <a class="dropdown-item" id="rcRoadmApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
-        <a class="dropdown-item" id="rcRoadmCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+        <a class="dropdown-item" id="rcRoadmCopyPara" href="#"><img src="Assets/img/Copy_template.svg" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcRoadmApplyPro" href="#"><img src="Assets/img/Apply_template.svg" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcRoadmCancel" href="#"><img src="Assets/img/cancel.svg" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
     </div>
     <div class="dropdown-menu" id="attenuatorMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('attenuatorMenu')">
@@ -1192,9 +1178,9 @@
         <a class="dropdown-item" id="rcAttenuatorEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Attenuator</span></a>
         <a class="dropdown-item" id="rcAttenuatorDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Attenuator</span></a>
         <a class="dropdown-item" id="rcAttenuatorCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
-        <a class="dropdown-item" id="rcAttenuatorCopyPara" style="display:none;" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
-        <a class="dropdown-item" id="rcAttenuatorApplyPro" style="display:none;" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
-        <a class="dropdown-item" id="rcAttenuatorCancel" style="display:none;" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCopyPara" style="display:none;" href="#"><img src="Assets/img/Copy_template.svg" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcAttenuatorApplyPro" style="display:none;" href="#"><img src="Assets/img/Apply_template.svg" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcAttenuatorCancel" style="display:none;" href="#"><img src="Assets/img/cancel.svg" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
     </div>
     <div class="dropdown-menu" id="ILAMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('ILAMenu')">
@@ -1211,9 +1197,9 @@
         <a class="dropdown-item" id="rcAmplifierEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Amplifier</span></a>
         <a class="dropdown-item" id="rcAmplifierDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Amplifier</span></a>
         <a class="dropdown-item" id="rcAmplifierCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
-        <a class="dropdown-item" id="rcAmplifierCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
-        <a class="dropdown-item" id="rcAmpApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
-        <a class="dropdown-item" id="rcAmpCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+        <a class="dropdown-item" id="rcAmplifierCopyPara" href="#"><img src="Assets/img/Copy_template.svg" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcAmpApplyPro" href="#"><img src="Assets/img/Apply_template.svg" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcAmpCancel" href="#"><img src="Assets/img/cancel.svg" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
     </div>
     <div class="dropdown-menu" id="ramanAmpMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('ramanAmpMenu')">
@@ -1222,9 +1208,9 @@
         <a class="dropdown-item" id="rcRamanAmpEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Raman Amplifier</span></a>
         <a class="dropdown-item" id="rcRamanAmpDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Raman Amplifier</span></a>
         <a class="dropdown-item" id="rcRamanAmpCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
-        <a class="dropdown-item" id="rcRamanAmpCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
-        <a class="dropdown-item" id="rcRamanApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
-        <a class="dropdown-item" id="rcRamanCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+        <a class="dropdown-item" id="rcRamanAmpCopyPara" href="#"><img src="Assets/img/Copy_template.svg" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcRamanApplyPro" href="#"><img src="Assets/img/Apply_template.svg" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcRamanCancel" href="#"><img src="Assets/img/cancel.svg" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
     </div>
     <div class="dropdown-menu" id="transceiverMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('transceiverMenu')">
@@ -1233,9 +1219,9 @@
         <a class="dropdown-item" id="rcTransceiverEdit" href="#"><img src="Assets/img/edit.svg" alt="" class="mr-2 icon_menu"> <span>Edit Transceiver</span></a>
         <a class="dropdown-item" id="rcTransceiverDelete" href="#"><img src="Assets/img/delete.svg" alt="" class="mr-2 icon_menu"> <span>Delete Transceiver</span></a>
         <a class="dropdown-item" id="rcTransceiverCopy" href="#"><img src="Assets/img/copy.svg" alt="" class="mr-2 icon_menu"> <span>Copy</span></a>
-        <a class="dropdown-item" id="rcTransceiverCopyPara" href="#"><img src="Assets/img/Copy_template.png" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
-        <a class="dropdown-item" id="rcTransApplyPro" href="#"><img src="Assets/img/Apply_template.png" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
-        <a class="dropdown-item" id="rcTransCancel" href="#"><img src="Assets/img/cancel.png" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
+        <a class="dropdown-item" id="rcTransceiverCopyPara" href="#"><img src="Assets/img/Copy_template.svg" alt="" class="mr-2 icon_menu"> <span>Copy-Template</span></a>
+        <a class="dropdown-item" id="rcTransApplyPro" href="#"><img src="Assets/img/Apply_template.svg" alt="" class="mr-2 icon_menu"> <span>Apply Template</span></a>
+        <a class="dropdown-item" id="rcTransCancel" href="#"><img src="Assets/img/cancel.svg" alt="" class="mr-2 icon_menu"> <span>Cancel</span></a>
     </div>
     <div class="dropdown-menu" id="templateMenu" aria-labelledby="dropdownMenuButton">
         <span class="close close-btnn1" onclick="closeMenu('templateMenu')">
