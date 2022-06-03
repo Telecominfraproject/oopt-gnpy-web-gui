@@ -1,5 +1,4 @@
 #!/bin/bash
-
 clear
 REPO_URL="https://github.com/Telecominfraproject/oopt-gnpy-web-gui.git"
 DnldDir="$HOME/TIP_HTML"
@@ -13,7 +12,7 @@ fi
 
 cd $DnldDir
 git init $DnldDir
-git clone -b "html_source" --single-branch $REPO_URL
+git clone $REPO_URL
 
 cd $PublishDir
 python -m http.server 8000
