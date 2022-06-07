@@ -31,6 +31,16 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
  vis.js may be distributed under either license.
 
+**taffy.js**
+
+ Software License Agreement (BSD License) 
+ Web: http://taffydb.com Twitter: http://twitter.com/biastoact
+ Copyright (c) All rights reserved.
+Redistribution and use of this software in source and binary forms, with or without modification, are permitted provided that the following condition is met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 **Bootstrap**
 
  Bootstrap v4.6.1 (https://getbootstrap.com/)
@@ -70,4 +80,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
  License : https://github.com/eligrey/FileSaver.js/blob/master/LICENSE.md (MIT)
  source  : http://purl.eligrey.com/github/FileSaver.js
 
+**Font Awesome**
+
+ Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
+ License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+
+ Font Awesome Free 5.0.6 by @fontawesome - http://fontawesome.com
+ License - http://fontawesome.com/license (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ 
            
