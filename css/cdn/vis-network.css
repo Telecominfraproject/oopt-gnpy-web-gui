@@ -509,7 +509,7 @@ div.vis-network div.vis-close {
     height: 30px;
     background-position: 20px 3px;
     background-repeat: no-repeat;
-    background-image: url(img/network/cross.png);
+    /*background-image: url(img/network/cross.png);*/
     cursor: pointer;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -554,7 +554,7 @@ div.vis-network div.vis-manipulation div.vis-button {
     }
 
     div.vis-network div.vis-manipulation div.vis-button.vis-back {
-        background-image: url(img/network/backIcon.png);
+        /*background-image: url(img/network/backIcon.png);*/
     }
 
     div.vis-network div.vis-manipulation div.vis-button.vis-none:hover {
@@ -576,12 +576,12 @@ div.vis-network div.vis-manipulation div.notification {
 }
 
 div.vis-network div.vis-manipulation div.vis-button.vis-add {
-    background-image: url(img/network/addNodeIcon.png);
+    /*background-image: url(img/network/addNodeIcon.png);*/
 }
 
 div.vis-network div.vis-edit-mode div.vis-button.vis-edit,
 div.vis-network div.vis-manipulation div.vis-button.vis-edit {
-    background-image: url(img/network/editIcon.png);
+    /*background-image: url(img/network/editIcon.png);*/
 }
 
     div.vis-network div.vis-edit-mode div.vis-button.vis-edit.vis-edit-mode {
@@ -590,11 +590,11 @@ div.vis-network div.vis-manipulation div.vis-button.vis-edit {
     }
 
 div.vis-network div.vis-manipulation div.vis-button.vis-connect {
-    background-image: url(img/network/connectIcon.png);
+    /*background-image: url(img/network/connectIcon.png);*/
 }
 
 div.vis-network div.vis-manipulation div.vis-button.vis-delete {
-    background-image: url(img/network/deleteIcon.png);
+    /*background-image: url(img/network/deleteIcon.png);*/
 }
 
 div.vis-network div.vis-edit-mode div.vis-label,
@@ -639,43 +639,43 @@ div.vis-network div.vis-navigation div.vis-button {
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-up {
-        background-image: url(img/network/upArrow.svg);
+        background-image: url(../../Assets/img/upArrow.svg);
         bottom: 50px;
         left: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-down {
-        background-image: url(img/network/downArrow.svg);
+        background-image: url(../../Assets/img/downArrow.svg);
         bottom: 10px;
         left: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-left {
-        background-image: url(img/network/leftArrow.svg);
+        background-image: url(../../Assets/img/leftArrow.svg);
         bottom: 10px;
         left: 15px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-right {
-        background-image: url(img/network/rightArrow.svg);
+        background-image: url(../../Assets/img/rightArrow.svg);
         bottom: 10px;
         left: 95px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomIn {
-        background-image: url(img/network/plus.svg);
+        background-image: url(../../Assets/img/zoomin.svg);
         bottom: 10px;
         right: 15px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomOut {
-        background-image: url(img/network/minus.svg);
+        background-image: url(../../Assets/img/zoomout.svg);
         bottom: 10px;
         right: 55px;
     }
 
     div.vis-network div.vis-navigation div.vis-button.vis-zoomExtends {
-        background-image: url(img/network/zoomExtends.svg);
+        background-image: url(../../Assets/img/zoomExtends.svg);
         bottom: 50px;
         right: 15px;
     }
