@@ -7,7 +7,7 @@
   },
   "options": {
     "physics": false,
-
+    
     "interaction": {
       "navigationButtons": true,
       "keyboard": false,
@@ -238,6 +238,13 @@
     "fiber_category": "Dual Fiber",
     "width": 2,
     "options": {
+      "shadow": {
+        "enabled": true,
+        "color": "orange",
+        "size": 2,
+        "x": 2,
+        "y": 2
+      },
       "color": {
         "color": "blue",
         "highlight": "blue",
@@ -281,6 +288,13 @@
     "fiber_category": "Single Fiber",
     "width": 2,
     "options": {
+      "shadow": {
+        "enabled": true,
+        "color": "orange",
+        "size": 2,
+        "x": 2,
+        "y": 2
+      },
       "w_color": {
         "color": "gray",
         "highlight": "gray",
@@ -353,6 +367,13 @@
     "component_type": "Service",
     "width": 2,
     "options": {
+      "shadow": {
+        "enabled": true,
+        "color": "orange",
+        "size": 2,
+        "x": 2,
+        "y": 2
+      },
       "color": {
         "color": "red",
         "highlight": "red",
@@ -398,6 +419,13 @@
     "patch_category": "Single Patch",
     "width": 2,
     "options": {
+      "shadow": {
+        "enabled": true,
+        "color": "orange",
+        "size": 2,
+        "x": 2,
+        "y": 2
+      },
       "color": {
         "color": "black",
         "highlight": "black",
@@ -442,6 +470,13 @@
     "patch_category": "Dual Patch",
     "width": 2,
     "options": {
+      "shadow": {
+        "enabled": true,
+        "color": "orange",
+        "size": 2,
+        "x": 2,
+        "y": 2
+      },
       "color": {
         "color": "black",
         "highlight": "black",

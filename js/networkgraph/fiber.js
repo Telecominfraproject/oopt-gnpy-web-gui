@@ -276,7 +276,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
                 smooth: fiberSmooth,
                 fiber_type: fiber_Type, span_length: span_Length,
                 loss_coefficient: loss_Coefficient, connector_in: connector_IN, connector_out: connector_OUT,
-                span_loss: span_Loss,
+                span_loss: span_Loss
             });
 
             realUpdate();
@@ -865,7 +865,7 @@ function updateSingleFiber(fiberID) {
             if (fiberID.length > 1) {
 
                 for (var i = 0; i < fiberID.length; i++) {
-                    if (network.body.data.edges.get(fiberID[i].id).color == singleFiberJSON.options.h_color || network.body.data.edges.get(fiberID[i].id).color == singleFiberJSON.options.fh_color) {
+                    if (network.body.data.edges.get(fiberID[i].id).shadow == singleFiberJSON.options.shadow) {
 
                         var fiber = network.body.data.edges.get(fiberID[i].id);
                         preUpdateList.push(fiber);
@@ -940,12 +940,12 @@ function clearSingleFiber() {
 function deleteFiber(fiberList) {
 
     removeEdgeList = [];
-    var h_color;
+    var shadow;
     for (var i = 0; i < fiberList.length; i++) {
         if (fiberList.length > 1) {
-            h_color = network.body.data.edges.get(fiberList[i].id).color;
+            shadow = network.body.data.edges.get(fiberList[i].id).shadow;
 
-            if (h_color == singleFiberJSON.options.h_color || h_color == singleFiberJSON.options.fh_color)
+            if (shadow == singleFiberJSON.options.shadow)
                 removeFiber(fiberList[i].id, true);
 
         }
