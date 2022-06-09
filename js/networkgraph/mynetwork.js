@@ -1073,7 +1073,7 @@ function draw(isImport) {
                         id: edgeDetails.id, shadow: shadow, is_highlight: highlight
                     });
                 }
-                
+
             }
         }
     });
@@ -1352,6 +1352,10 @@ function draw(isImport) {
         var edgesArray = [];
         if (hEdges.length > 0) {
             edgesArray = hEdges;
+
+            if (!network.body.data.edges.get(edgeData).is_highlight)
+                edgesArray.push({ id: edgeData });
+
         }
         else if (nodeData == "" && edgeData != "") {
             edgesArray.push({ id: edgeData });
@@ -1445,6 +1449,16 @@ function draw(isImport) {
                 }
 
             }
+        }
+
+        if (nodeDatas != undefined) {
+
+        }
+        if (edgeDatas != undefined) {
+            network.body.data.edges.update({
+                id: edgeDatas.id, shadow: singleFiberJSON.options.shadow, is_highlight: true
+            });
+
         }
 
         //to add only same type of node on multiple select
