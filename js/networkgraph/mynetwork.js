@@ -1046,7 +1046,7 @@ function draw(isImport) {
                     copyDetails = selectedEdges[selectedEdges.length - 1];
 
                     if (copyDetails.component_type != edgeDetails.component_type) {
-                        showMessage(alertType.Error, 'Please select same type of fiber');
+                        showMessage(alertType.Error, 'Please select same type of element (Fiber)');
                         return;
                     }
                     else {
@@ -1085,7 +1085,7 @@ function draw(isImport) {
         });
 
         if (hEdges.length > 0) {
-            showMessage(alertType.Error, 'Please select same type of fiber');
+            showMessage(alertType.Error, 'Please select same type of element (Fiber)');
             return;
         }
 
@@ -1392,45 +1392,50 @@ function draw(isImport) {
                 if (isCopyPara) {
                     if (sNodes.length > 0)
                         copyDetails = network.body.data.nodes.get(sNodes[sNodes.length - 1].id);
-                    else
-                        copyDetails = network.body.data.nodes.get(nodeDatas.id);
+                    else {
+                        if(nodeDatas)
+                            copyDetails = network.body.data.nodes.get(nodeDatas.id);
+                    }
+                        
                 }
                 else
                     copyDetails = network.body.data.nodes.get(sNodes[0].id);
 
-                type_name = copyDetails.node_type;
-                if (copyDetails.node_type == amplifierJSON.node_type) {
-                    if (copyDetails.amp_category == ramanampJSON.amp_category)
-                        type_name = 'Raman Amplifier';
-                    else
-                        type_name = copyDetails.amp_category;
-                }
-                else if (copyDetails.node_type == roadmJSON.node_type)
-                    type_name = copyDetails.node_type.toUpperCase();
-                else if (copyDetails.node_type == fusedJSON.node_type)
-                    type_name = "Attenuator";
+                if (copyDetails) {
+
+                    type_name = copyDetails.node_type;
+                    if (copyDetails.node_type == amplifierJSON.node_type) {
+                        if (copyDetails.amp_category == ramanampJSON.amp_category)
+                            type_name = 'Raman Amplifier';
+                        else
+                            type_name = copyDetails.amp_category;
+                    }
+                    else if (copyDetails.node_type == roadmJSON.node_type)
+                        type_name = copyDetails.node_type.toUpperCase();
+                    else if (copyDetails.node_type == fusedJSON.node_type)
+                        type_name = "Attenuator";
 
 
-                if (type != copyDetails.node_type) {
+                    if (type != copyDetails.node_type) {
 
-                    showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                    return;
-                }
-                else {
-                    if (type == copyDetails.node_type) {
+                        showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                        return;
+                    }
+                    else {
+                        if (type == copyDetails.node_type) {
 
-                        if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
-                            if (amp_category != copyDetails.amp_category) {
-                                showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
-                                return;
+                            if (type == amplifierJSON.node_type && copyDetails.node_type == amplifierJSON.node_type) {
+                                if (amp_category != copyDetails.amp_category) {
+                                    showMessage(alertType.Error, 'Please select same type of node (' + type_name + ')');
+                                    return;
+                                }
                             }
+
+                            $('#toast').toast('hide');
+
                         }
-
-                        $('#toast').toast('hide');
-
                     }
                 }
-
             }
 
 
@@ -1441,7 +1446,7 @@ function draw(isImport) {
                     copyDetails = network.body.data.edges.get(edgeDatas.id);
                 if (type != copyDetails.component_type) {
 
-                    showMessage(alertType.Error, 'Please select same type of fiber');
+                    showMessage(alertType.Error, 'Please select same type of element (Fiber)');
                     return;
                 }
                 else {
@@ -1454,7 +1459,7 @@ function draw(isImport) {
         if (nodeDatas != undefined) {
 
         }
-        if (edgeDatas != undefined) {
+        if (!nodeDatas && edgeDatas != undefined) {
             network.body.data.edges.update({
                 id: edgeDatas.id, shadow: singleFiberJSON.options.shadow, is_highlight: true
             });
