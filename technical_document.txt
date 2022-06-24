@@ -1,0 +1,438 @@
+GNPy Technical Document
+
+Init:
+       Initialize the network working area using vis.js
+
+                    i. Code Location: js/networkgraph/mynetwork.js
+                   ii.Function name: init
+                           This function is used to define container, options and dataset then pass it as parameter to vis. network after we make all the network related events like click, oncontext, select                                       node, select edge, hoverEdge/Node, blur Edge/Node etc.
+
+File Reference: 
+
+                  1.js/thirdparty/vis.js
+                  2.js/networkgraph/alea.js
+                  3.js/networkgraph/exampleUtil.js
+                  4.css/thirdparty/vis-network.css
+
+Document URL – vis js:
+
+	1.https://visjs.github.io/vis-network/docs/network/
+
+Import Network using JSON:
+
+         User to import an external JSON file of a fixed format (determined by TIP) to input the network topology with node types, fiber/patch/service connectivity/parameters, Error message must be          displayed in case the import fails.
+         Automatically will create network topology-based on import json data, then will applied all the rules once json file loaded successfully.
+
+                   i.Code location: js/networkgraph/mynetwork.js
+
+                  ii.Function name: load_EqptConfig, importNetwork, importNode, draw
+
+                 iii.load_EqptConfig:
+                        This function is used to load the equipment configuration data from the import json file.
+
+                  iv.importNetwork:
+                        This is used to load the fiber/service data into array list.
+
+                  v.importNode:
+                        This function is used to load all nodes element data into array list
+
+
+Draw:
+
+        This function is used to convert both array list into dataset then pass it as parameter also container, options to vis. Network.
+
+Create/Edit Topology:
+
+Node creation:
+
+          User to click the “ROADM/Attenuator/Transceiver/Amplifier/Raman Amplifier” button and create a node anywhere in the workspace by clicking on it.
+
+                     i.Code location: js/networkgraph/node.js
+                    ii.Function name: addNodes
+                    iii.addNodes:
+                        Node will be created based on selected node type on left side menu. Node style and configuration data loaded from configurationdata, styledata json.
+File Reference: 
+
+                   1.data/configurationdata.json
+                   2.data/styledata.json
+
+Node update:
+      
+        User to right click on the “ROADM/Attenuator/Transceiver/Amplifier/Raman Amplifier” select edit option and node will be update based on selected node ID.
+
+                     i.Code location: js/networkgraph/node.js
+                    ii.Function name: updateRoadm, updateAttenuator, updateAmplifier, updateRamanAmp, updateTransceiver, realUpdate.
+                   iii.realUpdate:
+                    This function is used to check the node rules after node updating, if node is fully completed node image will be change.
+
+Node delete:
+
+        User to right click on the “ROADM/Attenuator/Transceiver/Amplifier/Raman Amplifier” select delete option and node will be removed based on selected node ID.
+
+                    i.Code location: js/networkgraph/node.js
+                    ii.Function name: removeNodes
+
+Node cancel:
+
+         This is function is used to clear input and temporary data for selected node ID.
+
+                   i.Code location: js/networkgraph/node.js
+                  ii.Function name: clearRoadm, clearAttenuator, clearAmplifier, clearRamanAmp, clearTransceiver.
+
+Copy and Paste node:
+
+         User to right click on the “ROADM/Attenuator/Transceiver/Amplifier/Raman Amplifier” select copy option, all the parameter of nodes will be copied then right click anywhere in the workspace          then select paste option, the latest copied node shall be pasted. All the parameters of the nodes must be retained when the paste is performed.
+
+                  i.Code location: js/networkgraph/node.js
+                  ii.Function name: copyNode, pasteNode
+
+Node copy and apply template:
+
+        User to right click on the “ROADM /Transceiver/Amplifier/Raman Amplifier” select copy-template/paste-template option.
+
+                   i.Code location: js/networkgraph/node.js
+                  ii.Function name: copyNodeTemplate, applyRoadmTemplate, applyTransceiverTemplate, applyAmpTemplate, applyRamanAmpTemplate, clearNodeTemplate
+                       This function is used to copy the properties of a node and apply them to one or multiple of same nodes by selecting all of them together
+                 iii.clearNodeTemplate:
+                     This function is used to clear the copy template data.
+Node hover:
+
+       This function is used to displays node name, type parameter when hover the mouse near the node.
+                  i.Code location: js/networkgraph/node.js
+                 ii.Function name: displayNodesHover
+
+Single fiber creation:
+
+       User to click the “Single fiber” button and be able to add a fiber connection between any 2 nodes by dragging from source node to destination.
+
+                  i.Code location: js/networkgraph/fiber.js
+
+                 ii.Function name: addFiberComponent, multipleFiberService
+
+                iii.addFiberComponent:
+
+                    Fiber will be created based on dragging from source node to destination. fiber style and configuration data loaded from configurationdata, styledata json.
+
+                iv.multipleFiberService:
+
+                   This function is used to add multiple single fiber/patch and service between same set of nodes and re-arrange them one by one.
+
+                 v.File Reference: 
+
+                      1.data/configurationdata.json
+                      2.data/styledata.json
+
+Single fiber update:
+
+       User to right click on the “Single fiber” select edit option and fiber will be update based on selected fiber ID.
+
+               i.Code location: js/networkgraph/fiber.js
+              ii.Function name: updateSingleFiber
+
+Single fiber delete:
+
+      User to right click on the “Single fiber” select delete option and fiber will be removed based on selected fiber ID.
+
+             i.Code location: js/networkgraph/fiber.js
+            ii.Function name: removeFiber
+
+Single fiber cancel:
+
+       This is function is used to clear input and temporary data for selected fiber ID.
+
+           i.Code location: js/networkgraph/fiber.js
+          ii.Function name: clearSingleFiber
+
+Insert node:
+
+      User to right-click on any “single fiber” select “Insert Node” options.
+
+          i.Code location: js/networkgraph/fiber.js
+         ii.Function name: singleFiberInsertNode
+
+singleFiberInsertNode:
+
+     This function is used to insert a node (ROADM/Attenuator/Amplifier/Raman Amplifier) in the middle of selected fiber.
+
+Single fiber hover:
+
+     This function is used to displays fiber details like span length, loss etc. when hover the mouse near the single fiber.
+
+          i.Code location: js/networkgraph/fiber.js
+         ii.Function name: displayFiberHover
+
+Single patch creation:
+
+     User to click the “Single patch” button and be able to add a patch connection between any 2 nodes by dragging from source node to destination.
+
+         i.Code location: js/networkgraph/patch.js
+
+        ii.Function name: addPatchComponent
+
+       iii.addPatchComponent:
+
+           Patch will be created based on dragging from source node to destination. patch style and configuration data loaded from configurationdata, styledata json.
+
+        iv.File Reference: 
+
+            1.data/configurationdata.json
+            2.data/styledata.json
+
+Single patch update:
+
+     User to right click on the “Single patch” select edit option and fiber will be update based on selected patch ID.
+
+          i.Code location: js/networkgraph/patch.js
+         ii.Function name: updateSinglePatch
+
+Single patch delete:
+
+    User to right click on the “Single patch” select delete option and patch will be removed based on selected patch ID.
+
+         i.Code location: js/networkgraph/patch.js
+        ii.Function name: deletePatch
+
+Single patch cancel:
+
+    This is function is used to clear input and temporary data for selected patch ID.
+
+          i.Code location: js/networkgraph/patch.js
+         ii.Function name: clearSinglePatch
+
+Add/Edit services:
+
+Service creation:
+
+      User to click the “Service” button and be able to add a service connection between only same type of 2 transceiver by dragging from source node to destination.
+
+             i.Code location: js/networkgraph/service.js
+
+            ii.Function name: addServiceComponent
+
+           iii.addServiceComponent:
+
+               Service will be created based on dragging from source node to destination. service style and configuration data loaded from configurationdata, styledata json.
+
+            iv.File Reference: 
+
+               1.data/configurationdata.json
+                2.data/styledata.json
+
+Service update:
+
+     User to right click on the “Service” select edit option and service will be update based on selected service ID.
+
+           i.Code location: js/networkgraph/service.js
+          ii.Function name: updateService
+
+Service delete:
+
+     User to right click on the “Service” select delete option and service will be removed based on selected service ID.
+
+        i.Code location: js/networkgraph/service.js
+       ii.Function name: deleteService
+
+Service cancel:
+
+    This is function is used to clear input and temporary data for selected service.
+
+        i.Code location: js/networkgraph/service.js
+       ii.Function name: clearService
+
+Service hover:
+
+   This function is used to displays service. when hover the mouse near the service ID.
+
+        i.Code location: js/networkgraph/fiber.js
+       ii.Function name: displayFiberHover
+
+Analyze network:
+
+Save and Export network:
+
+     Export/Save the network topology as a JSON file when the “Export/Save network” button is clicked. The schema of the JSON file will match the given JSON file like           Equipment_JSON_MOD2.json.
+
+            i.Code location: js/networkgraph/mynetwork.js
+
+           ii.Function name: exportNetwork
+
+              This function is used to push the equipment data, nodes, fiber, patch and service data into separate array list then convert it to JSON then save/export as json file.
+
+          iii.File Reference: data/Equipment_JSON_MOD2.json
+
+Simulation parameters:
+
+      We stored simulation parameters temporally in session storage also we edit/fetch simulation parameters from session storage.
+
+           i.Code location: js/networkgraph/mynetwork.js
+
+          ii.Function name: saveSimulations
+
+             This function is used to convert simulation parameters to JSON then stored it in session storage (“simulationParameters”).
+
+Show labels:
+
+       Site names and link it to Show Labels switch so that we can prevent the overlap of the site names, especially for large networks.
+
+             i.Code location: js/networkgraph/mynetwork.js
+
+            ii.Function name: hideEdgeLabels
+
+               This function is used to show/hide the nodes/fiber/patch/service labels except ROAM. Here we change network options. Update the model of edge and node color as transparent then set                  it to network options.
+
+Undo:
+
+        The undo function is used to reverse a mistake, such as deleting the wrong element in a network topology. We stored every action detail one by one into array list (tempUndo) like node                  creation/deletion/updating etc. 
+
+        Ex: node creation/deletion/updating: tempUndo.push(nodedata).
+
+            i.Code location: js/networkgraph/mynetwork.js
+
+            ii.Event: “button_undo on click”
+
+               Users click on “button_undo” we fetch latest one record from array list (tempUndo) then will check record whether creation/deletion/updating after that will call the relevant action. After will                stored action details into new array list (tempRedo) then will using pop method to remove record from array list (tempUndo) ex: tempUndo.pop().
+
+        Ex: node updating:
+
+               tempRedo.push(nodedata).
+              data.nodes.update (latest record of tempUndo).
+
+Redo:
+
+        The redo function is used to restores any actions that were previously undone using an undo. We stored every undo action detail one by one into array list (tempRedo) like node                  creation/deletion/updating etc. 
+
+         Ex: node creation/deletion/updating: tempRedo.push(nodedata)
+
+               i.Code location: js/networkgraph/mynetwork.js
+
+              ii.Event: “button_redo on click”
+
+                 Users click on “button_redo” we fetch latest one record from array list (tempRedo) then will check record whether creation/deletion/updating after that will call the relevant action. After will                    stored action details into new array list (tempUndo) then will using pop method to remove record from array list (tempRedo) ex: tempRedo.pop().
+
+         Ex: node deletion:
+
+                tempUndoo.push(nodedata).
+               data.nodes.remove (latest record of tempRedo).
+
+Screen capture:
+
+        User to click the “Screen capture” button and be able to capture the network topology as image file.
+
+                i.Code location: js/networkgraph/mynetwork.js
+
+               ii.Function name: captureImage
+
+                  This function is used to convert the network area to “.png” format image file (“NetworkPage.png”) with help of html2canvas js.
+
+              iii.File Reference: 
+
+                   1.js/thirdparty/html2canvas.min.js
+
+Check errors:
+
+          User to click the “Check errors” button and be able to see the summary of network topology error list.
+                i.Code location:
+
+                  1.js/networkgraph/mynetwork.js
+                  2.js/networkgraph/constraints.js
+
+               ii.Function name: topologyValidation, checkLink, checkMisLink, checkFiberPro.
+
+               iii.topologyValidation:
+
+                    This function is used to check the node link, mis-link, fiber properties and consolidate all error list.
+
+               iv.checkLink:
+
+                   This function is used to check the node link and type rules.
+         Ex: 
+ 
+             1.Node must have an even number of links with an equal number of incoming and outgoing links.
+             2.Node type not entered by the user.
+
+checkMisLink:
+
+            This function is used to check the limits of node link rules
+         
+         Ex: 
+
+            1. One or more links missing.
+            2.Node Cannot support 2 links of the same type, must have one incoming and one outgoing link.
+            3.Node cannot support more than 2 links.
+            4.Amplifier type not entered by the user.
+            5.Amplifier category not entered by the user.
+
+checkFiberPro:
+
+           This function is used to check the fiber properties rules.
+
+          Ex: 
+
+             1.Fiber type not entered by the user.
+             2.Fiber length not entered by the user.
+
+Node highlight:
+
+          User can be able to select multiple nodes by ctrl+click, it is used to edit/delete/applytemplate for multiple nodes.
+
+            i.Code location: js/networkgraph/mynetwork.js
+
+           ii.Event name: “selectNode on Click”
+
+              We highlight the node using “image” property. Ex, we are using different image to differentiate the node like complete/incomplete/selection/error node.
+
+          iii.File Reference: 
+
+              1.data/configurationdata.json
+              2.data/styledata.json
+
+Fiber highlight:
+
+      User can be able to select multiple fiber by ctrl+click, it is used to edit/delete for multiple fiber.
+
+          i.Code location: js/networkgraph/mynetwork.js
+
+         ii.Event name: “selectEdge on Click”
+
+            We highlight the fiber using “shadow and color” properties. Ex, we are using different color to differentiate the fiber like complete/incomplete/selection/error fiber.
+
+        iii.File Reference: 
+
+           1.data/configurationdata.json
+           2.data/styledata.json
+Font:
+
+          i.Font Name: Material Icons 
+
+         ii.Location: css/thirdparty/icon.css
+
+        iii.Font URL: fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2
+
+         iv.Open the material icon source link: https://fonts.googleapis.com/icon?family=Material+Icons
+
+              Description: Google provides a set of 750 icons designed under "material design guidelines" and these are known as Material Design icons. These icons are simple and they support all                                     modern web browsers. Since these icons are vector based, they are scalable as well. To use these icons, we have to load the font (library) material-icons.
+                                    You can increase or decrease the size of an icon by defining its size in the CSS and using it along with the class name as shown below. In the following example, we have                                     declared the size  as 6 em and Defining the Color: You can use the CSS to define the color of an icon. 
+
+           i.Font Name: Roboto
+
+          ii.Location:  css/thirdparty/roboto-css.css
+
+          iii.Font URL: fonts/KFOmCnqEu92Fr1Mu4mxK.woff2
+
+          iv.Open the roboto source link: https://fonts.googleapis.com/css?family=Roboto
+
+              Description: Roboto has a dual nature. It has a mechanical skeleton and the forms are largely geometric. At the same time, the font features friendly and open curves. While some grotesks                                     distort their letterforms to force a rigid rhythm, Roboto doesn’t compromise, allowing letters to be settled into their natural width. This makes for a more natural reading rhythm                                     more commonly found in humanist and serif types.
+
+          i.Font Name: Oswald
+
+         ii.Location:  css/thirdparty/oswald-css.css 
+
+        iii.Font URL: fonts/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvsUZiZQ.woff2 
+
+        iv.Open the oswald source link: https://fonts.googleapis.com/css?family=Oswald
+
+              Description: Oswald is a reworking of the classic style historically represented by the 'Alternate Gothic' sans serif typefaces. The characters of Oswald were initially re-drawn and reformed                                     to better fit the pixel grid of standard digital screens. Oswald is designed to be used freely across the internet by web browsers on desktop computers, laptops and mobile                                     devices.
+
+
+
+
