@@ -1,4 +1,13 @@
-﻿//1-roadm, 2-amp, 3-fused, 4-transceiver, 6- raman amp
+﻿/**
+ * node.js.
+ * The node  can be defined as the connection point of "ROADM, Attenuator, Transceiver, Amplifier and Raman Amplifier" and defines the node manipulations.
+ */
+
+
+/**
+ * Check node Mode 1-roadm, 2-amp, 3-fused, 4-transceiver, 6- raman amp
+ * @param {Number} nodemode - Mode of the component.
+ */
 function AddNodeMode(nodemode) {
 
     nodeMode = nodemode;
@@ -8,6 +17,13 @@ function AddNodeMode(nodemode) {
     }
 }
 
+/**
+ * Node creation by node mode.
+ * Node will be placed based on co-ordidate points x,y.
+ * Node style and configuration data loaded from configurationdata, styledata json.
+ * @param {object} data - The data of the component.
+ * @param callback - The callback that handles the response.
+ */
 function addNodes(data, callback) {
 
     var nodeDetails = "";
@@ -110,6 +126,11 @@ function addNodes(data, callback) {
     tempUndo.push(network.body.data.nodes.get(data.id));
 }
 
+/**
+ * Populate ROADM component details by node ID.
+ * @param {string} nodeID - The ID of the ROADM component.
+ * @param callback - The callback that handles the response.
+ */
 function roadmEdit(nodeID, callback) {
     _roadmListDB().remove();
     document.getElementById("roadmMenu").style.display = "none";
@@ -174,6 +195,12 @@ function roadmEdit(nodeID, callback) {
     document.getElementById("btnCloseRoadm").onclick = clearRoadm.bind(
     );
 }
+
+/**
+ * Update ROADM.
+ * Update ROADM label, type by ROADM ID.
+ * @param {string} nodeID - The ID of the ROADM component
+ */
 function updateRoadm(nodeID) {
     removeNodeList = [];
     if (nameLengthValidation("txtRoadmName")) {
@@ -252,6 +279,8 @@ function updateRoadm(nodeID) {
     }
 
 }
+
+/** Clear input/teporary data and other settings. */
 function clearRoadm() {
     $("#txtRoadmName").val('');
     $("#divRoadmPro").empty();
@@ -261,6 +290,11 @@ function clearRoadm() {
     UnSelectAll();
 }
 
+/**
+ * Check ROADM component rules and update check-errors summary.
+ * @param {string} id - The ID of ROADM component.
+ * @param {string} rtype - The type of ROADM component.
+ */
 function realUpdate_Roadm(id, rtype) {
     var roadmtype = rtype;
     var connectedEges = network.getConnectedEdges(id);
@@ -291,6 +325,11 @@ function realUpdate_Roadm(id, rtype) {
     }
 }
 
+/**
+ * Populate Attenuator component details by node ID.
+ * @param {string} nodeID - The ID of the Attenuator component.
+ * @param callback - The callback that handles the response.
+ */
 function attenuatorEdit(nodeID, callback) {
     document.getElementById("attenuatorMenu").style.display = "none";
     openDrawer('attenuator');
@@ -306,6 +345,12 @@ function attenuatorEdit(nodeID, callback) {
     document.getElementById("btnCloseAttenuator").onclick = clearAttenuator.bind(
     );
 }
+
+/**
+ * Update Attenuator.
+ * Update Attenuator label, type by Attenuator ID.
+ * @param {string} nodeID - The ID of the Attenuator component
+ */
 function updateAttenuator(nodeID) {
 
     var id = nodeID;
@@ -328,6 +373,8 @@ function updateAttenuator(nodeID) {
     }
 
 }
+
+/** Clear input/teporary data and other settings. */
 function clearAttenuator() {
     $("#txtAttenuatorName").val('');
     closeDrawer('attenuator');
@@ -404,6 +451,11 @@ function clearILA() {
     _roadmListDB().remove();
 }
 
+/**
+ * Populate Amplifier component details by node ID.
+ * @param {string} nodeID - The ID of the Amplifier component.
+ * @param callback - The callback that handles the response.
+ */
 function amplifierEdit(nodeID, callback) {
     document.getElementById("amplifierMenu").style.display = "none";
     openDrawer('amplifier');
@@ -448,6 +500,12 @@ function amplifierEdit(nodeID, callback) {
     document.getElementById("btnCloseAmplifier").onclick = clearAmplifier.bind(
     );
 }
+
+/**
+ * Update Amplifier.
+ * Update Amplifier label, type by Amplifier ID.
+ * @param {string} nodeID - The ID of the Amplifier component
+ */
 function updateAmplifier(nodeID) {
     removeNodeList = [];
     if (nameLengthValidation("txtAmplifierName")) {
@@ -508,12 +566,20 @@ function updateAmplifier(nodeID) {
     }
 
 }
+
+/** Clear input/teporary data and other settings. */
 function clearAmplifier() {
     $("#txtAmplifierName").val('');
     $("#ddlAmplifierType").val('');
     closeDrawer('amplifier');
     UnSelectAll();
 }
+
+/**
+ * Check Amplifier component rules and update check-errors summary.
+ * @param {string} id - The ID of Amplifier component.
+ * @param {string} rtype - The type of Amplifier component.
+ */
 function realUpdate_Amplifier(id, rtype) {
     var amptype = rtype;
     var connectedEdges;
@@ -544,6 +610,11 @@ function realUpdate_Amplifier(id, rtype) {
 
 }
 
+/**
+ * Populate Raman Amplifier component details by node ID.
+ * @param {string} nodeID - The ID of the Raman Amplifier component.
+ * @param callback - The callback that handles the response.
+ */
 function ramanAmpEdit(nodeID, callback) {
     document.getElementById("ramanAmpMenu").style.display = "none";
     openDrawer('ramanamp');
@@ -601,6 +672,12 @@ function ramanAmpEdit(nodeID, callback) {
     document.getElementById("btnCloseRamanAmp").onclick = clearRamanAmp.bind(
     );
 }
+
+/**
+ * Update Raman Amplifier.
+ * Update Raman Amplifier label, type by Raman Amplifier ID.
+ * @param {string} nodeID - The ID of the Raman Amplifier component
+ */
 function updateRamanAmp(nodeID) {
     removeNodeList = [];
     if (nameLengthValidation("txtRamanAmpName")) {
@@ -665,6 +742,8 @@ function updateRamanAmp(nodeID) {
         }
     }
 }
+
+/** Clear input/teporary data and other settings. */
 function clearRamanAmp() {
     $("#txtRamanAmpName").val('');
     $("#ddlRamanAmpType").val('');
@@ -672,6 +751,12 @@ function clearRamanAmp() {
     closeDrawer('ramanamp');
     UnSelectAll();
 }
+
+/**
+ * Check Raman Amplifier component rules and update check-errors summary.
+ * @param {string} id - The ID of Raman Amplifier component.
+ * @param {string} rtype - The type of Raman Amplifier component.
+ */
 function realUpdate_RamanAmp(id, rtype) {
     var amptype = rtype;
     var connectedEdges;
@@ -705,6 +790,11 @@ function realUpdate_RamanAmp(id, rtype) {
 
 }
 
+/**
+ * Populate Transceiver component details by node ID.
+ * @param {string} nodeID - The ID of the Transceiver component.
+ * @param callback - The callback that handles the response.
+ */
 function transceiverEdit(nodeID, callback) {
     document.getElementById("transceiverMenu").style.display = "none";
     openDrawer('transceiver');
@@ -749,6 +839,12 @@ function transceiverEdit(nodeID, callback) {
     document.getElementById("btnCloseTransceiver").onclick = clearTransceiver.bind(
     );
 }
+
+/**
+ * Update Transceiver.
+ * Update Transceiver label, type by Transceiver ID.
+ * @param {string} nodeID - The ID of the Transceiver component
+ */
 function updateTransceiver(nodeID) {
     removeNodeList = [];
     if (nameLengthValidation("txtTransceiverName")) {
@@ -906,6 +1002,8 @@ function updateTransceiver(nodeID) {
     }
 
 }
+
+/** Clear input/teporary data and other settings. */
 function clearTransceiver() {
     $("#txtTransceiverName").val('');
     $("#ddlTransceiverType").val('');
@@ -913,6 +1011,12 @@ function clearTransceiver() {
     closeDrawer('transceiver');
     UnSelectAll();
 }
+
+/**
+ * Check Transceiver component rules and update check-errors summary.
+ * @param {string} id - The ID of Transceiver component.
+ * @param {string} rtype - The type of Transceiver component.
+ */
 function realUpdate_Transceiver(id, rtype) {
     var connectedEges = network.getConnectedEdges(id);
     var tempEdge = [];
@@ -978,6 +1082,12 @@ function deleteNode(nodeList) {
     UnSelectAll();
 
 }
+
+/**
+ * Remove node by node ID.
+ * @param {string} nodeID - Component ID.
+ * @param {boolean} isMultiple - Remove multiple node.
+ */
 function removeNodes(nodeID, isMultiple) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     var node_type = nodeDetails.node_type;
@@ -1033,6 +1143,12 @@ function removeNodes(nodeID, isMultiple) {
     network.body.data.nodes.remove(nodeID);
 }
 
+/**
+ * Bind pasteNode method.
+ * Copy node parameters by selected node ID
+ * @param {string} nodeID - Component ID.
+ * @param callback - The callback that handles the response.
+ */
 function copyNode(nodeID, callback) {
     showHideDrawerandMenu();
     isCopy = true;
@@ -1044,6 +1160,12 @@ function copyNode(nodeID, callback) {
 
     );
 }
+
+/**
+ * Create new node by copied node parameters.
+ * Node will be placed based on co-ordidates.
+ * @param {string} nodeId - Copied node ID.
+ */
 function pasteNode(nodeId) {
     if (isCopy) {
         isCopy = false;
@@ -1128,6 +1250,12 @@ function pasteNode(nodeId) {
     }
 }
 
+/**
+ * Copy node template by selected node ID.
+ * Validate the node template by type, category
+ * @param {string} nodeID - The ID of Copied node template.
+ * @param callback - The callback that handles the response.
+ */
 function copyNodeTemplate(nodeID, callback) {
     var isOk = false;
     var nodeDetails = network.body.data.nodes.get(nodeID);
@@ -1162,12 +1290,27 @@ function copyNodeTemplate(nodeID, callback) {
 function cancelCopyTemplate(nodeId) {
     clearNodeTemplate();
 }
+
+/**
+ * Apply copied template to specified ROADM node.
+ * Check node rules and update check-errors summary.
+ * @param {string} nodeID - The ID of the destination node.
+ * @param {string} roadm_type - Coponent type.
+ */
 function applyRoadmTemplate(nodeID, roadm_type) {
     network.body.data.nodes.update({
         id: nodeID, roadm_type: roadm_type
     });
     realUpdate_Roadm(nodeID, roadm_type);
 }
+
+/**
+ * Apply copied template to specified Transceiver node.
+ * Check node rules and update check-errors summary.
+ * @param {string} nodeID - The ID of the destination node.
+ * @param {string} node_type - Node type.
+ * @param {string} trans_type - Transceiver type.
+ */
 function applyTransceiverTemplate(nodeID, node_type, trans_type) {
     var id = nodeID;
     var connectedEdges = network.getConnectedEdges(id);
@@ -1213,12 +1356,20 @@ function applyTransceiverTemplate(nodeID, node_type, trans_type) {
     }
     return isOk;
 }
+/// <summary>
+/// To apply copied template to specified Amplifier node.
+/// Apply node rules.
+/// </summary>
 function applyAmpTemplate(nodeID, amp_type) {
     network.body.data.nodes.update({
         id: nodeID, amp_type: amp_type
     });
     realUpdate_Amplifier(nodeID, amp_type);
 }
+/// <summary>
+/// To apply copied template to specified Raman Amplifier node.
+/// Apply node rules.
+/// </summary>
 function applyRamanAmpTemplate(nodeID, amp_type, category) {
     network.body.data.nodes.update({
         id: nodeID, amp_type: amp_type, category: category
@@ -1226,6 +1377,13 @@ function applyRamanAmpTemplate(nodeID, amp_type, category) {
     realUpdate_RamanAmp(nodeID, amp_type);
 
 }
+
+/**
+ * Apply copied template to specified node.
+ * Apply node rules.
+ * @param {object} nodes - Selected destination nodes for apply template.
+ * @param callback - The callback that handles the response.
+ */
 function applyTemplate(nodes, callback) {
     var isUpdated = false;
     if (isCopyPara) {
@@ -1317,6 +1475,8 @@ function applyTemplate(nodes, callback) {
         clearNodeTemplate();
     }
 }
+
+/** Reset the copied template data. */
 function clearNodeTemplate() {
     isCopyPara = false;
     copiedNodeID = "";
@@ -1327,6 +1487,10 @@ function clearNodeTemplate() {
     remove_NodeFiberHighlight();
 }
 
+/**
+ * Displays node name, type parameter when hover the mouse near the node.
+ * @param {object} params - Node details.
+ */
 function displayNodesHover(params) {
     var nodeDetails = network.body.data.nodes.get(params.node);
     if (nodeDetails.component_type == roadmJSON.component_type) {
@@ -1348,6 +1512,11 @@ function displayNodesHover(params) {
     showHoverDiv(params.event.pageX, params.event.pageY, "hoverDiv");
 }
 
+/**
+ * Get next level of node label name by node type/amplifer category.
+ * @param {string} node_type - Node type.
+ * @param {string} amp_category - Amplifier category.
+ */
 function nodeName(node_type, amp_category) {
     const number = [];
     var nodeList = [];
@@ -1419,6 +1588,11 @@ function nodeName(node_type, amp_category) {
 
 }
 
+/**
+ * Set warning icons to imcompleted node by node ID.
+ * Update node size, image by node ID.
+ * @param {string} nodeID - Node ID.
+ */
 function addNodeHighlight(nodeID) {
     var nodeDetails = network.body.data.nodes.get(nodeID);
     if (nodeDetails.node_type == roadmJSON.node_type)

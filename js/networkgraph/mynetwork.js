@@ -1,4 +1,9 @@
-﻿var nodes = null;
+﻿/**
+ * mynetwork.js.
+ * The mynetwork library file describes to initialize the network area using vis.js and defines common functionalities of network components.
+ */
+
+var nodes = null;
 var edges = null;
 var network = null;
 var data = getScaleFreeNetwork(0);
@@ -72,7 +77,13 @@ var preScale;
 var prePosition;
 var _eqpt_json;
 var isEqptFile = false;
+var isImportJSON = false;
 
+var displayEdgeLabels = false;
+var hiddenNodeTextDisplayOptions;
+var displayNodeLabels = false;
+
+/**  Hide fiber/patch/service label. */
 var hiddenEdgeTextOptions = {
     edges: {
         font: {
@@ -89,8 +100,8 @@ var hiddenEdgeTextOptions = {
         }
     },
 };
-var displayEdgeLabels = false;
 
+/** Hide node label. */
 var hiddenNodeTextOptions = {
     nodes: {
         font: {
@@ -100,8 +111,6 @@ var hiddenNodeTextOptions = {
         }
     }
 };
-var hiddenNodeTextDisplayOptions;
-var displayNodeLabels = false;
 
 $(document).ready(function () {
 
@@ -386,6 +395,12 @@ $(document).ready(function () {
     $("#importEqptLink").click(function () {
         $("#importEqpt").click();
     });
+
+    /**
+    * Read text from import json file.
+    * @param {string} file - Get path as file.
+    * @param callback - The callback that handles the response.
+    */
     function readTextFile(file, callback) {
         var rawFile = new XMLHttpRequest();
         rawFile.overrideMimeType("application/json");
@@ -429,6 +444,19 @@ $(document).ready(function () {
             });
         }
     });
+
+    /** 
+     *  Undo network actions. 
+     *  The redo function is used to restores any actions that were previously undone using an undo. 
+     *  We stored every undo action detail one by one into array list (tempRedo) like node creation/deletion/updating etc...
+     *  Ex: node creation/deletion/updating: tempRedo.push(nodedata).
+     *  we fetch latest one record from array list (tempRedo) then will check record whether creation/deletion/updating after that will call the relevant action. 
+     *  After will stored action details into new array list (tempUndo) then will using pop method to remove record from array list (tempRedo) ex: tempRedo.pop().
+     *  Ex: node deletion:
+     *  tempUndoo.push(nodedata).
+     *  data.nodes.remove (latest record of tempRedo).
+     */
+    
     $("#button_undo").on("click", function () {
         if (tempUndo.length > 0) {
             var tempData = tempUndo[tempUndo.length - 1];
@@ -580,6 +608,18 @@ $(document).ready(function () {
         enableEdgeIndicator();
 
     });
+
+    /** 
+     *  Redo network actions.
+     *  The undo function is used to reverse a mistake, such as deleting the wrong element in a network topology. 
+     *  We stored every action detail one by one into array list (tempUndo) like node creation/deletion/updating etc...
+     *  ex:node creation/deletion/updating: tempUndo.push(nodedata).
+     *  we fetch latest one record from array list (tempUndo) then will check record whether creation/deletion/updating after that will call the relevant action. 
+     *  After will stored action details into new array list (tempRedo) then will using pop method to remove record from array list (tempUndo) ex: tempUndo.pop().
+     *  Ex: node updating:
+     *  tempRedo.push(nodedata).
+     *  data.nodes.update (latest record of tempUndo).
+     */
     $("#button_redo").on("click", function () {
         if (tempRedo.length > 0) {
             var tempData = tempRedo[tempRedo.length - 1];
@@ -670,7 +710,6 @@ $(document).ready(function () {
         enableEdgeIndicator();
 
     });
-    //end undo and redo
     $("#showHideEle").on("click", function () {
         hideEdgeLabels();
         enableEdgeIndicator();
@@ -712,6 +751,11 @@ $(document).ready(function () {
     });
 });
 
+/**
+ * Network view changes by selection. 
+ * Show/Hid the some components menu and options based on selected network view.
+ * @param {number} view - 1 -> NE view, 2-> Functional view.
+ */
 function networkView(view) {
     if (view == topologyView.NE_View)//collapsed view /NE view
     {
@@ -759,6 +803,10 @@ function networkView(view) {
     }
 }
 
+/**
+ * Show/Hide the node/fiber/patch/service label by network view.
+ * @param {number} view - 1 -> NE view, 2-> Functional view.
+ */
 function expandAndCollapseView(view) {
     var FVEdges = network.body.data.edges.get({
         filter: function (item) {
@@ -845,6 +893,11 @@ function networkMenuHide() {
         $("#stepCreateTopology").click();
     }
 }
+/** This function is used to show/hide the nodes/fiber/patch/service labels except ROADM. 
+ * Here we udpate the network options.
+ * Update the model of edge and node color as transparent then set it to network options. 
+ */
+
 function hideEdgeLabels() {
     if (!displayEdgeLabels) {
         // Apply options for hidden edge text
@@ -860,6 +913,13 @@ function hideEdgeLabels() {
     }
     enableEdgeIndicator();
 }
+
+/**
+ * Calculate the fiber span loss, length and coefficient.
+ * @param {string} eleSL - The span length of fiber.
+ * @param {string} eleLC - The loss coefficient of fiber.
+ * @param {string} eleSpanLoss - The span loss of fiber.
+ */
 function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
     var spanLength = "#" + eleSL;
     var lossCoefficient = "#" + eleLC;
@@ -868,6 +928,12 @@ function fiberLengthCal(eleSL, eleLC, eleSpanLoss) {
     var loss_coefficient = parseFloat($(lossCoefficient).val());
     $(spanLoss).val(span_length * loss_coefficient);
 }
+
+/**
+ * Highlight/Un-Highlight the component menu by node mode and name.
+ * @param {string} mode - Node mode.
+ * @param {string} nodename - Node name.
+ */
 function enableDisableNode(mode, nodename) {
     if (nodeMode == mode) {
         modeHighLight();
@@ -878,16 +944,28 @@ function enableDisableNode(mode, nodename) {
         AddNodeMode(mode);
     }
 }
-//disabled browser right click menu
+
+/**  Disable browser right click options. */
 $(document).bind("contextmenu", function (e) {
     return false;
 });
+
+/** To create random text for token creation. */
 var rand = function () {
     return Math.random().toString(36).substr(2); // remove `0.`
 };
+
+/** To generate token for component creation.
+ * It will consider as component ID. */
 var token = function () {
     return rand() + rand(); // to make it longer
 };
+
+/**
+ * Initialize the vis.network,Data and options.
+ * Define all component events.
+ * @param {boolean} isImport - True -> Initialize while import network json file, False -> Initialize while page loading.
+ */
 function draw(isImport) {
     // create a network
     var container = document.getElementById("mynetwork");
@@ -1393,10 +1471,10 @@ function draw(isImport) {
                     if (sNodes.length > 0)
                         copyDetails = network.body.data.nodes.get(sNodes[sNodes.length - 1].id);
                     else {
-                        if(nodeDatas)
+                        if (nodeDatas)
                             copyDetails = network.body.data.nodes.get(nodeDatas.id);
                     }
-                        
+
                 }
                 else
                     copyDetails = network.body.data.nodes.get(sNodes[0].id);
@@ -1993,6 +2071,11 @@ function draw(isImport) {
         hideEdgeLabels();
     }
 }
+
+/**
+ * Create container element for display component details when hover mouse on it.
+ * @param {string} html - Html elements.
+ */
 function htmlTitle(html) {
     const container = document.createElement("pre");
     container.innerHTML = html;
@@ -2005,6 +2088,12 @@ function htmlTitle(html) {
     container.style.fontVariant = commonJSON.font_variant;
     return container;
 }
+
+/**
+ *Initiate the network initialize by the flag.
+ * @param {boolean} isImport - True -> Initialize network while import network json file, False -> Will initialize while page loading.
+ */
+
 function init(isImport) {
     if (isImport) {
         draw(isImport);
@@ -2015,6 +2104,13 @@ function init(isImport) {
         }, 1000);
     }
 }
+
+/**
+ * Export/Save the network topology as a JSON file.
+ * The JSON file data's are loaded from network dataset. like nodes, edges.
+ * The schema of the JSON file will match the given JSON file like Equipment_JSON_MOD2.json.
+ * @param {boolean} isSaveNetwork - True -> Save network topology, False -> Export network topology.
+ */
 function exportNetwork(isSaveNetwork) {
     var nodeList = [];
     var edgeList = [];
@@ -2232,10 +2328,17 @@ function exportNetwork(isSaveNetwork) {
 
     saveAs(blob, filename);
 }
+
+/**  Hide the loader after completion of action. */
 function hideLoader() {
     $('#loader').hide();
     $("#importEqpt").val('');
 }
+
+/**
+ * This function is used to load the equipment configuration data from the import json file.
+ * @param {boolean} isFileUpload - True -> Load data from import network json, False -> Load data from default equipment configuration json.
+ */
 function load_EqptConfig(isFileUpload) {
     try {
         if (!eqpt_config['tip-photonic-simulation:simulation'] || !eqpt_config['tip-photonic-equipment:transceiver'] || !eqpt_config['tip-photonic-equipment:fiber'] || !eqpt_config['tip-photonic-equipment:amplifier']) {
@@ -2306,6 +2409,11 @@ function handleFileLoad(event) {
     _import_json = event.target.result;
     importNetwork();
 }
+
+/**
+ * This function is used to load all nodes element data into dataset from import json file.
+ * @param {number} index - Index number for get node details from import json.
+ */
 function importNode(index) {
     var nodeDetails = "";
     var shape = "";
@@ -2449,6 +2557,11 @@ function importNode(index) {
     });
 
 }
+
+/**
+ * This function is used to load all fiber/patch/service element data into dataset from import json file.
+ * @param {number} index - Index number for get edge details from import json.
+ */
 function importEdge(index) {
     var edgeData = _import_json["network"][0]['ietf-network-topology:link'][index];
     var to = edgeData["destination"]["dest-node"];
@@ -2485,10 +2598,17 @@ function importEdge(index) {
         addServiceComponent(1, from, to, labelvalue, textvalue, true);
     }
 }
+
+/**
+ * Get random point to displays node if not available lat, long in import network json file.
+ * @param {number} min - Minimum of random number.
+ * @param {number} max - Maximum of random number.
+ */
 function getRandomNumberBetween(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
-var isImportJSON = false;
+
+/** This is used to load the network component data from import network json file. */
 function importNetwork() {
     try {
         importNodes = [];
@@ -2564,6 +2684,12 @@ function importNetwork() {
     }
     draw(true);
 }
+
+/**
+ * Loop through the node dataset and get some properties then store it into array list.
+ * It is return node dataset.
+ * @param {object} data - Dataset of node.
+ */
 function getNodeData(data) {
     data.forEach(function (elem, index, array) {
         importNodes.push({
@@ -2586,6 +2712,12 @@ function getNodeData(data) {
 
     return new vis.DataSet(importNodes);
 }
+
+/**
+ * Get node details by ID.
+ * @param {object} data - Node details.
+ * @param {string} id - The ID of destination node component.
+ */
 function getNodeById(data, id) {
     for (var n = 0; n < data.length; n++) {
         if (data[n].id == id) {
@@ -2596,6 +2728,12 @@ function getNodeById(data, id) {
 
     throw "cannot find id '" + id + "' in data";
 }
+
+/**
+ * Loop through the edge dataset and assign some properties then store it into array list.
+ * It is return edge dataset.
+ * @param {object} data - Dataset of edge. edge like fiber/patch/service.
+ */
 function getEdgeData(data) {
 
     data.forEach(function (elem) {
@@ -2636,13 +2774,19 @@ function getEdgeData(data) {
 
     return new vis.DataSet(importEdges);
 }
+
+/** Save the network topology. */
 function SaveNetwork() {
     exportNetwork(true);
 }
+
+/** Clear component selection. */
 function UnSelectAll() {
     network.unselectAll();
     remove_NodeFiberHighlight();
 }
+
+/** Capture network topology as image file. */
 function captureImage() {
     network.fit();
     html2canvas(document.querySelector("#mynetwork"), {
@@ -2657,6 +2801,10 @@ function captureImage() {
     });
     return false;
 }
+
+/** Disable fiber/patch/service mode.
+  * Reteset the data values.
+ */
 function disableFiberService() {
 
     nodeMode = "";
@@ -2678,6 +2826,12 @@ function disableFiberService() {
         to: ''
     };
 }
+
+/**
+ * Check source and destination node have same connections.
+ * @param {string} fromNode - Source node ID.
+ * @param {string} toNode - Destination node ID.
+ */
 function checkfiberconnection(fromNode, toNode) {
     var edgesarr = network.body.data.edges.get();
     var flag = false;
@@ -2689,6 +2843,12 @@ function checkfiberconnection(fromNode, toNode) {
     }
     return flag;
 }
+
+/**
+ * This function is used to add multiple single fiber / patch and service between same set of nodes and re - arrange them one by one.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ */
 function multipleFiberService1(cfrom, cto) {
 
     var connectedFiber = network.getConnectedEdges(cfrom);
@@ -2724,6 +2884,12 @@ function multipleFiberService1(cfrom, cto) {
     else
         return fiberJSON.options.smooth;
 }
+
+/**
+ * This function is used to add multiple single fiber / patch and service between same set of nodes and re - arrange them one by one.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ */
 function multipleFiberService(cfrom, cto) {
     var connectedFiber = network.getConnectedEdges(cfrom);
     connectedFiber.push(network.getConnectedEdges(cto));
@@ -2769,6 +2935,16 @@ function multipleFiberService(cfrom, cto) {
         }
     });
 }
+
+/**
+ * Count fiber/patch and service connections between same set of node.
+ * @param {number} isdualfiber - True -> Dual fiber connection count.
+ * @param {number} issinglefiber - True -> Single fiber connection count.
+ * @param {number} isservice - True - > Service connection count.
+ * @param {number} ispatch - True -> Single patch connection count.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ */
 function countFiberService(isdualfiber, issinglefiber, isservice, ispatch, cfrom, cto) {
     var conCount = 1;
     var connectedFiber = network.getConnectedEdges(cfrom);
@@ -2806,7 +2982,12 @@ function countFiberService(isdualfiber, issinglefiber, isservice, ispatch, cfrom
     });
     return conCount;
 }
-//check node have connection
+
+/**
+ * Check node component have connection.
+ * @param {string} from -Source node ID.
+ * @param {string} to - Destination node ID .
+ */
 function checkNodeConnection(from, to) {
     var flag = false;
     var fiberList = network.getConnectedEdges(from);
@@ -2819,7 +3000,12 @@ function checkNodeConnection(from, to) {
     });
     return flag;
 }
-//check node have service connection
+
+/**
+ * Check node component have a service connection.
+ * @param {string} from - Source node ID.
+ * @param {string} to - Destination node ID.
+ */
 function checkNodeServiceConnection(from, to) {
     var flag = false;
     var fiberList = network.getConnectedEdges(from);
@@ -2835,6 +3021,13 @@ function checkNodeServiceConnection(from, to) {
     });
     return flag;
 }
+
+/**
+ * Restriction to remove transceiver node connection(fiber/patch) while transceiver having service.
+ * @param {number} from - Source node ID.
+ * @param {number} to - Destination node ID.
+ * @param {string} edgeType - The type of fiber/patch/service.
+ */
 function checkFiberPatchServiceCon(from, to, edgeType) {
     var isOk = false;
     var nodeDetails = network.body.data.nodes.get(from);
@@ -2885,12 +3078,18 @@ function checkFiberPatchServiceCon(from, to, edgeType) {
 
     return isOk;
 }
+
+/**
+ * Close context menu by menu ID.
+ * @param {string} menuID - The ID of menu.
+ */
 function closeMenu(menuID) {
     document.getElementById(menuID).style.display = "none";
     UnSelectAll();
 
 }
-//append node,preamp, booster type
+
+/** Append node,preamp and booster type to dropdown input control. */
 function appendSinglePreAmpandBoosterType() {
 
     if (eqpt_config['tip-photonic-equipment:amplifier']) {
@@ -2901,7 +3100,11 @@ function appendSinglePreAmpandBoosterType() {
         });
     }
 }
-//append node, preamp, booster type for dynamic ele
+
+/**
+ * Append node, preamp, booster type for dynamically generate element.
+ * @param {string} ddlID - The ID of dynamic input control. like dropdown.
+ */
 function appendPreAmpandBoosterType(ddlID) {
     var preAmpType = [];
     var boosterType = [];
@@ -2923,7 +3126,13 @@ function appendPreAmpandBoosterType(ddlID) {
         });
     }
 }
-//show context menu on righ click of the component
+
+/**
+ * show context menu near by selected component.
+ * @param {string} x - The point of selected component.
+ * @param {string} y - The point of selected component.
+ * @param {string} menu - Html element ID.
+ */
 function showContextMenu(x, y, menu) {
     showHideDrawerandMenu();
     var windowHeight = $(window).height() / 2;
@@ -2955,31 +3164,38 @@ function showContextMenu(x, y, menu) {
     }
     document.getElementById(menu).style.display = "block";
 }
-//show fiber and service details when hover the mouse over on it 
+
+/**
+ * Show the element for displays fiber, service and node components details when hover the mouse over on it.
+ * @param {string} x - left side menu.
+ * @param {string} y - bottom of the menu.
+ * @param {string} menu - Element ID.
+ */
 function showHoverDiv(x, y, menu) {
 
     var windowHeight = $(window).height() / 2;
     var windowWidth = $(window).width() / 2;
     var element = "#" + menu;
     if (y > windowHeight && x <= windowWidth) {
+        //Bottom-left part of window
         $(element).css("left", x);
         $(element).css("bottom", $(window).height() - y);
         $(element).css("right", "auto");
         $(element).css("top", "auto");
     } else if (y > windowHeight && x > windowWidth) {
-        //When user click on bottom-right part of window
+        //Bottom-right part of window
         $(element).css("right", $(window).width() - x);
         $(element).css("bottom", $(window).height() - y);
         $(element).css("left", "auto");
         $(element).css("top", "auto");
     } else if (y <= windowHeight && x <= windowWidth) {
-        //When user click on top-left part of window
+        //Top-left part of window
         $(element).css("left", x);
         $(element).css("top", y);
         $(element).css("right", "auto");
         $(element).css("bottom", "auto");
     } else {
-        //When user click on top-right part of window
+        //Top-right part of window
         $(element).css("right", $(window).width() - x);
         $(element).css("top", y);
         $(element).css("left", "auto");
@@ -2987,6 +3203,8 @@ function showHoverDiv(x, y, menu) {
     }
     document.getElementById(menu).style.display = "block";
 }
+
+/** To check network topology have components. */
 function networkValidation() {
     var flag = false;
     if (network.body.data.nodes.get().length > 0 || network.body.data.edges.get().length > 0)
@@ -2997,6 +3215,14 @@ function networkValidation() {
 
     return flag;
 }
+
+/**
+ * To load ROADM component type to dropdown control.
+ * @param {string} fiberID - The ID of fiber component.
+ * @param {string} nodeID - The ID of node component.
+ * @param {string} node_type - Type of ROADM component.
+ * @param {string} appendElement - Html element for loading component type.
+ */
 function loadRoadmType(fiberID, nodeID, node_type, appendElement) {
     var appendDiv = "#" + appendElement
     var fiberDetails = network.body.data.edges.get(fiberID);
@@ -3028,6 +3254,12 @@ function loadRoadmType(fiberID, nodeID, node_type, appendElement) {
         getRoadmDetails(fiberID, node_type);
     }
 }
+
+/**
+ * Generate accordian and dropdown element for loading type.
+ * @param {string} label - The label of component.
+ * @param {string} ddlEleID - Dropdown element for loading component type.
+ */
 function generateAccordianEle(label, ddlEleID) {
     var eleHtml = "";
     eleHtml += "<div class='form-group'>";
@@ -3036,6 +3268,12 @@ function generateAccordianEle(label, ddlEleID) {
     eleHtml += "</div>";
     return eleHtml;
 }
+
+/**
+ * Get ROADM component details by fiber ID.
+ * @param {string} fiberID - Fiber component ID.
+ * @param {string} node_type - The type of component.
+ */
 function getRoadmDetails(fiberID, node_type) {
     if (_roadmListDB({ roadm_fiber_id: fiberID }).count() > 0) {
         var roadmDetails = _roadmListDB({ roadm_fiber_id: fiberID }).first();
@@ -3055,6 +3293,13 @@ function getRoadmDetails(fiberID, node_type) {
             clearILA();
     }
 }
+
+/**
+ * Get next level of fiber/patch/service label.
+ * @param {string} from - Source node ID.
+ * @param {string} to -  Destination node ID.
+ * @param {string} component_type - The type of component.
+ */
 function getLabel(from, to, component_type) {
     var flabel;
     var tlabel;
@@ -3071,6 +3316,15 @@ function getLabel(from, to, component_type) {
 
     return component_type + " " + flabel + ' - ' + tlabel;
 }
+
+/**
+ * This function is used to store simulation parameters in session storage as JSON format.
+ * @param {number} fre_min - Frequency-max value.
+ * @param {number} frq_max - Frequency-min value.
+ * @param {number} spacing - Spacings.
+ * @param {number} channel - Number of channels.
+ * @param {number} margin - System margin.
+ */
 function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
     var simulationPara = {
         "frequency-min": fre_min,
@@ -3081,6 +3335,13 @@ function saveSimulations(fre_min, frq_max, spacing, channel, margin) {
     }
     sessionStorage.setItem("simulationParameters", JSON.stringify(simulationPara));
 }
+
+/**
+ * This function is used to show alert message.
+ * @param {string} messageType - Type of message.ex : Success/Info/Error/Warning.
+ * @param {string} textmsg - Message content.
+ * @param {boolean} removeTimeout - Set timeout for alert message.
+ */
 function showMessage(messageType, textmsg, removeTimeout) {
     $("#img_src").show();
     switch (messageType) {
@@ -3151,6 +3412,12 @@ function showMessage(messageType, textmsg, removeTimeout) {
 
 
 }
+
+/**
+ * This function is used to set/remove time interval for alert message.
+ * @param {number} targetEle - Target of toaster element like. Success/Warning/Error...
+ * @param {number} removeTimeout - Remove the interval time for alert message .
+ */
 function clearAndSetTimeout(targetEle, removeTimeout) {
     const highestId = window.setTimeout(() => {
         for (let i = highestId; i >= 0; i--) {
@@ -3164,10 +3431,17 @@ function clearAndSetTimeout(targetEle, removeTimeout) {
         }, 6000);
     }
 }
+
+/** To enable fiber/patch/service mode. */
 function enableEdgeIndicator() {
     if (isDualFiberMode == 1 || isSingleFiberMode == 1 || isSinglePatchMode == 1 || isDualPatchMode == 1 || isAddService == 1)
         network.addEdgeMode();
 }
+
+/**
+ * This function is used to check the node link, mis-link, fiber properties and consolidate all error list.
+ * @param {number} isTime - True -> remove time interval for error summary list.
+ */
 function topologyValidation(isTime) {
     //removeHighlight();
     var flag = false;
@@ -3202,6 +3476,14 @@ function topologyValidation(isTime) {
     }
     return flag;
 }
+
+/**
+ * Focus the error componets.
+ * Focus the node/fiber/patch/service components by span error ID.
+ * Update the components for highlight error component to set image, size, is_error, color properties by span error ID.
+ * @param {string} ID - Node/Fiber ID.
+ * @param {number} type - Component type.
+ */
 function focusNodeFiber(ID, type) {
     removeHighlight();
     UnSelectAll();
@@ -3233,6 +3515,12 @@ function focusNodeFiber(ID, type) {
         network.body.data.edges.update([{ id: ID, pre_color: edgeDetails.color, color: singleFiberJSON.options.err_color, is_error: true }]);
     }
 }
+
+/** 
+ * To remove focused error component highlight. 
+ * Update node component to set image, size, is_error by focused component ID.
+ * Update fiber/patch/service components to set color, is_error by focused component ID.
+ */
 function removeHighlight() {
 
     var errNodes = network.body.data.nodes.get({
@@ -3260,6 +3548,12 @@ function removeHighlight() {
         });
     }
 }
+
+/**
+ * To remove span error element on error summary list.
+ * @param {string} item - Node ID.
+ * @param {boolean} transUpdate - True -> remove span error element for transceiver, False -> remove rest of span error.
+ */
 function removeSpanInError(item, transUpdate) {
 
     var image;
@@ -3288,6 +3582,8 @@ function removeSpanInError(item, transUpdate) {
     $(removeID).remove();
     checkErrorFree();
 }
+
+/** To clear summary error element if there is no any error. */
 function checkErrorFree() {
     var roadmRule = $("#spanEven").find('p').length;
     var linkRule = $("#spanMisLink").find('p').length;
@@ -3310,12 +3606,23 @@ function checkErrorFree() {
         });
     }
 }
+
+/** 
+ *  Realtime update of summary error list. 
+ *  To do any action with component while error chec active on active, summary error list automatically update by component action.
+ */
 function realUpdate() {
     if ($("#div_toaster").is(":visible") && !$("#img_src").is(":visible")) {
         $("#btnValidation").click();
     }
 }
 
+/**
+ * To reset component selection/highlight.
+ * Get all highlighted components by is_highlight.
+ * Update the node components to set is_highlight, image properties by selected component ID.
+ * Update the fiber/patch/service components to set is_highlight, shadow properties by selected component ID.
+ * */
 function remove_NodeFiberHighlight() {
     var hNodes = network.body.data.nodes.get({
         filter: function (item) {

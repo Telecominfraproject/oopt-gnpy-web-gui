@@ -1,4 +1,9 @@
-﻿var addEdgeData = {
+﻿/**
+ * fiber.js.
+ * The fiber library describes to add a fiber connection between any 2 nodes by dragging from source node to destination and defines the fiber manipulation.
+ */
+
+var addEdgeData = {
     from: '',
     to: ''
 };
@@ -16,6 +21,10 @@ function dualFiberMode() {
         to: ''
     };
 }
+/**
+ * Enable settings for fiber and reset other settings.
+ * Set fiber 1 = enable, 0 = disable.
+ */
 function singleFiberMode() {
     UnSelectAll();
     isSingleFiberMode = 1;
@@ -29,7 +38,7 @@ function singleFiberMode() {
     };
 }
 
-
+/** Check connections rule for dual fiber not single fiber before add it. */
 function addFiber() {
     var srcNode = network.body.data.nodes.get(addEdgeData.from);
     var DestNode = network.body.data.nodes.get(addEdgeData.to);
@@ -77,6 +86,18 @@ function addFiber() {
     UnSelectAll();
     network.addEdgeMode();
 }
+
+/**
+ * Fiber creation.
+ * Fiber style and configuration data loaded from configurationdata, styledata json.
+ * Check connections rules.
+ * @param {number} cmode - Fiber mode 1 for add.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ * @param {string} clabel - The Label of the service.
+ * @param {string} ctext - The Text of the service.
+ * @param {boolean} isImport - false -> manual add, true -> automattically added while import json.
+ */
 function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
     if (cmode == 1) {
 
@@ -289,6 +310,7 @@ function addFiberComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         tempUndo.push(tedge);
     }
 }
+
 function dualFiberInsertNode(fiberID, node_type, callback) {
     var fiberDetails = network.body.data.edges.get(fiberID);
     var fromNode = network.body.nodes[fiberDetails.from];
@@ -500,6 +522,12 @@ function dualFiberInsertNode(fiberID, node_type, callback) {
     enableEdgeIndicator();
 }
 
+/**
+ * Insert a node (ROADM/Attenuator/Amplifier/Raman Amplifier) in the middle of selected fiber.
+ * @param {string} fiberID - Selected fiber ID
+ * @param {string} node_type - Type of node.
+ * @param callback - The callback that handles the response..
+ */
 function singleFiberInsertNode(fiberID, node_type, callback) {
 
     var fiberDetails = network.body.data.edges.get(fiberID);
@@ -752,6 +780,11 @@ function clearCbxandAccordian() {
     $('#cbx_clone').prop('checked', false);
 }
 
+/**
+ * Populate fiber details by fiber ID.
+ * @param {string} fiberID - Selected Fiber ID.
+ * @param callback - The callback that handles the response.
+ */
 function singleFiberEdit(fiberID, callback) {
     $("#txtLoss_Coefficient").removeClass('input_error');
     $('#cbxLength_Based_Loss').prop('checked', false);
@@ -817,6 +850,13 @@ function singleFiberEdit(fiberID, callback) {
     document.getElementById("btnCloseSingleFiber").onclick = clearSingleFiber.bind(
     );
 }
+
+/**
+ * Update fiber.
+ * Update fiber by fiber ID.
+ * Apply connections rules.
+ * @param {string} fiberID - Fiber ID.
+ */
 function updateSingleFiber(fiberID) {
     removeEdgeList = [];
     var id = fiberID[fiberID.length - 1].id;
@@ -918,6 +958,8 @@ function updateSingleFiber(fiberID) {
 
     }
 }
+
+/** Clear input/teporary data and other settings. */
 function clearSingleFiber() {
 
     $("#txtSinlgeFiberName").val('');
@@ -967,6 +1009,12 @@ function deleteFiber(fiberList) {
     enableEdgeIndicator();
 
 }
+
+/**
+ * Remove fiber by fiber ID.
+ * @param {string} fiberID - Component ID.
+ * @param {boolean} isMultiple - Remove multiple fiber.
+ */
 function removeFiber(fiberID, isMultiple) {
     var fiber = network.body.data.edges.get(fiberID);
 
@@ -1023,6 +1071,10 @@ function removeFiber(fiberID, isMultiple) {
     }
 }
 
+/**
+ * Displays fiber details when hover the mouse near the single fiber.
+ * @param {object} params - Fiber details.
+ */
 function displayFiberHover(params) {
     var fiberDetails = network.body.data.edges.get(params.edge);
     var fiber_type = "";

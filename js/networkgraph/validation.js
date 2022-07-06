@@ -1,4 +1,9 @@
-﻿$(document).ready(function () {
+﻿/**
+ * validation.js
+ * The Validations library currently describes the validation of component name, length, type.
+ */
+
+$(document).ready(function () {
     $("#txtSpan_Length").change(function () {
         var span_length = $("#txtSpan_Length").val().trim();
         var spanlen = parseFloat(span_length);
@@ -93,6 +98,10 @@
 
 });
 
+/**
+ * Validate the node/fiber/patch/service name and name length.
+ * @param {HTMLElement} element - Input element
+ */
 function nameLengthValidation(element) {
     var flag = true;
     var elementID = "#" + element
@@ -110,6 +119,8 @@ function nameLengthValidation(element) {
         showMessage(alertType.Error, msg);
     return flag;
 }
+
+/** Validate export file name. */
 function exportFileValidation() {
     var flag = false;
     if ($("#txtFileName").val().trim() != '')
@@ -118,6 +129,8 @@ function exportFileValidation() {
         showMessage(alertType.Error, 'Please enter file name');
     return flag;
 }
+
+/** Validate ROADM list, type and Amplifier type. */
 function roadmProVal() {
     var flag = false;
     if ($("#ddlRoadmList").val().trim() != 0 && $("#ddlROADMType").val().trim() != 0 && $("#ddlRPreAmpType").val().trim() != 0 && $("#ddlRBoosterType").val().trim() != 0)

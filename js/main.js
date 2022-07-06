@@ -1,3 +1,8 @@
+/**
+ *  main.js.
+ * The main.js library describes UI actions. like show/hide and update the html element with style based on user interaction.
+ */
+
 let attenuator = document.querySelector('#attenuator');
 let roadm = document.querySelector('#roadm');
 let ILA = document.querySelector('#ILA');
@@ -9,10 +14,12 @@ let singlefiber = document.querySelector('#singlefiber');
 let singlepatch = document.querySelector('#singlepatch');
 let dualpatch = document.querySelector('#dualpatch');
 let ramanamp = document.querySelector('#ramanamp');
-
-
 let drawerclose = document.getElementById('drawer-close')
 
+/**
+ * Open drawer based on node/fiber/patch/service.
+ * @param {string} node - The type of component.
+ */
 function openDrawer(node) {
     switch (node) {
         case 'attenuator':
@@ -187,6 +194,10 @@ function openDrawer(node) {
     }
 }
 
+/**
+ * Close drawer based on node/fiber/patch/service.
+ * @param {string} node - The type of component.
+ */
 function closeDrawer(node) {
     switch (node) {
         case 'attenuator':
@@ -238,29 +249,15 @@ function closeDrawer(node) {
     }
 }
 
-//sidebar
-
-// let sidebarleft = document.querySelector('#sidebar');
-// let buttonleft = document.getElementById('lefttoggle');
-// buttonleft.addEventListener("click",function(){
-//   sidebarleft.classList.toggle("d-left-none")
-//   buttonleft.classList.toggle('ml--btn')
-// })
-
-
 var tabcontent = document.querySelector(".stp-tab");
 var arrowbtn1 = document.querySelector("#toggle-arrow-1");
 var arrowbtn2 = document.querySelector("#toggle-arrow-2");
 var arrowbtn3 = document.querySelector("#toggle-arrow-3");
 var arrowbtn4 = document.querySelector("#toggle-arrow-4");
-//var arrowbtn5 = document.querySelector("#toggle-arrow-5");
 var sidebartext = document.querySelectorAll(".sidebar-text");
 var sidebartext1 = document.querySelectorAll(".sidebar-text1");
 var sidebartext2 = document.querySelectorAll(".sidebar-text2");
 var sidebartext3 = document.querySelectorAll(".sidebar-text3");
-
-
-
 
 arrowbtn2.addEventListener("click", function () {
     tabcontent.classList.toggle('left-59')
@@ -284,15 +281,11 @@ arrowbtn4.addEventListener("click", function () {
         sidebartext3[i].classList.toggle("d-none")
     }
 })
-//arrowbtn5.addEventListener("click", function () {
-//    tabcontent.classList.toggle('left-59')
-//    for (var i = 0; i < sidebartext4.length; i++) {
-//        sidebartext4[i].classList.toggle("d-none")
-//    }
-//})
 
-
-
+/**
+ * Highlight the steper menu by selection.
+ * @param {number} index - The menu index.
+ */
 function stepColor(index) {
     showMenu = 0;
     modeHighLight();
@@ -331,6 +324,7 @@ function stepColor(index) {
             break;
     }
 }
+
 var btnAddRoadm = "#btnAddRoadm";
 var btnAddFused = "#btnAddFused";
 var btnAddILA = "#btnAddILA";
@@ -342,6 +336,11 @@ var btnServiceActive = "#btnServiceActive";
 var btnAddSinglePatch = "#btnAddSinglePatch";
 var btnAddDualPatch = "#btnAddDualPatch";
 var btnAddRamAmp = "#btnAddRamAmp";
+
+/**
+ * Highlight node/fiber/patch/service menu by name.
+ * @param {string} node - The type on component.
+ */
 function modeHighLight(node) {
     disableFiberService();
     showHideDrawerandMenu();
@@ -489,6 +488,7 @@ function modeHighLight(node) {
     }
 }
 
+/** Show/Hide the context menu of node/fiber/patch/service.  */
 function showHideDrawerandMenu() {
     document.getElementById("roadmMenu").style.display = "none";
     document.getElementById("attenuatorMenu").style.display = "none";

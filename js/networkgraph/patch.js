@@ -1,4 +1,9 @@
-﻿var isDualPatchMode = 0;
+﻿/**
+ * patch.js
+ * The patch library describes to add a patch connection between any 2 nodes by dragging from source node to destination and defines the patch manipulation.
+ */
+
+var isDualPatchMode = 0;
 var isSinglePatchMode = 0;
 var addPatchData = {
     from: '',
@@ -16,6 +21,11 @@ function dualPatchMode() {
         to: ''
     };
 }
+
+/**
+ * Enable settings for patch and reset other settings.
+ * Set patch 1 = enable, 0 = disable.
+ */
 function singlePatchMode() {
     UnSelectAll();
     isDualPatchMode = 0;
@@ -59,6 +69,17 @@ function addSinglePatch() {
     UnSelectAll();
     network.addEdgeMode();
 }
+
+/**
+ * Patch creation.
+ * Patch style and configuration data loaded from configurationdata, styledata json.
+ * @param {number} cmode - Service mode 1 for add.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ * @param {string} clabel - The Label of the service.
+ * @param {string} ctext - The Text of the service.
+ * @param {boolean} isImport - false -> manual add, true -> automattically added while import json.
+ */
 function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
 
     if (cmode == 1) {
@@ -136,6 +157,12 @@ function addPatchComponent(cmode, cfrom, cto, clabel, ctext, isImport) {
         tempUndo.push(tedge);
     }
 }
+
+/**
+ * Populate patch details by patch ID.
+ * @param {string} patchID - Patch ID.
+ * @param callback - The callback that handles the response.
+ */
 function singlePatchEdit(patchID, callback) {
     document.getElementById("singlePatchMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(patchID);
@@ -149,6 +176,12 @@ function singlePatchEdit(patchID, callback) {
     document.getElementById("btnCloseSinglePatch").onclick = clearSinglePatch.bind(
     );
 }
+
+/**
+ * Update patch.
+ * Update patch label, text by patch ID.
+ * @param {string} patchID - patch ID.
+ */
 function updateSinglePatch(patchID) {
 
     var id = patchID;
@@ -172,6 +205,11 @@ function updateSinglePatch(patchID) {
     }
 
 }
+
+/**
+ * Remove patch by patch ID.
+ * @param {string} patchID - patch ID.
+ */
 function deletePatch(patchID) {
     var patchDetails = network.body.data.edges.get(patchID);
     var patchLabel = patchDetails.label;
@@ -192,6 +230,8 @@ function deletePatch(patchID) {
     UnSelectAll();
     enableEdgeIndicator();
 }
+
+/** Clear input/teporary data and other settings. */
 function clearSinglePatch() {
 
     $("#txtSinglePatchName").val('');

@@ -1,4 +1,16 @@
-﻿function nodeRule(from, to, nodeType) {
+﻿/**
+ * constraints.js
+ * The constraints library a list of rules for components. It is defining the network topology validation.
+ */
+
+
+/**
+ * Check connections rules between nodes.
+ * @param {string} from - Source node.
+ * @param {string} to - Destination node.
+ * @param {string} nodeType - Node type.
+ */
+function nodeRule(from, to, nodeType) {
     var fromConnections = network.getConnectedEdges(from);
     var toConnections = network.getConnectedEdges(to);
     var connections = [];
@@ -85,6 +97,7 @@
     return { message: message, flag: flag };
 }
 
+/** Check the ROADM, transceiver link and type rules. */
 function checkLink() {
 
     var roadmList = network.body.data.nodes.get({
@@ -145,6 +158,7 @@ function checkLink() {
     return { message: message, flag: flag };
 }
 
+/** check the limits of amplifier, attenuator link rules. */
 function checkMisLink() {
 
     var roadmList = network.body.data.nodes.get({
@@ -219,6 +233,7 @@ function checkMisLink() {
     return { message: message, flag: flag };
 }
 
+/** To check the node type force rules. */
 function checkTypeForce() {
 
     var transList = network.body.data.nodes.get({
@@ -272,6 +287,7 @@ function checkTypeForce() {
     return { message: message, flag: flag };
 }
 
+/** check the fiber properties rules. */
 function checkFiberPro() {
 
     var fiberList = network.body.data.edges.get({
@@ -302,6 +318,8 @@ function checkFiberPro() {
     message = msg.join(' ');
     return { message: message, flag: flag };
 }
+
+/** Check the node link and type rules on import network JSON file. */
 function nodeRuleOnImportJSON() {
     //checkLink
     var roadmList = network.body.data.nodes.get({
@@ -384,6 +402,7 @@ function nodeRuleOnImportJSON() {
     });
 }
 
+/** Set fiber/patch/service smooth while on import network JSON file. */
 function edgeStyleOnImportJSON() {
     var edgeList = network.body.data.edges.get();
     var cfrom;
@@ -439,6 +458,12 @@ function edgeStyleOnImportJSON() {
 
     }
 }
+
+/**
+ * Check the node connections and fiber/patch/service rules on import network JSON file.
+ * @param {string} cfrom - Source node.
+ * @param {string} cto - Destination node.
+ */
 function nodeValidationInEdge(cfrom, cto) {
     // start remove highlight once roadm have equal in/out conn
     var roadmList = [];

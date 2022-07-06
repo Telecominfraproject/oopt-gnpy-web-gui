@@ -87,5 +87,29 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
  Font Awesome Free 5.0.6 by @fontawesome - http://fontawesome.com
  License - http://fontawesome.com/license (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+
+ **Material Icons**
+
+ We have made these icons available for you to incorporate them into your products under the Apache License Version 2.0. 
+
+ Feel free to remix and re-share these icons and documentation in your products. 
+
+ We'd love attribution in your app's about screen, but it's not required.
+ 
+**Roboto Icons**      
+
+ These fonts are licensed under the Apache License, Version 2.0.
+
+ You can use them in your products & projects – print or digital, commercial or otherwise.
+
+ This isn't legal advice, please consider consulting a lawyer and see the full license for all details.
+
+**Oswald Icons** 
+
+ These fonts are licensed under the Open Font License.
+
+ You can use them in your products & projects – print or digital, commercial or otherwise.
+
+ This isn't legal advice, please consider consulting a lawyer and see the full license for all details.
  
            

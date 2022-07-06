@@ -1,8 +1,18 @@
-﻿var isAddService = 0;
+﻿/**
+ * service.js
+ * The Service it is also same as the connectivity path between 2 transceiver nodes. This library file defines the service manipulation.
+ */
+
+var isAddService = 0;
 var addServiceData = {
     from: '',
     to: ''
 };
+
+/**
+ * Enable settings for service and reset other settings.
+ * Set service 1 = enable, 0 = disable.
+ */
 function addServiceMode() {
     UnSelectAll();
     isAddService = 1;
@@ -15,6 +25,8 @@ function addServiceMode() {
         to: ''
     };
 }
+
+/** Check service connections rule before add it. */
 function addService() {
 
     var fromDetails = network.body.data.nodes.get(addServiceData.from);
@@ -50,6 +62,16 @@ function addService() {
     UnSelectAll();
 
 }
+
+/**
+ * Service creation.
+ * Service style and configuration data loaded from configurationdata, styledata json.
+ * @param {number} cmode - Service mode 1 for add.
+ * @param {string} cfrom - Source node ID.
+ * @param {string} cto - Destination node ID.
+ * @param {string} clabel - The Label of the service.
+ * @param {boolean} isImport - false -> manual add, true -> automattically added while import json.
+ */
 function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
     var serviceID = token();
     if (cmode == 1) {
@@ -79,6 +101,12 @@ function addServiceComponent(cmode, cfrom, cto, clabel, isImport) {
     UnSelectAll();
     network.addEdgeMode();
 }
+
+/**
+ * Populate service details by service ID.
+ * @param {string} serviceID - Service ID.
+ * @param callback - The callback that handles the response.
+ */
 function serviceEdit(serviceID, callback) {
     document.getElementById("serviceMenu").style.display = "none";
     var edgeDetails = network.body.data.edges.get(serviceID);
@@ -96,6 +124,12 @@ function serviceEdit(serviceID, callback) {
     document.getElementById("btnCloseService").onclick = clearService.bind(
     );
 }
+
+/**
+ * Update service.
+ * Update service label, text, band_width by service ID.
+ * @param {string} serviceID - Service ID.
+ */
 function updateService(serviceID) {
 
     var id = serviceID;
@@ -123,6 +157,11 @@ function updateService(serviceID) {
     }
 
 }
+
+/**
+ * Remove service by service ID.
+ * @param {string} serviceID - Service ID.
+ */
 function deleteService(serviceID) {
     var serviceDetails = network.body.data.edges.get(serviceID);
     document.getElementById("serviceMenu").style.display = "none";
@@ -135,6 +174,8 @@ function deleteService(serviceID) {
     UnSelectAll();
     enableEdgeIndicator();
 }
+
+/** Clear input/teporary data and other settings. */
 function clearService() {
 
     $("#txtServiceName").val('');
