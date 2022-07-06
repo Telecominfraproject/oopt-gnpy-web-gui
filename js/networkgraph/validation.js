@@ -1,9 +1,4 @@
-﻿/**
- * validation.js
- * The Validations library currently describes the validation of component name, length, type.
- */
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $("#txtSpan_Length").change(function () {
         var span_length = $("#txtSpan_Length").val().trim();
         var spanlen = parseFloat(span_length);

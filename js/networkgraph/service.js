@@ -1,9 +1,4 @@
-﻿/**
- * service.js
- * The Service it is also same as the connectivity path between 2 transceiver nodes. This library file defines the service manipulation.
- */
-
-var isAddService = 0;
+﻿var isAddService = 0;
 var addServiceData = {
     from: '',
     to: ''

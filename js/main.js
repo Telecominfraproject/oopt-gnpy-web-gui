@@ -1,8 +1,3 @@
-/**
- *  main.js.
- * The main.js library describes UI actions. like show/hide and update the html element with style based on user interaction.
- */
-
 let attenuator = document.querySelector('#attenuator');
 let roadm = document.querySelector('#roadm');
 let ILA = document.querySelector('#ILA');
