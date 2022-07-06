@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: exampleUtil.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: exampleUtil.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>﻿ /**
+ * exampleUtil module
+ * @module exampleUtil
+ */
+
+// These globals will be injected into a page that will use them.
+/* eslint no-unused-vars: "off" */
+
+// This is quite old and I don't want to waste too much time here. We probably
+// should stop using this altogether as the examples should be easy and
+// straightforward to understand and this only obscures it.
+/* eslint require-jsdoc: "off" */
+
+/* global Alea:false seededRandom:true */
+
+/**
+ * Created by Alex on 5/20/2015.
+ *
+ * @remarks
+ * This depends on Alea from https://unpkg.com/alea@1.0.0/alea.js.
+ */
+
+/**
+ * @param path
+ * @param success
+ * @param error
+ */
+function loadJSON(path, success, error) {
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                success(JSON.parse(xhr.responseText));
+            } else {
+                error(xhr);
+            }
+        }
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+}
+
+/**
+ * @param nodeCount
+ */
+function getScaleFreeNetwork(nodeCount) {
+    const nodes = [];
+    const edges = [];
+    const connectionCount = [];
+   
+    // Add child nodes, change styles…
+    // randomly create some nodes and edges
+    for (let i = 0; i &lt; nodeCount; i++) {
+        nodes.push({
+            id: i,
+            label: String(i),
+        });
+
+        connectionCount[i] = 0;
+
+        // create edges in a scale-free-network way
+        if (i == 1) {
+            const from = i;
+            const to = 0;
+            edges.push({
+                from: from,
+                to: to,
+            });
+            connectionCount[from]++;
+            connectionCount[to]++;
+        } else if (i > 1) {
+            const conn = edges.length * 2;
+            const rand = Math.floor(seededRandom() * conn);
+            let cum = 0;
+            let j = 0;
+            while (j &lt; connectionCount.length &amp;&amp; cum &lt; rand) {
+                cum += connectionCount[j];
+                j++;
+            }
+
+            const from = i;
+            const to = j;
+            edges.push({
+                from: from,
+                to: to,
+            });
+            connectionCount[from]++;
+            connectionCount[to]++;
+        }
+    }
+
+    return { nodes: nodes, edges: edges };
+}
+
+seededRandom = Alea("SEED");
+
+/**
+ * @param nodeCount
+ */
+function getScaleFreeNetworkSeeded(nodeCount) {
+    const nodes = [];
+    const edges = [];
+    const connectionCount = [];
+    let edgesId = 0;
+
+    // randomly create some nodes and edges
+    for (let i = 0; i &lt; nodeCount; i++) {
+        nodes.push({
+            id: i,
+            label: String(i),
+            title: element(i),
+        });
+
+        connectionCount[i] = 0;
+
+        // create edges in a scale-free-network way
+        if (i == 1) {
+            const from = i;
+            const to = 0;
+            edges.push({
+                id: edgesId++,
+                from: from,
+                to: to,
+            });
+            connectionCount[from]++;
+            connectionCount[to]++;
+        } else if (i > 1) {
+            const conn = edges.length * 2;
+            const rand = Math.floor(seededRandom() * conn);
+            let cum = 0;
+            let j = 0;
+            while (j &lt; connectionCount.length &amp;&amp; cum &lt; rand) {
+                cum += connectionCount[j];
+                j++;
+            }
+
+            const from = i;
+            const to = j;
+            edges.push({
+                id: edgesId++,
+                from: from,
+                to: to,
+            });
+            connectionCount[from]++;
+            connectionCount[to]++;
+        }
+    }
+
+    return { nodes: nodes, edges: edges };
+
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">oopt-gnpy-web-gui-main</a></h2><h3>Modules</h3><ul><li><a href="module-alea.html">alea</a></li><li><a href="module-constraints.html">constraints</a></li><li><a href="module-exampleUtil.html">exampleUtil</a></li><li><a href="module-fiber.html">fiber</a></li><li><a href="module-filesaver.html">filesaver</a></li><li><a href="module-mynetwork.html">mynetwork</a></li><li><a href="module-node.html">node</a></li><li><a href="module-patch.html">patch</a></li><li><a href="module-service.html">service</a></li><li><a href="module-validation.html">validation</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-LICENSE.html">LICENSE</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 06 2022 15:49:42 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

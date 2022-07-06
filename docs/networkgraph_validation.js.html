@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: networkgraph/validation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: networkgraph/validation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>﻿ /**
+ * validation.js
+ * The Validations library currently describes the validation of component name, length, and type
+ * @module validation
+ */
+
+
+$(document).ready(function () {
+    $("#txtSpan_Length").change(function () {
+        var span_length = $("#txtSpan_Length").val().trim();
+        var spanlen = parseFloat(span_length);
+        if (isNaN(span_length) || spanlen &lt;= 0 || span_length == "") {
+            $("#txtSpan_Length").addClass('input_error');
+            return;
+        }
+        else
+            $("#txtSpan_Length").removeClass('input_error');
+
+        if ($('#cbxLength_Based_Loss').is(":checked")) {
+            fiberCalc();
+                
+        }
+    });
+    $("#txtLoss_Coefficient").change(function () {
+        if ($('#cbxLength_Based_Loss').is(":checked")) {
+            var span_length = $("#txtLoss_Coefficient").val().trim();
+            var spanlen = parseFloat(span_length);
+            if (isNaN(span_length) || spanlen &lt;= 0 || span_length == "") {
+                return;
+            }
+            fiberCalc();
+        }
+        
+
+        
+
+    });
+    function fiberCalc() {
+        var span_length = $("#txtSpan_Length").val().trim();
+        var spanlen = parseFloat(span_length);
+        var loss_coeff = $("#txtLoss_Coefficient").val().trim();
+        var lossCoeff = parseFloat(loss_coeff);
+        if (!isNaN(span_length) || spanlen >= 0 || span_length != "" || !isNaN(loss_coeff) || lossCoeff >= 0 || loss_coeff != "")
+            fiberLengthCal('txtSpan_Length', 'txtLoss_Coefficient', 'txtSpan_Loss');
+    }
+    $("#ddlSingleFiberType").change(function () {
+        if ($(this).val()=="") {
+            $("#ddlSingleFiberType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlSingleFiberType").removeClass('input_error');
+
+    });
+    $("#ddlRoadmType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRoadmType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRoadmType").removeClass('input_error');
+
+    });
+    $("#ddlAmplifierType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlAmplifierType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlAmplifierType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpType").removeClass('input_error');
+
+    });
+    $("#ddlRamanAmpCategory").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlRamanAmpCategory").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlRamanAmpCategory").removeClass('input_error');
+
+    });
+    $("#ddlTransceiverType").change(function () {
+        if ($(this).val() == "") {
+            $("#ddlTransceiverType").addClass('input_error');
+            return;
+        }
+        else
+            $("#ddlTransceiverType").removeClass('input_error');
+
+    });
+
+});
+
+/**
+ * Validate the node/fiber/patch/service name and name length.
+ * @param {HTMLElement} element - Input element
+ */
+function nameLengthValidation(element) {
+    var flag = true;
+    var elementID = "#" + element
+    var maxLength = Number(configData.node.site_length);
+    var msg = "";
+    if ($(elementID).val().trim() == '') {
+        msg = "Please enter the name";
+        flag = false;
+    }
+    else if (Number($(elementID).val().trim().length) > maxLength) {
+        msg = "Name length should be less than or equal to 20";
+        flag = false;
+    }
+    if (!flag)
+        showMessage(alertType.Error, msg);
+    return flag;
+}
+
+/** Validate export file name. */
+function exportFileValidation() {
+    var flag = false;
+    if ($("#txtFileName").val().trim() != '')
+        flag = true;
+    else
+        showMessage(alertType.Error, 'Please enter file name');
+    return flag;
+}
+
+/** Validate ROADM list, type and Amplifier type. */
+function roadmProVal() {
+    var flag = false;
+    if ($("#ddlRoadmList").val().trim() != 0 &amp;&amp; $("#ddlROADMType").val().trim() != 0 &amp;&amp; $("#ddlRPreAmpType").val().trim() != 0 &amp;&amp; $("#ddlRBoosterType").val().trim() != 0)
+        flag = true;
+    else
+        showMessage(alertType.Error, 'Please enter the value');
+    return flag;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">oopt-gnpy-web-gui-main</a></h2><h3>Modules</h3><ul><li><a href="module-alea.html">alea</a></li><li><a href="module-constraints.html">constraints</a></li><li><a href="module-exampleUtil.html">exampleUtil</a></li><li><a href="module-fiber.html">fiber</a></li><li><a href="module-filesaver.html">filesaver</a></li><li><a href="module-main.html">main</a></li><li><a href="module-mynetwork.html">mynetwork</a></li><li><a href="module-node.html">node</a></li><li><a href="module-patch.html">patch</a></li><li><a href="module-service.html">service</a></li><li><a href="module-validation.html">validation</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-LICENSE.html">LICENSE</a></li><li><a href="tutorial-technical_document.html">technical_document</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Wed Jul 06 2022 19:21:36 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
