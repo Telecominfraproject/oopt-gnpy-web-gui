@@ -1,4 +1,10 @@
-﻿/*
+﻿ /**
+* filesaver.js
+* Filesaver.js is the solution to saving files on the client-side and is perfect for web apps that generate files on the client.
+* @module filesaver
+*/
+
+/*
 * FileSaver.js
 * A saveAs() FileSaver implementation.
 *

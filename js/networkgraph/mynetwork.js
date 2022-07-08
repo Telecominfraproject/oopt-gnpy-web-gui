@@ -1,4 +1,10 @@
-﻿var nodes = null;
+﻿/**
+* mynetwork.js
+* The mynetwork library file describes how to initialize the network area using vis.js and defines common functionalities of network components.
+* @module mynetwork
+*/
+
+var nodes = null;
 var edges = null;
 var network = null;
 var data = getScaleFreeNetwork(0);

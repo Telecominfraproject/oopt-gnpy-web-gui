@@ -1,4 +1,10 @@
-﻿(function (root, factory) {
+﻿ /**
+* alea.js
+* Alea library is a pseudo-random number generator (PRNG).
+* @module alea
+*/
+
+(function (root, factory) {
     if (typeof exports === 'object') {
         module.exports = factory();
     } else if (typeof define === 'function' && define.amd) {

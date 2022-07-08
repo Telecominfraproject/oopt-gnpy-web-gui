@@ -1,3 +1,14 @@
+/**
+* @file GNPy is a open source optical network planning tool which can be used to simulate multi-vendor open optical networks. Click below to explore the tool.
+* @see <a href="https://tiptool.vee-services.com/">GNPy Optical network planning tool</a>
+*/
+
+/**
+* main.js
+* The main.js library describes UI actions. like show/hide and update the HTML element with style based on user interaction.
+* @module main
+*/
+
 let attenuator = document.querySelector('#attenuator');
 let roadm = document.querySelector('#roadm');
 let ILA = document.querySelector('#ILA');

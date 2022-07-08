@@ -1,4 +1,11 @@
-﻿// These globals will be injected into a page that will use them.
+﻿
+/**
+* exampleUtil.js
+* This library describes how to create some random nodes and fiber/patch/service.
+* @module exampleUtil
+*/
+
+// These globals will be injected into a page that will use them.
 /* eslint no-unused-vars: "off" */
 
 // This is quite old and I don't want to waste too much time here. We probably

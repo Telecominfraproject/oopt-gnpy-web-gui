@@ -1,4 +1,10 @@
 ﻿/**
+* constraints.js
+* The constraints library is a list of rules for components. It is defining the network topology validation.
+* @module constraints
+*/
+
+/**
  * Check connections rules between nodes.
  * @param {string} from - Source node.
  * @param {string} to - Destination node.

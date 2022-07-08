@@ -1,4 +1,10 @@
-﻿var addEdgeData = {
+﻿ /**
+* fiber.js
+* The fiber library describes how to add a fiber connection between any 2 nodes by dragging from source node to destination and defines the fiber manipulation.
+* @module fiber
+*/
+
+var addEdgeData = {
     from: '',
     to: ''
 };

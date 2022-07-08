@@ -1,4 +1,10 @@
-﻿var isAddService = 0;
+﻿/**
+* service.js
+* The Service is also the same as the connectivity path between 2 transceiver nodes. This library file defines service manipulation.
+* @module service
+*/
+
+var isAddService = 0;
 var addServiceData = {
     from: '',
     to: ''

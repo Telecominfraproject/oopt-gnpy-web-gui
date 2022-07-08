@@ -1,4 +1,10 @@
-﻿var isDualPatchMode = 0;
+﻿/**
+* patch.js
+* The patch library describes how to add a patch connection between any 2 nodes by dragging from source node to destination and defines the patch manipulation.
+* @module patch
+*/
+
+var isDualPatchMode = 0;
 var isSinglePatchMode = 0;
 var addPatchData = {
     from: '',

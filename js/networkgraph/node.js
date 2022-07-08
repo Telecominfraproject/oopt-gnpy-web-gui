@@ -1,4 +1,10 @@
 ﻿/**
+* node.js
+* The node can be defined as the connection point of "ROADM, Attenuator, Transceiver, Amplifier, and Raman Amplifier" and defines the node manipulations.
+* @module node
+*/
+
+/**
  * Check node Mode 1-roadm, 2-amp, 3-fused, 4-transceiver, 6- raman amp
  * @param {Number} nodemode - Mode of the component.
  */
