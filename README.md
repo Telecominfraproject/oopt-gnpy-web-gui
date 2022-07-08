@@ -4,6 +4,8 @@
 
 This is some example code to show you how to use JSDoc for documenting your JavaScript.
 
+Please use the below steps.
+
 **Step 1** 
 
 #JSDoc supports stable versions of Node.js 8.15.0 and later.
@@ -46,20 +48,19 @@ npm i -D jsdoc
       "destination": "./docs/",
       "tutorials": "./readme"
     }
-   }
+    }
   
   **Note :** created readme folder and add LICENSE.md and technical_document.md file and tutorials.json.
 		  update tutorials.json following code
 		  
-		  {
-		  "LICENSE": {
-			"title": "LICENSE"
-		  },
-
-		  "technical_document": {
-			"title": "technical_document"
-		  }
-		}
+    {
+     "LICENSE": {
+     "title": "LICENSE"
+     },
+     "technical_document": {
+     "title": "technical_document"
+    }
+    }
 
 **Step 5**
 
