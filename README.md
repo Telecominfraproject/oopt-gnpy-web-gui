@@ -3,6 +3,7 @@
 ## JSDoc Documentation
 
 This is some example code to show you how to use JSDoc for documenting your JavaScript.
+please use the below steps.
 
 **Step 1** 
 
