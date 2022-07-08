@@ -3,7 +3,6 @@
 ## JSDoc Documentation
 
 This is some example code to show you how to use JSDoc for documenting your JavaScript.
-please use the below steps.
 
 **Step 1** 
 
@@ -31,7 +30,7 @@ npm i -D jsdoc
 
 #To Create jsdoc.json file in root and update the code
 
-{
+    {
     "source": {
       "include": ["js"],
       "includePattern": ".js$",
@@ -47,7 +46,7 @@ npm i -D jsdoc
       "destination": "./docs/",
       "tutorials": "./readme"
     }
-  }
+   }
   
   **Note :** created readme folder and add LICENSE.md and technical_document.md file and tutorials.json.
 		  update tutorials.json following code
@@ -61,12 +60,11 @@ npm i -D jsdoc
 			"title": "technical_document"
 		  }
 		}
-        
+
 **Step 5**
 
 #Run the jsdoc command in visual studio code terminal
 npm run doc
 
 *The JSDoc has created docs and other dependency file generated and customize your documentation.
-
 
